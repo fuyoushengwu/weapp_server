@@ -1,3 +1,7 @@
 .settings
 target
 .project
+/sources/distribute
+logs
+.classpath
+*.jar

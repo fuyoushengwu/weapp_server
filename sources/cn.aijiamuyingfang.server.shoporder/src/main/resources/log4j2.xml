@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="WARN" monitorInterval="30">
+	<appenders>
+		<console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n" />
+		</console>
+
+		<RollingFile name="order" fileName="logs/order.log"
+			filePattern="logs/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="100 MB" />
+			</Policies>
+		</RollingFile>
+
+		<RollingFile name="Spring" fileName="logs/spring.log"
+			filePattern="logs/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="100 MB" />
+			</Policies>
+		</RollingFile>
+	</appenders>
+
+	<loggers>
+		<!--过滤掉spring和mybatis的一些无用的DEBUG信息 -->
+		<logger name="cn.aijiamuyingfang.server.shoporder" level="DEBUG"
+			additivity="false">
+			<appender-ref ref="order" />
+		</logger>
+		<logger name="org.springframework" level="INFO">
+			<appender-ref ref="Spring" />
+		</logger>
+		<root level="INFO">
+			<appender-ref ref="Console" />
+		</root>
+	</loggers>
+
+</configuration>

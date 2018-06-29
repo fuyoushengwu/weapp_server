@@ -15,18 +15,10 @@ pipeline {
             }
         }
 
-        stage('build'){
-            steps {
-                dir("sources") {
-                    sh 'mvn org.jacoco:jacoco-maven-plugin:prepare-agent -Dmaven.test.failure.ignore=true install'
-                }
-            }
-        }
-
         stage('code analysis') {
             steps {
                 dir("sources") {
-                    sh 'mvn sonar:sonar -Dsonar.organization=fuyoushengwu-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=1a1a48e2f6cd3453ae98de53fc46ef27b53732f7'
+                    sh 'mvn clean install sonar:sonar -Dsonar.organization=fuyoushengwu-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=1a1a48e2f6cd3453ae98de53fc46ef27b53732f7'
                 }
             }
         }
@@ -35,8 +27,8 @@ pipeline {
     post {
 
         success {
-            dir("sources") {
-                archive 'target/*.jar'
+            dir("sources/distribute") {
+                archive 'weapp/**'
             }
         }
     }
