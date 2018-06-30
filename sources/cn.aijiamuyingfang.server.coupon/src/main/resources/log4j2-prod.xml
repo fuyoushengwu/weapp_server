@@ -6,7 +6,16 @@
 		</console>
 
 		<RollingFile name="coupon" fileName="logs/coupon.log"
-			filePattern="logs/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
+			filePattern="logs/$${date:yyyy-MM}/coupon-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="100 MB" />
+			</Policies>
+		</RollingFile>
+
+		<RollingFile name="Server" fileName="logs/server.log"
+			filePattern="logs/$${date:yyyy-MM}/server-%d{yyyy-MM-dd}-%i.log">
 			<PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n" />
 			<Policies>
 				<TimeBasedTriggeringPolicy />
@@ -15,7 +24,7 @@
 		</RollingFile>
 
 		<RollingFile name="Spring" fileName="logs/spring.log"
-			filePattern="logs/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
+			filePattern="logs/$${date:yyyy-MM}/spring-%d{yyyy-MM-dd}-%i.log">
 			<PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n" />
 			<Policies>
 				<TimeBasedTriggeringPolicy />
@@ -29,6 +38,10 @@
 		<logger name="cn.aijiamuyingfang.server.coupon" level="ERROR"
 			additivity="false">
 			<appender-ref ref="coupon" />
+		</logger>
+		<logger name="cn.aijiamuyingfang.server" level="ERROR"
+			additivity="false">
+			<appender-ref ref="Server" />
 		</logger>
 		<logger name="org.springframework" level="ERROR">
 			<appender-ref ref="Spring" />

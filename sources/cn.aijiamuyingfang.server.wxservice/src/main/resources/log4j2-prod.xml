@@ -5,8 +5,17 @@
 			<PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n" />
 		</console>
 
-		<RollingFile name="wxservice" fileName="logs/wxservice.log"
-			filePattern="logs/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
+		<RollingFile name="WXService" fileName="logs/wxservice.log"
+			filePattern="logs/$${date:yyyy-MM}/wxservice-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="100 MB" />
+			</Policies>
+		</RollingFile>
+
+		<RollingFile name="Server" fileName="logs/server.log"
+			filePattern="logs/$${date:yyyy-MM}/server-%d{yyyy-MM-dd}-%i.log">
 			<PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n" />
 			<Policies>
 				<TimeBasedTriggeringPolicy />
@@ -15,7 +24,7 @@
 		</RollingFile>
 
 		<RollingFile name="Spring" fileName="logs/spring.log"
-			filePattern="logs/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
+			filePattern="logs/$${date:yyyy-MM}/spring-%d{yyyy-MM-dd}-%i.log">
 			<PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n" />
 			<Policies>
 				<TimeBasedTriggeringPolicy />
@@ -28,7 +37,11 @@
 		<!--过滤掉spring和mybatis的一些无用的DEBUG信息 -->
 		<logger name="cn.aijiamuyingfang.server.wxservice" level="ERROR"
 			additivity="false">
-			<appender-ref ref="wxservice" />
+			<appender-ref ref="WXService" />
+		</logger>
+		<logger name="cn.aijiamuyingfang.server" level="ERROR"
+			additivity="false">
+			<appender-ref ref="Server" />
 		</logger>
 		<logger name="org.springframework" level="ERROR">
 			<appender-ref ref="Spring" />
