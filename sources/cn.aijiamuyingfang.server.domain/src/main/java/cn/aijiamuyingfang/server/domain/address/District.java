@@ -17,29 +17,37 @@ import javax.persistence.MappedSuperclass;
  */
 @MappedSuperclass
 public abstract class District {
-	/**
-	 * 行政区名
-	 */
-	private String name;
+  /**
+   * 行政区名
+   */
+  protected String name;
 
-	/**
-	 * 行政区编码
-	 */
-	private String code;
+  /**
+   * 行政区编码
+   */
+  protected String code;
 
-	public String getName() {
-		return name;
-	}
+  public District() {
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public District(String name, String code) {
+    this.name = name;
+    this.code = code;
+  }
 
-	public String getCode() {
-		return code;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getCode() {
+    return code;
+  }
+
+  public void setCode(String code) {
+    this.code = code;
+  }
 }

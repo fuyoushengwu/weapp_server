@@ -1,6 +1,9 @@
 package cn.aijiamuyingfang.server.domain.address;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * [描述]:
@@ -14,31 +17,20 @@ import javax.persistence.Entity;
  * @date 2018-06-25 20:37:56
  */
 @Entity
-public class StoreAddress extends Address {
-	/**
-	 * 店铺地址-联系电话
-	 */
-	private String phone;
+public class StoreAddress extends StoreAddressRequest {
+  /**
+   * 地址-Id
+   */
+  @Id
+  @GeneratedValue(generator = "strategy_uuid")
+  @GenericGenerator(name = "strategy_uuid", strategy = "uuid")
+  private String id;
 
-	/**
-	 * 店铺地址-联系人
-	 */
-	private String contactor;
+  public String getId() {
+    return id;
+  }
 
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public String getContactor() {
-		return contactor;
-	}
-
-	public void setContactor(String contactor) {
-		this.contactor = contactor;
-	}
-
+  public void setId(String id) {
+    this.id = id;
+  }
 }

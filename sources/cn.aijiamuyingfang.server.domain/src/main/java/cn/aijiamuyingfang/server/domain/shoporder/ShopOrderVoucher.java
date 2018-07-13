@@ -1,14 +1,13 @@
 package cn.aijiamuyingfang.server.domain.shoporder;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-
 import cn.aijiamuyingfang.server.domain.coupon.UserVoucher;
 import cn.aijiamuyingfang.server.domain.coupon.VoucherItem;
 import cn.aijiamuyingfang.server.domain.goods.Good;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * [描述]:
@@ -23,58 +22,62 @@ import cn.aijiamuyingfang.server.domain.goods.Good;
  */
 @Entity
 public class ShopOrderVoucher {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+  /**
+   * ID
+   */
+  @Id
+  @GeneratedValue(generator = "strategy_uuid")
+  @GenericGenerator(name = "strategy_uuid", strategy = "uuid")
+  private String id;
 
-	/**
-	 * 订单使用的用户兑换券
-	 */
-	@ManyToOne
-	private UserVoucher userVoucher;
+  /**
+   * 订单使用的用户兑换券
+   */
+  @ManyToOne
+  private UserVoucher userVoucher;
 
-	/**
-	 * 订单使用的兑换方式
-	 */
-	@ManyToOne
-	private VoucherItem voucherItem;
+  /**
+   * 订单使用的兑换方式
+   */
+  @ManyToOne
+  private VoucherItem voucherItem;
 
-	/**
-	 * 该兑换项关联的商品
-	 */
-	@ManyToOne
-	private Good good;
+  /**
+   * 该兑换项关联的商品
+   */
+  @ManyToOne
+  private Good good;
 
-	public long getId() {
-		return id;
-	}
+  public String getId() {
+    return id;
+  }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	public UserVoucher getUserVoucher() {
-		return userVoucher;
-	}
+  public UserVoucher getUserVoucher() {
+    return userVoucher;
+  }
 
-	public void setUserVoucher(UserVoucher userVoucher) {
-		this.userVoucher = userVoucher;
-	}
+  public void setUserVoucher(UserVoucher userVoucher) {
+    this.userVoucher = userVoucher;
+  }
 
-	public VoucherItem getVoucherItem() {
-		return voucherItem;
-	}
+  public VoucherItem getVoucherItem() {
+    return voucherItem;
+  }
 
-	public void setVoucherItem(VoucherItem voucherItem) {
-		this.voucherItem = voucherItem;
-	}
+  public void setVoucherItem(VoucherItem voucherItem) {
+    this.voucherItem = voucherItem;
+  }
 
-	public Good getGood() {
-		return good;
-	}
+  public Good getGood() {
+    return good;
+  }
 
-	public void setGood(Good good) {
-		this.good = good;
-	}
+  public void setGood(Good good) {
+    this.good = good;
+  }
 
 }

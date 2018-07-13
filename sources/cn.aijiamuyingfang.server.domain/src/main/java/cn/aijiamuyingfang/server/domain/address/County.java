@@ -12,4 +12,10 @@ package cn.aijiamuyingfang.server.domain.address;
  * @date 2018-06-25 17:53:29
  */
 public class County extends District {
+  public County() {
+  }
+
+  public County(String name, String code) {
+    super(name, code);
+  }
 }

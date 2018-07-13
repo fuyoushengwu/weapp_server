@@ -19,18 +19,18 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface HttpApi {
-	/**
-	 * 提供服务的baseurl
-	 * 
-	 * @return
-	 */
-	String baseurl() default "localhost:8080";
+  /**
+   * 提供服务的baseurl
+   * 
+   * @return
+   */
+  String baseurl() default "localhost:8080";
 
-	/**
-	 * 服务拦截器类
-	 * 
-	 * @return
-	 */
-	Class<?>[] interceptor() default {};
+  /**
+   * 服务拦截器类
+   * 
+   * @return
+   */
+  Class<?>[] interceptor() default {};
 
 }

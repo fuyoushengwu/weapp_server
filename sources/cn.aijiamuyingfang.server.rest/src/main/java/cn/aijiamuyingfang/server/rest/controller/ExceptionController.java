@@ -1,14 +1,20 @@
 package cn.aijiamuyingfang.server.rest.controller;
 
+import cn.aijiamuyingfang.server.commons.controller.bean.ResponseBean;
+import cn.aijiamuyingfang.server.commons.controller.bean.ResponseCode;
+import cn.aijiamuyingfang.server.domain.exception.AuthException;
+import cn.aijiamuyingfang.server.domain.exception.CouponException;
+import cn.aijiamuyingfang.server.domain.exception.GoodsException;
+import cn.aijiamuyingfang.server.domain.exception.ShopCartException;
+import cn.aijiamuyingfang.server.domain.exception.ShopOrderException;
+import cn.aijiamuyingfang.server.domain.exception.UserException;
+import cn.aijiamuyingfang.server.domain.exception.WXServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import cn.aijiamuyingfang.server.rest.controller.bean.ResponseBean;
-import cn.aijiamuyingfang.server.rest.controller.bean.ResponseCode;
-import cn.aijiamuyingfang.server.rest.exception.GoodsException;
-import cn.aijiamuyingfang.server.rest.exception.WXServiceException;
 
 /**
  * [描述]:
@@ -23,41 +29,93 @@ import cn.aijiamuyingfang.server.rest.exception.WXServiceException;
  */
 @RestControllerAdvice
 public class ExceptionController {
-	private static final Logger LOGGER = LogManager.getLogger(ExceptionController.class);
+  private static final Logger LOGGER = LogManager.getLogger(ExceptionController.class);
 
-	@ExceptionHandler(Exception.class)
-	public ResponseBean<Exception> handleException(Exception exception) {
-		LOGGER.error("Exception", exception);
-		ResponseBean<Exception> responseBean = new ResponseBean<>();
-		responseBean.setResponseCode(ResponseCode.RUNTIME_EXCEPTION, exception.getMessage());
-		responseBean.setData(exception);
-		return responseBean;
-	}
+  @ExceptionHandler(Exception.class)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseBean<Exception> handleException(Exception exception) {
+    LOGGER.error("Exception", exception);
+    ResponseBean<Exception> responseBean = new ResponseBean<>();
+    responseBean.setResponseCode(ResponseCode.RUNTIME_EXCEPTION, exception.getMessage());
+    return responseBean;
+  }
 
-	@ExceptionHandler(RuntimeException.class)
-	public ResponseBean<RuntimeException> handleException(RuntimeException exception) {
-		LOGGER.error("RuntimeException", exception);
-		ResponseBean<RuntimeException> responseBean = new ResponseBean<>();
-		responseBean.setResponseCode(ResponseCode.RUNTIME_EXCEPTION, exception.getMessage());
-		responseBean.setData(exception);
-		return responseBean;
-	}
+  @ExceptionHandler(RuntimeException.class)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseBean<RuntimeException> handleException(RuntimeException exception) {
+    LOGGER.error("RuntimeException", exception);
+    ResponseBean<RuntimeException> responseBean = new ResponseBean<>();
+    responseBean.setResponseCode(ResponseCode.RUNTIME_EXCEPTION, exception.getMessage());
+    return responseBean;
+  }
 
-	@ExceptionHandler(GoodsException.class)
-	public ResponseBean<GoodsException> handleException(GoodsException exception) {
-		LOGGER.error("GoodsException", exception);
-		ResponseBean<GoodsException> responseBean = new ResponseBean<>();
-		responseBean.setCode(exception.getCode());
-		responseBean.setMsg(exception.getMessage());
-		return responseBean;
-	}
+  @ExceptionHandler(GoodsException.class)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseBean<GoodsException> handleException(GoodsException exception) {
+    LOGGER.error("GoodsException", exception);
+    ResponseBean<GoodsException> responseBean = new ResponseBean<>();
+    responseBean.setCode(exception.getCode());
+    responseBean.setMsg(exception.getMessage());
+    return responseBean;
+  }
 
-	@ExceptionHandler(WXServiceException.class)
-	public ResponseBean<WXServiceException> handleException(WXServiceException exception) {
-		LOGGER.error("WXServiceException", exception);
-		ResponseBean<WXServiceException> responseBean = new ResponseBean<>();
-		responseBean.setResponseCode(ResponseCode.RUNTIME_EXCEPTION, exception.getMessage());
-		responseBean.setData(exception);
-		return responseBean;
-	}
+  @ExceptionHandler(UserException.class)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseBean<GoodsException> handleException(UserException exception) {
+    LOGGER.error("UserException", exception);
+    ResponseBean<GoodsException> responseBean = new ResponseBean<>();
+    responseBean.setCode(exception.getCode());
+    responseBean.setMsg(exception.getMessage());
+    return responseBean;
+  }
+
+  @ExceptionHandler(ShopCartException.class)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseBean<ShopCartException> handleException(ShopCartException exception) {
+    LOGGER.error("ShopCartException", exception);
+    ResponseBean<ShopCartException> responseBean = new ResponseBean<>();
+    responseBean.setCode(exception.getCode());
+    responseBean.setMsg(exception.getMessage());
+    return responseBean;
+  }
+
+  @ExceptionHandler(ShopOrderException.class)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseBean<ShopOrderException> handleException(ShopOrderException exception) {
+    LOGGER.error("ShopOrderException", exception);
+    ResponseBean<ShopOrderException> responseBean = new ResponseBean<>();
+    responseBean.setCode(exception.getCode());
+    responseBean.setMsg(exception.getMessage());
+    return responseBean;
+  }
+
+  @ExceptionHandler(CouponException.class)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseBean<CouponException> handleException(CouponException exception) {
+    LOGGER.error("CouponException", exception);
+    ResponseBean<CouponException> responseBean = new ResponseBean<>();
+    responseBean.setCode(exception.getCode());
+    responseBean.setMsg(exception.getMessage());
+    return responseBean;
+  }
+
+  @ExceptionHandler(WXServiceException.class)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseBean<WXServiceException> handleException(WXServiceException exception) {
+    LOGGER.error("WXServiceException", exception);
+    ResponseBean<WXServiceException> responseBean = new ResponseBean<>();
+    responseBean.setCode(exception.getCode());
+    responseBean.setMsg(exception.getMessage());
+    return responseBean;
+  }
+
+  @ExceptionHandler(AuthException.class)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseBean<AuthException> handleException(AuthException exception) {
+    LOGGER.error("AuthException", exception);
+    ResponseBean<AuthException> responseBean = new ResponseBean<>();
+    responseBean.setCode(exception.getCode());
+    responseBean.setMsg(exception.getMessage());
+    return responseBean;
+  }
 }

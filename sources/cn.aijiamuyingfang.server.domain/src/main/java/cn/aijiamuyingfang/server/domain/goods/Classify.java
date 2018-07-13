@@ -1,14 +1,17 @@
 package cn.aijiamuyingfang.server.domain.goods;
 
+import cn.aijiamuyingfang.server.commons.utils.StringUtils;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.ArrayList;
 import java.util.List;
-
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.OneToMany;
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.util.CollectionUtils;
 
 /**
  * [描述]:
@@ -22,99 +25,127 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @date 2018-06-27 00:12:32
  */
 @Entity
-public class Classify {
-	/**
-	 * 条目Id
-	 */
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+public class Classify extends ClassifyRequest {
+  /**
+   * 条目Id
+   */
+  @Id
+  @GeneratedValue(generator = "strategy_uuid")
+  @GenericGenerator(name = "strategy_uuid", strategy = "uuid")
+  private String id;
 
-	/**
-	 * 条目名
-	 */
-	private String name;
+  /**
+   * 条目层级(最顶层的条目为1,顶层条目下的子条目为2)
+   */
+  private int level;
 
-	/**
-	 * 条目是否废弃(该字段用于删除条目:当需要删除条目时,设置该字段为true)
-	 */
-	private boolean deprecated;
+  /**
+   * 条目封面
+   */
+  private String coverImg;
 
-	/**
-	 * 条目层级(最顶层的条目为1,顶层条目下的子条目为2)
-	 */
-	private int level;
+  /**
+   * 子条目
+   */
+  @OneToMany(cascade = CascadeType.ALL)
+  @JsonIgnore
+  private List<Classify> subClassifyList = new ArrayList<>();
 
-	/**
-	 * 条目封面
-	 */
-	private String coverImg;
+  @ManyToMany
+  @JsonIgnore
+  private List<Good> goodList = new ArrayList<>();
 
-	/**
-	 * 子条目
-	 */
-	@ManyToMany
-	@JsonIgnore
-	private List<Classify> subClassifyList;
+  /**
+   * 添加子条目
+   * 
+   * @param subclassify
+   */
+  public void addSubClassify(Classify subclassify) {
+    synchronized (this) {
+      if (null == this.subClassifyList) {
+        this.subClassifyList = new ArrayList<>();
+      }
+    }
+    if (subclassify != null) {
+      this.subClassifyList.add(subclassify);
+    }
+  }
 
-	@ManyToMany
-	@JsonIgnore
-	private List<Good> goodList;
+  /**
+   * 条目下添加商品
+   * 
+   * @param good
+   */
+  public void addGood(Good good) {
+    if (good != null) {
+      this.goodList.add(good);
+    }
+  }
 
-	public long getId() {
-		return id;
-	}
+  /**
+   * 根据提供的Classify更新本条目的信息
+   * 
+   * @param updateClassify
+   */
+  public void update(Classify updateClassify) {
+    if (null == updateClassify) {
+      return;
+    }
+    if (StringUtils.hasContent(updateClassify.name)) {
+      this.name = updateClassify.name;
+    }
+    if (updateClassify.level != 0) {
+      this.level = updateClassify.level;
+    }
+    if (StringUtils.hasContent(updateClassify.coverImg)) {
+      this.coverImg = updateClassify.coverImg;
+    }
+    if (!CollectionUtils.isEmpty(updateClassify.subClassifyList)) {
+      this.subClassifyList = updateClassify.subClassifyList;
+    }
+    if (!CollectionUtils.isEmpty(updateClassify.goodList)) {
+      this.goodList = updateClassify.goodList;
+    }
+  }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+  public String getId() {
+    return id;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public int getLevel() {
+    return level;
+  }
 
-	public boolean isDeprecated() {
-		return deprecated;
-	}
+  public void setLevel(int level) {
+    this.level = level;
+  }
 
-	public void setDeprecated(boolean deprecated) {
-		this.deprecated = deprecated;
-	}
+  public String getCoverImg() {
+    return coverImg;
+  }
 
-	public int getLevel() {
-		return level;
-	}
+  public void setCoverImg(String coverImg) {
+    this.coverImg = coverImg;
+  }
 
-	public void setLevel(int level) {
-		this.level = level;
-	}
+  public List<Classify> getSubClassifyList() {
+    return subClassifyList;
+  }
 
-	public String getCoverImg() {
-		return coverImg;
-	}
+  public void setSubClassifyList(List<Classify> subClassifyList) {
+    this.subClassifyList = subClassifyList;
+  }
 
-	public void setCoverImg(String coverImg) {
-		this.coverImg = coverImg;
-	}
+  public List<Good> getGoodList() {
+    return goodList;
+  }
 
-	public List<Classify> getSubClassifyList() {
-		return subClassifyList;
-	}
-
-	public void setSubClassifyList(List<Classify> subClassifyList) {
-		this.subClassifyList = subClassifyList;
-	}
-
-	public List<Good> getGoodList() {
-		return goodList;
-	}
-
-	public void setGoodList(List<Good> goodList) {
-		this.goodList = goodList;
-	}
+  public void setGoodList(List<Good> goodList) {
+    this.goodList = goodList;
+  }
 
 }

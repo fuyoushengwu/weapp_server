@@ -18,6 +18,11 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>cn.aijiamuyingfang.server.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>cn.aijiamuyingfang.server.rest</artifactId>
 			<version>${project.version}</version>
 		</dependency>

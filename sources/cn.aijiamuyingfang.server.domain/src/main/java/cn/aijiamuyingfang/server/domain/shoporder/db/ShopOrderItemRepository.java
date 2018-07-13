@@ -1,14 +1,13 @@
 package cn.aijiamuyingfang.server.domain.shoporder.db;
 
+import cn.aijiamuyingfang.server.domain.shoporder.ShopOrderItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import cn.aijiamuyingfang.server.domain.shoporder.ShopOrderItem;
 
 /**
  * [描述]:
  * <p>
- * 门店地址的数据仓库
+ * 订单商品项的数据仓库
  * </p>
  * 
  * @version 1.0.0
@@ -17,6 +16,6 @@ import cn.aijiamuyingfang.server.domain.shoporder.ShopOrderItem;
  * @date 2018-06-25 21:15:03
  */
 @Repository
-public interface ShopOrderItemRepository extends JpaRepository<ShopOrderItem, Long> {
+public interface ShopOrderItemRepository extends JpaRepository<ShopOrderItem, String> {
 
 }

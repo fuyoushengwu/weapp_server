@@ -1,19 +1,16 @@
 package cn.aijiamuyingfang.server.domain.goods;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * [描述]:
@@ -28,82 +25,81 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  */
 @Entity
 public class GoodDetail {
-	/**
-	 * 商品详情Id
-	 */
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+  /**
+   * 商品详情Id
+   */
+  @Id
+  private String id;
 
-	/**
-	 * 保质期
-	 */
-	@Embedded
-	@AttributeOverrides({ @AttributeOverride(name = "start", column = @Column(name = "lifetime_start")),
-			@AttributeOverride(name = "end", column = @Column(name = "lifetime_end")) })
-	private ShelfLife lifetime;
+  /**
+   * 保质期
+   */
+  @Embedded
+  @AttributeOverrides({ @AttributeOverride(name = "start", column = @Column(name = "lifetime_start")),
+      @AttributeOverride(name = "end", column = @Column(name = "lifetime_end")) })
+  private ShelfLife lifetime;
 
-	/**
-	 * 商品详细图片
-	 */
-	@ElementCollection
-	private List<String> detailImgList;
+  /**
+   * 商品详细图片
+   */
+  @ElementCollection
+  private List<String> detailImgList = new ArrayList<>();
 
-	public long getId() {
-		return id;
-	}
+  public String getId() {
+    return id;
+  }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	public ShelfLife getLifetime() {
-		return lifetime;
-	}
+  public ShelfLife getLifetime() {
+    return lifetime;
+  }
 
-	public void setLifetime(ShelfLife lifetime) {
-		this.lifetime = lifetime;
-	}
+  public void setLifetime(ShelfLife lifetime) {
+    this.lifetime = lifetime;
+  }
 
-	public List<String> getDetailImgList() {
-		return detailImgList;
-	}
+  public List<String> getDetailImgList() {
+    return detailImgList;
+  }
 
-	public void setDetailImgList(List<String> detailImgList) {
-		this.detailImgList = detailImgList;
-	}
+  public void setDetailImgList(List<String> detailImgList) {
+    this.detailImgList = detailImgList;
+  }
 
-	/**
-	 * 保质期
-	 */
-	public static class ShelfLife {
-		/**
-		 * 保质期-开始时间
-		 */
-		@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-		private Date start;
+  /**
+   * 保质期
+   */
+  public static class ShelfLife {
+    /**
+     * 保质期-开始时间
+     */
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date start;
 
-		/**
-		 * 保质期-结束时间
-		 */
-		@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-		private Date end;
+    /**
+     * 保质期-结束时间
+     */
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date end;
 
-		public Date getStart() {
-			return start;
-		}
+    public Date getStart() {
+      return start;
+    }
 
-		public void setStart(Date start) {
-			this.start = start;
-		}
+    public void setStart(Date start) {
+      this.start = start;
+    }
 
-		public Date getEnd() {
-			return end;
-		}
+    public Date getEnd() {
+      return end;
+    }
 
-		public void setEnd(Date end) {
-			this.end = end;
-		}
+    public void setEnd(Date end) {
+      this.end = end;
+    }
 
-	}
+  }
 }

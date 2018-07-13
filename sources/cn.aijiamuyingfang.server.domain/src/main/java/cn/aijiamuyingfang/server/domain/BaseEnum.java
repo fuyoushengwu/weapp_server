@@ -14,6 +14,6 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * @date 2018-06-27 03:38:50
  */
 public interface BaseEnum {
-	@JsonValue
-	int getValue();
+  @JsonValue
+  int getValue();
 }

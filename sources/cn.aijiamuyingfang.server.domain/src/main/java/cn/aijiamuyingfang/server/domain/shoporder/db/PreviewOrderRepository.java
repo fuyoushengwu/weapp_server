@@ -1,16 +1,13 @@
 package cn.aijiamuyingfang.server.domain.shoporder.db;
 
-import java.util.List;
-
+import cn.aijiamuyingfang.server.domain.shoporder.PreviewOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import cn.aijiamuyingfang.server.domain.shoporder.PreviewOrder;
 
 /**
  * [描述]:
  * <p>
- * 门店地址的数据仓库
+ * 订单预览的数据仓库
  * </p>
  * 
  * @version 1.0.0
@@ -19,12 +16,19 @@ import cn.aijiamuyingfang.server.domain.shoporder.PreviewOrder;
  * @date 2018-06-25 21:15:03
  */
 @Repository
-public interface PreviewOrderRepository extends JpaRepository<PreviewOrder, Long> {
-	/**
-	 * 查找用户的预览订单
-	 * 
-	 * @param userid
-	 * @return
-	 */
-	List<PreviewOrder> findByUserid(long userid);
+public interface PreviewOrderRepository extends JpaRepository<PreviewOrder, String> {
+  /**
+   * 查找用户的预览订单
+   * 
+   * @param userid
+   * @return
+   */
+  PreviewOrder findByUserid(String userid);
+
+  /**
+   * 删除用户的预览订单
+   * 
+   * @param userid
+   */
+  void deleteByUserid(String userid);
 }

@@ -1,6 +1,7 @@
 package cn.aijiamuyingfang.server.domain.user;
 
 import cn.aijiamuyingfang.server.domain.BaseEnum;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * [描述]:
@@ -15,28 +16,31 @@ import cn.aijiamuyingfang.server.domain.BaseEnum;
  */
 public enum UserMessageType implements BaseEnum {
 
-	/**
-	 * 通知
-	 */
-	NOTICE(0),
+  /**
+   * 通知
+   */
+  @SerializedName("0")
+  NOTICE(0),
 
-	/**
-	 * 链接
-	 */
-	LINK(1),
-	/**
-	 * 位置类型
-	 */
-	UNKNOW(-1);
-	private int value;
+  /**
+   * 链接
+   */
+  @SerializedName("1")
+  LINK(1),
+  /**
+   * 位置类型
+   */
+  @SerializedName("-1")
+  UNKNOW(-1);
+  private int value;
 
-	private UserMessageType(int value) {
-		this.value = value;
-	}
+  private UserMessageType(int value) {
+    this.value = value;
+  }
 
-	@Override
-	public int getValue() {
-		return value;
-	}
+  @Override
+  public int getValue() {
+    return value;
+  }
 
 }

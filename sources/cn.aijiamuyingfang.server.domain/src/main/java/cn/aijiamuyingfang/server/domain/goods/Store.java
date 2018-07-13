@@ -1,25 +1,18 @@
 package cn.aijiamuyingfang.server.domain.goods;
 
+import cn.aijiamuyingfang.server.commons.utils.StringUtils;
+import cn.aijiamuyingfang.server.domain.address.StoreAddress;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import cn.aijiamuyingfang.server.commons.utils.StringUtils;
-import cn.aijiamuyingfang.server.domain.address.StoreAddress;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * [描述]:
@@ -33,207 +26,178 @@ import cn.aijiamuyingfang.server.domain.address.StoreAddress;
  * @date 2018-06-27 00:12:21
  */
 @Entity
-public class Store {
+public class Store extends StoreRequest {
 
-	/**
-	 * 门店是否废弃(该字段用于删除门店:当需要删除门店时,设置该字段为true)
-	 */
-	private boolean deprecated;
+  /**
+   * 门店Id
+   */
+  @Id
+  @GeneratedValue(generator = "strategy_uuid")
+  @GenericGenerator(name = "strategy_uuid", strategy = "uuid")
+  private String id;
 
-	/**
-	 * 门店Id
-	 */
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+  /**
+   * 门店是否废弃(该字段用于删除门店:当需要删除门店时,设置该字段为true)
+   */
+  private boolean deprecated;
 
-	/**
-	 * 门店名
-	 */
-	private String name;
+  /**
+   * 封面图片地址
+   */
+  private String coverImg;
 
-	/**
-	 * 营业时间
-	 */
-	@Embedded
-	@AttributeOverrides({ @AttributeOverride(name = "start", column = @Column(name = "start_worktime")),
-			@AttributeOverride(name = "end", column = @Column(name = "end_worktime")) })
-	private WorkTime workTime;
+  /**
+   * 详细图片地址
+   */
+  @ElementCollection
+  private List<String> detailImgList = new ArrayList<>();
 
-	/**
-	 * 封面图片地址
-	 */
-	private String coverImg;
+  /**
+   * 门店地址
+   */
+  @OneToOne(cascade = CascadeType.ALL)
+  private StoreAddress storeAddress;
 
-	/**
-	 * 详细图片地址
-	 */
-	@ElementCollection
-	private List<String> detailImgList;
+  @ManyToMany
+  @JsonIgnore
+  private List<Classify> classifyList = new ArrayList<>();
 
-	/**
-	 * 门店地址
-	 */
-	@OneToOne(cascade = CascadeType.ALL)
-	private StoreAddress storeAddress;
+  /**
+   * 根据提供的Store更新本门店的信息
+   * 
+   * @param updateStore
+   */
+  public void update(Store updateStore) {
+    if (null == updateStore) {
+      return;
+    }
+    if (StringUtils.hasContent(updateStore.name)) {
+      this.name = updateStore.name;
+    }
+    if (updateStore.workTime != null) {
+      this.workTime.update(updateStore.workTime);
+    }
+    if (StringUtils.hasContent(updateStore.coverImg)) {
+      this.coverImg = updateStore.coverImg;
+    }
+    if (updateStore.detailImgList != null && !updateStore.detailImgList.isEmpty()) {
+      this.detailImgList = updateStore.detailImgList;
+    }
+    if (updateStore.storeAddress != null) {
+      this.storeAddress = updateStore.storeAddress;
+    }
+    if (updateStore.classifyList != null && !updateStore.classifyList.isEmpty()) {
+      this.classifyList = updateStore.classifyList;
+    }
+  }
 
-	@ManyToMany
-	@JsonIgnore
-	private List<Classify> classifyList;
+  /**
+   * 为门店添加顶层条目
+   * 
+   * @param classify
+   */
+  public void addClassify(Classify classify) {
+    if (null == classify) {
+      return;
+    }
+    synchronized (this) {
+      if (null == this.classifyList) {
+        this.classifyList = new ArrayList<>();
+      }
+    }
+    this.classifyList.add(classify);
+  }
 
-	/**
-	 * 根据提供的Store更新本门店的信息
-	 * 
-	 * @param store
-	 */
-	public void update(Store store) {
-		if (null == store) {
-			return;
-		}
-		this.deprecated = store.deprecated;
-		if (StringUtils.hasContent(store.name)) {
-			this.name = store.name;
-		}
-		if (store.workTime != null) {
-			this.workTime.update(store.workTime);
-		}
-		if (StringUtils.hasContent(store.coverImg)) {
-			this.coverImg = store.coverImg;
-		}
-		if (store.detailImgList != null && !store.detailImgList.isEmpty()) {
-			this.detailImgList = store.detailImgList;
-		}
-		if (store.storeAddress != null) {
-			this.storeAddress = store.storeAddress;
-		}
-		if (store.classifyList != null && !store.classifyList.isEmpty()) {
-			this.classifyList = store.classifyList;
-		}
-	}
+  public boolean isDeprecated() {
+    return deprecated;
+  }
 
-	/**
-	 * 为门店添加顶层条目
-	 * 
-	 * @param classify
-	 */
-	public void addClassify(Classify classify) {
-		if (null == classify) {
-			return;
-		}
-		synchronized (this) {
-			if (null == this.classifyList) {
-				this.classifyList = new ArrayList<>();
-			}
-		}
-		this.classifyList.add(classify);
-	}
+  public void setDeprecated(boolean deprecated) {
+    this.deprecated = deprecated;
+  }
 
-	public boolean isDeprecated() {
-		return deprecated;
-	}
+  public String getId() {
+    return id;
+  }
 
-	public void setDeprecated(boolean deprecated) {
-		this.deprecated = deprecated;
-	}
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	public long getId() {
-		return id;
-	}
+  public String getCoverImg() {
+    return coverImg;
+  }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+  public void setCoverImg(String coverImg) {
+    this.coverImg = coverImg;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public List<String> getDetailImgList() {
+    return detailImgList;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public void setDetailImgList(List<String> detailImgList) {
+    this.detailImgList = detailImgList;
+  }
 
-	public WorkTime getWorkTime() {
-		return workTime;
-	}
+  public StoreAddress getStoreAddress() {
+    return storeAddress;
+  }
 
-	public void setWorkTime(WorkTime workTime) {
-		this.workTime = workTime;
-	}
+  public void setStoreAddress(StoreAddress storeAddress) {
+    this.storeAddress = storeAddress;
+  }
 
-	public String getCoverImg() {
-		return coverImg;
-	}
+  public List<Classify> getClassifyList() {
+    return classifyList;
+  }
 
-	public void setCoverImg(String coverImg) {
-		this.coverImg = coverImg;
-	}
+  public void setClassifyList(List<Classify> classifyList) {
+    this.classifyList = classifyList;
+  }
 
-	public List<String> getDetailImgList() {
-		return detailImgList;
-	}
+  /**
+   * 营业时间
+   */
+  public static class WorkTime {
+    /**
+     * 开始时间
+     */
+    private String start;
 
-	public void setDetailImgList(List<String> detailImgList) {
-		this.detailImgList = detailImgList;
-	}
+    /**
+     * 结束时间
+     */
+    private String end;
 
-	public StoreAddress getStoreAddress() {
-		return storeAddress;
-	}
+    public void update(WorkTime updateWorktime) {
+      if (null == updateWorktime) {
+        return;
+      }
+      if (StringUtils.hasContent(updateWorktime.start)) {
+        this.start = updateWorktime.start;
+      }
+      if (StringUtils.hasContent(updateWorktime.end)) {
+        this.end = updateWorktime.end;
+      }
+    }
 
-	public void setStoreAddress(StoreAddress storeAddress) {
-		this.storeAddress = storeAddress;
-	}
+    public String getStart() {
+      return start;
+    }
 
-	public List<Classify> getClassifyList() {
-		return classifyList;
-	}
+    public void setStart(String start) {
+      this.start = start;
+    }
 
-	public void setClassifyList(List<Classify> classifyList) {
-		this.classifyList = classifyList;
-	}
+    public String getEnd() {
+      return end;
+    }
 
-	/**
-	 * 营业时间
-	 */
-	public static class WorkTime {
-		/**
-		 * 开始时间
-		 */
-		private String start;
+    public void setEnd(String end) {
+      this.end = end;
+    }
 
-		/**
-		 * 结束时间
-		 */
-		private String end;
-
-		public void update(WorkTime workTime) {
-			if (null == workTime) {
-				return;
-			}
-			if (StringUtils.hasContent(workTime.start)) {
-				this.start = workTime.start;
-			}
-			if (StringUtils.hasContent(workTime.end)) {
-				this.end = workTime.end;
-			}
-		}
-
-		public String getStart() {
-			return start;
-		}
-
-		public void setStart(String start) {
-			this.start = start;
-		}
-
-		public String getEnd() {
-			return end;
-		}
-
-		public void setEnd(String end) {
-			this.end = end;
-		}
-
-	}
+  }
 
 }

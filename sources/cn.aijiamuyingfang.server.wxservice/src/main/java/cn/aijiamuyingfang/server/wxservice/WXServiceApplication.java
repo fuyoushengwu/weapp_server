@@ -18,7 +18,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 @SpringBootApplication(scanBasePackages = { "cn.aijiamuyingfang.server" })
 @EntityScan(basePackages = { "cn.aijiamuyingfang.server" })
 public class WXServiceApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(WXServiceApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(WXServiceApplication.class, args);
+  }
 }

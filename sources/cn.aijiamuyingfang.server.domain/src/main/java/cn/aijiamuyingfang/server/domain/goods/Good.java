@@ -1,12 +1,7 @@
 package cn.aijiamuyingfang.server.domain.goods;
 
+import cn.aijiamuyingfang.server.commons.utils.StringUtils;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-
-import cn.aijiamuyingfang.server.domain.coupon.GoodVoucher;
 
 /**
  * [描述]:
@@ -20,177 +15,92 @@ import cn.aijiamuyingfang.server.domain.coupon.GoodVoucher;
  * @date 2018-06-27 00:12:50
  */
 @Entity
-public class Good {
-	/**
-	 * 商品Id
-	 */
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+public class Good extends GoodRequest {
 
-	/**
-	 * 该商品是否废弃(该字段用于删除商品:当需要删除商品时,设置该字段为true)
-	 */
-	private boolean deprecated;
+  /**
+   * 商品封面
+   */
+  private String coverImg;
 
-	/**
-	 * 商品名
-	 */
-	private String name;
+  /**
+   * 该商品是否废弃(该字段用于删除商品:当需要删除商品时,设置该字段为true)
+   */
+  private boolean deprecated;
 
-	/**
-	 * 商品数量
-	 */
-	private int count;
+  /**
+   * 根据提供的Good更新本商品的信息
+   * 
+   * @param updateGood
+   */
+  public void update(Good updateGood) {
+    if (null == updateGood) {
+      return;
+    }
+    updateNumber(updateGood);
+    updateString(updateGood);
+  }
 
-	/**
-	 * 商品销量
-	 */
-	private int salecount;
+  /**
+   * 更新数字信息(该方法是为了拆减update方法的复杂度抽取的)
+   */
+  private void updateNumber(Good updateGood) {
+    if (updateGood.count != 0) {
+      this.count = updateGood.count;
+    }
+    if (updateGood.salecount != 0) {
+      this.salecount = updateGood.salecount;
+    }
+    if (updateGood.price != 0) {
+      this.price = updateGood.price;
+    }
+    if (updateGood.marketprice != 0) {
+      this.marketprice = updateGood.marketprice;
+    }
+    if (updateGood.score != 0) {
+      this.score = updateGood.score;
+    }
+  }
 
-	/**
-	 * 商品价格
-	 */
-	private double price;
+  /**
+   * 更新字符串信息(该方法是为了拆减update方法的复杂度抽取的)
+   */
+  private void updateString(Good updateGood) {
+    if (StringUtils.hasContent(updateGood.name)) {
+      this.name = updateGood.name;
+    }
+    if (StringUtils.hasContent(updateGood.coverImg)) {
+      this.coverImg = updateGood.coverImg;
+    }
+    if (StringUtils.hasContent(updateGood.pack)) {
+      this.pack = updateGood.pack;
+    }
+    if (StringUtils.hasContent(updateGood.level)) {
+      this.level = updateGood.level;
+    }
+    if (StringUtils.hasContent(updateGood.barcode)) {
+      this.barcode = updateGood.barcode;
+    }
+    if (StringUtils.hasContent(updateGood.voucherId)) {
+      this.voucherId = updateGood.voucherId;
+    }
+  }
 
-	/**
-	 * 超时零售价
-	 */
-	private double marketprice;
 
-	/**
-	 * 商品封面
-	 */
-	private String coverImg;
 
-	/**
-	 * 商品包装(听,盒,袋)
-	 */
-	private String pack;
+  public String getCoverImg() {
+    return coverImg;
+  }
 
-	/**
-	 * 商品等级(例如:奶粉:一段,二段,三段,四段,儿童,中老年)
-	 */
-	private String level;
+  public void setCoverImg(String coverImg) {
+    this.coverImg = coverImg;
+  }
 
-	/**
-	 * 商品条形码
-	 */
-	private String barcode;
+  public boolean isDeprecated() {
+    return deprecated;
+  }
 
-	/**
-	 * 购买商品可以获得的积分
-	 */
-	private int score;
-
-	/**
-	 * 购买商品可以获得的兑换券
-	 */
-	@ManyToOne
-	private GoodVoucher voucher;
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public boolean isDeprecated() {
-		return deprecated;
-	}
-
-	public void setDeprecated(boolean deprecated) {
-		this.deprecated = deprecated;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public int getCount() {
-		return count;
-	}
-
-	public void setCount(int count) {
-		this.count = count;
-	}
-
-	public int getSalecount() {
-		return salecount;
-	}
-
-	public void setSalecount(int salecount) {
-		this.salecount = salecount;
-	}
-
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
-	public double getMarketprice() {
-		return marketprice;
-	}
-
-	public void setMarketprice(double marketprice) {
-		this.marketprice = marketprice;
-	}
-
-	public String getCoverImg() {
-		return coverImg;
-	}
-
-	public void setCoverImg(String coverImg) {
-		this.coverImg = coverImg;
-	}
-
-	public String getPack() {
-		return pack;
-	}
-
-	public void setPack(String pack) {
-		this.pack = pack;
-	}
-
-	public String getLevel() {
-		return level;
-	}
-
-	public void setLevel(String level) {
-		this.level = level;
-	}
-
-	public String getBarcode() {
-		return barcode;
-	}
-
-	public void setBarcode(String barcode) {
-		this.barcode = barcode;
-	}
-
-	public int getScore() {
-		return score;
-	}
-
-	public void setScore(int score) {
-		this.score = score;
-	}
-
-	public GoodVoucher getVoucher() {
-		return voucher;
-	}
-
-	public void setVoucher(GoodVoucher voucher) {
-		this.voucher = voucher;
-	}
+  public void setDeprecated(boolean deprecated) {
+    this.deprecated = deprecated;
+  }
 
 }

@@ -33,6 +33,7 @@
 		<module>cn.aijiamuyingfang.server.shopcart</module>
 		<module>cn.aijiamuyingfang.server.shoporder</module>
 		<module>cn.aijiamuyingfang.server.client</module>
+		<module>cn.aijiamuyingfang.server.it</module>
 		<module>cn.aijiamuyingfang.server.distribute</module>
 	</modules>
 
@@ -48,6 +49,18 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<testFailureIgnore>true</testFailureIgnore>
@@ -61,7 +74,6 @@
 					<destFile>${project.basedir}/../target/jacoco-it.exec</destFile>
 				</configuration>
 			</plugin>
-
 		</plugins>
 	</build>
 

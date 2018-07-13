@@ -12,18 +12,18 @@ package cn.aijiamuyingfang.server.domain.user;
  * @date 2018-06-25 16:38:23
  */
 public enum Gender {
-	/**
-	 * 男性
-	 */
-	MALE,
+  /**
+   * 男性
+   */
+  MALE,
 
-	/**
-	 * 女性
-	 */
-	FEMALE,
+  /**
+   * 女性
+   */
+  FEMALE,
 
-	/**
-	 * 未知
-	 */
-	UNKNOW
+  /**
+   * 未知
+   */
+  UNKNOW
 }

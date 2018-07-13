@@ -1,13 +1,20 @@
 package cn.aijiamuyingfang.server.domain.user;
 
-import java.util.Date;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
+import cn.aijiamuyingfang.server.commons.utils.StringUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.CollectionUtils;
 
 /**
  * [描述]:
@@ -21,122 +28,207 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @date 2018-06-25 16:38:56
  */
 @Entity
-public class User {
-	/**
-	 * 用户的Id
-	 */
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+public class User extends UserRequest implements UserDetails {
+  private static final long serialVersionUID = -7352852942199443591L;
 
-	private String openid;
+  /**
+   * 用户的Id
+   */
+  @Id
+  @GeneratedValue(generator = "strategy_uuid")
+  @GenericGenerator(name = "strategy_uuid", strategy = "uuid")
+  private String id;
 
-	/**
-	 * 用户所在的APP ID
-	 */
-	private String appid;
+  /**
+   * 该小程序中用户的唯一Id
+   */
+  @JsonIgnore
+  private String openid;
 
-	/**
-	 * 昵称
-	 */
-	private String nickname;
+  /**
+   * 密码
+   */
+  @JsonIgnore
+  private String password;
 
-	/**
-	 * 性别
-	 */
-	private Gender gender;
+  /**
+   * 用户角色
+   */
+  @JsonIgnore
+  @ElementCollection(fetch = FetchType.EAGER)
+  private List<UserAuthority> authorityList = new ArrayList<>();
 
-	/**
-	 * 头像
-	 */
-	private String avatar;
+  /**
+   * 用户所在的APP ID
+   */
+  @JsonIgnore
+  private String appid;
 
-	/**
-	 * 联系电话
-	 */
-	private String phone;
+  /**
+   * 性别
+   */
+  private Gender gender;
 
-	/**
-	 * 最后一次消息读取时间
-	 */
-	@JsonIgnore
-	private Date lastReadMsgTime;
+  /**
+   * 最后一次消息读取时间
+   */
+  @JsonIgnore
+  private Date lastReadMsgTime;
 
-	/**
-	 * 用户积分
-	 */
-	private int score = 0;
+  /**
+   * 用户通用积分
+   */
+  private int genericScore = 0;
 
-	public long getId() {
-		return id;
-	}
+  /**
+   * 使用提供的updateUser更新用户信息
+   * 
+   * @param updateUser
+   */
+  public void update(User updateUser) {
+    if (null == updateUser) {
+      return;
+    }
+    if (StringUtils.hasContent(updateUser.nickname)) {
+      this.nickname = updateUser.nickname;
+    }
+    if (updateUser.gender != null) {
+      this.gender = updateUser.gender;
+    }
+    if (StringUtils.hasContent(updateUser.avatar)) {
+      this.avatar = updateUser.avatar;
+    }
+    if (StringUtils.hasContent(updateUser.phone)) {
+      this.phone = updateUser.phone;
+    }
+    if (updateUser.lastReadMsgTime != null) {
+      this.lastReadMsgTime = updateUser.lastReadMsgTime;
+    }
+    if (updateUser.genericScore != 0) {
+      this.genericScore = updateUser.genericScore;
+    }
+    if (!CollectionUtils.isEmpty(updateUser.authorityList)) {
+      this.authorityList = updateUser.authorityList;
+    }
+  }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+  /**
+   * 增加用户通用积分
+   * 
+   * @param score
+   */
+  public void increaseGenericScore(int score) {
+    this.genericScore += score;
+  }
 
-	public String getOpenid() {
-		return openid;
-	}
+  /**
+   * 减少用户通用积分
+   * 
+   * @param score
+   */
+  public void decreaseGenericScore(int score) {
+    this.genericScore -= score;
+  }
 
-	public void setOpenid(String openid) {
-		this.openid = openid;
-	}
+  public void addAuthority(UserAuthority authority) {
+    synchronized (this) {
+      if (null == this.authorityList) {
+        this.authorityList = new ArrayList<>();
+      }
+    }
+    if (authority != null) {
+      this.authorityList.add(authority);
+    }
+  }
 
-	public String getAppid() {
-		return appid;
-	}
+  @Override
+  @JsonIgnore
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return authorityList;
+  }
 
-	public void setAppid(String appid) {
-		this.appid = appid;
-	}
+  @Override
+  @JsonIgnore
+  public String getPassword() {
+    return this.password;
+  }
 
-	public String getNickname() {
-		return nickname;
-	}
+  @Override
+  @JsonIgnore
+  public String getUsername() {
+    return this.id;
+  }
 
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
 
-	public Gender getGender() {
-		return gender;
-	}
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
 
-	public void setGender(Gender gender) {
-		this.gender = gender;
-	}
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
 
-	public String getAvatar() {
-		return avatar;
-	}
+  @Override
+  public boolean isEnabled() {
+    return true;
+  }
 
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
-	}
+  public String getId() {
+    return id;
+  }
 
-	public String getPhone() {
-		return phone;
-	}
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+  public String getOpenid() {
+    return openid;
+  }
 
-	public Date getLastReadMsgTime() {
-		return lastReadMsgTime;
-	}
+  public void setOpenid(String openid) {
+    this.openid = openid;
+  }
 
-	public void setLastReadMsgTime(Date lastReadMsgTime) {
-		this.lastReadMsgTime = lastReadMsgTime;
-	}
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
-	public int getScore() {
-		return score;
-	}
+  public String getAppid() {
+    return appid;
+  }
 
-	public void setScore(int score) {
-		this.score = score;
-	}
+  public void setAppid(String appid) {
+    this.appid = appid;
+  }
+
+  public Gender getGender() {
+    return gender;
+  }
+
+  public void setGender(Gender gender) {
+    this.gender = gender;
+  }
+
+  public Date getLastReadMsgTime() {
+    return lastReadMsgTime;
+  }
+
+  public void setLastReadMsgTime(Date lastReadMsgTime) {
+    this.lastReadMsgTime = lastReadMsgTime;
+  }
+
+  public int getGenericScore() {
+    return genericScore;
+  }
+
+  public void setGenericScore(int score) {
+    this.genericScore = score;
+  }
 
 }

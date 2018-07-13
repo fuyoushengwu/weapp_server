@@ -13,4 +13,10 @@ package cn.aijiamuyingfang.server.domain.address;
  */
 public class City extends District {
 
+  public City() {
+  }
+
+  public City(String name, String code) {
+    super(name, code);
+  }
 }

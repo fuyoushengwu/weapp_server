@@ -13,4 +13,10 @@ package cn.aijiamuyingfang.server.domain.address;
  */
 public class Province extends District {
 
+  public Province() {
+  }
+
+  public Province(String name, String code) {
+    super(name, code);
+  }
 }

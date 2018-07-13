@@ -2,9 +2,9 @@ package cn.aijiamuyingfang.server.domain.coupon;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * [描述]:
@@ -19,56 +19,88 @@ import javax.persistence.ManyToOne;
  */
 @Entity
 public class UserVoucher {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+  @Id
+  @GeneratedValue(generator = "strategy_uuid")
+  @GenericGenerator(name = "strategy_uuid", strategy = "uuid")
+  private String id;
 
-	/**
-	 * 用户ID
-	 */
-	private long userid;
+  /**
+   * 是否废弃
+   */
+  private boolean deprecated;
 
-	/**
-	 * 兑换券
-	 */
-	@ManyToOne
-	private GoodVoucher goodVoucher;
+  /**
+   * 用户ID
+   */
+  private String userid;
 
-	/**
-	 * 用户拥有的该兑换券分值
-	 */
-	private int score;
+  /**
+   * 兑换券
+   */
+  @ManyToOne
+  private GoodVoucher goodVoucher;
 
-	public long getId() {
-		return id;
-	}
+  /**
+   * 用户拥有的该兑换券分值
+   */
+  private int score;
 
-	public void setId(long id) {
-		this.id = id;
-	}
+  /**
+   * 增加兑换券积分
+   * 
+   * @param param
+   */
+  public void increaseScore(int param) {
+    this.score += param;
+  }
 
-	public long getUserid() {
-		return userid;
-	}
+  /**
+   * 减少兑换券积分
+   * 
+   * @param param
+   */
+  public void decreaseScore(int param) {
+    this.score -= param;
+  }
 
-	public void setUserid(long userid) {
-		this.userid = userid;
-	}
+  public String getId() {
+    return id;
+  }
 
-	public GoodVoucher getGoodVoucher() {
-		return goodVoucher;
-	}
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	public void setGoodVoucher(GoodVoucher goodVoucher) {
-		this.goodVoucher = goodVoucher;
-	}
+  public boolean isDeprecated() {
+    return deprecated;
+  }
 
-	public int getScore() {
-		return score;
-	}
+  public void setDeprecated(boolean deprecated) {
+    this.deprecated = deprecated;
+  }
 
-	public void setScore(int score) {
-		this.score = score;
-	}
+  public String getUserid() {
+    return userid;
+  }
+
+  public void setUserid(String userid) {
+    this.userid = userid;
+  }
+
+  public GoodVoucher getGoodVoucher() {
+    return goodVoucher;
+  }
+
+  public void setGoodVoucher(GoodVoucher goodVoucher) {
+    this.goodVoucher = goodVoucher;
+  }
+
+  public int getScore() {
+    return score;
+  }
+
+  public void setScore(int score) {
+    this.score = score;
+  }
 
 }

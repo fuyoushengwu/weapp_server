@@ -1,16 +1,10 @@
 package cn.aijiamuyingfang.server.domain.shoporder;
 
+import cn.aijiamuyingfang.server.domain.shopcart.ShopCartItem;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import cn.aijiamuyingfang.server.domain.goods.Good;
-import cn.aijiamuyingfang.server.domain.shopcart.ShopCartItem;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * [描述]:
@@ -24,62 +18,79 @@ import cn.aijiamuyingfang.server.domain.shopcart.ShopCartItem;
  * @date 2018-06-27 15:55:10
  */
 @Entity
-public class PreviewOrderItem {
-	/**
-	 * 预览项的ID
-	 */
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+public class PreviewOrderItem extends PreviewOrderItemRequest {
+  /**
+   * 预览项的ID
+   */
+  @Id
+  @GeneratedValue(generator = "strategy_uuid")
+  @GenericGenerator(name = "strategy_uuid", strategy = "uuid")
+  private String id;
 
-	/**
-	 * 商品数量
-	 */
-	private int count;
+  /**
+   * 通过ShopCartItem生成PreviewOrderItem
+   * 
+   * @param shopcartItem
+   * @return
+   */
+  public static PreviewOrderItem fromShopCartItem(ShopCartItem shopcartItem) {
+    if (null == shopcartItem) {
+      return null;
+    }
+    PreviewOrderItem previeworderItem = new PreviewOrderItem();
+    previeworderItem.setCount(shopcartItem.getCount());
+    previeworderItem.setGood(shopcartItem.getGood());
+    previeworderItem.setShopcartItemId(shopcartItem.getId());
+    return previeworderItem;
+  }
 
-	/**
-	 * 商品
-	 */
-	@ManyToOne
-	private Good good;
+  /**
+   * 使用提供的updateOrderItem更新预览项
+   * 
+   * @param updateOrderItem
+   */
+  public void update(PreviewOrderItem updateOrderItem) {
+    if (null == updateOrderItem) {
+      return;
+    }
+    if (updateOrderItem.count != 0) {
+      this.count = updateOrderItem.count;
+    }
+  }
 
-	/**
-	 * 关联的购物车项
-	 */
-	@OneToOne
-	@JsonIgnore
-	private ShopCartItem shopcartItem;
+  public String getId() {
+    return id;
+  }
 
-	public long getId() {
-		return id;
-	}
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    return result;
+  }
 
-	public int getCount() {
-		return count;
-	}
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    PreviewOrderItem other = (PreviewOrderItem) obj;
+    if (null == id) {
+      return null == other.id;
+    }
+    return id.equals(other.id);
 
-	public void setCount(int count) {
-		this.count = count;
-	}
-
-	public Good getGood() {
-		return good;
-	}
-
-	public void setGood(Good good) {
-		this.good = good;
-	}
-
-	public ShopCartItem getShopcartItem() {
-		return shopcartItem;
-	}
-
-	public void setShopcartItem(ShopCartItem shopcartItem) {
-		this.shopcartItem = shopcartItem;
-	}
+  }
 
 }

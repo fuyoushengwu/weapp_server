@@ -1,6 +1,10 @@
 package cn.aijiamuyingfang.server.domain.address;
 
+import cn.aijiamuyingfang.server.commons.utils.StringUtils;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * [描述]:
@@ -14,58 +18,42 @@ import javax.persistence.Entity;
  * @date 2018-06-25 20:38:53
  */
 @Entity
-public class RecieveAddress extends Address {
+public class RecieveAddress extends RecieveAddressRequest {
+  /**
+   * 地址-Id
+   */
+  @Id
+  @GeneratedValue(generator = "strategy_uuid")
+  @GenericGenerator(name = "strategy_uuid", strategy = "uuid")
+  private String id;
 
-	/**
-	 * 收货地址-关联用户
-	 */
-	private long userId;
+  /**
+   * 使用updateRecieveAddress更新收件地址信息
+   * 
+   * @param updateRecieveAddress
+   */
+  public void update(RecieveAddress updateRecieveAddress) {
+    if (null == updateRecieveAddress) {
+      return;
+    }
+    super.update(updateRecieveAddress);
+    if (StringUtils.hasContent(updateRecieveAddress.userid)) {
+      this.userid = updateRecieveAddress.userid;
+    }
+    if (StringUtils.hasContent(updateRecieveAddress.phone)) {
+      this.phone = updateRecieveAddress.phone;
+    }
+    if (StringUtils.hasContent(updateRecieveAddress.reciever)) {
+      this.reciever = updateRecieveAddress.reciever;
+    }
+  }
 
-	/**
-	 * 收货地址-联系电话
-	 */
-	private String phone;
+  public String getId() {
+    return id;
+  }
 
-	/**
-	 * 收货地址-收件人
-	 */
-	private String reciever;
-
-	/**
-	 * 收货地址-默认收货地址
-	 */
-	private boolean def;
-
-	public long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(long userId) {
-		this.userId = userId;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public String getReciever() {
-		return reciever;
-	}
-
-	public void setReciever(String reciever) {
-		this.reciever = reciever;
-	}
-
-	public boolean isDef() {
-		return def;
-	}
-
-	public void setDef(boolean def) {
-		this.def = def;
-	}
+  public void setId(String id) {
+    this.id = id;
+  }
 
 }

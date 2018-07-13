@@ -20,7 +20,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(basePackages = { "cn.aijiamuyingfang.server" })
 @EntityScan(basePackages = { "cn.aijiamuyingfang.server" })
 public class ShoporderApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(ShoporderApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(ShoporderApplication.class, args);
+  }
 }

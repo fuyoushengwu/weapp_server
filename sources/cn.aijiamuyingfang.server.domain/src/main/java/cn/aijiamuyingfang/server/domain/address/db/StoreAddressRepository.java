@@ -1,9 +1,8 @@
 package cn.aijiamuyingfang.server.domain.address.db;
 
+import cn.aijiamuyingfang.server.domain.address.StoreAddress;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import cn.aijiamuyingfang.server.domain.address.StoreAddress;
 
 /**
  * [描述]:
@@ -17,6 +16,6 @@ import cn.aijiamuyingfang.server.domain.address.StoreAddress;
  * @date 2018-06-25 21:15:03
  */
 @Repository
-public interface StoreAddressRepository extends JpaRepository<StoreAddress, Long> {
-
+public interface StoreAddressRepository extends JpaRepository<StoreAddress, String> {
+  // TODO:要设置条件:deprecated=false
 }

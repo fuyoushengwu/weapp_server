@@ -1,13 +1,11 @@
 package cn.aijiamuyingfang.server.domain.coupon;
 
-import java.util.List;
-
-import javax.persistence.ElementCollection;
+import cn.aijiamuyingfang.server.commons.utils.StringUtils;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.util.CollectionUtils;
 
 /**
  * [描述]:
@@ -21,74 +19,54 @@ import javax.persistence.ManyToMany;
  * @date 2018-06-27 03:02:06
  */
 @Entity
-public class GoodVoucher {
-	/**
-	 * 兑换券-Id
-	 */
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+public class GoodVoucher extends GoodVoucherRequest {
+  /**
+   * 兑换券-Id
+   */
+  @Id
+  @GeneratedValue(generator = "strategy_uuid")
+  @GenericGenerator(name = "strategy_uuid", strategy = "uuid")
+  private String id;
 
-	/**
-	 * 兑换券名称
-	 */
-	private String name;
+  private boolean deprecated;
 
-	/**
-	 * 兑换券描述
-	 */
-	private String description;
+  /**
+   * 使用提供的GoodVoucher更新本商品兑换券信息
+   * 
+   * @param updateVoucher
+   */
+  public void update(GoodVoucher updateVoucher) {
+    if (null == updateVoucher) {
+      return;
+    }
+    if (StringUtils.hasContent(updateVoucher.name)) {
+      this.name = updateVoucher.name;
+    }
+    if (StringUtils.hasContent(updateVoucher.description)) {
+      this.description = updateVoucher.description;
+    }
+    if (updateVoucher.score != 0) {
+      this.score = updateVoucher.score;
+    }
+    if (!CollectionUtils.isEmpty(updateVoucher.voucheritemIdList)) {
+      this.voucheritemIdList = updateVoucher.voucheritemIdList;
+    }
+  }
 
-	/**
-	 * 兑换券中可用的兑换值
-	 */
-	private String score;
+  public String getId() {
+    return id;
+  }
 
-	/**
-	 * 兑换券可以兑换的项目
-	 */
-	@ElementCollection
-	@ManyToMany
-	private List<VoucherItem> voucherItemList;
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	public long getId() {
-		return id;
-	}
+  public boolean isDeprecated() {
+    return deprecated;
+  }
 
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getScore() {
-		return score;
-	}
-
-	public void setScore(String score) {
-		this.score = score;
-	}
-
-	public List<VoucherItem> getVoucherItemList() {
-		return voucherItemList;
-	}
-
-	public void setVoucherItemList(List<VoucherItem> voucherItemList) {
-		this.voucherItemList = voucherItemList;
-	}
+  public void setDeprecated(boolean deprecated) {
+    this.deprecated = deprecated;
+  }
 
 }

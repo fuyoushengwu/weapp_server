@@ -1,17 +1,15 @@
 package cn.aijiamuyingfang.server.domain.shoporder;
 
+import cn.aijiamuyingfang.server.domain.address.RecieveAddress;
+import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.CascadeType;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-
-import cn.aijiamuyingfang.server.domain.address.RecieveAddress;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * [描述]:
@@ -26,58 +24,75 @@ import cn.aijiamuyingfang.server.domain.address.RecieveAddress;
  */
 @Entity
 public class PreviewOrder {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+  @Id
+  @GeneratedValue(generator = "strategy_uuid")
+  @GenericGenerator(name = "strategy_uuid", strategy = "uuid")
+  private String id;
 
-	/**
-	 * 订单所属用户
-	 */
-	private long userid;
+  /**
+   * 订单所属用户
+   */
+  private String userid;
 
-	/**
-	 * 收货地址
-	 */
-	@OneToOne
-	private RecieveAddress recieveAddress;
+  /**
+   * 收货地址
+   */
+  @ManyToOne
+  private RecieveAddress recieveAddress;
 
-	/**
-	 * 预览的商品项
-	 */
-	@ElementCollection
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<PreviewOrderItem> orderItemList;
+  /**
+   * 预览的商品项
+   */
+  @OneToMany(cascade = CascadeType.ALL)
+  private List<PreviewOrderItem> orderItemList = new ArrayList<>();
 
-	public long getId() {
-		return id;
-	}
+  /**
+   * 添加预览项
+   * 
+   * @param item
+   */
+  public void addOrderItem(PreviewOrderItem item) {
+    if (null == item) {
+      return;
+    }
+    synchronized (this) {
+      if (null == this.orderItemList) {
+        this.orderItemList = new ArrayList<>();
+      }
+    }
+    this.orderItemList.add(item);
+  }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+  public String getId() {
+    return id;
+  }
 
-	public long getUserid() {
-		return userid;
-	}
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	public void setUserid(long userid) {
-		this.userid = userid;
-	}
+  public String getUserid() {
+    return userid;
+  }
 
-	public RecieveAddress getRecieveAddress() {
-		return recieveAddress;
-	}
+  public void setUserid(String userid) {
+    this.userid = userid;
+  }
 
-	public void setRecieveAddress(RecieveAddress recieveAddress) {
-		this.recieveAddress = recieveAddress;
-	}
+  public RecieveAddress getRecieveAddress() {
+    return recieveAddress;
+  }
 
-	public List<PreviewOrderItem> getOrderItemList() {
-		return orderItemList;
-	}
+  public void setRecieveAddress(RecieveAddress recieveAddress) {
+    this.recieveAddress = recieveAddress;
+  }
 
-	public void setOrderItemList(List<PreviewOrderItem> orderItemList) {
-		this.orderItemList = orderItemList;
-	}
+  public List<PreviewOrderItem> getOrderItemList() {
+    return orderItemList;
+  }
+
+  public void setOrderItemList(List<PreviewOrderItem> orderItemList) {
+    this.orderItemList = orderItemList;
+  }
 
 }

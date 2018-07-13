@@ -20,7 +20,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(basePackages = { "cn.aijiamuyingfang.server" })
 @EntityScan(basePackages = { "cn.aijiamuyingfang.server" })
 public class GoodsApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(GoodsApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(GoodsApplication.class, args);
+  }
 }

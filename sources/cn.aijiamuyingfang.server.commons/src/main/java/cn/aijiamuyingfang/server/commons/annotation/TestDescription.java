@@ -21,24 +21,24 @@ import java.lang.annotation.Target;
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Documented
 public @interface TestDescription {
-	/**
-	 * 测试用例预期
-	 * 
-	 * @return
-	 */
-	String expected() default "";
+  /**
+   * 测试用例预期
+   * 
+   * @return
+   */
+  String expected() default "";
 
-	/**
-	 * 测试用例条件
-	 * 
-	 * @return
-	 */
-	String condition() default "";
+  /**
+   * 测试用例条件
+   * 
+   * @return
+   */
+  String condition() default "";
 
-	/**
-	 * 测试用例描述
-	 * 
-	 * @return
-	 */
-	String description() default "";
+  /**
+   * 测试用例描述
+   * 
+   * @return
+   */
+  String description() default "";
 }

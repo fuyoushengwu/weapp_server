@@ -15,42 +15,42 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties(prefix = "wechat.miniapp")
 public class MiniAppProperties {
-	/**
-	 * 设置微信小程序的appid
-	 */
-	private String appid;
+  /**
+   * 设置微信小程序的appid
+   */
+  private String appid;
 
-	/**
-	 * 设置微信小程序的Secret
-	 */
-	private String secret;
+  /**
+   * 设置微信小程序的Secret
+   */
+  private String secret;
 
-	/**
-	 * 消息格式，XML或者JSON
-	 */
-	private String msgDataFormat;
+  /**
+   * 消息格式，XML或者JSON
+   */
+  private String msgDataFormat;
 
-	public String getAppid() {
-		return appid;
-	}
+  public String getAppid() {
+    return appid;
+  }
 
-	public void setAppid(String appid) {
-		this.appid = appid;
-	}
+  public void setAppid(String appid) {
+    this.appid = appid;
+  }
 
-	public String getSecret() {
-		return secret;
-	}
+  public String getSecret() {
+    return secret;
+  }
 
-	public void setSecret(String secret) {
-		this.secret = secret;
-	}
+  public void setSecret(String secret) {
+    this.secret = secret;
+  }
 
-	public String getMsgDataFormat() {
-		return msgDataFormat;
-	}
+  public String getMsgDataFormat() {
+    return msgDataFormat;
+  }
 
-	public void setMsgDataFormat(String msgDataFormat) {
-		this.msgDataFormat = msgDataFormat;
-	}
+  public void setMsgDataFormat(String msgDataFormat) {
+    this.msgDataFormat = msgDataFormat;
+  }
 }
