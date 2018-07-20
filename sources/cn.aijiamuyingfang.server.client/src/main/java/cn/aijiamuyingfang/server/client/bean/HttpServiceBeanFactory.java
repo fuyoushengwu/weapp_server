@@ -1,6 +1,16 @@
 package cn.aijiamuyingfang.server.client.bean;
 
+import cn.aijiamuyingfang.server.client.converter.EnumRetrofitConverterFactory;
 import cn.aijiamuyingfang.server.commons.utils.StringUtils;
+import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -107,13 +117,45 @@ public class HttpServiceBeanFactory {
         }
       }
 
+      GsonBuilder builder = new GsonBuilder();
+      builder.registerTypeAdapter(Date.class, new TypeAdapter<Date>() {
+        private SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        @Override
+        public void write(JsonWriter out, Date value) throws IOException {
+          if (value != null) {
+            out.value(dateFormatter.format(value));
+          } else {
+            out.value((String) null);
+          }
+        }
+
+        @Override
+        public Date read(JsonReader in) throws IOException {
+          if (in.peek() == JsonToken.NULL) {
+            in.nextNull();
+            return null;
+          }
+          String time = in.nextString();
+          try {
+            return dateFormatter.parse(time);
+          } catch (ParseException e) {
+            return null;
+          }
+        }
+
+      });
+
       Retrofit retrofit = new Retrofit.Builder().baseUrl(baseurl).client(clientBuilder.build())
-          .addConverterFactory(ScalarsConverterFactory.create()).addConverterFactory(GsonConverterFactory.create())
-          .build();
+          .addConverterFactory(ScalarsConverterFactory.create())
+          .addConverterFactory(GsonConverterFactory.create(builder.create()))
+          .addConverterFactory(new EnumRetrofitConverterFactory()).build();
       httpServiceBean.setRetrofit(retrofit);
       serviceBeans.put(baseurl, httpServiceBean);
     }
+
     Retrofit retrofit = httpServiceBean.getRetrofit();
+
     Object service = retrofit.create(serviceClass);
     httpServiceBean.getServices().put(serviceClass, service);
     return service;

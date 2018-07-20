@@ -119,6 +119,10 @@ public class AuthService {
     user = new User();
     user.setOpenid(jscode);
     user.setPassword(encoder.encode(jscode));
+    user.setJscode(request.getJscode());
+    user.setPhone(request.getPhone());
+    user.setAvatar(request.getAvatar());
+    user.setNickname(request.getNickname());
     user.addAuthority(UserAuthority.SENDER);
     userRepository.save(user);
     return user;

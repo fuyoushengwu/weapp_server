@@ -1,4 +1,4 @@
-package cn.aijiamuyingfang.server.domain;
+package cn.aijiamuyingfang.server.commons.domain;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 

@@ -1,8 +1,9 @@
 package cn.aijiamuyingfang.server.domain;
 
-import cn.aijiamuyingfang.server.domain.shoporder.SendType;
-import cn.aijiamuyingfang.server.domain.shoporder.ShopOrderStatus;
-import cn.aijiamuyingfang.server.domain.user.UserMessageType;
+import cn.aijiamuyingfang.server.commons.domain.BaseEnum;
+import cn.aijiamuyingfang.server.commons.domain.SendType;
+import cn.aijiamuyingfang.server.commons.domain.ShopOrderStatus;
+import cn.aijiamuyingfang.server.commons.domain.UserMessageType;
 import java.util.Map;
 import java.util.WeakHashMap;
 import org.springframework.core.convert.converter.Converter;

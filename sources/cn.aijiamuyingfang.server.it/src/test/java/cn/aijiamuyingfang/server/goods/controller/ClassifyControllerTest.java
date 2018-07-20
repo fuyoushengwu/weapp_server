@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.server.goods.controller;
 
+import static cn.aijiamuyingfang.server.client.AbstractTestAction.ADMIN_USER_TOKEN;
+
 import cn.aijiamuyingfang.server.client.itapi.impl.ClassifyControllerClient;
 import cn.aijiamuyingfang.server.commons.annotation.TestDescription;
 import cn.aijiamuyingfang.server.domain.exception.GoodsException;
@@ -34,25 +36,25 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class ClassifyControllerTest {
 
   @Autowired
-  private GoodsTestActions goodsTestActions;
+  private GoodsTestActions testActions;
 
   @Autowired
   private ClassifyControllerClient classifyControllerClient;
 
   @Before
   public void before() throws IOException {
-    goodsTestActions.clearData();
+    testActions.clearData();
   }
 
   @After
   public void after() {
-    goodsTestActions.clearData();
+    testActions.clearData();
   }
 
   @Test
   @TestDescription(description = "当门店中没有条目数据时查询")
   public void testGetStoreTopClassifyList_001() throws IOException {
-    Store store = goodsTestActions.createStoreOne();
+    Store store = testActions.createStoreOne();
     Assert.assertNotNull(store);
     Assert.assertEquals(0, store.getClassifyList().size());
   }
@@ -60,50 +62,48 @@ public class ClassifyControllerTest {
   @Test
   @TestDescription(description = "当有一条顶级的条目数据但不属于门店时查询")
   public void testGetStoreTopClassifyList_002() throws IOException {
-    goodsTestActions.createStoreOne();
-    goodsTestActions.createClassifyOne();
-    List<Classify> classifyList = classifyControllerClient.getStoreTopClassifyList(GoodsTestActions.ADMIN_USER_TOKEN,
-        goodsTestActions.storeoneId);
+    testActions.createStoreOne();
+    testActions.createClassifyOne();
+    List<Classify> classifyList = classifyControllerClient.getStoreTopClassifyList(ADMIN_USER_TOKEN,
+        testActions.storeoneId);
     Assert.assertEquals(0, classifyList.size());
   }
 
   @Test
   @TestDescription(description = "当门店中有一条顶级的条目数据时查询")
   public void testGetStoreTopClassifyList_003() throws IOException {
-    goodsTestActions.createStoreOne();
-    goodsTestActions.createClassifyOne();
-    goodsTestActions.applyClassifyOneForStoreOne();
-    List<Classify> classifyList = classifyControllerClient.getStoreTopClassifyList(GoodsTestActions.ADMIN_USER_TOKEN,
-        goodsTestActions.storeoneId);
+    testActions.createStoreOne();
+    testActions.createClassifyOne();
+    testActions.applyClassifyOneForStoreOne();
+    List<Classify> classifyList = classifyControllerClient.getStoreTopClassifyList(ADMIN_USER_TOKEN,
+        testActions.storeoneId);
     Assert.assertEquals(1, classifyList.size());
-    goodsTestActions.deleteClassifyOne();
-    classifyList = classifyControllerClient.getStoreTopClassifyList(GoodsTestActions.ADMIN_USER_TOKEN,
-        goodsTestActions.storeoneId);
+    testActions.deleteClassifyOne();
+    classifyList = classifyControllerClient.getStoreTopClassifyList(ADMIN_USER_TOKEN, testActions.storeoneId);
     Assert.assertEquals(0, classifyList.size());
   }
 
   @Test(expected = GoodsException.class)
   @TestDescription(description = "获取不存在的Classify")
   public void testGetClassify_001() throws IOException {
-    classifyControllerClient.getClassify(GoodsTestActions.ADMIN_USER_TOKEN, "not_exist_classify");
+    classifyControllerClient.getClassify(ADMIN_USER_TOKEN, "not_exist_classify");
   }
 
   @Test
   @TestDescription(description = "获取存在的Classify")
   public void testGetClassify_002() throws IOException {
-    goodsTestActions.createClassifyOne();
-    Classify classify = classifyControllerClient.getClassify(GoodsTestActions.ADMIN_USER_TOKEN,
-        goodsTestActions.classifyoneId);
+    testActions.createClassifyOne();
+    Classify classify = classifyControllerClient.getClassify(ADMIN_USER_TOKEN, testActions.classifyoneId);
     Assert.assertNotNull(classify);
-    Assert.assertEquals(goodsTestActions.classifyoneId, classify.getId());
+    Assert.assertEquals(testActions.classifyoneId, classify.getId());
   }
 
   @Test
   @TestDescription(description = "获取子条目(当没有子条目时)")
   public void test_GetSubClassifyList_001() throws IOException {
-    goodsTestActions.createClassifyOne();
-    List<Classify> classifyList = classifyControllerClient.getSubClassifyList(GoodsTestActions.ADMIN_USER_TOKEN,
-        goodsTestActions.classifyoneId);
+    testActions.createClassifyOne();
+    List<Classify> classifyList = classifyControllerClient.getSubClassifyList(ADMIN_USER_TOKEN,
+        testActions.classifyoneId);
     Assert.assertNotNull(classifyList);
     Assert.assertEquals(0, classifyList.size());
   }
@@ -111,10 +111,10 @@ public class ClassifyControllerTest {
   @Test
   @TestDescription(description = "获取子条目(当有子条目时)")
   public void test_GetSubClassifyList_002() throws IOException {
-    goodsTestActions.createClassifyOne();
-    goodsTestActions.createSubClassifyOneForClassifyOne();
-    List<Classify> classifyList = classifyControllerClient.getSubClassifyList(GoodsTestActions.ADMIN_USER_TOKEN,
-        goodsTestActions.classifyoneId);
+    testActions.createClassifyOne();
+    testActions.createSubClassifyOneForClassifyOne();
+    List<Classify> classifyList = classifyControllerClient.getSubClassifyList(ADMIN_USER_TOKEN,
+        testActions.classifyoneId);
     Assert.assertNotNull(classifyList);
     Assert.assertEquals(1, classifyList.size());
   }

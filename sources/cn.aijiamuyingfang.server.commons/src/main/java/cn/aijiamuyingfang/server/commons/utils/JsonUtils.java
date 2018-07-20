@@ -1,9 +1,18 @@
 package cn.aijiamuyingfang.server.commons.utils;
 
+import cn.aijiamuyingfang.server.commons.domain.SendType;
+import cn.aijiamuyingfang.server.commons.domain.ShopOrderStatus;
+import cn.aijiamuyingfang.server.commons.domain.UserMessageType;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +32,75 @@ public final class JsonUtils {
   // 线程局部变量，每个线程有自己的ObjectMapper变量，空间换取时间。
   private static final ThreadLocal<Gson> threadLocal = ThreadLocal.withInitial(() -> {
     GsonBuilder builder = new GsonBuilder();
-    builder.setDateFormat("yyyy-MM-dd HH:mm");
+    builder.setDateFormat("yyyy-MM-dd HH:mm:ss");
+    builder.registerTypeHierarchyAdapter(SendType.class, new TypeAdapter<SendType>() {
+
+      @Override
+      public void write(JsonWriter out, SendType value) throws IOException {
+        out.value(value == null ? null : value.getValue());
+      }
+
+      @Override
+      public SendType read(JsonReader in) throws IOException {
+        if (in.peek() == JsonToken.NULL) {
+          in.nextNull();
+          return SendType.UNKNOW;
+        }
+        int source = in.nextInt();
+        for (SendType sendType : SendType.values()) {
+          if (sendType.getValue() == source) {
+            return sendType;
+          }
+        }
+        return SendType.UNKNOW;
+      }
+    });
+
+    builder.registerTypeHierarchyAdapter(ShopOrderStatus.class, new TypeAdapter<ShopOrderStatus>() {
+
+      @Override
+      public void write(JsonWriter out, ShopOrderStatus value) throws IOException {
+        out.value(value == null ? null : value.getValue());
+      }
+
+      @Override
+      public ShopOrderStatus read(JsonReader in) throws IOException {
+        if (in.peek() == JsonToken.NULL) {
+          in.nextNull();
+          return ShopOrderStatus.UNKNOW;
+        }
+        int source = in.nextInt();
+        for (ShopOrderStatus status : ShopOrderStatus.values()) {
+          if (status.getValue() == source) {
+            return status;
+          }
+        }
+        return ShopOrderStatus.UNKNOW;
+      }
+    });
+
+    builder.registerTypeHierarchyAdapter(UserMessageType.class, new TypeAdapter<UserMessageType>() {
+
+      @Override
+      public void write(JsonWriter out, UserMessageType value) throws IOException {
+        out.value(value == null ? null : value.getValue());
+      }
+
+      @Override
+      public UserMessageType read(JsonReader in) throws IOException {
+        if (in.peek() == JsonToken.NULL) {
+          in.nextNull();
+          return UserMessageType.UNKNOW;
+        }
+        int source = in.nextInt();
+        for (UserMessageType type : UserMessageType.values()) {
+          if (type.getValue() == source) {
+            return type;
+          }
+        }
+        return UserMessageType.UNKNOW;
+      }
+    });
     return builder.create();
   });
 
@@ -106,9 +183,7 @@ public final class JsonUtils {
       return Collections.emptyList();
     }
     Gson gson = threadLocal.get();
-    return gson.fromJson(json, new TypeToken<List<T>>() {
-    }.getType());
-
+    return gson.fromJson(json, TypeToken.getParameterized(List.class, beanClass).getType());
   }
 
   /**
@@ -124,8 +199,7 @@ public final class JsonUtils {
       return Collections.emptyMap();
     }
     Gson gson = threadLocal.get();
-    return gson.fromJson(json, new TypeToken<Map<K, V>>() {
-    }.getType());
+    return gson.fromJson(json, TypeToken.getParameterized(HashMap.class, keyClass, valueClass).getType());
   }
 
 }

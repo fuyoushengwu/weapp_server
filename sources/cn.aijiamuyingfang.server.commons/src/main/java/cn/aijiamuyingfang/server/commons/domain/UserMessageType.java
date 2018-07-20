@@ -1,47 +1,39 @@
-package cn.aijiamuyingfang.server.domain.shoporder;
+package cn.aijiamuyingfang.server.commons.domain;
 
-import cn.aijiamuyingfang.server.domain.BaseEnum;
 import com.google.gson.annotations.SerializedName;
 
 /**
  * [描述]:
  * <p>
- * 订单配送类型
+ * 用户消息类型
  * </p>
  * 
  * @version 1.0.0
  * @author ShiWei
  * @email shiweideyouxiang@sina.cn
- * @date 2018-06-27 15:51:30
+ * @date 2018-06-27 17:10:30
  */
-public enum SendType implements BaseEnum {
+public enum UserMessageType implements BaseEnum {
+
   /**
-   * 自取
+   * 通知
    */
   @SerializedName("0")
-  PICKUP(0),
+  NOTICE(0),
 
   /**
-   * 送货
+   * 链接
    */
   @SerializedName("1")
-  OWNSEND(1),
-
+  LINK(1),
   /**
-   * 快递
-   */
-  @SerializedName("2")
-  THIRDSEND(2),
-
-  /**
-   * 未知类型
+   * 位置类型
    */
   @SerializedName("-1")
   UNKNOW(-1);
-
   private int value;
 
-  private SendType(int value) {
+  private UserMessageType(int value) {
     this.value = value;
   }
 

@@ -1,5 +1,6 @@
 package cn.aijiamuyingfang.server.domain.user;
 
+import cn.aijiamuyingfang.server.commons.domain.UserMessageType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
 import javax.persistence.Column;

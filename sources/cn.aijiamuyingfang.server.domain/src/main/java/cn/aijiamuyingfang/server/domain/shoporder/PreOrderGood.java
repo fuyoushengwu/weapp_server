@@ -14,6 +14,7 @@ import cn.aijiamuyingfang.server.domain.goods.Good;
  * @date 2018-07-03 04:40:35
  */
 public class PreOrderGood {
+
   /**
    * 预约的商品
    */

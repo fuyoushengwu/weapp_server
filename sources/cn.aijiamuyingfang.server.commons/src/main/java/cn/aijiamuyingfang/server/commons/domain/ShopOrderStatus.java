@@ -1,6 +1,5 @@
-package cn.aijiamuyingfang.server.domain.shoporder;
+package cn.aijiamuyingfang.server.commons.domain;
 
-import cn.aijiamuyingfang.server.domain.BaseEnum;
 import com.google.gson.annotations.SerializedName;
 
 /**

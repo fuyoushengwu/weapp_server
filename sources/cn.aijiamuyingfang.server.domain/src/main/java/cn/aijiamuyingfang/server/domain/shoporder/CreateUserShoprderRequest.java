@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.server.domain.shoporder;
 
+import cn.aijiamuyingfang.server.commons.domain.SendType;
+import cn.aijiamuyingfang.server.commons.domain.ShopOrderStatus;
 import java.util.Date;
 
 /**

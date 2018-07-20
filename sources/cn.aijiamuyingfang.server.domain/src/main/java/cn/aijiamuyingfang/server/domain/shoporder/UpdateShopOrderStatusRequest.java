@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.server.domain.shoporder;
 
+import cn.aijiamuyingfang.server.commons.domain.ShopOrderStatus;
+
 /**
  * [描述]:
  * <p>

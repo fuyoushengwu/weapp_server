@@ -65,7 +65,7 @@ public class ShopCartService {
       shopcartItem.setGood(good);
       shopcartItem.setCount(0);
     }
-    shopcartItem.setCount(goodNum);
+    shopcartItem.addCount(goodNum);
     shopcartItemRepository.save(shopcartItem);
     return shopcartItem;
   }

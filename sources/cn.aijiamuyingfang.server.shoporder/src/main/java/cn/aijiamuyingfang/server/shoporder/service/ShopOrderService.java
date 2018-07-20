@@ -3,6 +3,8 @@ package cn.aijiamuyingfang.server.shoporder.service;
 import cn.aijiamuyingfang.server.client.api.impl.CouponControllerClient;
 import cn.aijiamuyingfang.server.client.api.impl.TemplateMsgControllerClient;
 import cn.aijiamuyingfang.server.commons.controller.bean.ResponseCode;
+import cn.aijiamuyingfang.server.commons.domain.SendType;
+import cn.aijiamuyingfang.server.commons.domain.ShopOrderStatus;
 import cn.aijiamuyingfang.server.commons.utils.StringUtils;
 import cn.aijiamuyingfang.server.domain.address.RecieveAddress;
 import cn.aijiamuyingfang.server.domain.address.db.RecieveAddressRepository;
@@ -25,10 +27,8 @@ import cn.aijiamuyingfang.server.domain.shoporder.GetUserShopOrderListResponse;
 import cn.aijiamuyingfang.server.domain.shoporder.PreOrderGood;
 import cn.aijiamuyingfang.server.domain.shoporder.PreviewOrder;
 import cn.aijiamuyingfang.server.domain.shoporder.PreviewOrderItem;
-import cn.aijiamuyingfang.server.domain.shoporder.SendType;
 import cn.aijiamuyingfang.server.domain.shoporder.ShopOrder;
 import cn.aijiamuyingfang.server.domain.shoporder.ShopOrderItem;
-import cn.aijiamuyingfang.server.domain.shoporder.ShopOrderStatus;
 import cn.aijiamuyingfang.server.domain.shoporder.ShopOrderVoucher;
 import cn.aijiamuyingfang.server.domain.shoporder.UpdateShopOrderStatusRequest;
 import cn.aijiamuyingfang.server.domain.shoporder.db.PreviewOrderRepository;
@@ -170,7 +170,7 @@ public class ShopOrderService {
   }
 
   /**
-   * 更新订单
+   * 更新订单状态(在送货时调用)
    * 
    * @param token
    * @param shoporderid
@@ -416,7 +416,7 @@ public class ShopOrderService {
     shoporder.setUserid(userid);
 
     shoporder.setSendtype(requestBean.getSendtype());
-    shoporder.setStatus(requestBean.getStatus());
+    shoporder.setStatus(requestBean.getStatus() != null ? requestBean.getStatus() : ShopOrderStatus.UNSTART);
     shoporder.setPickupTime(requestBean.getPickupTime());
     shoporder.setRecieveAddress(recieveaddressRepository.findOne(requestBean.getAddressid()));
     shoporder.setBusinessMessage(requestBean.getBuyerMessage());
@@ -424,11 +424,19 @@ public class ShopOrderService {
 
     double totalGoodsPrice = 0;
     List<String> goodids = new ArrayList<>();
+    boolean ispreorder = false;
     for (PreviewOrderItem previeworderItem : previeworder.getOrderItemList()) {
+      if (previeworderItem.getCount() > previeworderItem.getGood().getCount()) {
+        ispreorder = true;
+      }
       shoporder.addOrderItem(ShopOrderItem.fromPreviewOrderItem(previeworderItem));
       totalGoodsPrice += previeworderItem.getGood().getPrice() * previeworderItem.getCount();
       goodids.add(previeworderItem.getGood().getId());
       shopcartitemRepository.delete(previeworderItem.getShopcartItemId());
+    }
+    if (ispreorder) {
+      shoporder.setStatus(ShopOrderStatus.PREORDER);
+      shoporder.setFromPreOrder(true);
     }
 
     shoporder.setTotalGoodsPrice(totalGoodsPrice);
@@ -575,12 +583,20 @@ public class ShopOrderService {
   public GetPreOrderGoodListResponse getPreOrderGoodList(int currentpage, int pagesize) {
     // PageRequest的Page参数是基于0的,但是currentPage是基于1的,所有将currentPage作为参数传递给PgeRequest时需要'-1'
     PageRequest pageRequest = new PageRequest(currentpage - 1, pagesize);
-    Page<PreOrderGood> preorderPage = shopOrderRepository.findPreOrder(pageRequest);
+    Page<Object[]> pageResponse = shopOrderRepository.findPreOrder(pageRequest);
+    List<PreOrderGood> preorderGoodList = new ArrayList<>();
+    for (Object[] data : pageResponse.getContent()) {
+      PreOrderGood preOrderGood = new PreOrderGood();
+      preOrderGood.setCount(Integer.valueOf(data[0].toString()));
+      preOrderGood.setGood(goodRepository.findOne(data[1].toString()));
+      preorderGoodList.add(preOrderGood);
+    }
     GetPreOrderGoodListResponse response = new GetPreOrderGoodListResponse();
-    response.setCurrentpage(preorderPage.getNumber() + 1);
-    response.setDataList(preorderPage.getContent());
-    response.setTotalpage(preorderPage.getSize());
+    response.setCurrentpage(pageResponse.getNumber() + 1);
+    response.setDataList(preorderGoodList);
+    response.setTotalpage(pageResponse.getSize());
     return response;
+
   }
 
   /**

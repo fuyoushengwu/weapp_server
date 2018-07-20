@@ -39,6 +39,14 @@ public enum ResponseCode {
    */
   RECIEVEADDRESS_NOT_EXIST("404", "RecieveAddress[%s] not exist"),
   /**
+   * 预览不存在
+   */
+  PREVIEWORDER_NOT_EXIST("404", "user[%s] preview order not exist"),
+  /**
+   * 预览项不存在
+   */
+  PREVIEWORDERITEM_NOT_EXIST("404", "preview order item[%s] not exist"),
+  /**
    * 订单不存在
    */
   SHOPORDER_NOT_EXIST("404", "shoporder[%s] not exist"),

@@ -1,5 +1,8 @@
 package cn.aijiamuyingfang.server.coupon.controller;
 
+import static cn.aijiamuyingfang.server.client.AbstractTestAction.ADMIN_USER_ID;
+import static cn.aijiamuyingfang.server.client.AbstractTestAction.ADMIN_USER_TOKEN;
+
 import cn.aijiamuyingfang.server.client.api.impl.CouponControllerClient;
 import cn.aijiamuyingfang.server.commons.annotation.TestDescription;
 import cn.aijiamuyingfang.server.domain.address.RecieveAddress;
@@ -47,7 +50,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT, classes = GoodsApplication.class)
 public class CouponControllerTest {
   @Autowired
-  private CouponTestActions couponTestActions;
+  private CouponTestActions testActions;
 
   @Autowired
   private PreviewOrderRepository previeworderRepository;
@@ -60,19 +63,19 @@ public class CouponControllerTest {
 
   @Before
   public void before() throws IOException {
-    couponTestActions.clearData();
+    testActions.clearData();
   }
 
   @After
   public void after() {
-    couponTestActions.clearData();
+    testActions.clearData();
   }
 
   @Test
   @TestDescription(description = "当前用户没有兑换券时获得不到用户兑换券")
   public void testGetUserVoucherList_001() throws IOException {
-    GetUserVoucherListResponse response = couponControllerClient.getUserVoucherList(CouponTestActions.ADMIN_USER_TOKEN,
-        CouponTestActions.ADMIN_USER_ID, 1, 10);
+    GetUserVoucherListResponse response = couponControllerClient.getUserVoucherList(ADMIN_USER_TOKEN, ADMIN_USER_ID, 1,
+        10);
     Assert.assertNotNull(response);
     Assert.assertEquals(1, response.getCurrentpage());
     Assert.assertEquals(0, response.getTotalpage());
@@ -83,50 +86,50 @@ public class CouponControllerTest {
   @TestDescription(description = "当前系统有两个用户,一个用户有兑换券一个用户没有兑换券")
   public void testGetUserVoucherList_002() throws IOException {
     // 0.创建用户:Sender
-    User senderUser = couponTestActions.createSenderOneUser();
+    User senderUser = testActions.createSenderOneUser();
     Assert.assertNotNull(senderUser);
 
-    String senderToken = couponTestActions.getSenderOneToken();
+    String senderToken = testActions.getSenderOneToken();
     Assert.assertNotNull(senderToken);
 
     // 1.为用户添加收货地址
-    RecieveAddress recieveaddress = couponTestActions.addSenderOneRecieveOne();
+    RecieveAddress recieveaddress = testActions.addSenderOneRecieveOne();
     Assert.assertNotNull(recieveaddress);
 
     // 2.创建商品:good 1
-    Good good = couponTestActions.createGoodOne();
+    Good good = testActions.createGoodOne();
     Assert.assertNotNull(good);
 
     // 3.创建VoucherItem:voucher item 1
-    VoucherItem voucherItem = couponTestActions.createVoucherItemOneForGoodOne();
+    VoucherItem voucherItem = testActions.createVoucherItemOneForGoodOne();
     Assert.assertNotNull(voucherItem);
 
     // 4.创建商品兑换券:good voucher 1
-    GoodVoucher goodVoucher = couponTestActions.createGoodVoucherOneWithVoucherItemOne();
+    GoodVoucher goodVoucher = testActions.createGoodVoucherOneWithVoucherItemOne();
     Assert.assertNotNull(goodVoucher);
 
     // 5.关联商品(good 1)和商品兑换券(good voucher 1)
-    Good updatedGood = couponTestActions.applyGoodVoucherOneForGoodOne();
+    Good updatedGood = testActions.applyGoodVoucherOneForGoodOne();
     Assert.assertNotNull(updatedGood.getVoucherId());
 
     // 6.用户(Sender)添加购物车
-    ShopCartItem shopcartItem = couponTestActions.senderoneAdd10GoodOne();
+    ShopCartItem shopcartItem = testActions.senderoneAdd10GoodOne();
     Assert.assertNotNull(shopcartItem);
 
     // 7.用户(Sender)预览订单
-    PreviewOrder previeworder = couponTestActions.senderonePreviewGoodOne();
+    PreviewOrder previeworder = testActions.senderonePreviewGoodOne();
     Assert.assertNotNull(previeworder);
 
     // 8.用户(Sender)购买商品
-    ShopOrder shoporder = couponTestActions.senderoneBuy();
+    ShopOrder shoporder = testActions.senderoneBuy();
     Assert.assertNotNull(shoporder);
     Assert.assertNull(previeworderRepository.findByUserid(senderUser.getId()));
 
     // 9.送货员送货
-    couponTestActions.sendShopOrder();
+    testActions.sendSenderOneShopOrder();
 
     // 10.用户(Sender)确认订单
-    ConfirmUserShopOrderFinishedResponse confirmResponse = couponTestActions.senderoneConfirmOrder();
+    ConfirmUserShopOrderFinishedResponse confirmResponse = testActions.senderoneConfirmOrder();
     Assert.assertNotNull(confirmResponse);
 
     // 11.确认用户(Sender)名下有兑换券
@@ -139,67 +142,64 @@ public class CouponControllerTest {
     Assert.assertEquals(goodVoucher.getId(), uservoucher.getGoodVoucher().getId());
 
     // 12.确认用户(Admin)名下没有兑换券
-    getUserVoucherListResponse = couponControllerClient.getUserVoucherList(CouponTestActions.ADMIN_USER_TOKEN,
-        CouponTestActions.ADMIN_USER_ID, 1, 10);
+    getUserVoucherListResponse = couponControllerClient.getUserVoucherList(ADMIN_USER_TOKEN, ADMIN_USER_ID, 1, 10);
     Assert.assertNotNull(getUserVoucherListResponse);
     Assert.assertEquals(0, getUserVoucherListResponse.getDataList().size());
-    userRepository.delete(senderUser.getId());
   }
 
   @Test
   @TestDescription(description = "用户名下没有兑换券,买商品")
   public void testGetUserShopOrderVoucherList_001() throws IOException {
     // 1.创建用户
-    User senderUser = couponTestActions.createSenderOneUser();
-    couponTestActions.getSenderOneToken();
+    testActions.createSenderOneUser();
+    testActions.getSenderOneToken();
     // 2.添加收货地址
-    couponTestActions.addSenderOneRecieveOne();
+    testActions.addSenderOneRecieveOne();
     // 3.创建商品:Good One
-    couponTestActions.createGoodOne();
+    testActions.createGoodOne();
     // 4.创建VoucherItem:Voucher Item One for Good One
-    couponTestActions.createVoucherItemOneForGoodOne();
+    testActions.createVoucherItemOneForGoodOne();
     // 5.创建GoodVoucher: Good Voucher One
-    couponTestActions.createGoodVoucherOneWithVoucherItemOne();
+    testActions.createGoodVoucherOneWithVoucherItemOne();
     // 6.关联GoodOne和GoodVoucherOne
-    couponTestActions.applyGoodVoucherOneForGoodOne();
+    testActions.applyGoodVoucherOneForGoodOne();
     // 7.添加GoodOne到购物车
-    couponTestActions.senderoneAdd10GoodOne();
+    testActions.senderoneAdd10GoodOne();
     // 8.预览商品
-    couponTestActions.senderonePreviewGoodOne();
+    testActions.senderonePreviewGoodOne();
     // 9.购买商品
-    ShopOrder shoporder = couponTestActions.senderoneBuy();
+    ShopOrder shoporder = testActions.senderoneBuy();
     Assert.assertEquals(0, shoporder.getOrderVoucher().size());
     Assert.assertEquals(10, shoporder.getSendPrice(), 0.0001);
     Assert.assertEquals(1010, shoporder.getTotalPrice(), 0.0001);
-    userRepository.delete(senderUser.getId());
   }
 
   @Test
   @TestDescription(description = "用户名下有兑换券,但是不足额,买商品")
   public void testGetUserShopOrderVoucherList_002() throws IOException {
     // 1.创建用户
-    User senderUser = couponTestActions.createSenderOneUser();
-    String senderToken = couponTestActions.getSenderOneToken();
+    User senderUser = testActions.createSenderOneUser();
+    String senderToken = testActions.getSenderOneToken();
     // 2.添加收货地址
-    couponTestActions.addSenderOneRecieveOne();
+    testActions.addSenderOneRecieveOne();
     // 3.创建商品:Good One
-    couponTestActions.createGoodOne();
+    testActions.createGoodOne();
     // 4.创建VoucherItem:Voucher Item One for Good One
-    couponTestActions.createVoucherItemOneForGoodOne();
+    testActions.createVoucherItemOneForGoodOne();
     // 5.创建GoodVoucher: Good Voucher One
-    couponTestActions.createGoodVoucherOneWithVoucherItemOne();
+    testActions.createGoodVoucherOneWithVoucherItemOne();
     // 6.关联GoodOne和GoodVoucherOne
-    couponTestActions.applyGoodVoucherOneForGoodOne();
+    testActions.applyGoodVoucherOneForGoodOne();
     // 7.添加GoodOne到购物车
-    couponTestActions.senderoneAdd5GoodOne();
+    testActions.senderoneAdd5GoodOne();
     // 8.预览商品
-    couponTestActions.senderonePreviewGoodOne();
+    testActions.senderonePreviewGoodOne();
     // 9.购买商品
-    couponTestActions.senderoneBuy();
+    testActions.senderoneBuy();
     // 9.送货员送货
-    couponTestActions.sendShopOrder();
+    testActions.sendSenderOneShopOrder();
     // 10.用户(Sender)确认订单
-    couponTestActions.senderoneConfirmOrder();
+    testActions.senderoneConfirmOrder();
     // 11.确认用户(Sender)名下有兑换券
     GetUserVoucherListResponse getUserVoucherListResponse = couponControllerClient.getUserVoucherList(senderToken,
         senderUser.getId(), 1, 10);
@@ -209,48 +209,47 @@ public class CouponControllerTest {
     Assert.assertEquals(75, uservoucher.getScore());
 
     // 7.添加GoodOne到购物车
-    couponTestActions.senderoneAdd5GoodOne();
+    testActions.senderoneAdd5GoodOne();
     // 8.预览商品
-    couponTestActions.senderonePreviewGoodOne();
+    testActions.senderonePreviewGoodOne();
     // 9.购买商品
-    ShopOrder shoporder = couponTestActions.senderoneBuy();
+    ShopOrder shoporder = testActions.senderoneBuy();
     Assert.assertEquals(0, shoporder.getOrderVoucher().size());
     Assert.assertEquals(10, shoporder.getSendPrice(), 0.0001);
     Assert.assertEquals(510, shoporder.getTotalPrice(), 0.0001);
 
-    userRepository.delete(senderUser.getId());
   }
 
   @Test
   @TestDescription(description = "用户名下有足额的兑换券,使用兑换券买商品(其中一种是可以用兑换券的,另一种是不可以用兑换券的)")
   public void testGetUserShopOrderVoucherList_003() throws IOException {
     // 1.创建用户
-    User senderUser = couponTestActions.createSenderOneUser();
-    String senderToken = couponTestActions.getSenderOneToken();
+    User senderUser = testActions.createSenderOneUser();
+    String senderToken = testActions.getSenderOneToken();
     // 2.添加收货地址
-    couponTestActions.addSenderOneRecieveOne();
+    testActions.addSenderOneRecieveOne();
     // 3.创建商品:Good One,,Good Two
-    couponTestActions.createGoodOne();
-    couponTestActions.createGoodTwo();
+    testActions.createGoodOne();
+    testActions.createGoodTwo();
     // 4.创建VoucherItem:Voucher Item One for Good One
-    couponTestActions.createVoucherItemOneForGoodOne();
-    couponTestActions.createVoucherItemTwoForGoodTwo();
+    testActions.createVoucherItemOneForGoodOne();
+    testActions.createVoucherItemTwoForGoodTwo();
     // 5.创建GoodVoucher: Good Voucher One
-    couponTestActions.createGoodVoucherOneWithVoucherItemOne();
-    couponTestActions.createGoodVoucherTwoWithVoucherItemTwo();
+    testActions.createGoodVoucherOneWithVoucherItemOne();
+    testActions.createGoodVoucherTwoWithVoucherItemTwo();
     // 6.关联GoodOne和GoodVoucherOne
-    couponTestActions.applyGoodVoucherOneForGoodOne();
-    couponTestActions.applyGoodVoucherTwoForGoodTwo();
+    testActions.applyGoodVoucherOneForGoodOne();
+    testActions.applyGoodVoucherTwoForGoodTwo();
     // 7.添加GoodOne到购物车
-    couponTestActions.senderoneAdd10GoodOne();
+    testActions.senderoneAdd10GoodOne();
     // 8.预览商品
-    couponTestActions.senderonePreviewGoodOne();
+    testActions.senderonePreviewGoodOne();
     // 9.购买商品
-    couponTestActions.senderoneBuy();
+    testActions.senderoneBuy();
     // 9.送货员送货
-    couponTestActions.sendShopOrder();
+    testActions.sendSenderOneShopOrder();
     // 10.用户(Sender)确认订单
-    couponTestActions.senderoneConfirmOrder();
+    testActions.senderoneConfirmOrder();
     // 11.确认用户(Sender)名下有兑换券
     GetUserVoucherListResponse getUserVoucherListResponse = couponControllerClient.getUserVoucherList(senderToken,
         senderUser.getId(), 1, 10);
@@ -260,95 +259,91 @@ public class CouponControllerTest {
     Assert.assertEquals(150, uservoucher.getScore());
 
     // 7.添加GoodOne,GoodTwo到购物车
-    couponTestActions.senderoneAdd10GoodOne();
-    couponTestActions.senderoneAdd10GoodTwo();
+    testActions.senderoneAdd10GoodOne();
+    testActions.senderoneAdd10GoodTwo();
     // 8.预览商品
-    couponTestActions.senderonePreviewAllGood();
+    testActions.senderonePreviewAllGood();
     // 9.购买商品
-    ShopOrder shoporder = couponTestActions.senderoneBuy();
+    ShopOrder shoporder = testActions.senderoneBuy();
     Assert.assertEquals(1, shoporder.getOrderVoucher().size());
     Assert.assertEquals(10, shoporder.getSendPrice(), 0.0001);
     Assert.assertEquals(1910, shoporder.getTotalPrice(), 0.0001);
 
     // 9.送货员送货
-    couponTestActions.sendShopOrder();
+    testActions.sendSenderOneShopOrder();
     // 10.用户(Sender)确认订单
-    couponTestActions.senderoneConfirmOrder();
+    testActions.senderoneConfirmOrder();
 
     getUserVoucherListResponse = couponControllerClient.getUserVoucherList(senderToken, senderUser.getId(), 1, 10);
     Assert.assertNotNull(getUserVoucherListResponse);
     Assert.assertEquals(2, getUserVoucherListResponse.getDataList().size());
-    Assert.assertEquals(couponTestActions.goodvoucheroneId,
+    Assert.assertEquals(testActions.goodvoucheroneId,
         getUserVoucherListResponse.getDataList().get(0).getGoodVoucher().getId());
     Assert.assertEquals(180, getUserVoucherListResponse.getDataList().get(0).getScore());
-    Assert.assertEquals(couponTestActions.goodvouchertwoId,
+    Assert.assertEquals(testActions.goodvouchertwoId,
         getUserVoucherListResponse.getDataList().get(1).getGoodVoucher().getId());
     Assert.assertEquals(150, getUserVoucherListResponse.getDataList().get(1).getScore());
 
     GetVoucherItemListResponse getVoucherItemListResponse = couponControllerClient
-        .getVoucherItemList(couponTestActions.senderoneToken, 1, 10);
+        .getVoucherItemList(testActions.senderoneToken, 1, 10);
     Assert.assertNotNull(getVoucherItemListResponse);
     Assert.assertEquals(2, getVoucherItemListResponse.getDataList().size());
 
     List<String> goodids = new ArrayList<>();
-    goodids.add(couponTestActions.goodoneId);
-    goodids.add(couponTestActions.goodtwoId);
+    goodids.add(testActions.goodoneId);
+    goodids.add(testActions.goodtwoId);
     GetShopOrderVoucherListResponse getShopOrderVoucherListResponse = couponControllerClient
-        .getUserShopOrderVoucherList(couponTestActions.senderoneToken, couponTestActions.senderoneId, goodids);
+        .getUserShopOrderVoucherList(testActions.senderoneToken, testActions.senderoneId, goodids);
     Assert.assertNotNull(getShopOrderVoucherListResponse);
     Assert.assertEquals(2, getShopOrderVoucherListResponse.getVoucherList().size());
 
-    couponControllerClient.deprecateVoucherItem(CouponTestActions.ADMIN_USER_TOKEN, couponTestActions.voucheritemoneId,
-        false);
-    getVoucherItemListResponse = couponControllerClient.getVoucherItemList(couponTestActions.senderoneToken, 1, 10);
+    couponControllerClient.deprecateVoucherItem(ADMIN_USER_TOKEN, testActions.voucheritemoneId, false);
+    getVoucherItemListResponse = couponControllerClient.getVoucherItemList(testActions.senderoneToken, 1, 10);
     Assert.assertNotNull(getVoucherItemListResponse);
     Assert.assertEquals(1, getVoucherItemListResponse.getDataList().size());
-    Assert.assertEquals(couponTestActions.voucheritemtwoId, getVoucherItemListResponse.getDataList().get(0).getId());
+    Assert.assertEquals(testActions.voucheritemtwoId, getVoucherItemListResponse.getDataList().get(0).getId());
 
-    getShopOrderVoucherListResponse = couponControllerClient
-        .getUserShopOrderVoucherList(couponTestActions.senderoneToken, couponTestActions.senderoneId, goodids);
+    getShopOrderVoucherListResponse = couponControllerClient.getUserShopOrderVoucherList(testActions.senderoneToken,
+        testActions.senderoneId, goodids);
     Assert.assertNotNull(getShopOrderVoucherListResponse);
     Assert.assertEquals(1, getShopOrderVoucherListResponse.getVoucherList().size());
-    Assert.assertEquals(couponTestActions.voucheritemtwoId,
+    Assert.assertEquals(testActions.voucheritemtwoId,
         getShopOrderVoucherListResponse.getVoucherList().get(0).getVoucherItem().getId());
 
-    userRepository.delete(senderUser.getId());
   }
 
   @Test
   @TestDescription(description = "原来有两个商品兑换券,废弃其中一个")
   public void test_GetGoodVoucherList_001() throws IOException {
-    GetGoodVoucherListResponse response = couponControllerClient.getGoodVoucherList(CouponTestActions.ADMIN_USER_TOKEN,
-        1, 10);
+    GetGoodVoucherListResponse response = couponControllerClient.getGoodVoucherList(ADMIN_USER_TOKEN, 1, 10);
     Assert.assertNotNull(response);
     Assert.assertEquals(0, response.getDataList().size());
     Assert.assertEquals(0, response.getTotalpage());
     // 1.创建商品
-    couponTestActions.createGoodOne();
-    couponTestActions.createGoodTwo();
+    testActions.createGoodOne();
+    testActions.createGoodTwo();
     // 2.创建VoucherItem
-    couponTestActions.createVoucherItemOneForGoodOne();
-    couponTestActions.createVoucherItemTwoForGoodTwo();
+    testActions.createVoucherItemOneForGoodOne();
+    testActions.createVoucherItemTwoForGoodTwo();
     // 3.创建GoodVoucher
-    couponTestActions.createGoodVoucherOneWithVoucherItemOne();
-    couponTestActions.createGoodVoucherTwoWithVoucherItemTwo();
+    testActions.createGoodVoucherOneWithVoucherItemOne();
+    testActions.createGoodVoucherTwoWithVoucherItemTwo();
     // 4.关联
-    couponTestActions.applyGoodVoucherOneForGoodOne();
-    couponTestActions.applyGoodVoucherTwoForGoodTwo();
+    testActions.applyGoodVoucherOneForGoodOne();
+    testActions.applyGoodVoucherTwoForGoodTwo();
 
-    response = couponControllerClient.getGoodVoucherList(CouponTestActions.ADMIN_USER_TOKEN, 1, 10);
+    response = couponControllerClient.getGoodVoucherList(ADMIN_USER_TOKEN, 1, 10);
     Assert.assertNotNull(response);
     Assert.assertEquals(2, response.getDataList().size());
     Assert.assertEquals(1, response.getTotalpage());
 
     // 5.废弃GoodVoucherOne
-    couponControllerClient.deprecateGoodVoucher(CouponTestActions.ADMIN_USER_TOKEN, couponTestActions.goodvoucheroneId,
-        false);
+    couponControllerClient.deprecateGoodVoucher(ADMIN_USER_TOKEN, testActions.goodvoucheroneId, false);
 
-    response = couponControllerClient.getGoodVoucherList(CouponTestActions.ADMIN_USER_TOKEN, 1, 10);
+    response = couponControllerClient.getGoodVoucherList(ADMIN_USER_TOKEN, 1, 10);
     Assert.assertNotNull(response);
     Assert.assertEquals(1, response.getDataList().size());
-    Assert.assertEquals(couponTestActions.goodvouchertwoId, response.getDataList().get(0).getId());
+    Assert.assertEquals(testActions.goodvouchertwoId, response.getDataList().get(0).getId());
     Assert.assertEquals(1, response.getTotalpage());
   }
 

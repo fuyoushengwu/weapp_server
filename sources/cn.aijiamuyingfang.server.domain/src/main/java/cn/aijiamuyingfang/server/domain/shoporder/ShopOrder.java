@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.server.domain.shoporder;
 
+import cn.aijiamuyingfang.server.commons.domain.SendType;
+import cn.aijiamuyingfang.server.commons.domain.ShopOrderStatus;
 import cn.aijiamuyingfang.server.commons.utils.StringUtils;
 import cn.aijiamuyingfang.server.domain.address.RecieveAddress;
 import com.fasterxml.jackson.annotation.JsonFormat;

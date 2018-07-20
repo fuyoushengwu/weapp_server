@@ -1,6 +1,8 @@
 package cn.aijiamuyingfang.server.shoporder.controller;
 
 import cn.aijiamuyingfang.server.commons.constants.AuthConstants;
+import cn.aijiamuyingfang.server.commons.domain.SendType;
+import cn.aijiamuyingfang.server.commons.domain.ShopOrderStatus;
 import cn.aijiamuyingfang.server.domain.exception.AuthException;
 import cn.aijiamuyingfang.server.domain.exception.ShopOrderException;
 import cn.aijiamuyingfang.server.domain.goods.GoodRequest;
@@ -10,9 +12,7 @@ import cn.aijiamuyingfang.server.domain.shoporder.GetFinishedPreOrderListRespons
 import cn.aijiamuyingfang.server.domain.shoporder.GetPreOrderGoodListResponse;
 import cn.aijiamuyingfang.server.domain.shoporder.GetShopOrderListResponse;
 import cn.aijiamuyingfang.server.domain.shoporder.GetUserShopOrderListResponse;
-import cn.aijiamuyingfang.server.domain.shoporder.SendType;
 import cn.aijiamuyingfang.server.domain.shoporder.ShopOrder;
-import cn.aijiamuyingfang.server.domain.shoporder.ShopOrderStatus;
 import cn.aijiamuyingfang.server.domain.shoporder.UpdateShopOrderStatusRequest;
 import cn.aijiamuyingfang.server.domain.util.ConverterService;
 import cn.aijiamuyingfang.server.shoporder.service.ShopOrderService;
@@ -92,7 +92,7 @@ public class ShopOrderController {
   }
 
   /**
-   * 更新订单
+   * 更新订单状态(在送货时调用)
    * 
    * @param token
    * @param shoporderid

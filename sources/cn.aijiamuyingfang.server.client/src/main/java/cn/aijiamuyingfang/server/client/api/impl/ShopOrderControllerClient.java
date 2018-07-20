@@ -3,6 +3,8 @@ package cn.aijiamuyingfang.server.client.api.impl;
 import cn.aijiamuyingfang.server.client.annotation.HttpService;
 import cn.aijiamuyingfang.server.client.api.ShopOrderControllerApi;
 import cn.aijiamuyingfang.server.commons.controller.bean.ResponseBean;
+import cn.aijiamuyingfang.server.commons.domain.SendType;
+import cn.aijiamuyingfang.server.commons.domain.ShopOrderStatus;
 import cn.aijiamuyingfang.server.commons.utils.JsonUtils;
 import cn.aijiamuyingfang.server.domain.exception.ShopOrderException;
 import cn.aijiamuyingfang.server.domain.goods.GoodRequest;
@@ -12,9 +14,7 @@ import cn.aijiamuyingfang.server.domain.shoporder.GetFinishedPreOrderListRespons
 import cn.aijiamuyingfang.server.domain.shoporder.GetPreOrderGoodListResponse;
 import cn.aijiamuyingfang.server.domain.shoporder.GetShopOrderListResponse;
 import cn.aijiamuyingfang.server.domain.shoporder.GetUserShopOrderListResponse;
-import cn.aijiamuyingfang.server.domain.shoporder.SendType;
 import cn.aijiamuyingfang.server.domain.shoporder.ShopOrder;
-import cn.aijiamuyingfang.server.domain.shoporder.ShopOrderStatus;
 import cn.aijiamuyingfang.server.domain.shoporder.UpdateShopOrderStatusRequest;
 import java.io.IOException;
 import java.util.List;
@@ -401,7 +401,7 @@ public class ShopOrderControllerClient {
    * @throws IOException
    */
   @SuppressWarnings("unchecked")
-  public Map<String, Integer> getUserShopOrderStatusCount(String token, String userid) throws IOException {
+  public Map<String, Double> getUserShopOrderStatusCount(String token, String userid) throws IOException {
     Response<ResponseBean> response = shoporderControllerApi.getUserShopOrderStatusCount(token, userid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
@@ -413,7 +413,7 @@ public class ShopOrderControllerClient {
       if (null == returnData) {
         throw new RuntimeException("get user shoporder status count return code is '200',but return data is null");
       }
-      return (Map<String, Integer>) returnData;
+      return (Map<String, Double>) returnData;
     }
     LOGGER.error(responseBean.getMsg());
     throw new ShopOrderException(returnCode, responseBean.getMsg());

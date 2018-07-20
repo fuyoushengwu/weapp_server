@@ -73,7 +73,7 @@ public class User extends UserRequest implements UserDetails {
    * 最后一次消息读取时间
    */
   @JsonIgnore
-  private Date lastReadMsgTime;
+  private Date lastReadMsgTime = new Date(0);
 
   /**
    * 用户通用积分

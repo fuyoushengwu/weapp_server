@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.server.goods.controller;
 
+import static cn.aijiamuyingfang.server.client.AbstractTestAction.ADMIN_USER_TOKEN;
+
 import cn.aijiamuyingfang.server.client.api.impl.GoodControllerClient;
 import cn.aijiamuyingfang.server.commons.annotation.TestDescription;
 import cn.aijiamuyingfang.server.domain.exception.GoodsException;
@@ -34,37 +36,36 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT, classes = GoodsApplication.class)
 public class GoodControllerTest {
   @Autowired
-  private GoodsTestActions goodsTestActions;
+  private GoodsTestActions testActions;
 
   @Autowired
   private GoodControllerClient goodcontrollerClient;
 
   @Before
   public void before() throws IOException {
-    goodsTestActions.clearData();
+    testActions.clearData();
   }
 
   @After
   public void after() {
-    goodsTestActions.clearData();
+    testActions.clearData();
   }
 
   @Test(expected = GoodsException.class)
   @TestDescription(description = "条目不存在")
   public void test_GetClassifyGoodList_001() throws IOException {
-    goodcontrollerClient.getClassifyGoodList(GoodsTestActions.ADMIN_USER_TOKEN, "not_exist_classify", null, null, null,
-        null, 1, 10);
+    goodcontrollerClient.getClassifyGoodList(ADMIN_USER_TOKEN, "not_exist_classify", null, null, null, null, 1, 10);
     Assert.fail();
   }
 
   @Test
   @TestDescription(description = "条目下没有商品")
   public void test_GetClassifyGoodList_002() throws IOException {
-    goodsTestActions.createStoreOne();
-    goodsTestActions.createClassifyOne();
-    goodsTestActions.applyClassifyOneForStoreOne();
-    GetClassifyGoodListResponse response = goodcontrollerClient.getClassifyGoodList(GoodsTestActions.ADMIN_USER_TOKEN,
-        goodsTestActions.classifyoneId, null, null, null, null, 1, 10);
+    testActions.createStoreOne();
+    testActions.createClassifyOne();
+    testActions.applyClassifyOneForStoreOne();
+    GetClassifyGoodListResponse response = goodcontrollerClient.getClassifyGoodList(ADMIN_USER_TOKEN,
+        testActions.classifyoneId, null, null, null, null, 1, 10);
     Assert.assertNotNull(response);
     Assert.assertEquals(0, response.getDataList().size());
   }
@@ -72,14 +73,14 @@ public class GoodControllerTest {
   @Test
   @TestDescription(description = "条目下有商品")
   public void test_GetClassifyGoodList_003() throws IOException {
-    goodsTestActions.createStoreOne();
-    goodsTestActions.createClassifyOne();
-    goodsTestActions.createSubClassifyOneForClassifyOne();
-    goodsTestActions.applyClassifyOneForStoreOne();
-    goodsTestActions.createGoodOne();
-    goodsTestActions.applyGoodOneForSubClassifyOne();
-    GetClassifyGoodListResponse response = goodcontrollerClient.getClassifyGoodList(GoodsTestActions.ADMIN_USER_TOKEN,
-        goodsTestActions.subclassifyoneId, null, null, null, null, 1, 10);
+    testActions.createStoreOne();
+    testActions.createClassifyOne();
+    testActions.createSubClassifyOneForClassifyOne();
+    testActions.applyClassifyOneForStoreOne();
+    testActions.createGoodOne();
+    testActions.applyGoodOneForSubClassifyOne();
+    GetClassifyGoodListResponse response = goodcontrollerClient.getClassifyGoodList(ADMIN_USER_TOKEN,
+        testActions.subclassifyoneId, null, null, null, null, 1, 10);
     Assert.assertNotNull(response);
     Assert.assertEquals(1, response.getDataList().size());
   }
@@ -87,26 +88,26 @@ public class GoodControllerTest {
   @Test(expected = GoodsException.class)
   @TestDescription(description = "获取不存在的Good")
   public void test_GetGood_001() throws IOException {
-    goodcontrollerClient.getGood(GoodsTestActions.ADMIN_USER_TOKEN, "not_exist_goodid");
+    goodcontrollerClient.getGood(ADMIN_USER_TOKEN, "not_exist_goodid");
     Assert.fail();
   }
 
   @Test
   @TestDescription(description = "获取存在的Good")
   public void test_GetGood_002() throws IOException {
-    goodsTestActions.createGoodOne();
-    Good good = goodcontrollerClient.getGood(GoodsTestActions.ADMIN_USER_TOKEN, goodsTestActions.goodoneId);
-    Assert.assertEquals(goodsTestActions.goodoneId, good.getId());
+    testActions.createGoodOne();
+    Good good = goodcontrollerClient.getGood(ADMIN_USER_TOKEN, testActions.goodoneId);
+    Assert.assertEquals(testActions.goodoneId, good.getId());
   }
 
   @Test(expected = GoodsException.class)
   @TestDescription(description = "获取废弃的Good")
   public void test_GetGood_003() throws IOException {
-    goodsTestActions.createGoodOne();
-    Good good = goodcontrollerClient.getGood(GoodsTestActions.ADMIN_USER_TOKEN, goodsTestActions.goodoneId);
-    Assert.assertEquals(goodsTestActions.goodoneId, good.getId());
-    goodsTestActions.deprecateGoodOne();
-    goodcontrollerClient.getGood(GoodsTestActions.ADMIN_USER_TOKEN, goodsTestActions.goodoneId);
+    testActions.createGoodOne();
+    Good good = goodcontrollerClient.getGood(ADMIN_USER_TOKEN, testActions.goodoneId);
+    Assert.assertEquals(testActions.goodoneId, good.getId());
+    testActions.deprecateGoodOne();
+    goodcontrollerClient.getGood(ADMIN_USER_TOKEN, testActions.goodoneId);
     Assert.fail();
   }
 
@@ -115,57 +116,55 @@ public class GoodControllerTest {
   public void test_UpdateGood_001() throws IOException {
     GoodRequest goodRequest = new GoodRequest();
     goodRequest.setName("good one rename");
-    goodcontrollerClient.updateGood(GoodsTestActions.ADMIN_USER_TOKEN, "not_exist_goodid", goodRequest);
+    goodcontrollerClient.updateGood(ADMIN_USER_TOKEN, "not_exist_goodid", goodRequest);
     Assert.fail();
   }
 
   @Test(expected = GoodsException.class)
   @TestDescription(description = "update废弃的Good")
   public void test_UpdateGood_002() throws IOException {
-    goodsTestActions.createGoodOne();
-    goodsTestActions.deprecateGoodOne();
+    testActions.createGoodOne();
+    testActions.deprecateGoodOne();
     GoodRequest goodRequest = new GoodRequest();
     goodRequest.setName("good one rename");
-    goodcontrollerClient.updateGood(GoodsTestActions.ADMIN_USER_TOKEN, goodsTestActions.goodoneId, goodRequest);
+    goodcontrollerClient.updateGood(ADMIN_USER_TOKEN, testActions.goodoneId, goodRequest);
     Assert.fail();
   }
 
   @Test
   @TestDescription(description = "update Good")
   public void test_UpdateGood_003() throws IOException {
-    goodsTestActions.createGoodOne();
+    testActions.createGoodOne();
     GoodRequest goodRequest = new GoodRequest();
     goodRequest.setName("good one rename");
-    goodcontrollerClient.updateGood(GoodsTestActions.ADMIN_USER_TOKEN, goodsTestActions.goodoneId, goodRequest);
-    Good good = goodcontrollerClient.getGood(GoodsTestActions.ADMIN_USER_TOKEN, goodsTestActions.goodoneId);
+    goodcontrollerClient.updateGood(ADMIN_USER_TOKEN, testActions.goodoneId, goodRequest);
+    Good good = goodcontrollerClient.getGood(ADMIN_USER_TOKEN, testActions.goodoneId);
     Assert.assertEquals("good one rename", good.getName());
   }
 
   @Test(expected = GoodsException.class)
   @TestDescription(description = "不存在的gooddetail")
   public void test_GetGoodDetail_001() throws IOException {
-    goodcontrollerClient.getGoodDetail(GoodsTestActions.ADMIN_USER_TOKEN, "not_exist_goodid");
+    goodcontrollerClient.getGoodDetail(ADMIN_USER_TOKEN, "not_exist_goodid");
     Assert.fail();
   }
 
   @Test
   @TestDescription(description = "废弃的gooddetail")
   public void test_GetGoodDetail_002() throws IOException {
-    goodsTestActions.createGoodOne();
-    goodsTestActions.deprecateGoodOne();
-    GoodDetail gooddetail = goodcontrollerClient.getGoodDetail(GoodsTestActions.ADMIN_USER_TOKEN,
-        goodsTestActions.goodoneId);
+    testActions.createGoodOne();
+    testActions.deprecateGoodOne();
+    GoodDetail gooddetail = goodcontrollerClient.getGoodDetail(ADMIN_USER_TOKEN, testActions.goodoneId);
     Assert.assertNotNull(gooddetail);
-    Assert.assertEquals(goodsTestActions.goodoneId, gooddetail.getId());
+    Assert.assertEquals(testActions.goodoneId, gooddetail.getId());
   }
 
   @Test
   @TestDescription(description = "gooddetail")
   public void test_GetGoodDetail_003() throws IOException {
-    goodsTestActions.createGoodOne();
-    GoodDetail goodDetail = goodcontrollerClient.getGoodDetail(GoodsTestActions.ADMIN_USER_TOKEN,
-        goodsTestActions.goodoneId);
+    testActions.createGoodOne();
+    GoodDetail goodDetail = goodcontrollerClient.getGoodDetail(ADMIN_USER_TOKEN, testActions.goodoneId);
     Assert.assertNotNull(goodDetail);
-    Assert.assertEquals(goodsTestActions.goodoneId, goodDetail.getId());
+    Assert.assertEquals(testActions.goodoneId, goodDetail.getId());
   }
 }

@@ -49,6 +49,15 @@ public class ShopCartItem {
    */
   private int count;
 
+  /**
+   * 增加购物车中商品数量
+   * 
+   * @param c
+   */
+  public void addCount(int c) {
+    this.count += c;
+  }
+
   public String getId() {
     return id;
   }

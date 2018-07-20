@@ -1,9 +1,8 @@
 package cn.aijiamuyingfang.server.domain.shoporder.db;
 
-import cn.aijiamuyingfang.server.domain.shoporder.PreOrderGood;
-import cn.aijiamuyingfang.server.domain.shoporder.SendType;
+import cn.aijiamuyingfang.server.commons.domain.SendType;
+import cn.aijiamuyingfang.server.commons.domain.ShopOrderStatus;
 import cn.aijiamuyingfang.server.domain.shoporder.ShopOrder;
-import cn.aijiamuyingfang.server.domain.shoporder.ShopOrderStatus;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,12 +33,8 @@ public interface ShopOrderRepository extends JpaRepository<ShopOrder, String> {
    * @param sendtypeList
    * @return
    */
-  @Query(
-      value = "select count(*) from shop_order where userid=:userid and status in :statusList and sendtype in "
-          + ":sendtypeList",
-      nativeQuery = true)
-  int countByUseridAndStatusInAndSendtypeIn(@Param("userid") String userid,
-      @Param("statusList") List<ShopOrderStatus> statusList, @Param("sendtypeList") List<SendType> sendtypeList);
+  int countByUseridAndStatusInAndSendtypeIn(String userid, List<ShopOrderStatus> statusList,
+      List<SendType> sendtypeList);
 
   /**
    * 根据订单状态、配送方式分页查找用户的订单
@@ -88,12 +83,14 @@ public interface ShopOrderRepository extends JpaRepository<ShopOrder, String> {
    * @return
    */
   @Query(
-      value = "select sum(si.count) as count, good.* from shop_order_item si inner join good on si.good_id=good.id "
-          + "inner join shop_order s on si.id=s.id where s.status=0 group by si.good_id order by ?#{#pageable}",
-      countQuery = "select count(*) from shop_order_item si inner join good on si.good_id=good.id inner join "
-          + "shop_order s on si.id=s.id where s.status=0 group by si.good_id order by ?#{#pageable}",
+      value = "select sum(shop_order_item.count),good.id from shop_order_item inner join good on shop_order_item.good_id=good.id where "
+          + "shop_order_item.count>good.count and shop_order_item.id in(select order_item_list_id from shop_order right join shop_order_order_item_list "
+          + "on shop_order.id=shop_order_order_item_list.shop_order_id where shop_order.status=0) group by good.id order by ?#{#pageable}",
+      countQuery = "select count(*) from shop_order_item inner join good on shop_order_item.good_id=good.id where shop_order_item.count>good.count "
+          + "and shop_order_item.id in(select order_item_list_id from shop_order right join shop_order_order_item_list on "
+          + "shop_order.id=shop_order_order_item_list.shop_order_id where shop_order.status=0) group by good.id order by ?#{#pageable}",
       nativeQuery = true)
-  Page<PreOrderGood> findPreOrder(Pageable pageable);
+  Page<Object[]> findPreOrder(Pageable pageable);
 
   /**
    * 查找包含某件商品的预约单
@@ -102,8 +99,8 @@ public interface ShopOrderRepository extends JpaRepository<ShopOrder, String> {
    * @return
    */
   @Query(
-      value = "select s.* from shop_order_item si inner join shop_order s on si.id=s.id where si.good_id=:good_id "
-          + "and s.status=0",
+      value = "select * from shop_order where status=0 and id in (select shop_order_id from shop_order_order_item_list where "
+          + "order_item_list_id in (select id from shop_order_item  where good_id=:good_id))",
       nativeQuery = true)
   List<ShopOrder> findPreOrderContainsGoodid(@Param("good_id") String goodid);
 }

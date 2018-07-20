@@ -55,9 +55,12 @@ public class PreviewOrderService {
     }
     PreviewOrder previewOrder = previeworderRepository.findByUserid(userid);
     if (null == previewOrder) {
-      throw new ShopOrderException(ResponseCode.SHOPORDERITEM_NOT_EXIST, itemid);
+      throw new ShopOrderException(ResponseCode.PREVIEWORDER_NOT_EXIST, userid);
     }
     PreviewOrderItem orderItem = itemRepository.findOne(itemid);
+    if (null == orderItem) {
+      throw new ShopOrderException(ResponseCode.PREVIEWORDERITEM_NOT_EXIST, itemid);
+    }
     if (!previewOrder.getOrderItemList().contains(orderItem)) {
       throw new AuthException("403", "no permission update other user's preview item");
     }
@@ -80,6 +83,7 @@ public class PreviewOrderService {
     PreviewOrderItem orderItem = itemRepository.findOne(itemid);
     previewOrder.getOrderItemList().remove(orderItem);
     previeworderRepository.save(previewOrder);
+    itemRepository.delete(orderItem.getId());
   }
 
   /**
