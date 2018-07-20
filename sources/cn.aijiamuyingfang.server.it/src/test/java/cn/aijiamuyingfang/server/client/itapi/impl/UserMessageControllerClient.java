@@ -3,7 +3,9 @@ package cn.aijiamuyingfang.server.client.itapi.impl;
 import cn.aijiamuyingfang.server.client.annotation.HttpService;
 import cn.aijiamuyingfang.server.client.itapi.UserMessageControllerApi;
 import cn.aijiamuyingfang.server.commons.controller.bean.ResponseBean;
+import cn.aijiamuyingfang.server.commons.controller.bean.ResponseCode;
 import cn.aijiamuyingfang.server.commons.utils.JsonUtils;
+import cn.aijiamuyingfang.server.domain.exception.GoodsException;
 import cn.aijiamuyingfang.server.domain.exception.UserException;
 import cn.aijiamuyingfang.server.domain.user.GetMessagesListResponse;
 import cn.aijiamuyingfang.server.domain.user.UserMessage;
@@ -61,7 +63,7 @@ public class UserMessageControllerClient {
     Response<ResponseBean> response = usermessageControllerApi.getUserUnReadMessageCount(token, userid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
@@ -88,7 +90,7 @@ public class UserMessageControllerClient {
         .execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
@@ -96,7 +98,7 @@ public class UserMessageControllerClient {
       GetMessagesListResponse getMessagesListResponse = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
           GetMessagesListResponse.class);
       if (null == getMessagesListResponse) {
-        throw new RuntimeException("get user message list  return code is '200',but return data is null");
+        throw new UserException("500", "get user message list  return code is '200',but return data is null");
       }
       return getMessagesListResponse;
     }
@@ -117,14 +119,14 @@ public class UserMessageControllerClient {
     Response<ResponseBean> response = usermessageControllerApi.createMessage(token, userid, request).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
       UserMessage usermessage = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), UserMessage.class);
       if (null == usermessage) {
-        throw new RuntimeException("create message  return code is '200',but return data is null");
+        throw new UserException("500", "create message  return code is '200',but return data is null");
       }
       return usermessage;
     }
@@ -162,7 +164,7 @@ public class UserMessageControllerClient {
     Response<ResponseBean> response = usermessageControllerApi.deleteMessage(token, userid, messageid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     if ("200".equals(returnCode)) {

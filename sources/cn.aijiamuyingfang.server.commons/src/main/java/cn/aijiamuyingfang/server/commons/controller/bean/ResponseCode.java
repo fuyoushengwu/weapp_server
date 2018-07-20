@@ -93,6 +93,10 @@ public enum ResponseCode {
    * 运行时异常
    */
   RUNTIME_EXCEPTION("500", "%s"),
+  /**
+   * 请求返回体是null
+   */
+  RESPONSE_BODY_IS_NULL("500", "response body is null"),
 
   /**
    * 请求正常

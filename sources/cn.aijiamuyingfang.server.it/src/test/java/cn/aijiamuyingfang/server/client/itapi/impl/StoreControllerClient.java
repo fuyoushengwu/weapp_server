@@ -3,6 +3,7 @@ package cn.aijiamuyingfang.server.client.itapi.impl;
 import cn.aijiamuyingfang.server.client.annotation.HttpService;
 import cn.aijiamuyingfang.server.client.itapi.StoreControllerApi;
 import cn.aijiamuyingfang.server.commons.controller.bean.ResponseBean;
+import cn.aijiamuyingfang.server.commons.controller.bean.ResponseCode;
 import cn.aijiamuyingfang.server.commons.utils.JsonUtils;
 import cn.aijiamuyingfang.server.commons.utils.StringUtils;
 import cn.aijiamuyingfang.server.domain.address.City;
@@ -79,7 +80,7 @@ public class StoreControllerClient {
     Response<ResponseBean> response = storeControllerApi.getInUseStoreList(token, currentpage, pagesize).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
@@ -87,7 +88,7 @@ public class StoreControllerClient {
       GetInUseStoreListResponse getInUseStoreListResponse = JsonUtils
           .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetInUseStoreListResponse.class);
       if (null == getInUseStoreListResponse) {
-        throw new RuntimeException("get inuse store list  return code is '200',but return data is null");
+        throw new GoodsException("500", "get inuse store list  return code is '200',but return data is null");
       }
       return getInUseStoreListResponse;
     }
@@ -114,14 +115,14 @@ public class StoreControllerClient {
     }
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
       Store store = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), Store.class);
       if (null == store) {
-        throw new RuntimeException("create store return code is '200',but return data is null");
+        throw new GoodsException("500", "create store return code is '200',but return data is null");
       }
       return store;
     }
@@ -248,14 +249,14 @@ public class StoreControllerClient {
     Response<ResponseBean> response = storeControllerApi.getStore(token, storeid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
       Store store = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), Store.class);
       if (null == store) {
-        throw new RuntimeException("get store return code is '200',but return data is null");
+        throw new GoodsException("500", "get store return code is '200',but return data is null");
       }
       return store;
     }
@@ -276,14 +277,14 @@ public class StoreControllerClient {
     Response<ResponseBean> response = storeControllerApi.updateStore(token, storeid, storeRequest).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
       Store store = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), Store.class);
       if (null == store) {
-        throw new RuntimeException("update store return code is '200',but return data is null");
+        throw new GoodsException("500", "update store return code is '200',but return data is null");
       }
       return store;
     }
@@ -320,7 +321,7 @@ public class StoreControllerClient {
     Response<ResponseBean> response = storeControllerApi.deprecateStore(token, storeid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     if ("200".equals(returnCode)) {
@@ -341,7 +342,7 @@ public class StoreControllerClient {
     Response<ResponseBean> response = storeControllerApi.getDefaultStoreId(token).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
@@ -363,14 +364,14 @@ public class StoreControllerClient {
     Response<ResponseBean> response = storeControllerApi.getStoresCity(token).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
       List<String> cities = JsonUtils.json2List(JsonUtils.list2Json((List<?>) returnData), String.class);
       if (null == cities) {
-        throw new RuntimeException("get stores city  return code is '200',but return data is null");
+        throw new GoodsException("500", "get stores city  return code is '200',but return data is null");
       }
       return cities;
     }
@@ -396,7 +397,7 @@ public class StoreControllerClient {
     Response<ResponseBean> response = storeControllerApi.addStoreClassify(token, storeid, classifyid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     if ("200".equals(returnCode)) {

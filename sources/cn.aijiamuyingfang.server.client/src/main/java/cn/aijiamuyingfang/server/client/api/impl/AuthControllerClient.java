@@ -3,6 +3,7 @@ package cn.aijiamuyingfang.server.client.api.impl;
 import cn.aijiamuyingfang.server.client.annotation.HttpService;
 import cn.aijiamuyingfang.server.client.api.AuthControllerApi;
 import cn.aijiamuyingfang.server.commons.controller.bean.ResponseBean;
+import cn.aijiamuyingfang.server.commons.controller.bean.ResponseCode;
 import cn.aijiamuyingfang.server.commons.utils.JsonUtils;
 import cn.aijiamuyingfang.server.domain.exception.AuthException;
 import cn.aijiamuyingfang.server.domain.user.TokenResponse;
@@ -48,7 +49,7 @@ public class AuthControllerClient {
     Response<ResponseBean> response = authControllerApi.getToken(jscode, nickname, avatar).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new AuthException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
@@ -56,7 +57,7 @@ public class AuthControllerClient {
       TokenResponse tokenResponse = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
           TokenResponse.class);
       if (null == tokenResponse) {
-        throw new RuntimeException("get token return code is '200',.but return data is null");
+        throw new AuthException("500", "get token return code is '200',.but return data is null");
       }
       return tokenResponse;
     }
@@ -76,14 +77,14 @@ public class AuthControllerClient {
     Response<ResponseBean> response = authControllerApi.registerUser(token, request).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new AuthException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
       User userResponse = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), User.class);
       if (null == userResponse) {
-        throw new RuntimeException("register user return code is '200',.but return data is null");
+        throw new AuthException("500", "register user return code is '200',.but return data is null");
       }
       return userResponse;
     }
@@ -114,7 +115,7 @@ public class AuthControllerClient {
     Response<ResponseBean> response = authControllerApi.refreshToken(token).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new AuthException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
@@ -122,7 +123,7 @@ public class AuthControllerClient {
       TokenResponse tokenResponse = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
           TokenResponse.class);
       if (null == tokenResponse) {
-        throw new RuntimeException("refresh token return code is '200',.but return data is null");
+        throw new AuthException("500", "refresh token return code is '200',.but return data is null");
       }
       return tokenResponse;
     }

@@ -3,6 +3,7 @@ package cn.aijiamuyingfang.server.client.api.impl;
 import cn.aijiamuyingfang.server.client.annotation.HttpService;
 import cn.aijiamuyingfang.server.client.api.UserControllerApi;
 import cn.aijiamuyingfang.server.commons.controller.bean.ResponseBean;
+import cn.aijiamuyingfang.server.commons.controller.bean.ResponseCode;
 import cn.aijiamuyingfang.server.commons.utils.JsonUtils;
 import cn.aijiamuyingfang.server.domain.address.RecieveAddress;
 import cn.aijiamuyingfang.server.domain.address.RecieveAddressRequest;
@@ -63,14 +64,14 @@ public class UserControllerClient {
     Response<ResponseBean> response = userControllerApi.getUser(token, userid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new UserException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
       User user = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), User.class);
       if (null == user) {
-        throw new RuntimeException("get user  return code is '200',but return data is null");
+        throw new UserException("500", "get user  return code is '200',but return data is null");
       }
       return user;
     }
@@ -90,14 +91,14 @@ public class UserControllerClient {
     Response<ResponseBean> response = userControllerApi.updateUser(token, userid, request).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new UserException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
       User user = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), User.class);
       if (null == user) {
-        throw new RuntimeException("update user  return code is '200',but return data is null");
+        throw new UserException("500", "update user  return code is '200',but return data is null");
       }
       return user;
     }
@@ -128,7 +129,7 @@ public class UserControllerClient {
     Response<ResponseBean> response = userControllerApi.getUserRecieveAddressList(token, userid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new UserException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
@@ -136,7 +137,7 @@ public class UserControllerClient {
       List<RecieveAddress> recieveaddressList = JsonUtils.json2List(JsonUtils.list2Json((List<?>) returnData),
           RecieveAddress.class);
       if (null == recieveaddressList) {
-        throw new RuntimeException("get user  recieve address list return code is '200',but return data is null");
+        throw new UserException("500", "get user  recieve address list return code is '200',but return data is null");
       }
       return recieveaddressList;
     }
@@ -157,7 +158,7 @@ public class UserControllerClient {
     Response<ResponseBean> response = userControllerApi.addUserRecieveAddress(token, userid, request).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new UserException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
@@ -165,7 +166,7 @@ public class UserControllerClient {
       RecieveAddress recieveaddress = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
           RecieveAddress.class);
       if (null == recieveaddress) {
-        throw new RuntimeException("add user recieve address  return code is '200',but return data is null");
+        throw new UserException("500", "add user recieve address  return code is '200',but return data is null");
       }
       return recieveaddress;
     }
@@ -198,7 +199,7 @@ public class UserControllerClient {
     Response<ResponseBean> response = userControllerApi.getRecieveAddress(token, userid, addressid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new UserException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
@@ -206,7 +207,7 @@ public class UserControllerClient {
       RecieveAddress recieveaddress = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
           RecieveAddress.class);
       if (null == recieveaddress) {
-        throw new RuntimeException("get recieve address  return code is '200',but return data is null");
+        throw new UserException("500", "get recieve address  return code is '200',but return data is null");
       }
       return recieveaddress;
     }
@@ -229,7 +230,7 @@ public class UserControllerClient {
         ResponseBean> response = userControllerApi.updateRecieveAddress(token, userid, addressid, request).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new UserException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
@@ -237,7 +238,7 @@ public class UserControllerClient {
       RecieveAddress recieveaddress = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
           RecieveAddress.class);
       if (null == recieveaddress) {
-        throw new RuntimeException("update recieve address  return code is '200',but return data is null");
+        throw new UserException("500", "update recieve address  return code is '200',but return data is null");
       }
       return recieveaddress;
     }
@@ -276,7 +277,7 @@ public class UserControllerClient {
     Response<ResponseBean> response = userControllerApi.deprecateRecieveAddress(token, userid, addressid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new UserException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     if ("200".equals(returnCode)) {

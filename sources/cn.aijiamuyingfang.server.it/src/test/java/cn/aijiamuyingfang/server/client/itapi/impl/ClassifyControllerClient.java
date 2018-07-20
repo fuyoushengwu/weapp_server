@@ -3,6 +3,7 @@ package cn.aijiamuyingfang.server.client.itapi.impl;
 import cn.aijiamuyingfang.server.client.annotation.HttpService;
 import cn.aijiamuyingfang.server.client.itapi.ClassifyControllerApi;
 import cn.aijiamuyingfang.server.commons.controller.bean.ResponseBean;
+import cn.aijiamuyingfang.server.commons.controller.bean.ResponseCode;
 import cn.aijiamuyingfang.server.commons.utils.JsonUtils;
 import cn.aijiamuyingfang.server.commons.utils.StringUtils;
 import cn.aijiamuyingfang.server.domain.exception.GoodsException;
@@ -68,14 +69,14 @@ public class ClassifyControllerClient {
     Response<ResponseBean> response = classifyControllerApi.getStoreTopClassifyList(token, storeid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
       List<Classify> classifyList = JsonUtils.json2List(JsonUtils.list2Json((List<?>) returnData), Classify.class);
       if (null == classifyList) {
-        throw new RuntimeException("get store top classify list return code is '200',but return data is null");
+        throw new GoodsException("500", "get store top classify list return code is '200',but return data is null");
       }
       return classifyList;
     }
@@ -95,14 +96,14 @@ public class ClassifyControllerClient {
     Response<ResponseBean> response = classifyControllerApi.getClassify(token, classifyid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
       Classify classify = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), Classify.class);
       if (null == classify) {
-        throw new RuntimeException("get classify  return code is '200',but return data is null");
+        throw new GoodsException("500", "get classify  return code is '200',but return data is null");
       }
       return classify;
     }
@@ -126,7 +127,7 @@ public class ClassifyControllerClient {
     Response<ResponseBean> response = classifyControllerApi.deleteClassify(token, classifyid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     if ("200".equals(returnCode)) {
@@ -148,14 +149,14 @@ public class ClassifyControllerClient {
     Response<ResponseBean> response = classifyControllerApi.createTopClassify(token, request).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
       Classify classify = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), Classify.class);
       if (null == classify) {
-        throw new RuntimeException("create top classify  return code is '200',but return data is null");
+        throw new GoodsException("500", "create top classify  return code is '200',but return data is null");
       }
       return classify;
     }
@@ -186,14 +187,14 @@ public class ClassifyControllerClient {
     Response<ResponseBean> response = classifyControllerApi.getSubClassifyList(token, classifyid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
       List<Classify> classifyList = JsonUtils.json2List(JsonUtils.list2Json((List<?>) returnData), Classify.class);
       if (null == classifyList) {
-        throw new RuntimeException("get sub classify list return code is '200',but return data is null");
+        throw new GoodsException("500", "get sub classify list return code is '200',but return data is null");
       }
       return classifyList;
     }
@@ -222,14 +223,14 @@ public class ClassifyControllerClient {
     }
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
       Classify classify = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), Classify.class);
       if (null == classify) {
-        throw new RuntimeException("create sub classify  return code is '200',but return data is null");
+        throw new GoodsException("500", "create sub classify  return code is '200',but return data is null");
       }
       return classify;
     }
@@ -290,7 +291,7 @@ public class ClassifyControllerClient {
     Response<ResponseBean> response = classifyControllerApi.addClassifyGood(token, classifyid, goodid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     if ("200".equals(returnCode)) {

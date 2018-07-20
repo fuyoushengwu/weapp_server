@@ -451,7 +451,7 @@ public class ShopOrderService {
         .getUserShopOrderVoucherList(token, userid, goodids).getVoucherList();
 
     shoporder.setOrderVoucher(shoporderVoucherList);
-    double totalPrice = totalGoodsPrice + sendPrice - requestBean.getJfNum() / 100;
+    double totalPrice = totalGoodsPrice + sendPrice - requestBean.getJfNum() / 100.0;
     if (!CollectionUtils.isEmpty(shoporderVoucherList)) {
       List<UserVoucher> updateUserVoucherList = new ArrayList<>();
       for (ShopOrderVoucher shoporderVoucher : shoporderVoucherList) {

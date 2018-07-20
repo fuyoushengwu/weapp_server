@@ -3,6 +3,7 @@ package cn.aijiamuyingfang.server.client.api.impl;
 import cn.aijiamuyingfang.server.client.annotation.HttpService;
 import cn.aijiamuyingfang.server.client.api.PreviewOrderControllerApi;
 import cn.aijiamuyingfang.server.commons.controller.bean.ResponseBean;
+import cn.aijiamuyingfang.server.commons.controller.bean.ResponseCode;
 import cn.aijiamuyingfang.server.commons.utils.JsonUtils;
 import cn.aijiamuyingfang.server.domain.exception.ShopOrderException;
 import cn.aijiamuyingfang.server.domain.shoporder.PreviewOrder;
@@ -66,7 +67,7 @@ public class PreviewOrderControllerClient {
         .execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new ShopOrderException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
@@ -74,7 +75,7 @@ public class PreviewOrderControllerClient {
       PreviewOrderItem previeworderItem = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
           PreviewOrderItem.class);
       if (null == previeworderItem) {
-        throw new RuntimeException("update preview order item return code is '200',.but return data is null");
+        throw new ShopOrderException("500", "update preview order item return code is '200',.but return data is null");
       }
       return previeworderItem;
     }
@@ -114,7 +115,7 @@ public class PreviewOrderControllerClient {
     Response<ResponseBean> response = previeworderControllerApi.deletePreviewOrderItem(token, userid, itemid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new ShopOrderException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     if ("200".equals(returnCode)) {
@@ -137,14 +138,14 @@ public class PreviewOrderControllerClient {
     Response<ResponseBean> response = previeworderControllerApi.generatePreviewOrder(token, userid, goodids).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new ShopOrderException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
       PreviewOrder previeworder = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), PreviewOrder.class);
       if (null == previeworder) {
-        throw new RuntimeException("generate preview order return code is '200',.but return data is null");
+        throw new ShopOrderException("500", "generate preview order return code is '200',.but return data is null");
       }
       return previeworder;
     }

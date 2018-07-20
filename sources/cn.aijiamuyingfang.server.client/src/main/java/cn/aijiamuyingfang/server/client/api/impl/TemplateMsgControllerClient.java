@@ -3,6 +3,7 @@ package cn.aijiamuyingfang.server.client.api.impl;
 import cn.aijiamuyingfang.server.client.annotation.HttpService;
 import cn.aijiamuyingfang.server.client.api.TemplateMsgControllerApi;
 import cn.aijiamuyingfang.server.commons.controller.bean.ResponseBean;
+import cn.aijiamuyingfang.server.commons.controller.bean.ResponseCode;
 import cn.aijiamuyingfang.server.commons.controller.bean.wxservice.TemplateMsg;
 import cn.aijiamuyingfang.server.commons.controller.bean.wxservice.TemplateMsgKeyValue;
 import cn.aijiamuyingfang.server.domain.exception.WXServiceException;
@@ -110,7 +111,7 @@ public class TemplateMsgControllerClient {
     Response<ResponseBean> response = templatemsgControllerApi.sendPreOrderMsg(token, openid, msgData).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new WXServiceException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     if ("200".equals(returnCode)) {
@@ -181,7 +182,7 @@ public class TemplateMsgControllerClient {
     Response<ResponseBean> response = templatemsgControllerApi.sendPickupMsg(token, openid, msgData).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new WXServiceException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     if ("200".equals(returnCode)) {
@@ -257,7 +258,7 @@ public class TemplateMsgControllerClient {
     Response<ResponseBean> response = templatemsgControllerApi.sendThirdSendMsg(token, openid, msgData).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new WXServiceException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     if ("200".equals(returnCode)) {
@@ -327,7 +328,7 @@ public class TemplateMsgControllerClient {
     Response<ResponseBean> response = templatemsgControllerApi.sendOwnSendMsg(token, openid, msgData).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new WXServiceException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     if ("200".equals(returnCode)) {
@@ -345,7 +346,7 @@ public class TemplateMsgControllerClient {
     Response<ResponseBean> response = templatemsgControllerApi.sendOrderOverTimeMsg(token, openid, msgData).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new WXServiceException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     if ("200".equals(returnCode)) {
@@ -363,7 +364,7 @@ public class TemplateMsgControllerClient {
     Response<ResponseBean> response = templatemsgControllerApi.sendOrderConfirmMsg(token, openid, msgData).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new WXServiceException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     if ("200".equals(returnCode)) {

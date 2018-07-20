@@ -3,6 +3,7 @@ package cn.aijiamuyingfang.server.client.api.impl;
 import cn.aijiamuyingfang.server.client.annotation.HttpService;
 import cn.aijiamuyingfang.server.client.api.CouponControllerApi;
 import cn.aijiamuyingfang.server.commons.controller.bean.ResponseBean;
+import cn.aijiamuyingfang.server.commons.controller.bean.ResponseCode;
 import cn.aijiamuyingfang.server.commons.utils.JsonUtils;
 import cn.aijiamuyingfang.server.domain.coupon.GetGoodVoucherListResponse;
 import cn.aijiamuyingfang.server.domain.coupon.GetShopOrderVoucherListResponse;
@@ -72,7 +73,7 @@ public class CouponControllerClient {
         ResponseBean> response = couponControllerApi.getUserVoucherList(token, userid, currentpage, pagesize).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new CouponException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
@@ -80,7 +81,7 @@ public class CouponControllerClient {
       GetUserVoucherListResponse uservoucherListResponse = JsonUtils
           .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetUserVoucherListResponse.class);
       if (null == uservoucherListResponse) {
-        throw new RuntimeException("get user voucher list  return code is '200',.but return data is null");
+        throw new CouponException("500", "get user voucher list  return code is '200',.but return data is null");
       }
       return uservoucherListResponse;
     }
@@ -102,7 +103,7 @@ public class CouponControllerClient {
     Response<ResponseBean> response = couponControllerApi.getUserShopOrderVoucherList(token, userid, goodids).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new CouponException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
@@ -110,7 +111,7 @@ public class CouponControllerClient {
       GetShopOrderVoucherListResponse shoporderVoucherListResponse = JsonUtils
           .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetShopOrderVoucherListResponse.class);
       if (null == shoporderVoucherListResponse) {
-        throw new RuntimeException("get shoporder voucher list return code is '200',.but return data is null");
+        throw new CouponException("500", "get shoporder voucher list return code is '200',.but return data is null");
       }
       return shoporderVoucherListResponse;
     }
@@ -131,7 +132,7 @@ public class CouponControllerClient {
     Response<ResponseBean> response = couponControllerApi.getGoodVoucherList(token, currentpage, pagesize).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new CouponException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
@@ -139,7 +140,7 @@ public class CouponControllerClient {
       GetGoodVoucherListResponse goodvoucherListResponse = JsonUtils
           .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetGoodVoucherListResponse.class);
       if (null == goodvoucherListResponse) {
-        throw new RuntimeException("get good voucher list return code is '200',.but return data is null");
+        throw new CouponException("500", "get good voucher list return code is '200',.but return data is null");
       }
       return goodvoucherListResponse;
     }
@@ -159,14 +160,14 @@ public class CouponControllerClient {
     Response<ResponseBean> response = couponControllerApi.createGoodVoucher(token, request).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new CouponException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
       GoodVoucher goodvoucher = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GoodVoucher.class);
       if (null == goodvoucher) {
-        throw new RuntimeException("create good voucher return code is '200',.but return data is null");
+        throw new CouponException("500", "create good voucher return code is '200',.but return data is null");
       }
       return goodvoucher;
     }
@@ -201,7 +202,7 @@ public class CouponControllerClient {
     Response<ResponseBean> response = couponControllerApi.deprecateGoodVoucher(token, voucherid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new CouponException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     if ("200".equals(returnCode)) {
@@ -224,7 +225,7 @@ public class CouponControllerClient {
     Response<ResponseBean> response = couponControllerApi.getVoucherItemList(token, currentpage, pagesize).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new CouponException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
@@ -232,7 +233,7 @@ public class CouponControllerClient {
       GetVoucherItemListResponse voucheritemListResponse = JsonUtils
           .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetVoucherItemListResponse.class);
       if (null == voucheritemListResponse) {
-        throw new RuntimeException("get voucher item list  return code is '200',.but return data is null");
+        throw new CouponException("500", "get voucher item list  return code is '200',.but return data is null");
       }
       return voucheritemListResponse;
     }
@@ -253,14 +254,14 @@ public class CouponControllerClient {
     Response<ResponseBean> response = couponControllerApi.createVoucherItem(token, request).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new CouponException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
       VoucherItem voucheritem = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), VoucherItem.class);
       if (null == voucheritem) {
-        throw new RuntimeException("create voucher item return code is '200',.but return data is null");
+        throw new CouponException("500", "create voucher item return code is '200',.but return data is null");
       }
       return voucheritem;
     }
@@ -295,7 +296,7 @@ public class CouponControllerClient {
     Response<ResponseBean> response = couponControllerApi.deprecateVoucherItem(token, itemid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new CouponException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     if ("200".equals(returnCode)) {

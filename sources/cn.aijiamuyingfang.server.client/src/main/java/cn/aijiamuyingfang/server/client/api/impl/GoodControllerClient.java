@@ -3,6 +3,7 @@ package cn.aijiamuyingfang.server.client.api.impl;
 import cn.aijiamuyingfang.server.client.annotation.HttpService;
 import cn.aijiamuyingfang.server.client.api.GoodControllerApi;
 import cn.aijiamuyingfang.server.commons.controller.bean.ResponseBean;
+import cn.aijiamuyingfang.server.commons.controller.bean.ResponseCode;
 import cn.aijiamuyingfang.server.commons.utils.JsonUtils;
 import cn.aijiamuyingfang.server.commons.utils.StringUtils;
 import cn.aijiamuyingfang.server.domain.exception.GoodsException;
@@ -86,7 +87,7 @@ public class GoodControllerClient {
         .execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
@@ -94,7 +95,7 @@ public class GoodControllerClient {
       GetClassifyGoodListResponse getClassifyGoodListResponse = JsonUtils
           .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetClassifyGoodListResponse.class);
       if (null == getClassifyGoodListResponse) {
-        throw new RuntimeException("get classify good list  return code is '200',.but return data is null");
+        throw new GoodsException("500", "get classify good list  return code is '200',.but return data is null");
       }
       return getClassifyGoodListResponse;
     }
@@ -122,14 +123,14 @@ public class GoodControllerClient {
     }
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
       Good good = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), Good.class);
       if (null == good) {
-        throw new RuntimeException("create good return code is '200',but return data is null");
+        throw new GoodsException("500", "create good return code is '200',but return data is null");
       }
       return good;
     }
@@ -230,14 +231,14 @@ public class GoodControllerClient {
     Response<ResponseBean> response = goodControllerApi.getGood(token, goodid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
       Good good = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), Good.class);
       if (null == good) {
-        throw new RuntimeException("get good  return code is '200',.but return data is null");
+        throw new GoodsException("500", "get good  return code is '200',.but return data is null");
       }
       return good;
     }
@@ -262,7 +263,7 @@ public class GoodControllerClient {
     Response<ResponseBean> response = goodControllerApi.deprecateGood(token, goodid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     if ("200".equals(returnCode)) {
@@ -284,14 +285,14 @@ public class GoodControllerClient {
     Response<ResponseBean> response = goodControllerApi.getGoodDetail(token, goodid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
       GoodDetail goodDetail = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GoodDetail.class);
       if (null == goodDetail) {
-        throw new RuntimeException("get good detail  return code is '200',.but return data is null");
+        throw new GoodsException("500", "get good detail  return code is '200',.but return data is null");
       }
       return goodDetail;
     }
@@ -312,14 +313,14 @@ public class GoodControllerClient {
     Response<ResponseBean> response = goodControllerApi.updateGood(token, goodid, request).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
       Good good = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), Good.class);
       if (null == good) {
-        throw new RuntimeException("update good  return code is '200',.but return data is null");
+        throw new GoodsException("500", "update good  return code is '200',.but return data is null");
       }
       return good;
     }

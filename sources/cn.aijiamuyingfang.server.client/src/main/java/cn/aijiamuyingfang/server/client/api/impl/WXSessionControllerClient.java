@@ -3,6 +3,7 @@ package cn.aijiamuyingfang.server.client.api.impl;
 import cn.aijiamuyingfang.server.client.annotation.HttpService;
 import cn.aijiamuyingfang.server.client.api.WXSessionControllerApi;
 import cn.aijiamuyingfang.server.commons.controller.bean.ResponseBean;
+import cn.aijiamuyingfang.server.commons.controller.bean.ResponseCode;
 import cn.aijiamuyingfang.server.commons.controller.bean.wxservice.WXSession;
 import cn.aijiamuyingfang.server.commons.utils.JsonUtils;
 import cn.aijiamuyingfang.server.domain.exception.WXServiceException;
@@ -37,14 +38,14 @@ public class WXSessionControllerClient {
     Response<ResponseBean> response = wxsessionControllerApi.jscode2Session(jscode).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new WXServiceException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
       WXSession wxsession = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), WXSession.class);
       if (null == wxsession) {
-        throw new RuntimeException("jscode to wxsession  is '200',.but return data is null");
+        throw new WXServiceException("500", "jscode to wxsession  is '200',.but return data is null");
       }
       return wxsession;
     }

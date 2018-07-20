@@ -3,6 +3,7 @@ package cn.aijiamuyingfang.server.client.api.impl;
 import cn.aijiamuyingfang.server.client.annotation.HttpService;
 import cn.aijiamuyingfang.server.client.api.ShopOrderControllerApi;
 import cn.aijiamuyingfang.server.commons.controller.bean.ResponseBean;
+import cn.aijiamuyingfang.server.commons.controller.bean.ResponseCode;
 import cn.aijiamuyingfang.server.commons.domain.SendType;
 import cn.aijiamuyingfang.server.commons.domain.ShopOrderStatus;
 import cn.aijiamuyingfang.server.commons.utils.JsonUtils;
@@ -77,7 +78,7 @@ public class ShopOrderControllerClient {
         .getUserShopOrderList(token, userid, status, sendtype, currentpage, pagesize).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new ShopOrderException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
@@ -85,7 +86,7 @@ public class ShopOrderControllerClient {
       GetUserShopOrderListResponse getUserShoporderListResponse = JsonUtils
           .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetUserShopOrderListResponse.class);
       if (null == getUserShoporderListResponse) {
-        throw new RuntimeException("get user shoporder list return code is '200',but return data is null");
+        throw new ShopOrderException("500", "get user shoporder list return code is '200',but return data is null");
       }
       return getUserShoporderListResponse;
     }
@@ -110,7 +111,7 @@ public class ShopOrderControllerClient {
         .getShopOrderList(token, status, sendtype, currentpage, pagesize).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new ShopOrderException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
@@ -118,7 +119,7 @@ public class ShopOrderControllerClient {
       GetShopOrderListResponse getShoporderListResponse = JsonUtils
           .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetShopOrderListResponse.class);
       if (null == getShoporderListResponse) {
-        throw new RuntimeException("get  shoporder list return code is '200',but return data is null");
+        throw new ShopOrderException("500", "get  shoporder list return code is '200',but return data is null");
       }
       return getShoporderListResponse;
     }
@@ -146,7 +147,7 @@ public class ShopOrderControllerClient {
         .execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new ShopOrderException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     if ("200".equals(returnCode)) {
@@ -174,7 +175,7 @@ public class ShopOrderControllerClient {
         ResponseBean> response = shoporderControllerApi.delete100DaysFinishedShopOrder(token, shoporderid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new ShopOrderException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     if ("200".equals(returnCode)) {
@@ -202,7 +203,7 @@ public class ShopOrderControllerClient {
     Response<ResponseBean> response = shoporderControllerApi.deleteUserShopOrder(token, userid, shoporderid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new ShopOrderException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     if ("200".equals(returnCode)) {
@@ -227,7 +228,7 @@ public class ShopOrderControllerClient {
         .execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new ShopOrderException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
@@ -235,7 +236,8 @@ public class ShopOrderControllerClient {
       ConfirmUserShopOrderFinishedResponse confirmResponse = JsonUtils
           .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), ConfirmUserShopOrderFinishedResponse.class);
       if (null == confirmResponse) {
-        throw new RuntimeException("confirm user shoporder finish return code is '200',but return data is null");
+        throw new ShopOrderException("500",
+            "confirm user shoporder finish return code is '200',but return data is null");
       }
       return confirmResponse;
     }
@@ -280,7 +282,7 @@ public class ShopOrderControllerClient {
         .updateUserShopOrderRecieveAddress(token, userid, shoporderid, addressid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new ShopOrderException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     if ("200".equals(returnCode)) {
@@ -305,7 +307,7 @@ public class ShopOrderControllerClient {
         ResponseBean> response = shoporderControllerApi.getFinishedPreOrderList(token, currentpage, pagesize).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new ShopOrderException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
@@ -313,7 +315,7 @@ public class ShopOrderControllerClient {
       GetFinishedPreOrderListResponse getFinishedPreOrderListResponse = JsonUtils
           .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetFinishedPreOrderListResponse.class);
       if (null == getFinishedPreOrderListResponse) {
-        throw new RuntimeException("get finished preorder list  return code is '200',but return data is null");
+        throw new ShopOrderException("500", "get finished preorder list  return code is '200',but return data is null");
       }
       return getFinishedPreOrderListResponse;
     }
@@ -334,14 +336,14 @@ public class ShopOrderControllerClient {
     Response<ResponseBean> response = shoporderControllerApi.getUserShopOrder(token, userid, shoporderid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new ShopOrderException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
       ShopOrder shoporder = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), ShopOrder.class);
       if (null == shoporder) {
-        throw new RuntimeException("get user shoporder return code is '200',but return data is null");
+        throw new ShopOrderException("500", "get user shoporder return code is '200',but return data is null");
       }
       return shoporder;
     }
@@ -363,14 +365,14 @@ public class ShopOrderControllerClient {
     Response<ResponseBean> response = shoporderControllerApi.createUserShopOrder(token, userid, requestBean).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new ShopOrderException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
       ShopOrder shoporder = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), ShopOrder.class);
       if (null == shoporder) {
-        throw new RuntimeException("create user shoporder return code is '200',but return data is null");
+        throw new ShopOrderException("500", "create user shoporder return code is '200',but return data is null");
       }
       return shoporder;
     }
@@ -405,13 +407,14 @@ public class ShopOrderControllerClient {
     Response<ResponseBean> response = shoporderControllerApi.getUserShopOrderStatusCount(token, userid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new ShopOrderException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
       if (null == returnData) {
-        throw new RuntimeException("get user shoporder status count return code is '200',but return data is null");
+        throw new ShopOrderException("500",
+            "get user shoporder status count return code is '200',but return data is null");
       }
       return (Map<String, Double>) returnData;
     }
@@ -435,7 +438,7 @@ public class ShopOrderControllerClient {
         ResponseBean> response = shoporderControllerApi.getPreOrderGoodList(token, currentpage, pagesize).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new ShopOrderException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
@@ -443,7 +446,7 @@ public class ShopOrderControllerClient {
       GetPreOrderGoodListResponse getPreOrderGoodListResponse = JsonUtils
           .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetPreOrderGoodListResponse.class);
       if (null == getPreOrderGoodListResponse) {
-        throw new RuntimeException("get preorder good list return code is '200',but return data is null");
+        throw new ShopOrderException("500", "get preorder good list return code is '200',but return data is null");
       }
       return getPreOrderGoodListResponse;
     }
@@ -469,7 +472,7 @@ public class ShopOrderControllerClient {
     Response<ResponseBean> response = shoporderControllerApi.updatePreOrder(token, request).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new ShopOrderException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     if ("200".equals(returnCode)) {

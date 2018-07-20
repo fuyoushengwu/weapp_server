@@ -3,6 +3,7 @@ package cn.aijiamuyingfang.server.client.api.impl;
 import cn.aijiamuyingfang.server.client.annotation.HttpService;
 import cn.aijiamuyingfang.server.client.api.ShopCartControllerApi;
 import cn.aijiamuyingfang.server.commons.controller.bean.ResponseBean;
+import cn.aijiamuyingfang.server.commons.controller.bean.ResponseCode;
 import cn.aijiamuyingfang.server.commons.utils.JsonUtils;
 import cn.aijiamuyingfang.server.domain.exception.ShopCartException;
 import cn.aijiamuyingfang.server.domain.shopcart.AddShopCartItemRequest;
@@ -63,14 +64,14 @@ public class ShopCartControllerClient {
     Response<ResponseBean> response = shopcartControllerApi.addShopCartItem(token, userid, requestBean).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new ShopCartException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
       ShopCartItem shopcartitem = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), ShopCartItem.class);
       if (null == shopcartitem) {
-        throw new RuntimeException("add shopcart item  return code is '200',.but return data is null");
+        throw new ShopCartException("500", "add shopcart item  return code is '200',.but return data is null");
       }
       return shopcartitem;
     }
@@ -107,7 +108,7 @@ public class ShopCartControllerClient {
         .execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new ShopCartException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
@@ -115,7 +116,7 @@ public class ShopCartControllerClient {
       GetShopCartItemListResponse getShopCartItemListResponse = JsonUtils
           .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetShopCartItemListResponse.class);
       if (null == getShopCartItemListResponse) {
-        throw new RuntimeException("get shopcart list  return code is '200',.but return data is null");
+        throw new ShopCartException("500", "get shopcart list  return code is '200',.but return data is null");
       }
       return getShopCartItemListResponse;
     }
@@ -141,7 +142,7 @@ public class ShopCartControllerClient {
     Response<ResponseBean> response = shopcartControllerApi.checkAllShopCartItem(token, userid, ischecked).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new ShopCartException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     if ("200".equals(returnCode)) {
@@ -172,7 +173,7 @@ public class ShopCartControllerClient {
         .execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new ShopCartException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     if ("200".equals(returnCode)) {
@@ -200,7 +201,7 @@ public class ShopCartControllerClient {
     Response<ResponseBean> response = shopcartControllerApi.deleteShopCartItem(token, userid, shopcartid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new ShopCartException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     if ("200".equals(returnCode)) {
@@ -226,14 +227,14 @@ public class ShopCartControllerClient {
         .execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new ShopCartException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
       ShopCartItem shopcartitem = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), ShopCartItem.class);
       if (null == shopcartitem) {
-        throw new RuntimeException("update shopcart item  count return code is '200',.but return data is null");
+        throw new ShopCartException("500", "update shopcart item  count return code is '200',.but return data is null");
       }
       return shopcartitem;
     }
@@ -272,7 +273,7 @@ public class ShopCartControllerClient {
     Response<ResponseBean> response = shopcartControllerApi.deleteGood(token, goodid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
-      throw new RuntimeException("response body is null");
+      throw new ShopCartException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
     if ("200".equals(returnCode)) {

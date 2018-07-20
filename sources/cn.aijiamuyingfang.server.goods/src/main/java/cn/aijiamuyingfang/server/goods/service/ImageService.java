@@ -71,6 +71,10 @@ public class ImageService {
    *          门店Id
    */
   public void deleteStoreImg(String storeId) {
+    // Restrict the storeId to uuid only
+    if (!storeId.matches("[0-9a-f]{8}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{12}")) {
+      throw new IllegalArgumentException("storeId is not UUID");
+    }
     File storeDir = new File(imagesPath, "stores/" + storeId);
     try {
       FileUtils.deleteDirectory(storeDir);
