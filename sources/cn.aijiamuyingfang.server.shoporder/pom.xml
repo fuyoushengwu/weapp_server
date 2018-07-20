@@ -53,6 +53,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<outputDirectory>../cn.aijiamuyingfang.server.distribute/services/shoporder</outputDirectory>
+					<classifier>boot</classifier>
 				</configuration>
 			</plugin>
 			<plugin>
