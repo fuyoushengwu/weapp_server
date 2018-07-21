@@ -15,22 +15,47 @@ pipeline {
             }
         }
 
-        stage('code analysis') {
+        stage('package') {
             steps {
                 dir("sources") {
-                    sh 'mvn clean install sonar:sonar -Dsonar.organization=fuyoushengwu-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=1a1a48e2f6cd3453ae98de53fc46ef27b53732f7'
+                    sh 'mvn clean package -Dmaven.test.skip=true'
                 }
             }
         }
-    }
 
-    post {
+        stage('deploy') {
+            steps {
+                sshPublisher(
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: '172.16.0.4-SSH', 
+                            transfers: [
+                                sshTransfer(
+                                    sourceFiles: 'sources/distribute/weapp.tar.gz',
+                                    removePrefix: 'sources/distribute/', 
+                                    execCommand: 'tar -zxvf weapp.tar.gz'
+                                )
+                            ], 
+                            verbose: true
+                        ), 
+                        sshPublisherDesc(
+                            configName: '172.16.0.8-SSH', 
+                            transfers: [
+                                sshTransfer(
+                                    sourceFiles: 'sources/distribute/weapp.tar.gz',
+                                    removePrefix: 'sources/distribute/', 
+                                    execCommand: 'tar -zxvf weapp.tar.gz'
+                                )
+                            ], 
+                            verbose: true
+                        )
+                    ]
+                )
 
-        success {
-            dir("sources/distribute") {
-                archive 'weapp/**'
             }
         }
+
+
     }
 
 }

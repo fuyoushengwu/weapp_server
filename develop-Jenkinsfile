@@ -28,7 +28,7 @@ pipeline {
 
         success {
             dir("sources/distribute") {
-                archive 'weapp/**'
+                archiveArtifacts 'weapp/**'
             }
         }
     }

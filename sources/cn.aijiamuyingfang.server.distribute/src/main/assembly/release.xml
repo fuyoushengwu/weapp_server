@@ -22,6 +22,11 @@
 			<directoryMode>644</directoryMode>
 		</fileSet>
 		<fileSet>
+			<directory>nginx</directory>
+			<outputDirectory>nginx</outputDirectory>
+			<directoryMode>644</directoryMode>
+		</fileSet>
+		<fileSet>
 			<directory>static</directory>
 			<outputDirectory>static</outputDirectory>
 			<directoryMode>644</directoryMode>

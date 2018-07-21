@@ -13,7 +13,8 @@
 		<fileSet>
 			<directory>src/main/resources</directory>
 			<includes>
-				<include>*.properties</include>
+				<include>application.properties</include>
+				<include>application-dev.properties</include>
 			</includes>
 			<outputDirectory>config</outputDirectory>
 			<fileMode>0644</fileMode>
