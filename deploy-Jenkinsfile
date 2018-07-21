@@ -31,14 +31,17 @@ pipeline {
                             configName: '172.16.0.4-SSH', 
                             transfers: [
                                 sshTransfer(
+                                    execCommand: 'rm -rf *'
+                                ),
+                                sshTransfer(
                                     sourceFiles: 'sources/distribute/weapp.tar.gz',
                                     removePrefix: 'sources/distribute/', 
                                     execCommand: 'tar -zxvf weapp.tar.gz'
                                 ),
                                 sshTransfer(
                                     sourceFiles: '/root/soft/nginx/ssl/*',
-                                    removePrefix: '/root/soft/nginx/ssl/', 
-                                    remoteDirectory: 'weapp/nginx/ssl',
+                                    removePrefix: '/root/soft/nginx/', 
+                                    remoteDirectory: 'weapp/nginx/',
                                 )
                             ], 
                             verbose: true
@@ -47,14 +50,17 @@ pipeline {
                             configName: '172.16.0.8-SSH', 
                             transfers: [
                                 sshTransfer(
+                                    execCommand: 'rm -rf *'
+                                ),
+                                sshTransfer(
                                     sourceFiles: 'sources/distribute/weapp.tar.gz',
                                     removePrefix: 'sources/distribute/', 
                                     execCommand: 'tar -zxvf weapp.tar.gz'
                                 ),
                                 sshTransfer(
                                     sourceFiles: '/root/soft/nginx/ssl/*',
-                                    removePrefix: '/root/soft/nginx/ssl/', 
-                                    remoteDirectory: 'weapp/nginx/ssl',
+                                    removePrefix: '/root/soft/nginx/', 
+                                    remoteDirectory: 'weapp/nginx/',
                                 )
                             ], 
                             verbose: true
