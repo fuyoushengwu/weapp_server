@@ -64,7 +64,7 @@ public class UserMessageService {
     User user = userRepository.findOne(userid);
     if (user != null) {
       user.setLastReadMsgTime(new Date());
-      userRepository.save(user);
+      userRepository.saveAndFlush(user);
     }
     return response;
   }
@@ -107,7 +107,7 @@ public class UserMessageService {
   public UserMessage createMessage(String userid, UserMessage message) {
     if (message != null) {
       message.setUserid(userid);
-      usermessageRepository.save(message);
+      usermessageRepository.saveAndFlush(message);
     }
     return message;
   }

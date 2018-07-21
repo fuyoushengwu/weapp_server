@@ -334,21 +334,7 @@ public class ShopOrderControllerClient {
    */
   public ShopOrder getUserShopOrder(String token, String userid, String shoporderid) throws IOException {
     Response<ResponseBean> response = shoporderControllerApi.getUserShopOrder(token, userid, shoporderid).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      throw new ShopOrderException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    Object returnData = responseBean.getData();
-    if ("200".equals(returnCode)) {
-      ShopOrder shoporder = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), ShopOrder.class);
-      if (null == shoporder) {
-        throw new ShopOrderException("500", "get user shoporder return code is '200',but return data is null");
-      }
-      return shoporder;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new ShopOrderException(returnCode, responseBean.getMsg());
+    return getShopOrderFromResponse(response, "get user shoporder return code is '200',but return data is null");
   }
 
   /**
@@ -363,6 +349,17 @@ public class ShopOrderControllerClient {
   public ShopOrder createUserShopOrder(String token, String userid, CreateUserShoprderRequest requestBean)
       throws IOException {
     Response<ResponseBean> response = shoporderControllerApi.createUserShopOrder(token, userid, requestBean).execute();
+    return getShopOrderFromResponse(response, "create user shoporder return code is '200',but return data is null");
+  }
+
+  /**
+   * 从response中获取ShopOrder
+   * 
+   * @param response
+   * @param exceptionmsg
+   * @return
+   */
+  private ShopOrder getShopOrderFromResponse(Response<ResponseBean> response, String exceptionmsg) {
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       throw new ShopOrderException(ResponseCode.RESPONSE_BODY_IS_NULL);
@@ -372,7 +369,7 @@ public class ShopOrderControllerClient {
     if ("200".equals(returnCode)) {
       ShopOrder shoporder = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), ShopOrder.class);
       if (null == shoporder) {
-        throw new ShopOrderException("500", "create user shoporder return code is '200',but return data is null");
+        throw new ShopOrderException("500", exceptionmsg);
       }
       return shoporder;
     }

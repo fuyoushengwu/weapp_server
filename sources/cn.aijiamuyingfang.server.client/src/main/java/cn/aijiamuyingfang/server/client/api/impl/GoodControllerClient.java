@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.MultipartBody.Builder;
 import okhttp3.RequestBody;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -95,7 +96,7 @@ public class GoodControllerClient {
       GetClassifyGoodListResponse getClassifyGoodListResponse = JsonUtils
           .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetClassifyGoodListResponse.class);
       if (null == getClassifyGoodListResponse) {
-        throw new GoodsException("500", "get classify good list  return code is '200',.but return data is null");
+        throw new GoodsException("500", "get classify good list  return code is '200',but return data is null");
       }
       return getClassifyGoodListResponse;
     }
@@ -117,25 +118,12 @@ public class GoodControllerClient {
       throws IOException {
     Response<ResponseBean> response;
     if (null == coverImageFile && CollectionUtils.isEmpty(detailImageFiles)) {
-      response = goodControllerApi.createGood(token, convert(null, null, goodRequest)).execute();
+      response = goodControllerApi.createGood(token, buildMultipartBody(null, null, goodRequest)).execute();
     } else {
-      response = goodControllerApi.createGood(token, convert(coverImageFile, detailImageFiles, goodRequest)).execute();
+      response = goodControllerApi.createGood(token, buildMultipartBody(coverImageFile, detailImageFiles, goodRequest))
+          .execute();
     }
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    Object returnData = responseBean.getData();
-    if ("200".equals(returnCode)) {
-      Good good = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), Good.class);
-      if (null == good) {
-        throw new GoodsException("500", "create good return code is '200',but return data is null");
-      }
-      return good;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new GoodsException(returnCode, responseBean.getMsg());
+    return getGoodFromResponse(response, "create good return code is '200',but return data is null");
   }
 
   /**
@@ -150,29 +138,80 @@ public class GoodControllerClient {
   public void createGoodAsync(String token, File coverImageFile, List<File> detailImageFiles, GoodRequest goodRequest,
       Callback<ResponseBean> callback) {
     if (null == coverImageFile && CollectionUtils.isEmpty(detailImageFiles)) {
-      goodControllerApi.createGood(token, convert(null, null, goodRequest)).enqueue(callback);
+      goodControllerApi.createGood(token, buildMultipartBody(null, null, goodRequest)).enqueue(callback);
     } else {
-      goodControllerApi.createGood(token, convert(coverImageFile, detailImageFiles, goodRequest)).enqueue(callback);
+      goodControllerApi.createGood(token, buildMultipartBody(coverImageFile, detailImageFiles, goodRequest))
+          .enqueue(callback);
     }
   }
 
-  private MultipartBody convert(File coverImageFile, List<File> detailImageFiles, GoodRequest goodRequest) {
+  /**
+   * 根据coverImageFile、detailImageFiles和goodRequest构建MultipartBody
+   * 
+   * @param coverImageFile
+   * @param detailImageFiles
+   * @param goodRequest
+   * @return
+   */
+  private MultipartBody buildMultipartBody(File coverImageFile, List<File> detailImageFiles, GoodRequest goodRequest) {
     MultipartBody.Builder requestBodyBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+    buildCoverImage(requestBodyBuilder, coverImageFile);
+    buildDetailImage(requestBodyBuilder, detailImageFiles);
+    buildGoodRequest(requestBodyBuilder, goodRequest);
+    return requestBodyBuilder.build();
+
+  }
+
+  /**
+   * 为MultipartBody添加coverImage段
+   * 
+   * @param requestBodyBuilder
+   * @param coverImageFile
+   */
+  private void buildCoverImage(MultipartBody.Builder requestBodyBuilder, File coverImageFile) {
     if (coverImageFile != null) {
       RequestBody requestCoverImg = RequestBody.create(MediaType.parse("multipart/form-data"), coverImageFile);
       requestBodyBuilder.addFormDataPart("coverImage", coverImageFile.getName(), requestCoverImg);
     }
+  }
 
+  /**
+   * 为MultipartBody添加detailImages段
+   * 
+   * @param requestBodyBuilder
+   * @param detailImageFiles
+   */
+  private void buildDetailImage(Builder requestBodyBuilder, List<File> detailImageFiles) {
     if (!CollectionUtils.isEmpty(detailImageFiles)) {
       for (File detailImageFile : detailImageFiles) {
         RequestBody requestdetailImg = RequestBody.create(MediaType.parse("multipart/form-data"), detailImageFile);
         requestBodyBuilder.addFormDataPart("detailImages", detailImageFile.getName(), requestdetailImg);
       }
     }
+  }
 
+  /**
+   * 将GoodRequest的字段添加到MultipartBody中
+   * 
+   * @param requestBodyBuilder
+   * @param goodRequest
+   */
+  private void buildGoodRequest(Builder requestBodyBuilder, GoodRequest goodRequest) {
     if (null == goodRequest) {
-      return requestBodyBuilder.build();
+      return;
     }
+    buildGoodRequestString(requestBodyBuilder, goodRequest);
+    buildGoodRequestNumber(requestBodyBuilder, goodRequest);
+    buildLifeTime(requestBodyBuilder, goodRequest.getLifetime());
+  }
+
+  /**
+   * 将GoodRequest中String类型的字段添加到MultipartBody中
+   * 
+   * @param requestBodyBuilder
+   * @param goodRequest
+   */
+  private void buildGoodRequestString(Builder requestBodyBuilder, GoodRequest goodRequest) {
     if (StringUtils.hasContent(goodRequest.getBarcode())) {
       requestBodyBuilder.addFormDataPart("barcode", goodRequest.getBarcode());
     }
@@ -188,6 +227,15 @@ public class GoodControllerClient {
     if (StringUtils.hasContent(goodRequest.getVoucherId())) {
       requestBodyBuilder.addFormDataPart("voucherId", goodRequest.getVoucherId());
     }
+  }
+
+  /**
+   * 将GoodRequest中Number类型的字段添加到MultipartBody中
+   * 
+   * @param requestBodyBuilder
+   * @param goodRequest
+   */
+  private void buildGoodRequestNumber(Builder requestBodyBuilder, GoodRequest goodRequest) {
     if (goodRequest.getCount() > 0) {
       requestBodyBuilder.addFormDataPart("count", goodRequest.getCount() + "");
     }
@@ -203,7 +251,15 @@ public class GoodControllerClient {
     if (goodRequest.getScore() > 0) {
       requestBodyBuilder.addFormDataPart("score", goodRequest.getScore() + "");
     }
-    ShelfLife lifetime = goodRequest.getLifetime();
+  }
+
+  /**
+   * 为MultipartBody添加lifetime段
+   * 
+   * @param requestBodyBuilder
+   * @param lifetime
+   */
+  private void buildLifeTime(Builder requestBodyBuilder, ShelfLife lifetime) {
     if (lifetime != null) {
       SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_PATTERN);
       Date startTime = lifetime.getStart();
@@ -215,8 +271,6 @@ public class GoodControllerClient {
         requestBodyBuilder.addFormDataPart("lifetime.end", dateFormat.format(endTime));
       }
     }
-    return requestBodyBuilder.build();
-
   }
 
   /**
@@ -229,21 +283,7 @@ public class GoodControllerClient {
    */
   public Good getGood(String token, String goodid) throws IOException {
     Response<ResponseBean> response = goodControllerApi.getGood(token, goodid).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    Object returnData = responseBean.getData();
-    if ("200".equals(returnCode)) {
-      Good good = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), Good.class);
-      if (null == good) {
-        throw new GoodsException("500", "get good  return code is '200',.but return data is null");
-      }
-      return good;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new GoodsException(returnCode, responseBean.getMsg());
+    return getGoodFromResponse(response, "get good  return code is '200',but return data is null");
   }
 
   /**
@@ -292,7 +332,7 @@ public class GoodControllerClient {
     if ("200".equals(returnCode)) {
       GoodDetail goodDetail = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GoodDetail.class);
       if (null == goodDetail) {
-        throw new GoodsException("500", "get good detail  return code is '200',.but return data is null");
+        throw new GoodsException("500", "get good detail  return code is '200',but return data is null");
       }
       return goodDetail;
     }
@@ -311,6 +351,17 @@ public class GoodControllerClient {
    */
   public Good updateGood(String token, String goodid, GoodRequest request) throws IOException {
     Response<ResponseBean> response = goodControllerApi.updateGood(token, goodid, request).execute();
+    return getGoodFromResponse(response, "update good  return code is '200',but return data is null");
+  }
+
+  /**
+   * 从response中获取Good
+   * 
+   * @param response
+   * @param exceptionMsg
+   * @return
+   */
+  private Good getGoodFromResponse(Response<ResponseBean> response, String exceptionMsg) {
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
@@ -320,7 +371,7 @@ public class GoodControllerClient {
     if ("200".equals(returnCode)) {
       Good good = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), Good.class);
       if (null == good) {
-        throw new GoodsException("500", "update good  return code is '200',.but return data is null");
+        throw new GoodsException("500", exceptionMsg);
       }
       return good;
     }

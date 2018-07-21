@@ -52,7 +52,7 @@ public class UserService {
    */
   public void saveUser(User user) {
     if (user != null) {
-      userRepository.save(user);
+      userRepository.saveAndFlush(user);
     }
   }
 
@@ -86,7 +86,7 @@ public class UserService {
       return user;
     }
     user.update(updateUser);
-    userRepository.save(user);
+    userRepository.saveAndFlush(user);
     return user;
   }
 
@@ -120,7 +120,7 @@ public class UserService {
       return null;
     }
     recieveAddress.setUserid(userid);
-    recieveaddressRepository.save(recieveAddress);
+    recieveaddressRepository.saveAndFlush(recieveAddress);
     return recieveAddress;
   }
 
@@ -163,7 +163,7 @@ public class UserService {
     }
 
     recieveAddress.update(updateRecieveAddress);
-    recieveaddressRepository.save(recieveAddress);
+    recieveaddressRepository.saveAndFlush(recieveAddress);
     return recieveAddress;
   }
 
@@ -184,7 +184,7 @@ public class UserService {
     }
 
     recieveAddress.setDeprecated(true);
-    recieveaddressRepository.save(recieveAddress);
+    recieveaddressRepository.saveAndFlush(recieveAddress);
   }
 
 }

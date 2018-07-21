@@ -65,7 +65,7 @@ public class PreviewOrderService {
       throw new AuthException("403", "no permission update other user's preview item");
     }
     orderItem.update(updateOrderItem);
-    itemRepository.save(orderItem);
+    itemRepository.saveAndFlush(orderItem);
     return orderItem;
   }
 
@@ -82,7 +82,7 @@ public class PreviewOrderService {
     }
     PreviewOrderItem orderItem = itemRepository.findOne(itemid);
     previewOrder.getOrderItemList().remove(orderItem);
-    previeworderRepository.save(previewOrder);
+    previeworderRepository.saveAndFlush(previewOrder);
     itemRepository.delete(orderItem.getId());
   }
 
@@ -110,7 +110,7 @@ public class PreviewOrderService {
     }
 
     previeworderRepository.deleteByUserid(userid);
-    previeworderRepository.save(previeworder);
+    previeworderRepository.saveAndFlush(previeworder);
     return previeworder;
   }
 

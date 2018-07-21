@@ -62,21 +62,7 @@ public class ShopCartControllerClient {
   public ShopCartItem addShopCartItem(String token, String userid, AddShopCartItemRequest requestBean)
       throws IOException {
     Response<ResponseBean> response = shopcartControllerApi.addShopCartItem(token, userid, requestBean).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      throw new ShopCartException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    Object returnData = responseBean.getData();
-    if ("200".equals(returnCode)) {
-      ShopCartItem shopcartitem = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), ShopCartItem.class);
-      if (null == shopcartitem) {
-        throw new ShopCartException("500", "add shopcart item  return code is '200',.but return data is null");
-      }
-      return shopcartitem;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new ShopCartException(returnCode, responseBean.getMsg());
+    return getShopCartItemFromResponse(response, "add shopcart item  return code is '200',but return data is null");
   }
 
   /**
@@ -116,7 +102,7 @@ public class ShopCartControllerClient {
       GetShopCartItemListResponse getShopCartItemListResponse = JsonUtils
           .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetShopCartItemListResponse.class);
       if (null == getShopCartItemListResponse) {
-        throw new ShopCartException("500", "get shopcart list  return code is '200',.but return data is null");
+        throw new ShopCartException("500", "get shopcart list  return code is '200',but return data is null");
       }
       return getShopCartItemListResponse;
     }
@@ -225,6 +211,18 @@ public class ShopCartControllerClient {
       throws IOException {
     Response<ResponseBean> response = shopcartControllerApi.updateShopCartItemCount(token, userid, shopcartid, count)
         .execute();
+    return getShopCartItemFromResponse(response,
+        "update shopcart item  count return code is '200',but return data is null");
+  }
+
+  /**
+   * 从response中获取ShopCartItem
+   * 
+   * @param response
+   * @param exceptionmsg
+   * @return
+   */
+  private ShopCartItem getShopCartItemFromResponse(Response<ResponseBean> response, String exceptionmsg) {
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       throw new ShopCartException(ResponseCode.RESPONSE_BODY_IS_NULL);
@@ -234,7 +232,7 @@ public class ShopCartControllerClient {
     if ("200".equals(returnCode)) {
       ShopCartItem shopcartitem = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), ShopCartItem.class);
       if (null == shopcartitem) {
-        throw new ShopCartException("500", "update shopcart item  count return code is '200',.but return data is null");
+        throw new ShopCartException("500", exceptionmsg);
       }
       return shopcartitem;
     }

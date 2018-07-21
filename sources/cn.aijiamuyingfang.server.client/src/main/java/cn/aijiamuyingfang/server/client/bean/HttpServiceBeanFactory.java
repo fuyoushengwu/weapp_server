@@ -94,29 +94,6 @@ public class HttpServiceBeanFactory {
     if (null == httpServiceBean) {
       httpServiceBean = new HttpServiceBean();
 
-      OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder().connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
-          .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS).readTimeout(READ_TIMEOUT, TimeUnit.SECONDS);
-      String hostname = baseurl.replace("https://", "").replace("/", "").split(":")[0];
-
-      // 支持https,添加证书指纹,验证域名
-      clientBuilder
-          .certificatePinner(
-              new CertificatePinner.Builder().add(hostname, "sha256/jrDEZDX1N+Szu2sVh3jIPvp1ikCwEY2x4mQiRBKvKU4=")
-                  .add(hostname, "sha256/IiSbZ4pMDEyXvtl7Lg8K3FNmJcTAhKUTrB2FQOaAO/s=")
-                  .add(hostname, "sha256/JbQbUG5JMJUoI6brnx0x3vZF6jilxsapbXGVfjhN8Fg=").build())
-          .hostnameVerifier((str, session) -> hostname.equals(str));
-
-      // 添加服务拦截器实例
-      for (Class<?> interceptorClass : interceptorClasses) {
-        if (Interceptor.class.isAssignableFrom(interceptorClass)) {
-          try {
-            clientBuilder.addInterceptor((Interceptor) interceptorClass.newInstance());
-          } catch (InstantiationException | IllegalAccessException e) {
-            LOGGER.error(e.getMessage(), e);
-          }
-        }
-      }
-
       GsonBuilder builder = new GsonBuilder();
       builder.registerTypeAdapter(Date.class, new TypeAdapter<Date>() {
         private SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -146,7 +123,7 @@ public class HttpServiceBeanFactory {
 
       });
 
-      Retrofit retrofit = new Retrofit.Builder().baseUrl(baseurl).client(clientBuilder.build())
+      Retrofit retrofit = new Retrofit.Builder().baseUrl(baseurl).client(getOkHttpClient(baseurl, interceptorClasses))
           .addConverterFactory(ScalarsConverterFactory.create())
           .addConverterFactory(GsonConverterFactory.create(builder.create()))
           .addConverterFactory(new EnumRetrofitConverterFactory()).build();
@@ -159,5 +136,38 @@ public class HttpServiceBeanFactory {
     Object service = retrofit.create(serviceClass);
     httpServiceBean.getServices().put(serviceClass, service);
     return service;
+  }
+
+  /**
+   * 获取OkHttpClient
+   * 
+   * @param baseurl
+   * @param interceptorClasses
+   * @return
+   */
+  private static OkHttpClient getOkHttpClient(String baseurl, Class<?>... interceptorClasses) {
+    OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder().connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
+        .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS).readTimeout(READ_TIMEOUT, TimeUnit.SECONDS);
+    String hostname = baseurl.replace("https://", "").replace("/", "").split(":")[0];
+    // 支持https,添加证书指纹,验证域名
+    clientBuilder
+        .certificatePinner(
+            new CertificatePinner.Builder().add(hostname, "sha256/jrDEZDX1N+Szu2sVh3jIPvp1ikCwEY2x4mQiRBKvKU4=")
+                .add(hostname, "sha256/IiSbZ4pMDEyXvtl7Lg8K3FNmJcTAhKUTrB2FQOaAO/s=")
+                .add(hostname, "sha256/JbQbUG5JMJUoI6brnx0x3vZF6jilxsapbXGVfjhN8Fg=").build())
+        .hostnameVerifier((str, session) -> hostname.equals(str));
+
+    // 添加服务拦截器实例
+    for (Class<?> interceptorClass : interceptorClasses) {
+      if (Interceptor.class.isAssignableFrom(interceptorClass)) {
+        try {
+          clientBuilder.addInterceptor((Interceptor) interceptorClass.newInstance());
+        } catch (InstantiationException | IllegalAccessException e) {
+          LOGGER.error(e.getMessage(), e);
+        }
+      }
+    }
+
+    return clientBuilder.build();
   }
 }

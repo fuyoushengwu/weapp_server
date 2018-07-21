@@ -202,6 +202,7 @@ public class ShopOrderService {
         updateGoods.add(good);
       }
       goodRepository.save(updateGoods);
+      goodRepository.flush();
 
       switch (shoporder.getSendtype()) {
         case OWNSEND:
@@ -216,7 +217,7 @@ public class ShopOrderService {
         default:
           break;
       }
-      shopOrderRepository.save(shoporder);
+      shopOrderRepository.saveAndFlush(shoporder);
     }
   }
 
@@ -261,11 +262,12 @@ public class ShopOrderService {
         updateUserVoucherList.add(userVoucher);
       }
       uservoucherRepository.save(updateUserVoucherList);
+      goodRepository.flush();
 
       User user = userRepository.findOne(userid);
       if (user != null) {
         user.increaseGenericScore(shopOrder.getScore());
-        userRepository.save(user);
+        userRepository.saveAndFlush(user);
       }
     }
 
@@ -296,7 +298,7 @@ public class ShopOrderService {
 
     ConfirmUserShopOrderFinishedResponse response = new ConfirmUserShopOrderFinishedResponse();
     shoporder.setStatus(ShopOrderStatus.FINISHED);
-    shopOrderRepository.save(shoporder);
+    shopOrderRepository.saveAndFlush(shoporder);
 
     User user = userRepository.findOne(userid);
     if (null == user) {
@@ -321,10 +323,10 @@ public class ShopOrderService {
         int voucherScore = goodvoucher.getScore() * shoporderItem.getCount();
         uservoucher.increaseScore(voucherScore);
         response.addVoucherScore(voucherScore);
-        uservoucherRepository.save(uservoucher);
+        uservoucherRepository.saveAndFlush(uservoucher);
       }
     }
-    userRepository.save(user);
+    userRepository.saveAndFlush(user);
     return response;
   }
 
@@ -357,7 +359,7 @@ public class ShopOrderService {
     }
 
     shoporder.setRecieveAddress(recieveaddress);
-    shopOrderRepository.save(shoporder);
+    shopOrderRepository.saveAndFlush(shoporder);
   }
 
   /**
@@ -463,6 +465,7 @@ public class ShopOrderService {
         updateUserVoucherList.add(userVoucher);
       }
       uservoucherRepository.save(updateUserVoucherList);
+      goodRepository.flush();
     }
 
     shoporder.setTotalPrice(totalPrice);
@@ -470,10 +473,10 @@ public class ShopOrderService {
     User user = userRepository.findOne(userid);
     if (user != null) {
       user.decreaseGenericScore(shoporder.getScore());
-      userRepository.save(user);
+      userRepository.saveAndFlush(user);
     }
 
-    shopOrderRepository.save(shoporder);
+    shopOrderRepository.saveAndFlush(shoporder);
     previeworderRepository.delete(previeworder.getId());
     return shoporder;
   }
@@ -619,10 +622,10 @@ public class ShopOrderService {
           Good good = item.getGood();
           int buycount = item.getCount();
           good.setCount(good.getCount() - buycount);
-          goodRepository.save(good);
+          goodRepository.saveAndFlush(good);
         }
         shoporder.setStatus(ShopOrderStatus.UNSTART);
-        shopOrderRepository.save(shoporder);
+        shopOrderRepository.saveAndFlush(shoporder);
         templatemsgControllerClient.sendPreOrderMsg(token, shoporder, updatedGood, true);
 
       }

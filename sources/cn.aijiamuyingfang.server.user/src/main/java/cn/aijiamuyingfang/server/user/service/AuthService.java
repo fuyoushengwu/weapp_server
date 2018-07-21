@@ -69,7 +69,7 @@ public class AuthService {
       user.setAppid(appid);
       user.setNickname(nickname);
       user.setAvatar(avatar);
-      userRepository.save(user);
+      userRepository.saveAndFlush(user);
     }
     return login(user);
   }
@@ -124,7 +124,7 @@ public class AuthService {
     user.setAvatar(request.getAvatar());
     user.setNickname(request.getNickname());
     user.addAuthority(UserAuthority.SENDER);
-    userRepository.save(user);
+    userRepository.saveAndFlush(user);
     return user;
   }
 

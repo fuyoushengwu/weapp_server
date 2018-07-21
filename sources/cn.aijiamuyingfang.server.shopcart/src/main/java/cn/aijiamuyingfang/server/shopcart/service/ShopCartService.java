@@ -66,7 +66,7 @@ public class ShopCartService {
       shopcartItem.setCount(0);
     }
     shopcartItem.addCount(goodNum);
-    shopcartItemRepository.save(shopcartItem);
+    shopcartItemRepository.saveAndFlush(shopcartItem);
     return shopcartItem;
   }
 
@@ -115,7 +115,7 @@ public class ShopCartService {
       throw new AuthException("403", "no permission check other user's shopcart");
     }
     shopcartItem.setIschecked(ischecked);
-    shopcartItemRepository.save(shopcartItem);
+    shopcartItemRepository.saveAndFlush(shopcartItem);
   }
 
   /**
@@ -156,7 +156,7 @@ public class ShopCartService {
       throw new AuthException("403", "no permission chage other user's shopcart");
     }
     shopcartItem.setCount(count);
-    shopcartItemRepository.save(shopcartItem);
+    shopcartItemRepository.saveAndFlush(shopcartItem);
     return shopcartItem;
   }
 

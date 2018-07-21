@@ -72,7 +72,7 @@ public class StoreService {
     if (null == store) {
       return;
     }
-    storeRepository.save(store);
+    storeRepository.saveAndFlush(store);
   }
 
   /**
@@ -101,7 +101,7 @@ public class StoreService {
       return store;
     }
     store.update(updateStore);
-    storeRepository.save(store);
+    storeRepository.saveAndFlush(store);
     return store;
   }
 
@@ -116,12 +116,12 @@ public class StoreService {
       throw new GoodsException(ResponseCode.STORE_NOT_EXIST, storeid);
     }
     store.setDeprecated(true);
-    storeRepository.save(store);
+    storeRepository.saveAndFlush(store);
 
     StoreAddress storeaddress = store.getStoreAddress();
     if (storeaddress != null) {
       storeaddress.setDeprecated(true);
-      storeaddressRepository.save(storeaddress);
+      storeaddressRepository.saveAndFlush(storeaddress);
     }
 
   }

@@ -47,22 +47,7 @@ public class AuthControllerClient {
    */
   public TokenResponse getToken(String jscode, String nickname, String avatar) throws IOException {
     Response<ResponseBean> response = authControllerApi.getToken(jscode, nickname, avatar).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      throw new AuthException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    Object returnData = responseBean.getData();
-    if ("200".equals(returnCode)) {
-      TokenResponse tokenResponse = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
-          TokenResponse.class);
-      if (null == tokenResponse) {
-        throw new AuthException("500", "get token return code is '200',.but return data is null");
-      }
-      return tokenResponse;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new AuthException(returnCode, responseBean.getMsg());
+    return getTokenFromResponse(response);
   }
 
   /**
@@ -84,7 +69,7 @@ public class AuthControllerClient {
     if ("200".equals(returnCode)) {
       User userResponse = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), User.class);
       if (null == userResponse) {
-        throw new AuthException("500", "register user return code is '200',.but return data is null");
+        throw new AuthException("500", "register user return code is '200',but return data is null");
       }
       return userResponse;
     }
@@ -113,6 +98,16 @@ public class AuthControllerClient {
    */
   public TokenResponse refreshToken(String token) throws IOException {
     Response<ResponseBean> response = authControllerApi.refreshToken(token).execute();
+    return getTokenFromResponse(response);
+  }
+
+  /**
+   * 从response中获取Token
+   * 
+   * @param response
+   * @return
+   */
+  private TokenResponse getTokenFromResponse(Response<ResponseBean> response) {
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       throw new AuthException(ResponseCode.RESPONSE_BODY_IS_NULL);
@@ -123,7 +118,7 @@ public class AuthControllerClient {
       TokenResponse tokenResponse = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
           TokenResponse.class);
       if (null == tokenResponse) {
-        throw new AuthException("500", "refresh token return code is '200',.but return data is null");
+        throw new AuthException("500", "get token return code is '200',but return data is null");
       }
       return tokenResponse;
     }
@@ -139,6 +134,5 @@ public class AuthControllerClient {
    */
   public void refreshTokenAsync(String token, Callback<ResponseBean> callback) {
     authControllerApi.refreshToken(token).enqueue(callback);
-    ;
   }
 }

@@ -59,7 +59,7 @@ public class StoreClassifyService {
       throw new GoodsException(ResponseCode.STORE_NOT_EXIST, storeid);
     }
     store.addClassify(classify);
-    storeRepository.save(store);
+    storeRepository.saveAndFlush(store);
   }
 
   /**

@@ -62,21 +62,7 @@ public class UserControllerClient {
    */
   public User getUser(String token, String userid) throws IOException {
     Response<ResponseBean> response = userControllerApi.getUser(token, userid).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      throw new UserException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    Object returnData = responseBean.getData();
-    if ("200".equals(returnCode)) {
-      User user = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), User.class);
-      if (null == user) {
-        throw new UserException("500", "get user  return code is '200',but return data is null");
-      }
-      return user;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new UserException(returnCode, responseBean.getMsg());
+    return getUserFromResponse(response, "get user  return code is '200',but return data is null");
   }
 
   /**
@@ -89,6 +75,17 @@ public class UserControllerClient {
    */
   public User updateUser(String token, String userid, UserRequest request) throws IOException {
     Response<ResponseBean> response = userControllerApi.updateUser(token, userid, request).execute();
+    return getUserFromResponse(response, "update user  return code is '200',but return data is null");
+  }
+
+  /**
+   * 从response中获取User
+   * 
+   * @param response
+   * @param exceptionmsg
+   * @return
+   */
+  private User getUserFromResponse(Response<ResponseBean> response, String exceptionmsg) {
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       throw new UserException(ResponseCode.RESPONSE_BODY_IS_NULL);
@@ -98,7 +95,7 @@ public class UserControllerClient {
     if ("200".equals(returnCode)) {
       User user = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), User.class);
       if (null == user) {
-        throw new UserException("500", "update user  return code is '200',but return data is null");
+        throw new UserException("500", exceptionmsg);
       }
       return user;
     }
@@ -156,22 +153,8 @@ public class UserControllerClient {
   public RecieveAddress addUserRecieveAddress(String token, String userid, RecieveAddressRequest request)
       throws IOException {
     Response<ResponseBean> response = userControllerApi.addUserRecieveAddress(token, userid, request).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      throw new UserException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    Object returnData = responseBean.getData();
-    if ("200".equals(returnCode)) {
-      RecieveAddress recieveaddress = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
-          RecieveAddress.class);
-      if (null == recieveaddress) {
-        throw new UserException("500", "add user recieve address  return code is '200',but return data is null");
-      }
-      return recieveaddress;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new UserException(returnCode, responseBean.getMsg());
+    return getRecieveAddressFromResponse(response,
+        "add user recieve address  return code is '200',but return data is null");
   }
 
   /**
@@ -197,22 +180,7 @@ public class UserControllerClient {
    */
   public RecieveAddress getRecieveAddress(String token, String userid, String addressid) throws IOException {
     Response<ResponseBean> response = userControllerApi.getRecieveAddress(token, userid, addressid).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      throw new UserException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    Object returnData = responseBean.getData();
-    if ("200".equals(returnCode)) {
-      RecieveAddress recieveaddress = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
-          RecieveAddress.class);
-      if (null == recieveaddress) {
-        throw new UserException("500", "get recieve address  return code is '200',but return data is null");
-      }
-      return recieveaddress;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new UserException(returnCode, responseBean.getMsg());
+    return getRecieveAddressFromResponse(response, "get recieve address  return code is '200',but return data is null");
   }
 
   /**
@@ -228,6 +196,18 @@ public class UserControllerClient {
       RecieveAddressRequest request) throws IOException {
     Response<
         ResponseBean> response = userControllerApi.updateRecieveAddress(token, userid, addressid, request).execute();
+    return getRecieveAddressFromResponse(response,
+        "update recieve address  return code is '200',but return data is null");
+  }
+
+  /**
+   * 从response中获取RecieveAddress
+   * 
+   * @param response
+   * @param exceptionmsg
+   * @return
+   */
+  private RecieveAddress getRecieveAddressFromResponse(Response<ResponseBean> response, String exceptionmsg) {
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       throw new UserException(ResponseCode.RESPONSE_BODY_IS_NULL);
@@ -238,12 +218,13 @@ public class UserControllerClient {
       RecieveAddress recieveaddress = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
           RecieveAddress.class);
       if (null == recieveaddress) {
-        throw new UserException("500", "update recieve address  return code is '200',but return data is null");
+        throw new UserException("500", exceptionmsg);
       }
       return recieveaddress;
     }
     LOGGER.error(responseBean.getMsg());
     throw new UserException(returnCode, responseBean.getMsg());
+
   }
 
   /**

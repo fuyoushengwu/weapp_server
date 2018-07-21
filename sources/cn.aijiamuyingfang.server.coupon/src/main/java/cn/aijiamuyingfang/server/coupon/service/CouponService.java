@@ -78,10 +78,7 @@ public class CouponService {
       List<String> itemidList = voucher.getGoodVoucher().getVoucheritemIdList();
       for (String itemid : itemidList) {
         VoucherItem item = voucheritemRepository.findOne(itemid);
-        if (null == item) {
-          continue;
-        }
-        if (goodids.contains(item.getGoodid()) && item.getScore() <= voucher.getScore()) {
+        if (item != null && goodids.contains(item.getGoodid()) && item.getScore() <= voucher.getScore()) {
           ShopOrderVoucher shoporderVoucher = new ShopOrderVoucher();
           shoporderVoucher.setUserVoucher(voucher);
           shoporderVoucher.setVoucherItem(item);
@@ -121,7 +118,7 @@ public class CouponService {
    */
   public GoodVoucher createGoodVoucher(GoodVoucher goodVoucher) {
     if (goodVoucher != null) {
-      goodvoucherRepository.save(goodVoucher);
+      goodvoucherRepository.saveAndFlush(goodVoucher);
     }
     return goodVoucher;
   }
@@ -139,7 +136,7 @@ public class CouponService {
       return;
     }
     goodVoucher.setDeprecated(true);
-    goodvoucherRepository.save(goodVoucher);
+    goodvoucherRepository.saveAndFlush(goodVoucher);
 
     // 废弃UserVoucher
     UserVoucher userVoucher = uservoucherRepository.findByGoodVoucherId(voucherid);
@@ -147,7 +144,7 @@ public class CouponService {
       return;
     }
     userVoucher.setDeprecated(true);
-    uservoucherRepository.save(userVoucher);
+    uservoucherRepository.saveAndFlush(userVoucher);
 
     // 消除Good对GoodVoucherId的引用
     goodRepository.deprecateGoodVoucher(voucherid);
@@ -180,7 +177,7 @@ public class CouponService {
    */
   public VoucherItem createVoucherItem(VoucherItem voucherItem) {
     if (voucherItem != null) {
-      voucheritemRepository.save(voucherItem);
+      voucheritemRepository.saveAndFlush(voucherItem);
     }
     return voucherItem;
   }
@@ -197,7 +194,7 @@ public class CouponService {
       return;
     }
     voucherItem.setDeprecated(true);
-    voucheritemRepository.save(voucherItem);
+    voucheritemRepository.saveAndFlush(voucherItem);
 
     // GoodVoucher中引用的VoucherItem也删除
     goodvoucherRepository.deprecateVoucherItem(itemid);

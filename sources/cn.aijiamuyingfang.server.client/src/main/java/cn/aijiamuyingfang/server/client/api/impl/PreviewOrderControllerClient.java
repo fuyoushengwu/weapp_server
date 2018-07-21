@@ -75,7 +75,7 @@ public class PreviewOrderControllerClient {
       PreviewOrderItem previeworderItem = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
           PreviewOrderItem.class);
       if (null == previeworderItem) {
-        throw new ShopOrderException("500", "update preview order item return code is '200',.but return data is null");
+        throw new ShopOrderException("500", "update preview order item return code is '200',but return data is null");
       }
       return previeworderItem;
     }
@@ -145,7 +145,7 @@ public class PreviewOrderControllerClient {
     if ("200".equals(returnCode)) {
       PreviewOrder previeworder = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), PreviewOrder.class);
       if (null == previeworder) {
-        throw new ShopOrderException("500", "generate preview order return code is '200',.but return data is null");
+        throw new ShopOrderException("500", "generate preview order return code is '200',but return data is null");
       }
       return previeworder;
     }

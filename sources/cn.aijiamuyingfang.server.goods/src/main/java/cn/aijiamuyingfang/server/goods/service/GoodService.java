@@ -32,7 +32,7 @@ public class GoodService {
     if (null == good) {
       return good;
     }
-    return goodRepository.save(good);
+    return goodRepository.saveAndFlush(good);
   }
 
   /**
@@ -62,7 +62,7 @@ public class GoodService {
       return good;
     }
     good.update(updateGood);
-    goodRepository.save(good);
+    goodRepository.saveAndFlush(good);
     return good;
   }
 
@@ -75,7 +75,7 @@ public class GoodService {
     Good good = goodRepository.findOne(goodid);
     if (good != null) {
       good.setDeprecated(true);
-      goodRepository.save(good);
+      goodRepository.saveAndFlush(good);
     }
   }
 }

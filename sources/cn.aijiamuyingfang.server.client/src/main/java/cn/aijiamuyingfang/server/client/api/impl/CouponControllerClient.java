@@ -81,7 +81,7 @@ public class CouponControllerClient {
       GetUserVoucherListResponse uservoucherListResponse = JsonUtils
           .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetUserVoucherListResponse.class);
       if (null == uservoucherListResponse) {
-        throw new CouponException("500", "get user voucher list  return code is '200',.but return data is null");
+        throw new CouponException("500", "get user voucher list  return code is '200',but return data is null");
       }
       return uservoucherListResponse;
     }
@@ -111,7 +111,7 @@ public class CouponControllerClient {
       GetShopOrderVoucherListResponse shoporderVoucherListResponse = JsonUtils
           .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetShopOrderVoucherListResponse.class);
       if (null == shoporderVoucherListResponse) {
-        throw new CouponException("500", "get shoporder voucher list return code is '200',.but return data is null");
+        throw new CouponException("500", "get shoporder voucher list return code is '200',but return data is null");
       }
       return shoporderVoucherListResponse;
     }
@@ -140,7 +140,7 @@ public class CouponControllerClient {
       GetGoodVoucherListResponse goodvoucherListResponse = JsonUtils
           .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetGoodVoucherListResponse.class);
       if (null == goodvoucherListResponse) {
-        throw new CouponException("500", "get good voucher list return code is '200',.but return data is null");
+        throw new CouponException("500", "get good voucher list return code is '200',but return data is null");
       }
       return goodvoucherListResponse;
     }
@@ -167,7 +167,7 @@ public class CouponControllerClient {
     if ("200".equals(returnCode)) {
       GoodVoucher goodvoucher = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GoodVoucher.class);
       if (null == goodvoucher) {
-        throw new CouponException("500", "create good voucher return code is '200',.but return data is null");
+        throw new CouponException("500", "create good voucher return code is '200',but return data is null");
       }
       return goodvoucher;
     }
@@ -233,7 +233,7 @@ public class CouponControllerClient {
       GetVoucherItemListResponse voucheritemListResponse = JsonUtils
           .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetVoucherItemListResponse.class);
       if (null == voucheritemListResponse) {
-        throw new CouponException("500", "get voucher item list  return code is '200',.but return data is null");
+        throw new CouponException("500", "get voucher item list  return code is '200',but return data is null");
       }
       return voucheritemListResponse;
     }
@@ -261,7 +261,7 @@ public class CouponControllerClient {
     if ("200".equals(returnCode)) {
       VoucherItem voucheritem = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), VoucherItem.class);
       if (null == voucheritem) {
-        throw new CouponException("500", "create voucher item return code is '200',.but return data is null");
+        throw new CouponException("500", "create voucher item return code is '200',but return data is null");
       }
       return voucheritem;
     }

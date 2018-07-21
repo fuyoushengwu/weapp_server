@@ -52,19 +52,19 @@ public class ClassifyRepositoryTest {
     Classify classify = new Classify();
     classify.setName("classify");
     classify.setLevel(1);
-    classifyRepository.save(classify);
+    classifyRepository.saveAndFlush(classify);
     Assert.assertTrue(StringUtils.hasContent(classify.getId()));
 
     Store store = new Store();
     store.setName("store");
     store.addClassify(classify);
-    storeRepository.save(store);
+    storeRepository.saveAndFlush(store);
     Assert.assertTrue(StringUtils.hasContent(store.getId()));
     Assert.assertEquals(1, store.getClassifyList().size());
     Assert.assertEquals(classify.getId(), store.getClassifyList().get(0).getId());
 
     store.getClassifyList().remove(classify);
-    storeRepository.save(store);
+    storeRepository.saveAndFlush(store);
     classifyRepository.delete(classify.getId());
 
     Assert.assertEquals(0, store.getClassifyList().size());

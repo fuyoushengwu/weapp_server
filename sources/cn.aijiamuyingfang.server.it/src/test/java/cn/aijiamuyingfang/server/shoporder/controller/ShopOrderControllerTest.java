@@ -206,7 +206,7 @@ public class ShopOrderControllerTest {
 
   @Test
   @TestDescription(description = "删除100天外的订单")
-  public void test_Delete100DaysFinishedShopOrder_001() throws IOException {
+  public void test_Delete100DaysFinishedShopOrder_001() throws IOException, InterruptedException {
     testActions.createGoodOne();
     testActions.createGoodTwo();
 
@@ -236,7 +236,8 @@ public class ShopOrderControllerTest {
     ShopOrder shoporder = shoporderRepository.findOne(testActions.senderoneShoporderId);
     shoporder.setFinishTime(new Date(System.currentTimeMillis() - 101 * 24 * 60 * 60 * 1000L));
     shoporder.setLastModify(new Date(System.currentTimeMillis() - 101 * 24 * 60 * 60 * 1000L));
-    shoporderRepository.save(shoporder);
+    shoporderRepository.saveAndFlush(shoporder);
+    Thread.sleep(2000);
     client.delete100DaysFinishedShopOrder(testActions.senderoneToken, testActions.senderoneShoporderId, false);
     response = client.getShopOrderList(ADMIN_USER_TOKEN, null, null, 1, 10);
     Assert.assertEquals(1, response.getDataList().size());
@@ -265,7 +266,7 @@ public class ShopOrderControllerTest {
 
     RecieveAddress address = new RecieveAddress();
     address.setUserid(testActions.senderoneId);
-    recieveaddressRepository.save(address);
+    recieveaddressRepository.saveAndFlush(address);
 
     client.updateUserShopOrderRecieveAddress(testActions.senderoneToken, testActions.senderoneId,
         testActions.senderoneShoporderId, address.getId(), false);

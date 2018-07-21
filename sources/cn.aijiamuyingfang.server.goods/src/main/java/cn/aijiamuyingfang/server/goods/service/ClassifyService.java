@@ -60,7 +60,7 @@ public class ClassifyService {
       return classify;
     }
     classify.setLevel(1);
-    return classifyRepository.save(classify);
+    return classifyRepository.saveAndFlush(classify);
   }
 
   /**
@@ -80,7 +80,7 @@ public class ClassifyService {
       throw new GoodsException(ResponseCode.CLASSIFY_NOT_EXIST, topclassifyid);
     }
     topclassify.addSubClassify(subclassify);
-    classifyRepository.save(topclassify);
+    classifyRepository.saveAndFlush(topclassify);
     return topclassify.getSubClassifyList().get(topclassify.getSubClassifyList().size() - 1);
   }
 
@@ -115,7 +115,7 @@ public class ClassifyService {
       throw new GoodsException(ResponseCode.CLASSIFY_NOT_EXIST, classifyid);
     }
     classify.addGood(good);
-    classifyRepository.save(classify);
+    classifyRepository.saveAndFlush(classify);
   }
 
   /**
@@ -134,7 +134,7 @@ public class ClassifyService {
       return classify;
     }
     classify.update(updateClassify);
-    classifyRepository.save(classify);
+    classifyRepository.saveAndFlush(classify);
     return classify;
   }
 

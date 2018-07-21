@@ -45,7 +45,7 @@ public class WXSessionControllerClient {
     if ("200".equals(returnCode)) {
       WXSession wxsession = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), WXSession.class);
       if (null == wxsession) {
-        throw new WXServiceException("500", "jscode to wxsession  is '200',.but return data is null");
+        throw new WXServiceException("500", "jscode to wxsession  is '200',but return data is null");
       }
       return wxsession;
     }

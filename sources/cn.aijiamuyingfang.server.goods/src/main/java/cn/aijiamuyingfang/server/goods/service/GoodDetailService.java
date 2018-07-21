@@ -30,7 +30,7 @@ public class GoodDetailService {
     if (null == gooddetail) {
       return null;
     }
-    return goodDetailRepository.save(gooddetail);
+    return goodDetailRepository.saveAndFlush(gooddetail);
   }
 
   /**

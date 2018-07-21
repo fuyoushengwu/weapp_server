@@ -118,12 +118,10 @@ public class Good extends GoodRequest {
     if (getClass() != obj.getClass())
       return false;
     Good other = (Good) obj;
-    if (id == null) {
-      if (other.id != null)
-        return false;
-    } else if (!id.equals(other.id))
-      return false;
-    return true;
+    if (null == id) {
+      return null == other.id;
+    }
+    return id.equals(other.id);
   }
 
 }
