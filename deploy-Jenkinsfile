@@ -39,9 +39,7 @@ pipeline {
                                     execCommand: 'tar -zxvf weapp.tar.gz'
                                 ),
                                 sshTransfer(
-                                    sourceFiles: '/root/soft/nginx/ssl/*',
-                                    removePrefix: '/root/soft/nginx/', 
-                                    remoteDirectory: 'weapp/nginx/',
+                                    execCommand: './weapp/bin/deploya.sh'
                                 )
                             ], 
                             verbose: true
@@ -58,9 +56,7 @@ pipeline {
                                     execCommand: 'tar -zxvf weapp.tar.gz'
                                 ),
                                 sshTransfer(
-                                    sourceFiles: '/root/soft/nginx/ssl/*',
-                                    removePrefix: '/root/soft/nginx/', 
-                                    remoteDirectory: 'weapp/nginx/',
+                                    execCommand: './weapp/bin/deployb.sh'
                                 )
                             ], 
                             verbose: true
