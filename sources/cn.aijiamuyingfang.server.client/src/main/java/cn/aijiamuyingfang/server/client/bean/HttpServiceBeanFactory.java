@@ -59,26 +59,6 @@ public class HttpServiceBeanFactory {
   }
 
   /**
-   * 获得service服务实体
-   * 
-   * @param requiredType
-   * @return
-   */
-  public static Object getBean(Class<?> requiredType) {
-    if (null == requiredType) {
-      return null;
-    }
-    for (HttpServiceBean serviceBean : serviceBeans.values()) {
-      for (Map.Entry<Class<?>, Object> entry : serviceBean.getServices().entrySet()) {
-        if (requiredType.equals(entry.getKey())) {
-          return entry.getValue();
-        }
-      }
-    }
-    return null;
-  }
-
-  /**
    * 创建service服务实体
    * 
    * @param baseUrl
