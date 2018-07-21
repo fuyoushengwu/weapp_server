@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class JwtTokenService {
 
-  @Value("${weapp.jwt.secret}")
+  @Value("${weapp_jwt_secret}")
   private String secret;
 
   public String getUsernameFromToken(String token) {

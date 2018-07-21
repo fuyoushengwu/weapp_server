@@ -27,7 +27,7 @@ nohup java -jar /root/weapp/services/user/cn.aijiamuyingfang.server.user-0.0.1-b
 
 stopProcess cn.aijiamuyingfang.server.coupon
 echo "nohup java -jar /root/weapp/services/user/cn.aijiamuyingfang.server.coupon-0.0.1-boot.jar $WEAPP_OPTS >/root/weapp/logs/coupon.log 2>&1 &"
-nohup java -jar /root/weapp/services/user/cn.aijiamuyingfang.server.coupon-0.0.1-boot.jar $WEAPP_OPTS >/root/weapp/logs/coupon.log 2>&1 &
+nohup java -jar /root/weapp/services/coupon/cn.aijiamuyingfang.server.coupon-0.0.1-boot.jar $WEAPP_OPTS >/root/weapp/logs/coupon.log 2>&1 &
 
 stopProcess cn.aijiamuyingfang.server.wxservice
 echo "nohup java -jar /root/weapp/services/wxservice/cn.aijiamuyingfang.server.wxservice-0.0.1-boot.jar $WEAPP_OPTS >/root/weapp/logs/wxservice.log 2>&1 &"
