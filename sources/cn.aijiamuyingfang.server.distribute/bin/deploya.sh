@@ -1,5 +1,5 @@
 #!/bin/sh
-yues|cp -rf /root/weapp/nginx/* /etc/nginx/
+yes|cp -rf /root/weapp/nginx/* /etc/nginx/
 mkdir -p /etc/nginx/static/work
 mkdir -p /etc/nginx/static/images
 
