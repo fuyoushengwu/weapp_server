@@ -132,9 +132,9 @@ public class HttpServiceBeanFactory {
     // 支持https,添加证书指纹,验证域名
     clientBuilder
         .certificatePinner(
-            new CertificatePinner.Builder().add(hostname, "sha256/jrDEZDX1N+Szu2sVh3jIPvp1ikCwEY2x4mQiRBKvKU4=")
-                .add(hostname, "sha256/IiSbZ4pMDEyXvtl7Lg8K3FNmJcTAhKUTrB2FQOaAO/s=")
-                .add(hostname, "sha256/JbQbUG5JMJUoI6brnx0x3vZF6jilxsapbXGVfjhN8Fg=").build())
+            new CertificatePinner.Builder().add(hostname, "sha256/ws7jjHqFe0uRilFM2Rmby01kpiLy7LFiQLhQz4ntLWk=")
+                .add(hostname, "sha256/jzqM6/58ozsPRvxUzg0hzjM+GcfwhTbU/G0TCDvL7hU=")
+                .add(hostname, "sha256/r/mIkG3eEpVdm+u/ko/cwxzOMo1bk4TyHIlByibiA5E=").build())
         .hostnameVerifier((str, session) -> hostname.equals(str));
 
     // 添加服务拦截器实例
