@@ -6,5 +6,6 @@ logs
 .classpath
 *.jar
 .factorypath
+.vscode
 
 /sources/cn.aijiamuyingfang.server.distribute/services
