@@ -2,16 +2,15 @@ package cn.aijiamuyingfang.client.rest.api.impl;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.GoodControllerApi;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseBean;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseCode;
+import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
 import cn.aijiamuyingfang.commons.domain.exception.GoodsException;
-import cn.aijiamuyingfang.commons.domain.goods.GetClassifyGoodListResponse;
 import cn.aijiamuyingfang.commons.domain.goods.Good;
 import cn.aijiamuyingfang.commons.domain.goods.GoodDetail;
-import cn.aijiamuyingfang.commons.domain.goods.GoodRequest;
 import cn.aijiamuyingfang.commons.domain.goods.ShelfLife;
+import cn.aijiamuyingfang.commons.domain.goods.response.GetClassifyGoodListResponse;
+import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
+import cn.aijiamuyingfang.commons.domain.response.ResponseCode;
 import cn.aijiamuyingfang.commons.utils.CollectionUtils;
-import cn.aijiamuyingfang.commons.utils.JsonUtils;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import java.io.File;
 import java.io.IOException;
@@ -114,7 +113,7 @@ public class GoodControllerClient {
    * @return
    * @throws IOException
    */
-  public Good createGood(String token, File coverImageFile, List<File> detailImageFiles, GoodRequest goodRequest)
+  public Good createGood(String token, File coverImageFile, List<File> detailImageFiles, Good goodRequest)
       throws IOException {
     Response<ResponseBean> response;
     if (null == coverImageFile && CollectionUtils.isEmpty(detailImageFiles)) {
@@ -135,7 +134,7 @@ public class GoodControllerClient {
    * @param goodRequest
    * @param callback
    */
-  public void createGoodAsync(String token, File coverImageFile, List<File> detailImageFiles, GoodRequest goodRequest,
+  public void createGoodAsync(String token, File coverImageFile, List<File> detailImageFiles, Good goodRequest,
       Callback<ResponseBean> callback) {
     if (null == coverImageFile && CollectionUtils.isEmpty(detailImageFiles)) {
       goodControllerApi.createGood(token, buildMultipartBody(null, null, goodRequest)).enqueue(callback);
@@ -153,7 +152,7 @@ public class GoodControllerClient {
    * @param goodRequest
    * @return
    */
-  private MultipartBody buildMultipartBody(File coverImageFile, List<File> detailImageFiles, GoodRequest goodRequest) {
+  private MultipartBody buildMultipartBody(File coverImageFile, List<File> detailImageFiles, Good goodRequest) {
     MultipartBody.Builder requestBodyBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
     buildCoverImage(requestBodyBuilder, coverImageFile);
     buildDetailImage(requestBodyBuilder, detailImageFiles);
@@ -196,7 +195,7 @@ public class GoodControllerClient {
    * @param requestBodyBuilder
    * @param goodRequest
    */
-  private void buildGoodRequest(Builder requestBodyBuilder, GoodRequest goodRequest) {
+  private void buildGoodRequest(Builder requestBodyBuilder, Good goodRequest) {
     if (null == goodRequest) {
       return;
     }
@@ -211,7 +210,7 @@ public class GoodControllerClient {
    * @param requestBodyBuilder
    * @param goodRequest
    */
-  private void buildGoodRequestString(Builder requestBodyBuilder, GoodRequest goodRequest) {
+  private void buildGoodRequestString(Builder requestBodyBuilder, Good goodRequest) {
     if (StringUtils.hasContent(goodRequest.getBarcode())) {
       requestBodyBuilder.addFormDataPart("barcode", goodRequest.getBarcode());
     }
@@ -235,7 +234,7 @@ public class GoodControllerClient {
    * @param requestBodyBuilder
    * @param goodRequest
    */
-  private void buildGoodRequestNumber(Builder requestBodyBuilder, GoodRequest goodRequest) {
+  private void buildGoodRequestNumber(Builder requestBodyBuilder, Good goodRequest) {
     if (goodRequest.getCount() > 0) {
       requestBodyBuilder.addFormDataPart("count", goodRequest.getCount() + "");
     }
@@ -349,7 +348,7 @@ public class GoodControllerClient {
    * @return
    * @throws IOException
    */
-  public Good updateGood(String token, String goodid, GoodRequest request) throws IOException {
+  public Good updateGood(String token, String goodid, Good request) throws IOException {
     Response<ResponseBean> response = goodControllerApi.updateGood(token, goodid, request).execute();
     return getGoodFromResponse(response, "update good  return code is '200',but return data is null");
   }
@@ -387,7 +386,7 @@ public class GoodControllerClient {
    * @param request
    * @param callback
    */
-  public void updateGoodAsync(String token, String goodid, GoodRequest request, Callback<ResponseBean> callback) {
+  public void updateGoodAsync(String token, String goodid, Good request, Callback<ResponseBean> callback) {
     goodControllerApi.updateGood(token, goodid, request).enqueue(callback);
   }
 }

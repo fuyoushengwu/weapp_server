@@ -1,0 +1,19 @@
+package cn.aijiamuyingfang.commons.domain.coupon.response;
+
+import cn.aijiamuyingfang.commons.domain.PageResponse;
+import cn.aijiamuyingfang.commons.domain.coupon.UserVoucher;
+
+/**
+ * [描述]:
+ * <p>
+ * 分页获取用户兑换券的返回类型
+ * </p>
+ *
+ * @version 1.0.0
+ * @author ShiWei
+ * @email shiweideyouxiang@sina.cn
+ * @date 2018-06-09 21:25:38
+ */
+public class GetUserVoucherListResponse extends PageResponse<UserVoucher> {
+
+}

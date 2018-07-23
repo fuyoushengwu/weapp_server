@@ -2,8 +2,8 @@ package cn.aijiamuyingfang.client.rest.api;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
 import cn.aijiamuyingfang.commons.constants.AuthConstants;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseBean;
-import cn.aijiamuyingfang.commons.domain.user.UserRequest;
+import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
+import cn.aijiamuyingfang.commons.domain.user.User;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -43,11 +43,11 @@ public interface AuthControllerApi {
    * 注册用户
    * 
    * @param token
-   * @param request
+   * @param user
    * @return
    */
   @POST(value = "/user/register")
-  public Call<ResponseBean> registerUser(@Header(AuthConstants.HEADER_STRING) String token, @Body UserRequest request);
+  public Call<ResponseBean> registerUser(@Header(AuthConstants.HEADER_STRING) String token, @Body User user);
 
   /**
    * 刷新用户token

@@ -2,14 +2,13 @@ package cn.aijiamuyingfang.client.rest.api.impl;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.UserMessageControllerApi;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseBean;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseCode;
+import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
 import cn.aijiamuyingfang.commons.domain.exception.GoodsException;
 import cn.aijiamuyingfang.commons.domain.exception.UserException;
-import cn.aijiamuyingfang.commons.domain.user.GetMessagesListResponse;
+import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
+import cn.aijiamuyingfang.commons.domain.response.ResponseCode;
 import cn.aijiamuyingfang.commons.domain.user.UserMessage;
-import cn.aijiamuyingfang.commons.domain.user.UserMessageRequest;
-import cn.aijiamuyingfang.commons.utils.JsonUtils;
+import cn.aijiamuyingfang.commons.domain.user.response.GetMessagesListResponse;
 import java.io.IOException;
 import java.util.Map;
 import org.apache.logging.log4j.LogManager;
@@ -111,12 +110,12 @@ public class UserMessageControllerClient {
    * 
    * @param token
    * @param userid
-   * @param request
+   * @param message
    * @return
    * @throws IOException
    */
-  public UserMessage createMessage(String token, String userid, UserMessageRequest request) throws IOException {
-    Response<ResponseBean> response = usermessageControllerApi.createMessage(token, userid, request).execute();
+  public UserMessage createMessage(String token, String userid, UserMessage message) throws IOException {
+    Response<ResponseBean> response = usermessageControllerApi.createMessage(token, userid, message).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
@@ -139,12 +138,11 @@ public class UserMessageControllerClient {
    * 
    * @param token
    * @param userid
-   * @param request
+   * @param message
    * @param callback
    */
-  public void createMessageAsync(String token, String userid, UserMessageRequest request,
-      Callback<ResponseBean> callback) {
-    usermessageControllerApi.createMessage(token, userid, request).enqueue(callback);
+  public void createMessageAsync(String token, String userid, UserMessage message, Callback<ResponseBean> callback) {
+    usermessageControllerApi.createMessage(token, userid, message).enqueue(callback);
   }
 
   /**

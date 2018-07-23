@@ -2,18 +2,16 @@ package cn.aijiamuyingfang.client.rest.api.impl;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.CouponControllerApi;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseBean;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseCode;
-import cn.aijiamuyingfang.commons.domain.coupon.GetGoodVoucherListResponse;
-import cn.aijiamuyingfang.commons.domain.coupon.GetShopOrderVoucherListResponse;
-import cn.aijiamuyingfang.commons.domain.coupon.GetUserVoucherListResponse;
-import cn.aijiamuyingfang.commons.domain.coupon.GetVoucherItemListResponse;
+import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
 import cn.aijiamuyingfang.commons.domain.coupon.GoodVoucher;
-import cn.aijiamuyingfang.commons.domain.coupon.GoodVoucherRequest;
 import cn.aijiamuyingfang.commons.domain.coupon.VoucherItem;
-import cn.aijiamuyingfang.commons.domain.coupon.VoucherItemRequest;
+import cn.aijiamuyingfang.commons.domain.coupon.response.GetGoodVoucherListResponse;
+import cn.aijiamuyingfang.commons.domain.coupon.response.GetShopOrderVoucherListResponse;
+import cn.aijiamuyingfang.commons.domain.coupon.response.GetUserVoucherListResponse;
+import cn.aijiamuyingfang.commons.domain.coupon.response.GetVoucherItemListResponse;
 import cn.aijiamuyingfang.commons.domain.exception.CouponException;
-import cn.aijiamuyingfang.commons.utils.JsonUtils;
+import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
+import cn.aijiamuyingfang.commons.domain.response.ResponseCode;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -156,7 +154,7 @@ public class CouponControllerClient {
    * @return
    * @throws IOException
    */
-  public GoodVoucher createGoodVoucher(String token, GoodVoucherRequest request) throws IOException {
+  public GoodVoucher createGoodVoucher(String token, GoodVoucher request) throws IOException {
     Response<ResponseBean> response = couponControllerApi.createGoodVoucher(token, request).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
@@ -182,7 +180,7 @@ public class CouponControllerClient {
    * @param request
    * @param callback
    */
-  public void createGoodVoucherAsync(String token, GoodVoucherRequest request, Callback<ResponseBean> callback) {
+  public void createGoodVoucherAsync(String token, GoodVoucher request, Callback<ResponseBean> callback) {
     couponControllerApi.createGoodVoucher(token, request).enqueue(callback);
   }
 
@@ -250,7 +248,7 @@ public class CouponControllerClient {
    * @return
    * @throws IOException
    */
-  public VoucherItem createVoucherItem(String token, VoucherItemRequest request) throws IOException {
+  public VoucherItem createVoucherItem(String token, VoucherItem request) throws IOException {
     Response<ResponseBean> response = couponControllerApi.createVoucherItem(token, request).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
@@ -276,7 +274,7 @@ public class CouponControllerClient {
    * @param request
    * @param callback
    */
-  public void createVoucherItemAsync(String token, VoucherItemRequest request, Callback<ResponseBean> callback) {
+  public void createVoucherItemAsync(String token, VoucherItem request, Callback<ResponseBean> callback) {
     couponControllerApi.createVoucherItem(token, request).enqueue(callback);
   }
 

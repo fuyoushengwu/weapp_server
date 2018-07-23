@@ -2,11 +2,11 @@ package cn.aijiamuyingfang.client.rest.api.impl;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.WXSessionControllerApi;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseBean;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseCode;
-import cn.aijiamuyingfang.commons.controller.bean.wxservice.WXSession;
+import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
 import cn.aijiamuyingfang.commons.domain.exception.WXServiceException;
-import cn.aijiamuyingfang.commons.utils.JsonUtils;
+import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
+import cn.aijiamuyingfang.commons.domain.response.ResponseCode;
+import cn.aijiamuyingfang.commons.domain.wxservice.WXSession;
 import java.io.IOException;
 import java.util.Map;
 import org.apache.logging.log4j.LogManager;

@@ -2,9 +2,9 @@ package cn.aijiamuyingfang.client.rest.api;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
 import cn.aijiamuyingfang.commons.constants.AuthConstants;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseBean;
-import cn.aijiamuyingfang.commons.domain.address.RecieveAddressRequest;
-import cn.aijiamuyingfang.commons.domain.user.UserRequest;
+import cn.aijiamuyingfang.commons.domain.address.RecieveAddress;
+import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
+import cn.aijiamuyingfang.commons.domain.user.User;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -44,12 +44,12 @@ public interface UserControllerApi {
    * 
    * @param token
    * @param userid
-   * @param request
+   * @param user
    * @return
    */
   @PUT(value = "/user/{userid}")
   public Call<ResponseBean> updateUser(@Header(AuthConstants.HEADER_STRING) String token, @Path("userid") String userid,
-      @Body UserRequest request);
+      @Body User user);
 
   /**
    * 获取用户收件地址
@@ -72,7 +72,7 @@ public interface UserControllerApi {
    */
   @POST(value = "/user/{userid}/recieveaddress")
   public Call<ResponseBean> addUserRecieveAddress(@Header(AuthConstants.HEADER_STRING) String token,
-      @Path("userid") String userid, @Body RecieveAddressRequest request);
+      @Path("userid") String userid, @Body RecieveAddress request);
 
   /**
    * 获取收件地址
@@ -97,7 +97,7 @@ public interface UserControllerApi {
    */
   @PUT(value = "/user/{userid}/recieveaddress/{addressid}")
   public Call<ResponseBean> updateRecieveAddress(@Header(AuthConstants.HEADER_STRING) String token,
-      @Path("userid") String userid, @Path("addressid") String addressid, @Body RecieveAddressRequest request);
+      @Path("userid") String userid, @Path("addressid") String addressid, @Body RecieveAddress request);
 
   /**
    * 废弃收件地址

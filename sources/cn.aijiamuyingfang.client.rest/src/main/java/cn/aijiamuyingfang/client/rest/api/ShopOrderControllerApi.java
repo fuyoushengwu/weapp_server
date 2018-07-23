@@ -2,12 +2,12 @@ package cn.aijiamuyingfang.client.rest.api;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
 import cn.aijiamuyingfang.commons.constants.AuthConstants;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseBean;
-import cn.aijiamuyingfang.commons.domain.SendType;
-import cn.aijiamuyingfang.commons.domain.ShopOrderStatus;
-import cn.aijiamuyingfang.commons.domain.goods.GoodRequest;
-import cn.aijiamuyingfang.commons.domain.shoporder.CreateUserShoprderRequest;
-import cn.aijiamuyingfang.commons.domain.shoporder.UpdateShopOrderStatusRequest;
+import cn.aijiamuyingfang.commons.domain.goods.Good;
+import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
+import cn.aijiamuyingfang.commons.domain.shoporder.SendType;
+import cn.aijiamuyingfang.commons.domain.shoporder.ShopOrderStatus;
+import cn.aijiamuyingfang.commons.domain.shoporder.request.CreateUserShoprderRequest;
+import cn.aijiamuyingfang.commons.domain.shoporder.request.UpdateShopOrderStatusRequest;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -197,5 +197,5 @@ public interface ShopOrderControllerApi {
    */
   @PUT(value = "/shoporder/preorder/good/{goodid}")
   public Call<ResponseBean> updatePreOrder(@Header(AuthConstants.HEADER_STRING) String token,
-      @Path("goodid") String goodid, @Body GoodRequest request);
+      @Path("goodid") String goodid, @Body Good request);
 }

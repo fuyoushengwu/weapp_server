@@ -2,8 +2,8 @@ package cn.aijiamuyingfang.client.rest.api;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
 import cn.aijiamuyingfang.commons.constants.AuthConstants;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseBean;
-import cn.aijiamuyingfang.commons.domain.shoporder.PreviewOrderItemRequest;
+import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
+import cn.aijiamuyingfang.commons.domain.shoporder.PreviewOrderItem;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -39,7 +39,7 @@ public interface PreviewOrderControllerApi {
    */
   @PUT(value = "/user/{userid}/previeworder/item/{itemid}")
   public Call<ResponseBean> updatePreviewOrderItem(@Header(AuthConstants.HEADER_STRING) String token,
-      @Path("userid") String userid, @Path("itemid") String itemid, @Body PreviewOrderItemRequest request);
+      @Path("userid") String userid, @Path("itemid") String itemid, @Body PreviewOrderItem request);
 
   /**
    * 删除预览的商品项

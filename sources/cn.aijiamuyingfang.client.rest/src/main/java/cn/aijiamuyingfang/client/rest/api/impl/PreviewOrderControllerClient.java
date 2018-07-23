@@ -2,13 +2,12 @@ package cn.aijiamuyingfang.client.rest.api.impl;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.PreviewOrderControllerApi;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseBean;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseCode;
+import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
 import cn.aijiamuyingfang.commons.domain.exception.ShopOrderException;
+import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
+import cn.aijiamuyingfang.commons.domain.response.ResponseCode;
 import cn.aijiamuyingfang.commons.domain.shoporder.PreviewOrder;
 import cn.aijiamuyingfang.commons.domain.shoporder.PreviewOrderItem;
-import cn.aijiamuyingfang.commons.domain.shoporder.PreviewOrderItemRequest;
-import cn.aijiamuyingfang.commons.utils.JsonUtils;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -61,8 +60,8 @@ public class PreviewOrderControllerClient {
    * @return
    * @throws IOException
    */
-  public PreviewOrderItem updatePreviewOrderItem(String token, String userid, String itemid,
-      PreviewOrderItemRequest request) throws IOException {
+  public PreviewOrderItem updatePreviewOrderItem(String token, String userid, String itemid, PreviewOrderItem request)
+      throws IOException {
     Response<ResponseBean> response = previeworderControllerApi.updatePreviewOrderItem(token, userid, itemid, request)
         .execute();
     ResponseBean responseBean = response.body();
@@ -92,7 +91,7 @@ public class PreviewOrderControllerClient {
    * @param request
    * @param callback
    */
-  public void updatePreviewOrderItem(String token, String userid, String itemid, PreviewOrderItemRequest request,
+  public void updatePreviewOrderItem(String token, String userid, String itemid, PreviewOrderItem request,
       Callback<ResponseBean> callback) {
     previeworderControllerApi.updatePreviewOrderItem(token, userid, itemid, request).enqueue(callback);
   }

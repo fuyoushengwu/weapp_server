@@ -2,14 +2,12 @@ package cn.aijiamuyingfang.client.rest.api.impl;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.UserControllerApi;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseBean;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseCode;
+import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
 import cn.aijiamuyingfang.commons.domain.address.RecieveAddress;
-import cn.aijiamuyingfang.commons.domain.address.RecieveAddressRequest;
 import cn.aijiamuyingfang.commons.domain.exception.UserException;
+import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
+import cn.aijiamuyingfang.commons.domain.response.ResponseCode;
 import cn.aijiamuyingfang.commons.domain.user.User;
-import cn.aijiamuyingfang.commons.domain.user.UserRequest;
-import cn.aijiamuyingfang.commons.utils.JsonUtils;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -70,11 +68,11 @@ public class UserControllerClient {
    * 
    * @param token
    * @param userid
-   * @param request
+   * @param user
    * @return
    */
-  public User updateUser(String token, String userid, UserRequest request) throws IOException {
-    Response<ResponseBean> response = userControllerApi.updateUser(token, userid, request).execute();
+  public User updateUser(String token, String userid, User user) throws IOException {
+    Response<ResponseBean> response = userControllerApi.updateUser(token, userid, user).execute();
     return getUserFromResponse(response, "update user  return code is '200',but return data is null");
   }
 
@@ -108,11 +106,11 @@ public class UserControllerClient {
    * 
    * @param token
    * @param userid
-   * @param request
+   * @param user
    * @param callback
    */
-  public void updateUserAsync(String token, String userid, UserRequest request, Callback<ResponseBean> callback) {
-    userControllerApi.updateUser(token, userid, request).enqueue(callback);
+  public void updateUserAsync(String token, String userid, User user, Callback<ResponseBean> callback) {
+    userControllerApi.updateUser(token, userid, user).enqueue(callback);
   }
 
   /**
@@ -150,8 +148,7 @@ public class UserControllerClient {
    * @param request
    * @return
    */
-  public RecieveAddress addUserRecieveAddress(String token, String userid, RecieveAddressRequest request)
-      throws IOException {
+  public RecieveAddress addUserRecieveAddress(String token, String userid, RecieveAddress request) throws IOException {
     Response<ResponseBean> response = userControllerApi.addUserRecieveAddress(token, userid, request).execute();
     return getRecieveAddressFromResponse(response,
         "add user recieve address  return code is '200',but return data is null");
@@ -165,7 +162,7 @@ public class UserControllerClient {
    * @param request
    * @param callback
    */
-  public void addUserRecieveAddressAsync(String token, String userid, RecieveAddressRequest request,
+  public void addUserRecieveAddressAsync(String token, String userid, RecieveAddress request,
       Callback<ResponseBean> callback) {
     userControllerApi.addUserRecieveAddress(token, userid, request).enqueue(callback);
   }
@@ -192,8 +189,8 @@ public class UserControllerClient {
    * @param request
    * @return
    */
-  public RecieveAddress updateRecieveAddress(String token, String userid, String addressid,
-      RecieveAddressRequest request) throws IOException {
+  public RecieveAddress updateRecieveAddress(String token, String userid, String addressid, RecieveAddress request)
+      throws IOException {
     Response<
         ResponseBean> response = userControllerApi.updateRecieveAddress(token, userid, addressid, request).execute();
     return getRecieveAddressFromResponse(response,
@@ -236,7 +233,7 @@ public class UserControllerClient {
    * @param request
    * @param callback
    */
-  public void updateRecieveAddressAsync(String token, String userid, String addressid, RecieveAddressRequest request,
+  public void updateRecieveAddressAsync(String token, String userid, String addressid, RecieveAddress request,
       Callback<ResponseBean> callback) {
     userControllerApi.updateRecieveAddress(token, userid, addressid, request).enqueue(callback);
   }

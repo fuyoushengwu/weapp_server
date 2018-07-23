@@ -1,6 +1,6 @@
 package cn.aijiamuyingfang.commons.domain.exception;
 
-import cn.aijiamuyingfang.commons.controller.bean.ResponseCode;
+import cn.aijiamuyingfang.commons.domain.response.ResponseCode;
 
 /**
  * [描述]:

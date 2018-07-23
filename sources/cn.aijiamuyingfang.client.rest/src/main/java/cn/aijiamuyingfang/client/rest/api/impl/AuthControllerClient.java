@@ -2,13 +2,12 @@ package cn.aijiamuyingfang.client.rest.api.impl;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.AuthControllerApi;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseBean;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseCode;
+import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
 import cn.aijiamuyingfang.commons.domain.exception.AuthException;
-import cn.aijiamuyingfang.commons.domain.user.TokenResponse;
+import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
+import cn.aijiamuyingfang.commons.domain.response.ResponseCode;
 import cn.aijiamuyingfang.commons.domain.user.User;
-import cn.aijiamuyingfang.commons.domain.user.UserRequest;
-import cn.aijiamuyingfang.commons.utils.JsonUtils;
+import cn.aijiamuyingfang.commons.domain.user.response.TokenResponse;
 import java.io.IOException;
 import java.util.Map;
 import org.apache.logging.log4j.LogManager;
@@ -54,12 +53,12 @@ public class AuthControllerClient {
    * 注册用户
    * 
    * @param token
-   * @param request
+   * @param user
    * @return
    * @throws IOException
    */
-  public User registerUser(String token, UserRequest request) throws IOException {
-    Response<ResponseBean> response = authControllerApi.registerUser(token, request).execute();
+  public User registerUser(String token, User user) throws IOException {
+    Response<ResponseBean> response = authControllerApi.registerUser(token, user).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       throw new AuthException(ResponseCode.RESPONSE_BODY_IS_NULL);
@@ -81,11 +80,11 @@ public class AuthControllerClient {
    * 异步注册用户
    * 
    * @param token
-   * @param request
+   * @param user
    * @param callback
    */
-  public void registerUserAsync(String token, UserRequest request, Callback<ResponseBean> callback) {
-    authControllerApi.registerUser(token, request).enqueue(callback);
+  public void registerUserAsync(String token, User user, Callback<ResponseBean> callback) {
+    authControllerApi.registerUser(token, user).enqueue(callback);
 
   }
 

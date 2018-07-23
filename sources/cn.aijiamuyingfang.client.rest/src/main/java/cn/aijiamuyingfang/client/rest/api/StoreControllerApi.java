@@ -2,8 +2,8 @@ package cn.aijiamuyingfang.client.rest.api;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
 import cn.aijiamuyingfang.commons.constants.AuthConstants;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseBean;
-import cn.aijiamuyingfang.commons.domain.goods.StoreRequest;
+import cn.aijiamuyingfang.commons.domain.goods.Store;
+import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -78,7 +78,7 @@ public interface StoreControllerApi {
    */
   @PUT(value = "/store/{storeid}")
   public Call<ResponseBean> updateStore(@Header(AuthConstants.HEADER_STRING) String token,
-      @Path("storeid") String storeid, @Body StoreRequest storeRequest);
+      @Path("storeid") String storeid, @Body Store storeRequest);
 
   /**
    * 废弃门店

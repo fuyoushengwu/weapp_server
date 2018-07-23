@@ -25,7 +25,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @date 2018-06-27 00:12:32
  */
 @Entity
-public class Classify extends ClassifyRequest {
+public class Classify {
   /**
    * 条目Id
    */
@@ -33,6 +33,11 @@ public class Classify extends ClassifyRequest {
   @GeneratedValue(generator = "strategy_uuid")
   @GenericGenerator(name = "strategy_uuid", strategy = "uuid")
   private String id;
+
+  /**
+   * 条目名
+   */
+  private String name;
 
   /**
    * 条目层级(最顶层的条目为1,顶层条目下的子条目为2)
@@ -114,6 +119,14 @@ public class Classify extends ClassifyRequest {
 
   public void setId(String id) {
     this.id = id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   public int getLevel() {

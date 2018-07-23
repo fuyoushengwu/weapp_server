@@ -2,21 +2,21 @@ package cn.aijiamuyingfang.client.rest.api.impl;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.ShopOrderControllerApi;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseBean;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseCode;
-import cn.aijiamuyingfang.commons.domain.SendType;
-import cn.aijiamuyingfang.commons.domain.ShopOrderStatus;
+import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
 import cn.aijiamuyingfang.commons.domain.exception.ShopOrderException;
-import cn.aijiamuyingfang.commons.domain.goods.GoodRequest;
-import cn.aijiamuyingfang.commons.domain.shoporder.ConfirmUserShopOrderFinishedResponse;
-import cn.aijiamuyingfang.commons.domain.shoporder.CreateUserShoprderRequest;
-import cn.aijiamuyingfang.commons.domain.shoporder.GetFinishedPreOrderListResponse;
-import cn.aijiamuyingfang.commons.domain.shoporder.GetPreOrderGoodListResponse;
-import cn.aijiamuyingfang.commons.domain.shoporder.GetShopOrderListResponse;
-import cn.aijiamuyingfang.commons.domain.shoporder.GetUserShopOrderListResponse;
+import cn.aijiamuyingfang.commons.domain.goods.Good;
+import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
+import cn.aijiamuyingfang.commons.domain.response.ResponseCode;
+import cn.aijiamuyingfang.commons.domain.shoporder.SendType;
 import cn.aijiamuyingfang.commons.domain.shoporder.ShopOrder;
-import cn.aijiamuyingfang.commons.domain.shoporder.UpdateShopOrderStatusRequest;
-import cn.aijiamuyingfang.commons.utils.JsonUtils;
+import cn.aijiamuyingfang.commons.domain.shoporder.ShopOrderStatus;
+import cn.aijiamuyingfang.commons.domain.shoporder.request.CreateUserShoprderRequest;
+import cn.aijiamuyingfang.commons.domain.shoporder.request.UpdateShopOrderStatusRequest;
+import cn.aijiamuyingfang.commons.domain.shoporder.response.ConfirmUserShopOrderFinishedResponse;
+import cn.aijiamuyingfang.commons.domain.shoporder.response.GetFinishedPreOrderListResponse;
+import cn.aijiamuyingfang.commons.domain.shoporder.response.GetPreOrderGoodListResponse;
+import cn.aijiamuyingfang.commons.domain.shoporder.response.GetShopOrderListResponse;
+import cn.aijiamuyingfang.commons.domain.shoporder.response.GetUserShopOrderListResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -461,7 +461,7 @@ public class ShopOrderControllerClient {
    * @param async
    * @throws IOException
    */
-  public void updatePreOrder(String token, String goodid, GoodRequest request, boolean async) throws IOException {
+  public void updatePreOrder(String token, String goodid, Good request, boolean async) throws IOException {
     if (async) {
       shoporderControllerApi.updatePreOrder(token, goodid, request).enqueue(Empty_Callback);
       return;

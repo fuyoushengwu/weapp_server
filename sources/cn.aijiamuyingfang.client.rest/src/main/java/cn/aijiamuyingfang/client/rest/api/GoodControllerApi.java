@@ -2,8 +2,8 @@ package cn.aijiamuyingfang.client.rest.api;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
 import cn.aijiamuyingfang.commons.constants.AuthConstants;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseBean;
-import cn.aijiamuyingfang.commons.domain.goods.GoodRequest;
+import cn.aijiamuyingfang.commons.domain.goods.Good;
+import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
 import java.util.List;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
@@ -105,5 +105,5 @@ public interface GoodControllerApi {
    */
   @PUT(value = "/good/{goodid}")
   public Call<ResponseBean> updateGood(@Header(AuthConstants.HEADER_STRING) String token,
-      @Path(value = "goodid") String goodid, @Body GoodRequest request);
+      @Path(value = "goodid") String goodid, @Body Good request);
 }

@@ -2,14 +2,14 @@ package cn.aijiamuyingfang.client.rest.api.impl;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.TemplateMsgControllerApi;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseBean;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseCode;
-import cn.aijiamuyingfang.commons.controller.bean.wxservice.TemplateMsg;
-import cn.aijiamuyingfang.commons.controller.bean.wxservice.TemplateMsgKeyValue;
 import cn.aijiamuyingfang.commons.domain.exception.WXServiceException;
 import cn.aijiamuyingfang.commons.domain.goods.Good;
+import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
+import cn.aijiamuyingfang.commons.domain.response.ResponseCode;
 import cn.aijiamuyingfang.commons.domain.shoporder.ShopOrder;
 import cn.aijiamuyingfang.commons.domain.shoporder.ShopOrderItem;
+import cn.aijiamuyingfang.commons.domain.wxservice.TemplateMsg;
+import cn.aijiamuyingfang.commons.domain.wxservice.TemplateMsgKeyValue;
 import cn.aijiamuyingfang.commons.utils.CollectionUtils;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import java.io.IOException;

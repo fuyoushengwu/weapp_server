@@ -2,9 +2,9 @@ package cn.aijiamuyingfang.client.rest.api;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
 import cn.aijiamuyingfang.commons.constants.AuthConstants;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseBean;
-import cn.aijiamuyingfang.commons.domain.coupon.GoodVoucherRequest;
-import cn.aijiamuyingfang.commons.domain.coupon.VoucherItemRequest;
+import cn.aijiamuyingfang.commons.domain.coupon.GoodVoucher;
+import cn.aijiamuyingfang.commons.domain.coupon.VoucherItem;
+import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -76,7 +76,7 @@ public interface CouponControllerApi {
    */
   @POST(value = "/coupon/goodvoucher")
   public Call<ResponseBean> createGoodVoucher(@Header(AuthConstants.HEADER_STRING) String token,
-      @Body GoodVoucherRequest request);
+      @Body GoodVoucher request);
 
   /**
    * 废弃商品兑换券
@@ -110,7 +110,7 @@ public interface CouponControllerApi {
    */
   @POST(value = "/coupon/voucheritem")
   public Call<ResponseBean> createVoucherItem(@Header(AuthConstants.HEADER_STRING) String token,
-      @Body VoucherItemRequest request);
+      @Body VoucherItem request);
 
   /**
    * 废弃兑换方式

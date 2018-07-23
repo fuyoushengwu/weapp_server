@@ -2,8 +2,8 @@ package cn.aijiamuyingfang.client.rest.api;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
 import cn.aijiamuyingfang.commons.constants.AuthConstants;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseBean;
-import cn.aijiamuyingfang.commons.domain.user.UserMessageRequest;
+import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
+import cn.aijiamuyingfang.commons.domain.user.UserMessage;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -56,12 +56,12 @@ public interface UserMessageControllerApi {
    * 
    * @param token
    * @param userid
-   * @param request
+   * @param message
    * @return
    */
   @POST(value = "/user/{userid}/message")
   public Call<ResponseBean> createMessage(@Header(AuthConstants.HEADER_STRING) String token,
-      @Path("userid") String userid, @Body UserMessageRequest request);
+      @Path("userid") String userid, @Body UserMessage message);
 
   /**
    * 删除消息

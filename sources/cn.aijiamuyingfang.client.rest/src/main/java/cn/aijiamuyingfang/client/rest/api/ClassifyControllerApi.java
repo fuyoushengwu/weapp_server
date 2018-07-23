@@ -2,8 +2,8 @@ package cn.aijiamuyingfang.client.rest.api;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
 import cn.aijiamuyingfang.commons.constants.AuthConstants;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseBean;
-import cn.aijiamuyingfang.commons.domain.goods.ClassifyRequest;
+import cn.aijiamuyingfang.commons.domain.goods.Classify;
+import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -70,7 +70,7 @@ public interface ClassifyControllerApi {
    */
   @POST(value = "/classify")
   public Call<ResponseBean> createTopClassify(@Header(AuthConstants.HEADER_STRING) String token,
-      @Body ClassifyRequest request);
+      @Body Classify request);
 
   /**
    * 获得条目下的所有子条目

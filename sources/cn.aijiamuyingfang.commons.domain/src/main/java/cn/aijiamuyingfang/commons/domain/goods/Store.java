@@ -5,8 +5,12 @@ import cn.aijiamuyingfang.commons.utils.StringUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -26,7 +30,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @date 2018-06-27 00:12:21
  */
 @Entity
-public class Store extends StoreRequest {
+public class Store {
 
   /**
    * 门店Id
@@ -40,6 +44,19 @@ public class Store extends StoreRequest {
    * 门店是否废弃(该字段用于删除门店:当需要删除门店时,设置该字段为true)
    */
   private boolean deprecated;
+
+  /**
+   * 门店名
+   */
+  private String name;
+
+  /**
+   * 营业时间
+   */
+  @Embedded
+  @AttributeOverrides({ @AttributeOverride(name = "start", column = @Column(name = "start_worktime")),
+      @AttributeOverride(name = "end", column = @Column(name = "end_worktime")) })
+  private WorkTime workTime;
 
   /**
    * 封面图片地址
@@ -116,6 +133,22 @@ public class Store extends StoreRequest {
     this.deprecated = deprecated;
   }
 
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public WorkTime getWorkTime() {
+    return workTime;
+  }
+
+  public void setWorkTime(WorkTime workTime) {
+    this.workTime = workTime;
+  }
+
   public String getId() {
     return id;
   }
@@ -155,6 +188,5 @@ public class Store extends StoreRequest {
   public void setClassifyList(List<Classify> classifyList) {
     this.classifyList = classifyList;
   }
-
 
 }

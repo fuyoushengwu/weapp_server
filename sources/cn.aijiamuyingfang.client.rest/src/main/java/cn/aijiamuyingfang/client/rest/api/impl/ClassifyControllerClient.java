@@ -2,12 +2,11 @@ package cn.aijiamuyingfang.client.rest.api.impl;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.ClassifyControllerApi;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseBean;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseCode;
+import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
 import cn.aijiamuyingfang.commons.domain.exception.GoodsException;
 import cn.aijiamuyingfang.commons.domain.goods.Classify;
-import cn.aijiamuyingfang.commons.domain.goods.ClassifyRequest;
-import cn.aijiamuyingfang.commons.utils.JsonUtils;
+import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
+import cn.aijiamuyingfang.commons.domain.response.ResponseCode;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import java.io.File;
 import java.io.IOException;
@@ -145,7 +144,7 @@ public class ClassifyControllerClient {
    * @return
    * @throws IOException
    */
-  public Classify createTopClassify(String token, ClassifyRequest request) throws IOException {
+  public Classify createTopClassify(String token, Classify request) throws IOException {
     Response<ResponseBean> response = classifyControllerApi.createTopClassify(token, request).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
@@ -171,7 +170,7 @@ public class ClassifyControllerClient {
    * @param request
    * @param callback
    */
-  public void createTopClassifyAsync(String token, ClassifyRequest request, Callback<ResponseBean> callback) {
+  public void createTopClassifyAsync(String token, Classify request, Callback<ResponseBean> callback) {
     classifyControllerApi.createTopClassify(token, request).enqueue(callback);
   }
 
@@ -213,7 +212,7 @@ public class ClassifyControllerClient {
    * @throws IOException
    */
   public Classify createSubClassify(String token, String classifyid, File coverImageFile,
-      ClassifyRequest classifyRequest) throws IOException {
+      Classify classifyRequest) throws IOException {
     Response<ResponseBean> response = null;
     if (null == coverImageFile) {
       response = classifyControllerApi.createSubClassify(token, classifyid, convert(null, classifyRequest)).execute();
@@ -249,7 +248,7 @@ public class ClassifyControllerClient {
    * @throws IOException
    */
   public void createSubClassifyAsync(String token, String classifyid, File coverImageFile,
-      ClassifyRequest classifyRequest, Callback<ResponseBean> callback) throws IOException {
+      Classify classifyRequest, Callback<ResponseBean> callback) throws IOException {
     if (null == coverImageFile) {
       classifyControllerApi.createSubClassify(token, classifyid, convert(null, classifyRequest)).enqueue(callback);
     } else {
@@ -258,7 +257,7 @@ public class ClassifyControllerClient {
     }
   }
 
-  private MultipartBody convert(File coverImageFile, ClassifyRequest classifyRequest) {
+  private MultipartBody convert(File coverImageFile, Classify classifyRequest) {
     MultipartBody.Builder requestBodyBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
     if (coverImageFile != null) {
       RequestBody requestCoverImg = RequestBody.create(MediaType.parse("multipart/form-data"), coverImageFile);

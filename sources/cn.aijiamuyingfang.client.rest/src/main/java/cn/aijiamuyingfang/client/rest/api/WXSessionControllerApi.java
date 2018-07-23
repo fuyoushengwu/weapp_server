@@ -2,7 +2,7 @@ package cn.aijiamuyingfang.client.rest.api;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
 import cn.aijiamuyingfang.commons.constants.AuthConstants;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseBean;
+import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

@@ -14,6 +14,30 @@ import javax.persistence.Entity;
  * @date 2018-06-25 20:37:56
  */
 @Entity
-public class StoreAddress extends StoreAddressRequest {
+public class StoreAddress extends Address {
+  /**
+   * 店铺地址-联系电话
+   */
+  private String phone;
 
+  /**
+   * 店铺地址-联系人
+   */
+  private String contactor;
+
+  public String getPhone() {
+    return phone;
+  }
+
+  public void setPhone(String phone) {
+    this.phone = phone;
+  }
+
+  public String getContactor() {
+    return contactor;
+  }
+
+  public void setContactor(String contactor) {
+    this.contactor = contactor;
+  }
 }

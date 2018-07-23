@@ -15,7 +15,26 @@ import javax.persistence.Entity;
  * @date 2018-06-25 20:38:53
  */
 @Entity
-public class RecieveAddress extends RecieveAddressRequest {
+public class RecieveAddress extends Address {
+  /**
+   * 收货地址-关联用户
+   */
+  private String userid;
+
+  /**
+   * 收货地址-联系电话
+   */
+  private String phone;
+
+  /**
+   * 收货地址-收件人
+   */
+  private String reciever;
+
+  /**
+   * 收货地址-默认收货地址
+   */
+  private boolean def;
 
   /**
    * 使用updateRecieveAddress更新收件地址信息
@@ -37,4 +56,37 @@ public class RecieveAddress extends RecieveAddressRequest {
       this.reciever = updateRecieveAddress.reciever;
     }
   }
+
+  public String getUserid() {
+    return userid;
+  }
+
+  public void setUserid(String userid) {
+    this.userid = userid;
+  }
+
+  public String getPhone() {
+    return phone;
+  }
+
+  public void setPhone(String phone) {
+    this.phone = phone;
+  }
+
+  public String getReciever() {
+    return reciever;
+  }
+
+  public void setReciever(String reciever) {
+    this.reciever = reciever;
+  }
+
+  public boolean isDef() {
+    return def;
+  }
+
+  public void setDef(boolean def) {
+    this.def = def;
+  }
+
 }

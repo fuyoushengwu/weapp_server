@@ -2,22 +2,21 @@ package cn.aijiamuyingfang.client.rest.api.impl;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.StoreControllerApi;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseBean;
-import cn.aijiamuyingfang.commons.controller.bean.ResponseCode;
+import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
 import cn.aijiamuyingfang.commons.domain.address.City;
 import cn.aijiamuyingfang.commons.domain.address.Coordinate;
 import cn.aijiamuyingfang.commons.domain.address.County;
 import cn.aijiamuyingfang.commons.domain.address.Province;
-import cn.aijiamuyingfang.commons.domain.address.StoreAddressRequest;
+import cn.aijiamuyingfang.commons.domain.address.StoreAddress;
 import cn.aijiamuyingfang.commons.domain.address.Town;
 import cn.aijiamuyingfang.commons.domain.exception.GoodsException;
-import cn.aijiamuyingfang.commons.domain.goods.GetDefaultStoreIdResponse;
-import cn.aijiamuyingfang.commons.domain.goods.GetInUseStoreListResponse;
 import cn.aijiamuyingfang.commons.domain.goods.Store;
-import cn.aijiamuyingfang.commons.domain.goods.StoreRequest;
 import cn.aijiamuyingfang.commons.domain.goods.WorkTime;
+import cn.aijiamuyingfang.commons.domain.goods.response.GetDefaultStoreIdResponse;
+import cn.aijiamuyingfang.commons.domain.goods.response.GetInUseStoreListResponse;
+import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
+import cn.aijiamuyingfang.commons.domain.response.ResponseCode;
 import cn.aijiamuyingfang.commons.utils.CollectionUtils;
-import cn.aijiamuyingfang.commons.utils.JsonUtils;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import java.io.File;
 import java.io.IOException;
@@ -104,7 +103,7 @@ public class StoreControllerClient {
    * @return
    * @throws IOException
    */
-  public Store createStore(String token, File coverImageFile, List<File> detailImageFiles, StoreRequest storeRequest)
+  public Store createStore(String token, File coverImageFile, List<File> detailImageFiles, Store storeRequest)
       throws IOException {
     Response<ResponseBean> response;
     if (null == coverImageFile && CollectionUtils.isEmpty(detailImageFiles)) {
@@ -140,8 +139,8 @@ public class StoreControllerClient {
    * @param callback
    * @throws IOException
    */
-  public void createStoreAsync(String token, File coverImageFile, List<File> detailImageFiles,
-      StoreRequest storeRequest, Callback<ResponseBean> callback) throws IOException {
+  public void createStoreAsync(String token, File coverImageFile, List<File> detailImageFiles, Store storeRequest,
+      Callback<ResponseBean> callback) throws IOException {
     if (null == coverImageFile && CollectionUtils.isEmpty(detailImageFiles)) {
       storeControllerApi.createStore(token, convert(null, null, storeRequest)).enqueue(callback);
     } else {
@@ -149,7 +148,7 @@ public class StoreControllerClient {
     }
   }
 
-  private MultipartBody convert(File coverImageFile, List<File> detailImageFiles, StoreRequest storeRequest) {
+  private MultipartBody convert(File coverImageFile, List<File> detailImageFiles, Store storeRequest) {
     MultipartBody.Builder requestBodyBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
 
     if (coverImageFile != null) {
@@ -181,57 +180,57 @@ public class StoreControllerClient {
       }
     }
 
-    StoreAddressRequest storeaddressRequest = storeRequest.getStoreaddressRequest();
+    StoreAddress storeaddressRequest = storeRequest.getStoreAddress();
     if (storeaddressRequest != null) {
       Province province = storeaddressRequest.getProvince();
       if (province != null) {
         if (StringUtils.hasContent(province.getName())) {
-          requestBodyBuilder.addFormDataPart("storeaddressRequest.province.name", province.getName());
+          requestBodyBuilder.addFormDataPart("storeAddress.province.name", province.getName());
         }
         if (StringUtils.hasContent(province.getCode())) {
-          requestBodyBuilder.addFormDataPart("storeaddressRequest.province.code", province.getCode());
+          requestBodyBuilder.addFormDataPart("storeAddress.province.code", province.getCode());
         }
       }
       City city = storeaddressRequest.getCity();
       if (city != null) {
         if (StringUtils.hasContent(city.getName())) {
-          requestBodyBuilder.addFormDataPart("storeaddressRequest.city.name", city.getName());
+          requestBodyBuilder.addFormDataPart("storeAddress.city.name", city.getName());
         }
         if (StringUtils.hasContent(city.getCode())) {
-          requestBodyBuilder.addFormDataPart("storeaddressRequest.city.code", city.getCode());
+          requestBodyBuilder.addFormDataPart("storeAddress.city.code", city.getCode());
         }
       }
       County county = storeaddressRequest.getCounty();
       if (county != null) {
         if (StringUtils.hasContent(county.getName())) {
-          requestBodyBuilder.addFormDataPart("storeaddressRequest.county.name", county.getName());
+          requestBodyBuilder.addFormDataPart("storeAddress.county.name", county.getName());
         }
         if (StringUtils.hasContent(county.getCode())) {
-          requestBodyBuilder.addFormDataPart("storeaddressRequest.county.code", county.getCode());
+          requestBodyBuilder.addFormDataPart("storeAddress.county.code", county.getCode());
         }
       }
       Town town = storeaddressRequest.getTown();
       if (town != null) {
         if (StringUtils.hasContent(town.getName())) {
-          requestBodyBuilder.addFormDataPart("storeaddressRequest.town.name", town.getName());
+          requestBodyBuilder.addFormDataPart("storeAddress.town.name", town.getName());
         }
         if (StringUtils.hasContent(town.getCode())) {
-          requestBodyBuilder.addFormDataPart("storeaddressRequest.town.code", town.getCode());
+          requestBodyBuilder.addFormDataPart("storeAddress.town.code", town.getCode());
         }
       }
       Coordinate coordinate = storeaddressRequest.getCoordinate();
       if (coordinate != null) {
-        requestBodyBuilder.addFormDataPart("storeaddressRequest.coordinate.longitude", coordinate.getLongitude() + "");
-        requestBodyBuilder.addFormDataPart("storeaddressRequest.coordinate.latitude", coordinate.getLatitude() + "");
+        requestBodyBuilder.addFormDataPart("storeAddress.coordinate.longitude", coordinate.getLongitude() + "");
+        requestBodyBuilder.addFormDataPart("storeAddress.coordinate.latitude", coordinate.getLatitude() + "");
       }
       if (StringUtils.hasContent(storeaddressRequest.getContactor())) {
-        requestBodyBuilder.addFormDataPart("storeaddressRequest.contactor", storeaddressRequest.getContactor());
+        requestBodyBuilder.addFormDataPart("storeAddress.contactor", storeaddressRequest.getContactor());
       }
       if (StringUtils.hasContent(storeaddressRequest.getDetail())) {
-        requestBodyBuilder.addFormDataPart("storeaddressRequest.detail", storeaddressRequest.getDetail());
+        requestBodyBuilder.addFormDataPart("storeAddress.detail", storeaddressRequest.getDetail());
       }
       if (StringUtils.hasContent(storeaddressRequest.getPhone())) {
-        requestBodyBuilder.addFormDataPart("storeaddressRequest.phone", storeaddressRequest.getPhone());
+        requestBodyBuilder.addFormDataPart("storeAddress.phone", storeaddressRequest.getPhone());
       }
     }
     return requestBodyBuilder.build();
@@ -273,7 +272,7 @@ public class StoreControllerClient {
    * @return
    * @throws IOException
    */
-  public Store updateStore(String token, String storeid, StoreRequest storeRequest) throws IOException {
+  public Store updateStore(String token, String storeid, Store storeRequest) throws IOException {
     Response<ResponseBean> response = storeControllerApi.updateStore(token, storeid, storeRequest).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
@@ -300,8 +299,7 @@ public class StoreControllerClient {
    * @param storeRequest
    * @param callback
    */
-  public void updateStoreAsync(String token, String storeid, StoreRequest storeRequest,
-      Callback<ResponseBean> callback) {
+  public void updateStoreAsync(String token, String storeid, Store storeRequest, Callback<ResponseBean> callback) {
     storeControllerApi.updateStore(token, storeid, storeRequest).enqueue(callback);
   }
 

@@ -1,9 +1,11 @@
 package cn.aijiamuyingfang.commons.domain.shoporder;
 
+import cn.aijiamuyingfang.commons.domain.goods.Good;
 import cn.aijiamuyingfang.commons.domain.shopcart.ShopCartItem;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -18,7 +20,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @date 2018-06-27 15:55:10
  */
 @Entity
-public class PreviewOrderItem extends PreviewOrderItemRequest {
+public class PreviewOrderItem {
   /**
    * 预览项的ID
    */
@@ -26,6 +28,22 @@ public class PreviewOrderItem extends PreviewOrderItemRequest {
   @GeneratedValue(generator = "strategy_uuid")
   @GenericGenerator(name = "strategy_uuid", strategy = "uuid")
   private String id;
+
+  /**
+   * 商品数量
+   */
+  private int count;
+
+  /**
+   * 关联的购物车项Id
+   */
+  private String shopcartItemId;
+
+  /**
+   * 商品
+   */
+  @ManyToOne
+  private Good good;
 
   /**
    * 通过ShopCartItem生成PreviewOrderItem
@@ -64,6 +82,30 @@ public class PreviewOrderItem extends PreviewOrderItemRequest {
 
   public void setId(String id) {
     this.id = id;
+  }
+
+  public int getCount() {
+    return count;
+  }
+
+  public void setCount(int count) {
+    this.count = count;
+  }
+
+  public String getShopcartItemId() {
+    return shopcartItemId;
+  }
+
+  public void setShopcartItemId(String shopcartItemId) {
+    this.shopcartItemId = shopcartItemId;
+  }
+
+  public Good getGood() {
+    return good;
+  }
+
+  public void setGood(Good good) {
+    this.good = good;
   }
 
   @Override

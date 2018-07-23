@@ -28,7 +28,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @date 2018-06-25 16:38:56
  */
 @Entity
-public class User extends UserRequest implements UserDetails {
+public class User implements UserDetails {
   private static final long serialVersionUID = -7352852942199443591L;
 
   /**
@@ -50,6 +50,26 @@ public class User extends UserRequest implements UserDetails {
    */
   @JsonIgnore
   private String password;
+
+  /**
+   * 昵称
+   */
+  private String nickname;
+
+  /**
+   * 头像
+   */
+  private String avatar;
+
+  /**
+   * 联系电话
+   */
+  private String phone;
+
+  /**
+   * 小程序调用wx.login() 获取的临时登录凭证code
+   */
+  private String jscode;
 
   /**
    * 用户角色
@@ -197,6 +217,38 @@ public class User extends UserRequest implements UserDetails {
 
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  public String getNickname() {
+    return nickname;
+  }
+
+  public void setNickname(String nickname) {
+    this.nickname = nickname;
+  }
+
+  public String getAvatar() {
+    return avatar;
+  }
+
+  public void setAvatar(String avatar) {
+    this.avatar = avatar;
+  }
+
+  public String getPhone() {
+    return phone;
+  }
+
+  public void setPhone(String phone) {
+    this.phone = phone;
+  }
+
+  public String getJscode() {
+    return jscode;
+  }
+
+  public void setJscode(String jscode) {
+    this.jscode = jscode;
   }
 
   public String getAppid() {
