@@ -29,6 +29,8 @@
 		<module>cn.aijiamuyingfang.commons</module>
 		<module>cn.aijiamuyingfang.commons.domain</module>
 		<module>cn.aijiamuyingfang.client.rest</module>
+		<module>cn.aijiamuyingfang.client.rest.java</module>
+		<module>cn.aijiamuyingfang.client.rest.android</module>
 		<module>cn.aijiamuyingfang.server</module>
 		<module>cn.aijiamuyingfang.it</module>
 	</modules>

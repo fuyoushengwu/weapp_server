@@ -17,8 +17,6 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.CertificatePinner;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
@@ -35,7 +33,6 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
  * @date 2018-06-26 21:09:49
  */
 public class HttpServiceBeanFactory {
-  private static final Logger LOGGER = LogManager.getLogger(HttpServiceBeanFactory.class);
 
   // key:请求地址 value:当前请求地址下class所对应的service（key:class value:service）
   private static final Map<String, HttpServiceBean> serviceBeans = new HashMap<>();
@@ -143,7 +140,6 @@ public class HttpServiceBeanFactory {
         try {
           clientBuilder.addInterceptor((Interceptor) interceptorClass.newInstance());
         } catch (InstantiationException | IllegalAccessException e) {
-          LOGGER.error(e.getMessage(), e);
         }
       }
     }

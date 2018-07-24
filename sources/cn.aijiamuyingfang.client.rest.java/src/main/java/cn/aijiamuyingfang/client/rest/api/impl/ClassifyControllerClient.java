@@ -66,6 +66,18 @@ public class ClassifyControllerClient {
   public List<Classify> getStoreTopClassifyList(String token, @Path(value = "storeid") String storeid)
       throws IOException {
     Response<ResponseBean> response = classifyControllerApi.getStoreTopClassifyList(token, storeid).execute();
+    return getClassifyListFromResponse(response,
+        "get store top classify list return code is '200',but return data is null");
+  }
+
+  /**
+   * 从response中获取List<Classify>
+   * 
+   * @param response
+   * @param errormsg
+   * @return
+   */
+  private List<Classify> getClassifyListFromResponse(Response<ResponseBean> response, String errormsg) {
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
@@ -75,7 +87,7 @@ public class ClassifyControllerClient {
     if ("200".equals(returnCode)) {
       List<Classify> classifyList = JsonUtils.json2List(JsonUtils.list2Json((List<?>) returnData), Classify.class);
       if (null == classifyList) {
-        throw new GoodsException("500", "get store top classify list return code is '200',but return data is null");
+        throw new GoodsException("500", errormsg);
       }
       return classifyList;
     }
@@ -93,6 +105,17 @@ public class ClassifyControllerClient {
    */
   public Classify getClassify(String token, String classifyid) throws IOException {
     Response<ResponseBean> response = classifyControllerApi.getClassify(token, classifyid).execute();
+    return getClassifyFromResponse(response, "get classify  return code is '200',but return data is null");
+  }
+
+  /**
+   * 从response中获取Classify
+   * 
+   * @param response
+   * @param errormsg
+   * @return
+   */
+  private Classify getClassifyFromResponse(Response<ResponseBean> response, String errormsg) {
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
@@ -102,7 +125,7 @@ public class ClassifyControllerClient {
     if ("200".equals(returnCode)) {
       Classify classify = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), Classify.class);
       if (null == classify) {
-        throw new GoodsException("500", "get classify  return code is '200',but return data is null");
+        throw new GoodsException("500", errormsg);
       }
       return classify;
     }
@@ -146,21 +169,7 @@ public class ClassifyControllerClient {
    */
   public Classify createTopClassify(String token, Classify request) throws IOException {
     Response<ResponseBean> response = classifyControllerApi.createTopClassify(token, request).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    Object returnData = responseBean.getData();
-    if ("200".equals(returnCode)) {
-      Classify classify = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), Classify.class);
-      if (null == classify) {
-        throw new GoodsException("500", "create top classify  return code is '200',but return data is null");
-      }
-      return classify;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new GoodsException(returnCode, responseBean.getMsg());
+    return getClassifyFromResponse(response, "create top classify  return code is '200',but return data is null");
   }
 
   /**
@@ -184,21 +193,7 @@ public class ClassifyControllerClient {
    */
   public List<Classify> getSubClassifyList(String token, String classifyid) throws IOException {
     Response<ResponseBean> response = classifyControllerApi.getSubClassifyList(token, classifyid).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    Object returnData = responseBean.getData();
-    if ("200".equals(returnCode)) {
-      List<Classify> classifyList = JsonUtils.json2List(JsonUtils.list2Json((List<?>) returnData), Classify.class);
-      if (null == classifyList) {
-        throw new GoodsException("500", "get sub classify list return code is '200',but return data is null");
-      }
-      return classifyList;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new GoodsException(returnCode, responseBean.getMsg());
+    return getClassifyListFromResponse(response, "get sub classify list return code is '200',but return data is null");
   }
 
   /**
@@ -211,8 +206,8 @@ public class ClassifyControllerClient {
    * @return
    * @throws IOException
    */
-  public Classify createSubClassify(String token, String classifyid, File coverImageFile,
-      Classify classifyRequest) throws IOException {
+  public Classify createSubClassify(String token, String classifyid, File coverImageFile, Classify classifyRequest)
+      throws IOException {
     Response<ResponseBean> response = null;
     if (null == coverImageFile) {
       response = classifyControllerApi.createSubClassify(token, classifyid, convert(null, classifyRequest)).execute();
@@ -220,21 +215,7 @@ public class ClassifyControllerClient {
       response = classifyControllerApi.createSubClassify(token, classifyid, convert(coverImageFile, classifyRequest))
           .execute();
     }
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    Object returnData = responseBean.getData();
-    if ("200".equals(returnCode)) {
-      Classify classify = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), Classify.class);
-      if (null == classify) {
-        throw new GoodsException("500", "create sub classify  return code is '200',but return data is null");
-      }
-      return classify;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new GoodsException(returnCode, responseBean.getMsg());
+    return getClassifyFromResponse(response, "create sub classify  return code is '200',but return data is null");
   }
 
   /**
@@ -247,8 +228,8 @@ public class ClassifyControllerClient {
    * @param callback
    * @throws IOException
    */
-  public void createSubClassifyAsync(String token, String classifyid, File coverImageFile,
-      Classify classifyRequest, Callback<ResponseBean> callback) throws IOException {
+  public void createSubClassifyAsync(String token, String classifyid, File coverImageFile, Classify classifyRequest,
+      Callback<ResponseBean> callback) {
     if (null == coverImageFile) {
       classifyControllerApi.createSubClassify(token, classifyid, convert(null, classifyRequest)).enqueue(callback);
     } else {

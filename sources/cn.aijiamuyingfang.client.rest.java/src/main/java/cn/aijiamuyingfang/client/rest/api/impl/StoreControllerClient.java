@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.MultipartBody.Builder;
 import okhttp3.RequestBody;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -107,11 +108,15 @@ public class StoreControllerClient {
       throws IOException {
     Response<ResponseBean> response;
     if (null == coverImageFile && CollectionUtils.isEmpty(detailImageFiles)) {
-      response = storeControllerApi.createStore(token, convert(null, null, storeRequest)).execute();
+      response = storeControllerApi.createStore(token, buildMultipartBody(null, null, storeRequest)).execute();
     } else {
-      response = storeControllerApi.createStore(token, convert(coverImageFile, detailImageFiles, storeRequest))
-          .execute();
+      response = storeControllerApi
+          .createStore(token, buildMultipartBody(coverImageFile, detailImageFiles, storeRequest)).execute();
     }
+    return getStoreFromResponse(response, "create store return code is '200',but return data is null");
+  }
+
+  private Store getStoreFromResponse(Response<ResponseBean> response, String errormsg) {
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
@@ -121,7 +126,7 @@ public class StoreControllerClient {
     if ("200".equals(returnCode)) {
       Store store = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), Store.class);
       if (null == store) {
-        throw new GoodsException("500", "create store return code is '200',but return data is null");
+        throw new GoodsException("500", errormsg);
       }
       return store;
     }
@@ -140,37 +145,86 @@ public class StoreControllerClient {
    * @throws IOException
    */
   public void createStoreAsync(String token, File coverImageFile, List<File> detailImageFiles, Store storeRequest,
-      Callback<ResponseBean> callback) throws IOException {
+      Callback<ResponseBean> callback) {
     if (null == coverImageFile && CollectionUtils.isEmpty(detailImageFiles)) {
-      storeControllerApi.createStore(token, convert(null, null, storeRequest)).enqueue(callback);
+      storeControllerApi.createStore(token, buildMultipartBody(null, null, storeRequest)).enqueue(callback);
     } else {
-      storeControllerApi.createStore(token, convert(coverImageFile, detailImageFiles, storeRequest)).enqueue(callback);
+      storeControllerApi.createStore(token, buildMultipartBody(coverImageFile, detailImageFiles, storeRequest))
+          .enqueue(callback);
     }
   }
 
-  private MultipartBody convert(File coverImageFile, List<File> detailImageFiles, Store storeRequest) {
+  /**
+   * 根据coverImageFile、detailImageFiles和storeRequest构建MultipartBody
+   * 
+   * @param coverImageFile
+   * @param detailImageFiles
+   * @param storeRequest
+   * @return
+   */
+  private MultipartBody buildMultipartBody(File coverImageFile, List<File> detailImageFiles, Store storeRequest) {
     MultipartBody.Builder requestBodyBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+    buildCoverImage(requestBodyBuilder, coverImageFile);
+    buildDetailImage(requestBodyBuilder, detailImageFiles);
+    buildStoreRequest(requestBodyBuilder, storeRequest);
+    return requestBodyBuilder.build();
 
-    if (coverImageFile != null) {
-      RequestBody requestCoverImg = RequestBody.create(MediaType.parse("multipart/form-data"), coverImageFile);
-      requestBodyBuilder.addFormDataPart("coverImage", coverImageFile.getName(), requestCoverImg);
-    }
+  }
 
+  /**
+   * 为MultipartBody添加detailImages段
+   * 
+   * @param requestBodyBuilder
+   * @param detailImageFiles
+   */
+  private void buildDetailImage(Builder requestBodyBuilder, List<File> detailImageFiles) {
     if (!CollectionUtils.isEmpty(detailImageFiles)) {
       for (File detailImageFile : detailImageFiles) {
         RequestBody requestdetailImg = RequestBody.create(MediaType.parse("multipart/form-data"), detailImageFile);
         requestBodyBuilder.addFormDataPart("detailImages", detailImageFile.getName(), requestdetailImg);
       }
     }
+  }
 
+  /**
+   * 为MultipartBody添加coverImage段
+   * 
+   * @param requestBodyBuilder
+   * @param coverImageFile
+   */
+  private void buildCoverImage(MultipartBody.Builder requestBodyBuilder, File coverImageFile) {
+    if (coverImageFile != null) {
+      RequestBody requestCoverImg = RequestBody.create(MediaType.parse("multipart/form-data"), coverImageFile);
+      requestBodyBuilder.addFormDataPart("coverImage", coverImageFile.getName(), requestCoverImg);
+    }
+  }
+
+  /**
+   * 将Store添加到MultipartBody
+   * 
+   * @param requestBodyBuilder
+   * @param storeRequest
+   */
+  private void buildStoreRequest(Builder requestBodyBuilder, Store storeRequest) {
     if (null == storeRequest) {
-      return requestBodyBuilder.build();
+      return;
     }
     if (StringUtils.hasContent(storeRequest.getName())) {
       requestBodyBuilder.addFormDataPart("name", storeRequest.getName());
     }
 
-    WorkTime workTime = storeRequest.getWorkTime();
+    buildWorkTime(requestBodyBuilder, storeRequest.getWorkTime());
+    buildStoreAddress(requestBodyBuilder, storeRequest.getStoreAddress());
+
+  }
+
+  /**
+   * 为MultipartBody添加workTime字段
+   * 
+   * @param requestBodyBuilder
+   * @param workTime
+   */
+  private void buildWorkTime(Builder requestBodyBuilder, WorkTime workTime) {
     if (workTime != null) {
       if (StringUtils.hasContent(workTime.getStart())) {
         requestBodyBuilder.addFormDataPart("workTime.start", workTime.getStart());
@@ -179,61 +233,113 @@ public class StoreControllerClient {
         requestBodyBuilder.addFormDataPart("workTime.end", workTime.getEnd());
       }
     }
+  }
 
-    StoreAddress storeaddressRequest = storeRequest.getStoreAddress();
-    if (storeaddressRequest != null) {
-      Province province = storeaddressRequest.getProvince();
-      if (province != null) {
-        if (StringUtils.hasContent(province.getName())) {
-          requestBodyBuilder.addFormDataPart("storeAddress.province.name", province.getName());
-        }
-        if (StringUtils.hasContent(province.getCode())) {
-          requestBodyBuilder.addFormDataPart("storeAddress.province.code", province.getCode());
-        }
+  /**
+   * 为MultipartBody添加storeAddress字段
+   * 
+   * @param requestBodyBuilder
+   * @param storeaddress
+   */
+  private void buildStoreAddress(Builder requestBodyBuilder, StoreAddress storeaddress) {
+    if (storeaddress != null) {
+      buildProvince(requestBodyBuilder, storeaddress.getProvince());
+      buildCity(requestBodyBuilder, storeaddress.getCity());
+      buildCounty(requestBodyBuilder, storeaddress.getCounty());
+      buildTown(requestBodyBuilder, storeaddress.getTown());
+      buildCoordinate(requestBodyBuilder, storeaddress.getCoordinate());
+
+      if (StringUtils.hasContent(storeaddress.getContactor())) {
+        requestBodyBuilder.addFormDataPart("storeAddress.contactor", storeaddress.getContactor());
       }
-      City city = storeaddressRequest.getCity();
-      if (city != null) {
-        if (StringUtils.hasContent(city.getName())) {
-          requestBodyBuilder.addFormDataPart("storeAddress.city.name", city.getName());
-        }
-        if (StringUtils.hasContent(city.getCode())) {
-          requestBodyBuilder.addFormDataPart("storeAddress.city.code", city.getCode());
-        }
+      if (StringUtils.hasContent(storeaddress.getDetail())) {
+        requestBodyBuilder.addFormDataPart("storeAddress.detail", storeaddress.getDetail());
       }
-      County county = storeaddressRequest.getCounty();
-      if (county != null) {
-        if (StringUtils.hasContent(county.getName())) {
-          requestBodyBuilder.addFormDataPart("storeAddress.county.name", county.getName());
-        }
-        if (StringUtils.hasContent(county.getCode())) {
-          requestBodyBuilder.addFormDataPart("storeAddress.county.code", county.getCode());
-        }
-      }
-      Town town = storeaddressRequest.getTown();
-      if (town != null) {
-        if (StringUtils.hasContent(town.getName())) {
-          requestBodyBuilder.addFormDataPart("storeAddress.town.name", town.getName());
-        }
-        if (StringUtils.hasContent(town.getCode())) {
-          requestBodyBuilder.addFormDataPart("storeAddress.town.code", town.getCode());
-        }
-      }
-      Coordinate coordinate = storeaddressRequest.getCoordinate();
-      if (coordinate != null) {
-        requestBodyBuilder.addFormDataPart("storeAddress.coordinate.longitude", coordinate.getLongitude() + "");
-        requestBodyBuilder.addFormDataPart("storeAddress.coordinate.latitude", coordinate.getLatitude() + "");
-      }
-      if (StringUtils.hasContent(storeaddressRequest.getContactor())) {
-        requestBodyBuilder.addFormDataPart("storeAddress.contactor", storeaddressRequest.getContactor());
-      }
-      if (StringUtils.hasContent(storeaddressRequest.getDetail())) {
-        requestBodyBuilder.addFormDataPart("storeAddress.detail", storeaddressRequest.getDetail());
-      }
-      if (StringUtils.hasContent(storeaddressRequest.getPhone())) {
-        requestBodyBuilder.addFormDataPart("storeAddress.phone", storeaddressRequest.getPhone());
+      if (StringUtils.hasContent(storeaddress.getPhone())) {
+        requestBodyBuilder.addFormDataPart("storeAddress.phone", storeaddress.getPhone());
       }
     }
-    return requestBodyBuilder.build();
+  }
+
+  /**
+   * 为MultipartBody添加storeAddress.province字段
+   * 
+   * @param requestBodyBuilder
+   * @param province
+   */
+  private void buildProvince(Builder requestBodyBuilder, Province province) {
+    if (province != null) {
+      if (StringUtils.hasContent(province.getName())) {
+        requestBodyBuilder.addFormDataPart("storeAddress.province.name", province.getName());
+      }
+      if (StringUtils.hasContent(province.getCode())) {
+        requestBodyBuilder.addFormDataPart("storeAddress.province.code", province.getCode());
+      }
+    }
+  }
+
+  /**
+   * 为MultipartBody添加storeAddress.city字段
+   * 
+   * @param requestBodyBuilder
+   * @param city
+   */
+  private void buildCity(Builder requestBodyBuilder, City city) {
+    if (city != null) {
+      if (StringUtils.hasContent(city.getName())) {
+        requestBodyBuilder.addFormDataPart("storeAddress.city.name", city.getName());
+      }
+      if (StringUtils.hasContent(city.getCode())) {
+        requestBodyBuilder.addFormDataPart("storeAddress.city.code", city.getCode());
+      }
+    }
+  }
+
+  /**
+   * 为MultipartBody添加storeAddress.county字段
+   * 
+   * @param requestBodyBuilder
+   * @param county
+   */
+  private void buildCounty(Builder requestBodyBuilder, County county) {
+    if (county != null) {
+      if (StringUtils.hasContent(county.getName())) {
+        requestBodyBuilder.addFormDataPart("storeAddress.county.name", county.getName());
+      }
+      if (StringUtils.hasContent(county.getCode())) {
+        requestBodyBuilder.addFormDataPart("storeAddress.county.code", county.getCode());
+      }
+    }
+  }
+
+  /**
+   * 为MultipartBody添加storeAddress.town字段
+   * 
+   * @param requestBodyBuilder
+   * @param town
+   */
+  private void buildTown(Builder requestBodyBuilder, Town town) {
+    if (town != null) {
+      if (StringUtils.hasContent(town.getName())) {
+        requestBodyBuilder.addFormDataPart("storeAddress.town.name", town.getName());
+      }
+      if (StringUtils.hasContent(town.getCode())) {
+        requestBodyBuilder.addFormDataPart("storeAddress.town.code", town.getCode());
+      }
+    }
+  }
+
+  /**
+   * 为MultipartBody添加storeAddress.coordinate字段
+   * 
+   * @param requestBodyBuilder
+   * @param coordinate
+   */
+  private void buildCoordinate(Builder requestBodyBuilder, Coordinate coordinate) {
+    if (coordinate != null) {
+      requestBodyBuilder.addFormDataPart("storeAddress.coordinate.longitude", coordinate.getLongitude() + "");
+      requestBodyBuilder.addFormDataPart("storeAddress.coordinate.latitude", coordinate.getLatitude() + "");
+    }
   }
 
   /**
@@ -246,21 +352,7 @@ public class StoreControllerClient {
    */
   public Store getStore(String token, String storeid) throws IOException {
     Response<ResponseBean> response = storeControllerApi.getStore(token, storeid).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    Object returnData = responseBean.getData();
-    if ("200".equals(returnCode)) {
-      Store store = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), Store.class);
-      if (null == store) {
-        throw new GoodsException("500", "get store return code is '200',but return data is null");
-      }
-      return store;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new GoodsException(returnCode, responseBean.getMsg());
+    return getStoreFromResponse(response, "get store return code is '200',but return data is null");
   }
 
   /**
@@ -274,21 +366,7 @@ public class StoreControllerClient {
    */
   public Store updateStore(String token, String storeid, Store storeRequest) throws IOException {
     Response<ResponseBean> response = storeControllerApi.updateStore(token, storeid, storeRequest).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    Object returnData = responseBean.getData();
-    if ("200".equals(returnCode)) {
-      Store store = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), Store.class);
-      if (null == store) {
-        throw new GoodsException("500", "update store return code is '200',but return data is null");
-      }
-      return store;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new GoodsException(returnCode, responseBean.getMsg());
+    return getStoreFromResponse(response, "update store return code is '200',but return data is null");
   }
 
   /**
