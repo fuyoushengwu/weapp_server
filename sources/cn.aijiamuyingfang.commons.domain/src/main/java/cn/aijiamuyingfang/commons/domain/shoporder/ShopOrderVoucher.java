@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.commons.domain.shoporder;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import cn.aijiamuyingfang.commons.domain.coupon.UserVoucher;
 import cn.aijiamuyingfang.commons.domain.coupon.VoucherItem;
 import cn.aijiamuyingfang.commons.domain.goods.Good;
@@ -21,7 +23,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @date 2018-06-27 16:41:55
  */
 @Entity
-public class ShopOrderVoucher {
+public class ShopOrderVoucher implements Parcelable {
   /**
    * ID
    */
@@ -78,6 +80,17 @@ public class ShopOrderVoucher {
 
   public void setGood(Good good) {
     this.good = good;
+  }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flag) {
+    dest.writeString(id);
+    dest.writeParcelable(userVoucher, flag);
   }
 
 }

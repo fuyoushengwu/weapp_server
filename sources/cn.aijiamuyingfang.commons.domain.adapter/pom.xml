@@ -9,24 +9,14 @@
 		<version>0.0.1</version>
 	</parent>
 
-	<artifactId>cn.aijiamuyingfang.commons.domain</artifactId>
-	<name>cn.aijiamuyingfang.commons.domain</name>
+	<artifactId>cn.aijiamuyingfang.commons.domain.adapter</artifactId>
+	<name>cn.aijiamuyingfang.commons.domain.adapter</name>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.hibernate.javax.persistence</groupId>
-			<artifactId>hibernate-jpa-2.1-api</artifactId>
-			<version>1.0.0.Final</version>
-		</dependency>
-		<dependency>
 			<groupId>cn.aijiamuyingfang</groupId>
-			<artifactId>cn.aijiamuyingfang.commons</artifactId>
+			<artifactId>cn.aijiamuyingfang.commons.domain</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.android</groupId>
-			<artifactId>android</artifactId>
-			<version>4.1.1.4</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

@@ -1,11 +1,13 @@
 package cn.aijiamuyingfang.commons.domain.goods;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 
 /**
  * 营业时间
  */
-public class WorkTime {
+public class WorkTime implements Parcelable {
   /**
    * 开始时间
    */
@@ -43,5 +45,36 @@ public class WorkTime {
   public void setEnd(String end) {
     this.end = end;
   }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(start);
+    dest.writeString(end);
+  }
+
+  public WorkTime() {
+  }
+
+  private WorkTime(Parcel in) {
+    start = in.readString();
+    end = in.readString();
+  }
+
+  public static final Parcelable.Creator<WorkTime> CREATOR = new Parcelable.Creator<WorkTime>() {
+    @Override
+    public WorkTime createFromParcel(Parcel in) {
+      return new WorkTime(in);
+    }
+
+    @Override
+    public WorkTime[] newArray(int size) {
+      return new WorkTime[size];
+    }
+  };
 
 }

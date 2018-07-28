@@ -3,11 +3,14 @@ package cn.aijiamuyingfang.server.goods.service;
 import cn.aijiamuyingfang.commons.domain.exception.GoodsException;
 import cn.aijiamuyingfang.commons.domain.goods.Classify;
 import cn.aijiamuyingfang.commons.domain.goods.Good;
+import cn.aijiamuyingfang.commons.domain.goods.response.GetTopClassifyListResponse;
 import cn.aijiamuyingfang.commons.domain.response.ResponseCode;
 import cn.aijiamuyingfang.server.domain.goods.db.ClassifyRepository;
 import cn.aijiamuyingfang.server.domain.goods.db.GoodRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 /**
@@ -136,6 +139,33 @@ public class ClassifyService {
     classify.update(updateClassify);
     classifyRepository.saveAndFlush(classify);
     return classify;
+  }
+
+  /**
+   * 分页获取所有顶层条目
+   * 
+   * @param currentpage
+   * @param pagesize
+   * @return
+   */
+  public GetTopClassifyListResponse getTopClassifyList(int currentpage, int pagesize) {
+    // currentpage必须>=1,否则重置为1
+    if (currentpage < 1) {
+      currentpage = 1;
+    }
+    // pagesize必须>0,否则重置为1
+    if (pagesize <= 0) {
+      pagesize = 1;
+    }
+
+    // PageRequest的Page参数是基于0的,但是currentPage是基于1的,所有将currentPage作为参数传递给PgeRequest时需要'-1'
+    PageRequest pageRequest = new PageRequest(currentpage - 1, pagesize);
+    Page<Classify> classifyPage = classifyRepository.findTopClassifyList(pageRequest);
+    GetTopClassifyListResponse response = new GetTopClassifyListResponse();
+    response.setCurrentpage(classifyPage.getNumber() + 1);
+    response.setDataList(classifyPage.getContent());
+    response.setTotalpage(classifyPage.getTotalPages());
+    return response;
   }
 
 }

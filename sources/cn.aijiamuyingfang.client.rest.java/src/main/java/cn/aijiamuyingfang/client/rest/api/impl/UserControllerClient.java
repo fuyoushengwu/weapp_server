@@ -245,7 +245,6 @@ public class UserControllerClient {
    * @param userid
    * @param addressid
    * @param async
-   * @return
    */
   public void deprecateRecieveAddress(String token, String userid, String addressid, boolean async) throws IOException {
     if (async) {

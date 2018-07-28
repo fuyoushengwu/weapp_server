@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.commons.domain.address;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -22,7 +24,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @date 2018-07-04 23:00:45
  */
 @MappedSuperclass
-public abstract class Address {
+public abstract class Address implements Parcelable {
   /**
    * 地址-Id
    */
@@ -174,4 +176,35 @@ public abstract class Address {
     this.coordinate = coordinate;
   }
 
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(id);
+    dest.writeByte((byte) (deprecated ? 1 : 0));
+    dest.writeParcelable(province, flags);
+    dest.writeParcelable(city, flags);
+    dest.writeParcelable(county, flags);
+    dest.writeParcelable(town, flags);
+    dest.writeString(detail);
+    dest.writeParcelable(coordinate, flags);
+  }
+
+  protected Address() {
+
+  }
+
+  protected Address(Parcel in) {
+    id = in.readString();
+    deprecated = in.readByte() != 0;
+    province = in.readParcelable(Province.class.getClassLoader());
+    city = in.readParcelable(City.class.getClassLoader());
+    county = in.readParcelable(County.class.getClassLoader());
+    town = in.readParcelable(Town.class.getClassLoader());
+    detail = in.readString();
+    coordinate = in.readParcelable(Coordinate.class.getClassLoader());
+  }
 }

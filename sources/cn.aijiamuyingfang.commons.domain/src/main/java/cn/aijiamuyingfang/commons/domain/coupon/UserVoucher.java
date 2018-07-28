@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.commons.domain.coupon;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -18,7 +20,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @date 2018-06-27 03:11:01
  */
 @Entity
-public class UserVoucher {
+public class UserVoucher implements Parcelable {
   @Id
   @GeneratedValue(generator = "strategy_uuid")
   @GenericGenerator(name = "strategy_uuid", strategy = "uuid")
@@ -102,5 +104,42 @@ public class UserVoucher {
   public void setScore(int score) {
     this.score = score;
   }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flag) {
+    dest.writeString(id);
+    dest.writeByte((byte) (deprecated ? 1 : 0));
+    dest.writeString(userid);
+    dest.writeParcelable(goodVoucher, flag);
+    dest.writeInt(score);
+  }
+
+  public UserVoucher() {
+  }
+
+  private UserVoucher(Parcel in) {
+    this.id = in.readString();
+    this.deprecated = in.readByte() != 0;
+    this.userid = in.readString();
+    this.goodVoucher = in.readParcelable(GoodVoucher.class.getClassLoader());
+    this.score = in.readInt();
+  }
+
+  public static final Parcelable.Creator<UserVoucher> CREATOR = new Parcelable.Creator<UserVoucher>() {
+    @Override
+    public UserVoucher createFromParcel(Parcel in) {
+      return new UserVoucher(in);
+    }
+
+    @Override
+    public UserVoucher[] newArray(int size) {
+      return new UserVoucher[size];
+    }
+  };
 
 }

@@ -2,6 +2,7 @@ package cn.aijiamuyingfang.server.goods.controller;
 
 import cn.aijiamuyingfang.commons.domain.exception.GoodsException;
 import cn.aijiamuyingfang.commons.domain.goods.Classify;
+import cn.aijiamuyingfang.commons.domain.goods.response.GetTopClassifyListResponse;
 import cn.aijiamuyingfang.commons.domain.response.ResponseCode;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import cn.aijiamuyingfang.server.goods.service.ClassifyService;
@@ -54,6 +55,20 @@ public class ClassifyController {
   @GetMapping(value = "/store/{storeid}/classify")
   public List<Classify> getStoreTopClassifyList(@PathVariable(value = "storeid") String storeid) {
     return storeclassifyService.getStoreClassifyList(storeid);
+  }
+
+  /**
+   * 分页获取所有顶层条目
+   * 
+   * @param currentpage
+   * @param pagesize
+   * @return
+   */
+  @PreAuthorize(value = "isAuthenticated()")
+  @GetMapping(value = "/classify")
+  public GetTopClassifyListResponse getTopClassifyList(@RequestParam("currentpage") int currentpage,
+      @RequestParam("pagesize") int pagesize) {
+    return classifyService.getTopClassifyList(currentpage, pagesize);
   }
 
   /**

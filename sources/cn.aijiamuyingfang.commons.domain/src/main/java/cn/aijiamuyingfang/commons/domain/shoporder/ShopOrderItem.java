@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.commons.domain.shoporder;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import cn.aijiamuyingfang.commons.domain.goods.Good;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,7 +21,8 @@ import org.hibernate.annotations.GenericGenerator;
  * @date 2018-06-27 16:01:45
  */
 @Entity
-public class ShopOrderItem {
+public class ShopOrderItem implements Parcelable {
+
   /**
    * 订单商品的ID
    */
@@ -93,4 +96,39 @@ public class ShopOrderItem {
     this.price = price;
   }
 
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(id);
+    dest.writeParcelable(good, flags);
+    dest.writeInt(count);
+    dest.writeDouble(price);
+
+  }
+
+  public ShopOrderItem() {
+  }
+
+  private ShopOrderItem(Parcel in) {
+    id = in.readString();
+    good = in.readParcelable(Good.class.getClassLoader());
+    count = in.readInt();
+    price = in.readDouble();
+  }
+
+  public static final Parcelable.Creator<ShopOrderItem> CREATOR = new Parcelable.Creator<ShopOrderItem>() {
+    @Override
+    public ShopOrderItem createFromParcel(Parcel in) {
+      return new ShopOrderItem(in);
+    }
+
+    @Override
+    public ShopOrderItem[] newArray(int size) {
+      return new ShopOrderItem[size];
+    }
+  };
 }

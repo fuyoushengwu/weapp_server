@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.commons.domain.address;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import javax.persistence.Entity;
 
@@ -89,4 +91,36 @@ public class RecieveAddress extends Address {
     this.def = def;
   }
 
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    super.writeToParcel(dest, flags);
+    dest.writeString(userid);
+    dest.writeString(phone);
+    dest.writeString(reciever);
+    dest.writeByte((byte) (def ? 1 : 0));
+  }
+
+  public RecieveAddress() {
+    super();
+  }
+
+  private RecieveAddress(Parcel in) {
+    super(in);
+    userid = in.readString();
+    phone = in.readString();
+    reciever = in.readString();
+    def = in.readByte() != 0;
+  }
+
+  public static final Parcelable.Creator<RecieveAddress> CREATOR = new Parcelable.Creator<RecieveAddress>() {
+    @Override
+    public RecieveAddress createFromParcel(Parcel in) {
+      return new RecieveAddress(in);
+    }
+
+    @Override
+    public RecieveAddress[] newArray(int size) {
+      return new RecieveAddress[size];
+    }
+  };
 }

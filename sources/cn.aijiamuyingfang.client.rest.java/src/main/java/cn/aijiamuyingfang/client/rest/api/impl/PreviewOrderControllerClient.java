@@ -103,7 +103,6 @@ public class PreviewOrderControllerClient {
    * @param userid
    * @param itemid
    * @param async
-   * @return
    * @throws IOException
    */
   public void deletePreviewOrderItem(String token, String userid, String itemid, boolean async) throws IOException {

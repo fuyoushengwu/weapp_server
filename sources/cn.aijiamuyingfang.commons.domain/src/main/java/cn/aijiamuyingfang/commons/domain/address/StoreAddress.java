@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.commons.domain.address;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import javax.persistence.Entity;
 
 /**
@@ -40,4 +42,34 @@ public class StoreAddress extends Address {
   public void setContactor(String contactor) {
     this.contactor = contactor;
   }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    super.writeToParcel(dest, flags);
+    dest.writeString(phone);
+    dest.writeString(contactor);
+  }
+
+  public StoreAddress() {
+    super();
+  }
+
+  private StoreAddress(Parcel in) {
+    super(in);
+    phone = in.readString();
+    contactor = in.readString();
+  }
+
+  public static final Parcelable.Creator<StoreAddress> CREATOR = new Parcelable.Creator<StoreAddress>() {
+    @Override
+    public StoreAddress createFromParcel(Parcel in) {
+      return new StoreAddress(in);
+    }
+
+    @Override
+    public StoreAddress[] newArray(int size) {
+      return new StoreAddress[size];
+    }
+  };
+
 }

@@ -33,6 +33,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 /**
@@ -69,6 +70,14 @@ public class CouponControllerTest {
   @After
   public void after() {
     testActions.clearData();
+  }
+
+  @Autowired
+  private PasswordEncoder encoder;
+
+  @Test
+  public void test() {
+    System.out.println(encoder.encode("18061756483"));
   }
 
   @Test
@@ -289,6 +298,13 @@ public class CouponControllerTest {
     Assert.assertNotNull(getVoucherItemListResponse);
     Assert.assertEquals(2, getVoucherItemListResponse.getDataList().size());
 
+    VoucherItem voucheritemOne = couponControllerClient.getVoucherItem(testActions.senderoneToken,
+        testActions.voucheritemoneId);
+    Assert.assertNotNull(voucheritemOne);
+    VoucherItem voucheritemTwo = couponControllerClient.getVoucherItem(testActions.senderoneToken,
+        testActions.voucheritemtwoId);
+    Assert.assertNotNull(voucheritemTwo);
+
     List<String> goodids = new ArrayList<>();
     goodids.add(testActions.goodoneId);
     goodids.add(testActions.goodtwoId);
@@ -345,6 +361,9 @@ public class CouponControllerTest {
     Assert.assertEquals(1, response.getDataList().size());
     Assert.assertEquals(testActions.goodvouchertwoId, response.getDataList().get(0).getId());
     Assert.assertEquals(1, response.getTotalpage());
+
+    GoodVoucher goodVoucher = couponControllerClient.getGoodVoucher(ADMIN_USER_TOKEN, testActions.goodvouchertwoId);
+    Assert.assertNotNull(goodVoucher);
   }
 
 }

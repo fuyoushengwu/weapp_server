@@ -52,9 +52,9 @@ public class StoreController {
    * 分页获取在使用中的Store
    * 
    * @param currentpage
-   *          当前页 默认值:1 (currentpage必须>=1,否则重置为1)
+   *          当前页 默认值:1 (currentpage必须&ge;1,否则重置为1)
    * @param pagesize
-   *          每页大小 默认值:10(pagesize必须>0,否则重置为1)
+   *          每页大小 默认值:10(pagesize必&gt;0,否则重置为1)
    * @return
    */
   @PreAuthorize(value = "isAuthenticated()")

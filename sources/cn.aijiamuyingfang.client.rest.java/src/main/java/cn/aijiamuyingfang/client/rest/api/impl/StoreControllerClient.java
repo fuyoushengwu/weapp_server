@@ -70,9 +70,9 @@ public class StoreControllerClient {
    * 
    * @param token
    * @param currentpage
-   *          当前页 默认值:1 (currentpage必须>=1,否则重置为1)
+   *          当前页 默认值:1 (currentpage必须&ge;1,否则重置为1)
    * @param pagesize
-   *          每页大小 默认值:10(pagesize必须>0,否则重置为1)
+   *          每页大小 默认值:10(pagesize必须&gt;0,否则重置为1)
    * @return
    * @throws IOException
    */
@@ -142,7 +142,6 @@ public class StoreControllerClient {
    * @param detailImageFiles
    * @param storeRequest
    * @param callback
-   * @throws IOException
    */
   public void createStoreAsync(String token, File coverImageFile, List<File> detailImageFiles, Store storeRequest,
       Callback<ResponseBean> callback) {

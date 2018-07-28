@@ -25,16 +25,13 @@ import org.springframework.security.core.GrantedAuthority;
  *
  * <p>
  * Implementations are not used directly by Spring Security for security purposes. They simply store
- * user information which is later encapsulated into {@link Authentication} objects. This allows
+ * user information which is later encapsulated into Authentication objects. This allows
  * non-security related user information (such as email addresses, telephone numbers etc) to be
  * stored in a convenient location.
  * <p>
  * Concrete implementations must take particular care to ensure the non-null contract detailed for
- * each method is enforced. See {@link org.springframework.security.core.userdetails.User} for a
- * reference implementation (which you might like to extend or use in your code).
- *
- * @see UserDetailsService
- * @see UserCache
+ * each method is enforced. See org.springframework.security.core.userdetails.User for a reference
+ * implementation (which you might like to extend or use in your code).
  *
  * @author Ben Alex
  */

@@ -74,6 +74,17 @@ public interface CouponControllerApi {
       @Query("pagesize") int pagesize);
 
   /**
+   * 获取商品兑换券
+   * 
+   * @param token
+   * @param voucherid
+   * @return
+   */
+  @GET(value = "/coupon/goodvoucher/{voucherid}")
+  public Observable<ResponseBean<GoodVoucher>> getGoodVoucher(@Header(AuthConstants.HEADER_STRING) String token,
+      @Path("voucherid") String voucherid);
+
+  /**
    * 创建商品兑换券
    * 
    * @param token
@@ -107,6 +118,17 @@ public interface CouponControllerApi {
   public Observable<ResponseBean<GetVoucherItemListResponse>> getVoucherItemList(
       @Header(AuthConstants.HEADER_STRING) String token, @Query("currentpage") int currentpage,
       @Query("pagesize") int pagesize);
+
+  /**
+   * 获取兑换方式
+   * 
+   * @param token
+   * @param itemid
+   * @return
+   */
+  @GET(value = "/coupon/voucheritem/{itemid}")
+  public Observable<ResponseBean<VoucherItem>> getVoucherItem(@Header(AuthConstants.HEADER_STRING) String token,
+      @Path("itemid") String itemid);
 
   /**
    * 创建兑换方式

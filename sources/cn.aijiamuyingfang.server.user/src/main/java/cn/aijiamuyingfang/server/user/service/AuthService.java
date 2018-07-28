@@ -97,6 +97,7 @@ public class AuthService {
     UserDetails userDetails = userDetailService.loadUserByUsername(user.getId());
     String token = tokenService.generateToken(userDetails);
     TokenResponse tokenResponse = new TokenResponse();
+    tokenResponse.setUserid(user.getId());
     tokenResponse.setToken(token);
     return tokenResponse;
   }
@@ -143,6 +144,7 @@ public class AuthService {
     if (tokenService.canTokenBeRefreshed(token)) {
       TokenResponse tokenResponse = new TokenResponse();
       tokenResponse.setToken(tokenService.refreshToken(token));
+      tokenResponse.setUserid(((User) userDetails).getId());
       return tokenResponse;
     }
     throw new AuthException("400", "oldtoken is invalid,you need relogin");

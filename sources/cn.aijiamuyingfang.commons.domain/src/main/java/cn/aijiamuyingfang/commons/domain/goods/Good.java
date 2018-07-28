@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.commons.domain.goods;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -22,7 +24,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @date 2018-06-27 00:12:50
  */
 @Entity
-public class Good {
+public class Good implements Parcelable {
   /**
    * 商品Id
    */
@@ -291,5 +293,60 @@ public class Good {
     }
     return id.equals(other.id);
   }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(id);
+    dest.writeString(coverImg);
+    dest.writeByte((byte) (deprecated ? 1 : 0));
+    dest.writeParcelable(lifetime, flags);
+    dest.writeString(name);
+    dest.writeInt(count);
+    dest.writeInt(salecount);
+    dest.writeDouble(price);
+    dest.writeDouble(marketprice);
+    dest.writeString(pack);
+    dest.writeString(level);
+    dest.writeString(barcode);
+    dest.writeInt(score);
+    dest.writeString(voucherId);
+  }
+
+  public Good() {
+  }
+
+  private Good(Parcel in) {
+    this.id = in.readString();
+    this.coverImg = in.readString();
+    this.deprecated = in.readByte() != 0;
+    this.lifetime = in.readParcelable(ShelfLife.class.getClassLoader());
+    this.name = in.readString();
+    this.count = in.readInt();
+    this.salecount = in.readInt();
+    this.price = in.readDouble();
+    this.marketprice = in.readDouble();
+    this.pack = in.readString();
+    this.level = in.readString();
+    this.barcode = in.readString();
+    this.score = in.readInt();
+    this.voucherId = in.readString();
+  }
+
+  public static final Parcelable.Creator<Good> CREATOR = new Parcelable.Creator<Good>() {
+    @Override
+    public Good createFromParcel(Parcel in) {
+      return new Good(in);
+    }
+
+    @Override
+    public Good[] newArray(int size) {
+      return new Good[size];
+    }
+  };
 
 }

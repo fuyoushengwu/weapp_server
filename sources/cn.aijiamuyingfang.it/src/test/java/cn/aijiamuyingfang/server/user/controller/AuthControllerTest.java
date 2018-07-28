@@ -54,5 +54,6 @@ public class AuthControllerTest {
     TokenResponse response = client.refreshToken(token);
     Assert.assertNotNull(response);
     Assert.assertTrue(StringUtils.hasContent(response.getToken()));
+    Assert.assertEquals(testActions.senderoneId, response.getUserid());
   }
 }

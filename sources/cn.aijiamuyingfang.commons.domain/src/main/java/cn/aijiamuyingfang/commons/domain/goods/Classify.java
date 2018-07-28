@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.commons.domain.goods;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import cn.aijiamuyingfang.commons.utils.CollectionUtils;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -25,7 +27,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @date 2018-06-27 00:12:32
  */
 @Entity
-public class Classify {
+public class Classify implements Parcelable {
   /**
    * 条目Id
    */
@@ -161,4 +163,38 @@ public class Classify {
     this.goodList = goodList;
   }
 
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(id);
+    dest.writeString(name);
+    dest.writeInt(level);
+    dest.writeString(coverImg);
+  }
+
+  public Classify() {
+  }
+
+  private Classify(Parcel in) {
+    id = in.readString();
+    name = in.readString();
+    level = in.readInt();
+    coverImg = in.readString();
+  }
+
+  public static final Parcelable.Creator<Classify> CREATOR = new Parcelable.Creator<Classify>() {
+    @Override
+    public Classify createFromParcel(Parcel in) {
+      return new Classify(in);
+    }
+
+    @Override
+    public Classify[] newArray(int size) {
+      return new Classify[size];
+    }
+  };
 }

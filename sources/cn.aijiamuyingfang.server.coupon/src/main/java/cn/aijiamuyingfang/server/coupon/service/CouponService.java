@@ -110,6 +110,10 @@ public class CouponService {
     return response;
   }
 
+  public GoodVoucher getGoodVoucher(String voucherid) {
+    return goodvoucherRepository.findOne(voucherid);
+  }
+
   /**
    * 创建商品兑换券
    * 
@@ -127,7 +131,6 @@ public class CouponService {
    * 废弃商品兑换券
    * 
    * @param voucherid
-   * @return
    */
   public void deprecateGoodVoucher(String voucherid) {
     // 废弃GoodVoucher
@@ -167,6 +170,16 @@ public class CouponService {
     response.setDataList(voucheritemPage.getContent());
     response.setTotalpage(voucheritemPage.getTotalPages());
     return response;
+  }
+
+  /**
+   * 获取兑换方式
+   * 
+   * @param itemid
+   * @return
+   */
+  public VoucherItem getVoucherItem(String itemid) {
+    return voucheritemRepository.findOne(itemid);
   }
 
   /**

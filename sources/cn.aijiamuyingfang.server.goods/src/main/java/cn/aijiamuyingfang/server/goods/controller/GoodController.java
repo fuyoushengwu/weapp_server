@@ -90,8 +90,10 @@ public class GoodController {
   /**
    * 添加商品
    * 
-   * @param goodRequest
+   * @param coverImage
+   * @param detailImages
    * @param good
+   * @param request
    * @return
    */
   @PreAuthorize(value = "hasAuthority('admin')")

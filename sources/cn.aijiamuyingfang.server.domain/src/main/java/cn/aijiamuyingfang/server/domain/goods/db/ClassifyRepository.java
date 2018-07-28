@@ -2,12 +2,14 @@ package cn.aijiamuyingfang.server.domain.goods.db;
 
 import cn.aijiamuyingfang.commons.domain.goods.Classify;
 import java.util.List;
+import javax.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * [描述]:
@@ -22,6 +24,16 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 public interface ClassifyRepository extends JpaRepository<Classify, String> {
+
+  /**
+   * 分页查找所有顶层条目
+   * 
+   * @param pageable
+   * @return
+   */
+  @Query(value = "select * from classify where level=1 order by ?#{#pageable}",
+      countQuery = "select count(*) from classify where level=1 order by ?#{#pageable}", nativeQuery = true)
+  Page<Classify> findTopClassifyList(Pageable pageable);
 
   /**
    * 查找某一等级下的所有条目

@@ -92,6 +92,18 @@ public class CouponController {
   }
 
   /**
+   * 获取商品兑换项
+   * 
+   * @param voucherid
+   * @return
+   */
+  @PreAuthorize(value = "isAuthenticated()")
+  @GetMapping(value = "/coupon/goodvoucher/{voucherid}")
+  public GoodVoucher getGoodVoucher(@PathVariable("voucherid") String voucherid) {
+    return couponService.getGoodVoucher(voucherid);
+  }
+
+  /**
    * 创建商品兑换券
    * 
    * @param request
@@ -138,6 +150,18 @@ public class CouponController {
   public GetVoucherItemListResponse getVoucherItemList(@RequestParam("currentpage") int currentpage,
       @RequestParam("pagesize") int pagesize) {
     return couponService.getVoucherItemList(currentpage, pagesize);
+  }
+
+  /**
+   * 获取兑换方式
+   * 
+   * @param itemid
+   * @return
+   */
+  @PreAuthorize(value = "isAuthenticated()")
+  @GetMapping(value = "/coupon/voucheritem/{itemid}")
+  public VoucherItem getVoucherItem(@PathVariable("itemid") String itemid) {
+    return couponService.getVoucherItem(itemid);
   }
 
   /**

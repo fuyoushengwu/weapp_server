@@ -1,6 +1,10 @@
 package cn.aijiamuyingfang.client.rest.bean;
 
-import cn.aijiamuyingfang.client.rest.converter.EnumRetrofitConverterFactory;
+import static cn.aijiamuyingfang.client.rest.ClientRestConstants.DEFAULT_CONNECT_TIMEOUT;
+import static cn.aijiamuyingfang.client.rest.ClientRestConstants.DEFAULT_READ_TIMEOUT;
+import static cn.aijiamuyingfang.client.rest.ClientRestConstants.DEFAULT_WRITE_TIMEOUT;
+
+import cn.aijiamuyingfang.client.rest.utils.ClientRestUtils;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
@@ -13,13 +17,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import okhttp3.CertificatePinner;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
+import retrofit2.Retrofit;;
 
 /**
  * [描述]:
@@ -37,28 +37,13 @@ public class HttpServiceBeanFactory {
   // key:请求地址 value:当前请求地址下class所对应的service（key:class value:service）
   private static final Map<String, HttpServiceBean> serviceBeans = new HashMap<>();
 
-  /**
-   * 读超时时间
-   */
-  private static final int READ_TIMEOUT = 60000;
-
-  /**
-   * 写超时时间
-   */
-  private static final int WRITE_TIMEOUT = 60000;
-
-  /**
-   * 连接超时时间
-   */
-  private static final int CONNECT_TIMEOUT = 60000;
-
   private HttpServiceBeanFactory() {
   }
 
   /**
    * 创建service服务实体
    * 
-   * @param baseUrl
+   * @param baseurl
    * @param serviceClass
    * @param interceptorClasses
    * @return
@@ -100,10 +85,8 @@ public class HttpServiceBeanFactory {
 
       });
 
-      Retrofit retrofit = new Retrofit.Builder().baseUrl(baseurl).client(getOkHttpClient(baseurl, interceptorClasses))
-          .addConverterFactory(ScalarsConverterFactory.create())
-          .addConverterFactory(GsonConverterFactory.create(builder.create()))
-          .addConverterFactory(new EnumRetrofitConverterFactory()).build();
+      Retrofit retrofit = ClientRestUtils.getRetrofitBuilder(baseurl)
+          .client(getOkHttpClient(baseurl, interceptorClasses)).build();
       httpServiceBean.setRetrofit(retrofit);
       serviceBeans.put(baseurl, httpServiceBean);
     }
@@ -123,16 +106,9 @@ public class HttpServiceBeanFactory {
    * @return
    */
   private static OkHttpClient getOkHttpClient(String baseurl, Class<?>... interceptorClasses) {
-    OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder().connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
-        .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS).readTimeout(READ_TIMEOUT, TimeUnit.SECONDS);
     String hostname = baseurl.replace("https://", "").replace("/", "").split(":")[0];
-    // 支持https,添加证书指纹,验证域名
-    clientBuilder
-        .certificatePinner(
-            new CertificatePinner.Builder().add(hostname, "sha256/ws7jjHqFe0uRilFM2Rmby01kpiLy7LFiQLhQz4ntLWk=")
-                .add(hostname, "sha256/jzqM6/58ozsPRvxUzg0hzjM+GcfwhTbU/G0TCDvL7hU=")
-                .add(hostname, "sha256/r/mIkG3eEpVdm+u/ko/cwxzOMo1bk4TyHIlByibiA5E=").build())
-        .hostnameVerifier((str, session) -> hostname.equals(str));
+    OkHttpClient.Builder clientBuilder = ClientRestUtils.getOkHttpClientBuilder(hostname, DEFAULT_CONNECT_TIMEOUT,
+        DEFAULT_READ_TIMEOUT, DEFAULT_WRITE_TIMEOUT);
 
     // 添加服务拦截器实例
     for (Class<?> interceptorClass : interceptorClasses) {

@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.commons.domain.goods;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import cn.aijiamuyingfang.commons.domain.address.StoreAddress;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -30,7 +32,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @date 2018-06-27 00:12:21
  */
 @Entity
-public class Store {
+public class Store implements Parcelable {
 
   /**
    * 门店Id
@@ -189,4 +191,49 @@ public class Store {
     this.classifyList = classifyList;
   }
 
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(id);
+    dest.writeByte((byte) (deprecated ? 1 : 0));
+    dest.writeString(name);
+    dest.writeParcelable(workTime, flags);
+    dest.writeString(coverImg);
+    dest.writeStringList(detailImgList);
+    dest.writeParcelable(storeAddress, flags);
+    dest.writeParcelableArray(classifyList.toArray(new Classify[classifyList.size()]), flags);
+  }
+
+  public Store() {
+  }
+
+  private Store(Parcel in) {
+    id = in.readString();
+    deprecated = in.readByte() != 0;
+    name = in.readString();
+    in.readParcelable(WorkTime.class.getClassLoader());
+    coverImg = in.readString();
+    in.readStringList(detailImgList);
+    storeAddress = in.readParcelable(StoreAddress.class.getClassLoader());
+    classifyList = new ArrayList<>();
+    for (Parcelable p : in.readParcelableArray(Classify.class.getClassLoader())) {
+      classifyList.add((Classify) p);
+    }
+  }
+
+  public static final Parcelable.Creator<Store> CREATOR = new Parcelable.Creator<Store>() {
+    @Override
+    public Store createFromParcel(Parcel in) {
+      return new Store(in);
+    }
+
+    @Override
+    public Store[] newArray(int size) {
+      return new Store[size];
+    }
+  };
 }

@@ -55,8 +55,6 @@ public interface GoodControllerApi {
    * 添加商品
    * 
    * @param token
-   * @param coverImage
-   * @param detailImages
    * @param goodRequest
    * @return
    */

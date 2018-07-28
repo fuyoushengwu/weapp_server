@@ -134,7 +134,6 @@ public class ShopOrderControllerClient {
    * @param shoporderid
    * @param requestBean
    * @param async
-   * @return
    * @throws IOException
    */
   public void updateShopOrderStatus(String token, String shoporderid, UpdateShopOrderStatusRequest requestBean,
@@ -163,7 +162,6 @@ public class ShopOrderControllerClient {
    * @param token
    * @param shoporderid
    * @param async
-   * @return
    * @throws IOException
    */
   public void delete100DaysFinishedShopOrder(String token, String shoporderid, boolean async) throws IOException {
@@ -192,7 +190,6 @@ public class ShopOrderControllerClient {
    * @param userid
    * @param shoporderid
    * @param async
-   * @return
    * @throws IOException
    */
   public void deleteUserShopOrder(String token, String userid, String shoporderid, boolean async) throws IOException {
@@ -252,7 +249,6 @@ public class ShopOrderControllerClient {
    * @param userid
    * @param shoporderid
    * @param callback
-   * @return
    */
   public void confirmUserShopOrderFinishedAsync(String token, String userid, String shoporderid,
       Callback<ResponseBean> callback) {
@@ -267,7 +263,6 @@ public class ShopOrderControllerClient {
    * @param shoporderid
    * @param addressid
    * @param async
-   * @return
    * @throws IOException
    */
   @PUT(value = "/user/{userid}/shoporder/{shoporderid}/recieveaddress/{addressid}")

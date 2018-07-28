@@ -1,0 +1,6 @@
+### 该包是为了在非Android环境下使用cn.aijiamuyingfang.commons.domain而添加的适配类
+- cn.aijiamuyingfang.commons.domain为了支持在Android客户端的功能,部分的Domain实现了android.os.Parcelable接口
+- 在Android环境会将实现android.os.Parcelable接口的Domain传入android.content.Intent中
+- 在非Android的服务端环境中,虽然不是使用anroid.os.Parcelable的序列化能力，但是在引入实现了android.os.Parcelable接口的Domain时，因为Java的机制,JVM也会间接引入android.os.Parcelable。这时在非Android环境会出现NoClassDefFoundError
+- 为了解决这个问题,不要将这些Domain依赖的Android加入进来
+- 只要求形式满足cn.aijiamuyingfang.commons.domain的使用,不要求内容完全和Android环境一样,毕竟我们在服务端环境是不会用到Android的具体功能的

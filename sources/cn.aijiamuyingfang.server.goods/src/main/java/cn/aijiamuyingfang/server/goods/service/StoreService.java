@@ -40,9 +40,9 @@ public class StoreService {
    * 分页获取在使用中的Store
    * 
    * @param currentpage
-   *          当前页 (currentpage必须>=1,否则重置为1)
+   *          当前页 (currentpage必须&ge;1,否则重置为1)
    * @param pagesize
-   *          每页大小 (pagesize必须>0,否则重置为1)
+   *          每页大小 (pagesize必须&gt;0,否则重置为1)
    * @return
    */
   public GetInUseStoreListResponse getInUseStoreList(int currentpage, int pagesize) {
@@ -92,7 +92,7 @@ public class StoreService {
    * 更新门店信息
    * 
    * @param storeid
-   * @param store
+   * @param updateStore
    */
   public Store updateStore(String storeid, Store updateStore) {
     Store store = storeRepository.findOne(storeid);

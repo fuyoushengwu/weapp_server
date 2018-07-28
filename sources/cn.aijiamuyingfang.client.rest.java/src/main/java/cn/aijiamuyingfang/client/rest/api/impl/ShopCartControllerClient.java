@@ -117,7 +117,6 @@ public class ShopCartControllerClient {
    * @param userid
    * @param ischecked
    * @param async
-   * @return
    * @throws IOException
    */
   public void checkAllShopCartItem(String token, String userid, boolean ischecked, boolean async) throws IOException {
@@ -146,7 +145,6 @@ public class ShopCartControllerClient {
    * @param shopcartid
    * @param ischecked
    * @param async
-   * @return
    * @throws IOException
    */
   public void checkShopCartItem(String token, String userid, String shopcartid, boolean ischecked, boolean async)
@@ -176,7 +174,6 @@ public class ShopCartControllerClient {
    * @param userid
    * @param shopcartid
    * @param async
-   * @return
    * @throws IOException
    */
   public void deleteShopCartItem(String token, String userid, String shopcartid, boolean async) throws IOException {
@@ -260,7 +257,6 @@ public class ShopCartControllerClient {
    * @param token
    * @param goodid
    * @param async
-   * @return
    * @throws IOException
    */
   public void deleteGood(String token, String goodid, boolean async) throws IOException {

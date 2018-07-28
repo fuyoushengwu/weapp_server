@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.commons.domain.shoporder;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import cn.aijiamuyingfang.commons.domain.address.RecieveAddress;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -30,7 +32,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @date 2018-06-27 16:01:18
  */
 @Entity
-public class ShopOrder {
+public class ShopOrder implements Parcelable {
 
   /**
    * 订单ID
@@ -153,12 +155,6 @@ public class ShopOrder {
    * 订单总额
    */
   private double totalPrice;
-
-  public ShopOrder() {
-    // 因为SimpleDateFormat.format()方法不是线程安全的,所以为了避免多线程的问题不能将SimpleDateFormat作为类变量来调用‘format’方法
-    DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSS");
-    this.orderNo = dateFormat.format(new Date());
-  }
 
   /**
    * 距离最后修改日期(单位:天)
@@ -380,4 +376,83 @@ public class ShopOrder {
     this.totalPrice = totalPrice;
   }
 
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(id);
+    dest.writeString(userid);
+    dest.writeString(orderNo);
+    dest.writeParcelable(status, flags);
+    dest.writeByte((byte) (fromPreOrder ? 1 : 0));
+    dest.writeParcelable(sendtype, flags);
+    dest.writeLong(createTime.getTime());
+    dest.writeLong(finishTime.getTime());
+    dest.writeLong(pickupTime.getTime());
+    dest.writeParcelable(recieveAddress, flags);
+    dest.writeParcelableArray(orderItemList.toArray(new ShopOrderItem[orderItemList.size()]), flags);
+    dest.writeString(thirdsendCompany);
+    dest.writeString(thirdsendNo);
+    dest.writeStringList(operator);
+    dest.writeLong(lastModify.getTime());
+    dest.writeString(businessMessage);
+    dest.writeString(formid);
+    dest.writeDouble(totalGoodsPrice);
+    dest.writeDouble(sendPrice);
+    dest.writeInt(score);
+    dest.writeParcelableArray(orderVoucher.toArray(new ShopOrderVoucher[orderVoucher.size()]), flags);
+    dest.writeDouble(totalPrice);
+  }
+
+  public ShopOrder() {
+    // 因为SimpleDateFormat.format()方法不是线程安全的,所以为了避免多线程的问题不能将SimpleDateFormat作为类变量来调用‘format’方法
+    DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSS");
+    this.orderNo = dateFormat.format(new Date());
+  }
+
+  private ShopOrder(Parcel in) {
+    id = in.readString();
+    userid = in.readString();
+    orderNo = in.readString();
+    status = in.readParcelable(ShopOrderStatus.class.getClassLoader());
+    fromPreOrder = in.readByte() != 0;
+    sendtype = in.readParcelable(SendType.class.getClassLoader());
+    createTime = new Date(in.readLong());
+    finishTime = new Date(in.readLong());
+    pickupTime = new Date(in.readLong());
+    recieveAddress = in.readParcelable(RecieveAddress.class.getClassLoader());
+    orderItemList = new ArrayList<>();
+    for (Parcelable p : in.readParcelableArray(ShopOrderItem.class.getClassLoader())) {
+      orderItemList.add((ShopOrderItem) p);
+    }
+    thirdsendCompany = in.readString();
+    thirdsendNo = in.readString();
+    in.readStringList(operator);
+    lastModify = new Date(in.readLong());
+    businessMessage = in.readString();
+    formid = in.readString();
+    totalGoodsPrice = in.readDouble();
+    sendPrice = in.readDouble();
+    score = in.readInt();
+    orderVoucher = new ArrayList<>();
+    for (Parcelable p : in.readParcelableArray(ShopOrderVoucher.class.getClassLoader())) {
+      orderVoucher.add((ShopOrderVoucher) p);
+    }
+    totalPrice = in.readDouble();
+  }
+
+  public static final Parcelable.Creator<ShopOrder> CREATOR = new Parcelable.Creator<ShopOrder>() {
+    @Override
+    public ShopOrder createFromParcel(Parcel in) {
+      return new ShopOrder(in);
+    }
+
+    @Override
+    public ShopOrder[] newArray(int size) {
+      return new ShopOrder[size];
+    }
+  };
 }

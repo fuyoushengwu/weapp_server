@@ -28,6 +28,7 @@
 	<modules>
 		<module>cn.aijiamuyingfang.commons</module>
 		<module>cn.aijiamuyingfang.commons.domain</module>
+		<module>cn.aijiamuyingfang.commons.domain.adapter</module>
 		<module>cn.aijiamuyingfang.client.rest</module>
 		<module>cn.aijiamuyingfang.client.rest.java</module>
 		<module>cn.aijiamuyingfang.client.rest.android</module>
@@ -53,6 +54,38 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>generate-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>generate-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<tags>
+						<tag>
+							<name>date</name>
+						</tag>
+						<tag>
+							<name>email</name>
+						</tag>
+					</tags>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

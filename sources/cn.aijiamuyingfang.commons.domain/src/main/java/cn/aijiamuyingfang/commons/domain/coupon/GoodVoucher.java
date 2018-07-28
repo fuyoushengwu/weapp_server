@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.commons.domain.coupon;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import cn.aijiamuyingfang.commons.utils.CollectionUtils;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @date 2018-06-27 03:02:06
  */
 @Entity
-public class GoodVoucher {
+public class GoodVoucher implements Parcelable {
   /**
    * 兑换券-Id
    */
@@ -131,5 +133,45 @@ public class GoodVoucher {
   public void setScore(int score) {
     this.score = score;
   }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(id);
+    dest.writeByte((byte) (deprecated ? 1 : 0));
+    dest.writeString(name);
+    dest.writeStringList(voucheritemIdList);
+    dest.writeString(description);
+    dest.writeInt(score);
+  }
+
+  public GoodVoucher() {
+
+  }
+
+  protected GoodVoucher(Parcel in) {
+    id = in.readString();
+    deprecated = in.readByte() != 0;
+    name = in.readString();
+    in.readStringList(voucheritemIdList);
+    description = in.readString();
+    score = in.readInt();
+  }
+
+  public static final Creator<GoodVoucher> CREATOR = new Creator<GoodVoucher>() {
+    @Override
+    public GoodVoucher createFromParcel(Parcel in) {
+      return new GoodVoucher(in);
+    }
+
+    @Override
+    public GoodVoucher[] newArray(int size) {
+      return new GoodVoucher[size];
+    }
+  };
 
 }

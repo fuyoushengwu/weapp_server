@@ -1,5 +1,8 @@
 package cn.aijiamuyingfang.commons.domain.address;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * [描述]:
  * <p>
@@ -19,4 +22,21 @@ public class Town extends District {
   public Town(String name, String code) {
     super(name, code);
   }
+
+  private Town(Parcel in) {
+    this.name = in.readString();
+    this.code = in.readString();
+  }
+
+  public static final Parcelable.Creator<Town> CREATOR = new Parcelable.Creator<Town>() {
+    @Override
+    public Town createFromParcel(Parcel in) {
+      return new Town(in);
+    }
+
+    @Override
+    public Town[] newArray(int size) {
+      return new Town[size];
+    }
+  };
 }

@@ -146,6 +146,36 @@ public class CouponControllerClient {
     throw new CouponException(returnCode, responseBean.getMsg());
   }
 
+  public GoodVoucher getGoodVoucher(String token, String voucherid) throws IOException {
+    Response<ResponseBean> response = couponControllerApi.getGoodVoucher(token, voucherid).execute();
+    return getGoodVoucherFromResponse(response, "get good voucher  return code is '200',but return data is null");
+  }
+
+  /**
+   * 从response中获取GoodVoucher
+   * 
+   * @param response
+   * @param errormsg
+   * @return
+   */
+  private GoodVoucher getGoodVoucherFromResponse(Response<ResponseBean> response, String errormsg) {
+    ResponseBean responseBean = response.body();
+    if (null == responseBean) {
+      throw new CouponException(ResponseCode.RESPONSE_BODY_IS_NULL);
+    }
+    String returnCode = responseBean.getCode();
+    Object returnData = responseBean.getData();
+    if ("200".equals(returnCode)) {
+      GoodVoucher goodvoucher = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GoodVoucher.class);
+      if (null == goodvoucher) {
+        throw new CouponException("500", errormsg);
+      }
+      return goodvoucher;
+    }
+    LOGGER.error(responseBean.getMsg());
+    throw new CouponException(returnCode, responseBean.getMsg());
+  }
+
   /**
    * 创建商品兑换券
    * 
@@ -156,21 +186,7 @@ public class CouponControllerClient {
    */
   public GoodVoucher createGoodVoucher(String token, GoodVoucher request) throws IOException {
     Response<ResponseBean> response = couponControllerApi.createGoodVoucher(token, request).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      throw new CouponException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    Object returnData = responseBean.getData();
-    if ("200".equals(returnCode)) {
-      GoodVoucher goodvoucher = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GoodVoucher.class);
-      if (null == goodvoucher) {
-        throw new CouponException("500", "create good voucher return code is '200',but return data is null");
-      }
-      return goodvoucher;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new CouponException(returnCode, responseBean.getMsg());
+    return getGoodVoucherFromResponse(response, "create good voucher return code is '200',but return data is null");
   }
 
   /**
@@ -241,15 +257,26 @@ public class CouponControllerClient {
   }
 
   /**
-   * 创建兑换方式
+   * 获取兑换方式
    * 
    * @param token
-   * @param request
+   * @param itemid
    * @return
    * @throws IOException
    */
-  public VoucherItem createVoucherItem(String token, VoucherItem request) throws IOException {
-    Response<ResponseBean> response = couponControllerApi.createVoucherItem(token, request).execute();
+  public VoucherItem getVoucherItem(String token, String itemid) throws IOException {
+    Response<ResponseBean> response = couponControllerApi.getVoucherItem(token, itemid).execute();
+    return getVoucherItemFromResponse(response, "get voucher item list  return code is '200',but return data is null");
+  }
+
+  /**
+   * 从response中获取VoucherItem
+   * 
+   * @param response
+   * @param errormsg
+   * @return
+   */
+  private VoucherItem getVoucherItemFromResponse(Response<ResponseBean> response, String errormsg) {
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       throw new CouponException(ResponseCode.RESPONSE_BODY_IS_NULL);
@@ -259,12 +286,25 @@ public class CouponControllerClient {
     if ("200".equals(returnCode)) {
       VoucherItem voucheritem = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), VoucherItem.class);
       if (null == voucheritem) {
-        throw new CouponException("500", "create voucher item return code is '200',but return data is null");
+        throw new CouponException("500", errormsg);
       }
       return voucheritem;
     }
     LOGGER.error(responseBean.getMsg());
     throw new CouponException(returnCode, responseBean.getMsg());
+  }
+
+  /**
+   * 创建兑换方式
+   * 
+   * @param token
+   * @param request
+   * @return
+   * @throws IOException
+   */
+  public VoucherItem createVoucherItem(String token, VoucherItem request) throws IOException {
+    Response<ResponseBean> response = couponControllerApi.createVoucherItem(token, request).execute();
+    return getVoucherItemFromResponse(response, "create voucher item return code is '200',but return data is null");
   }
 
   /**

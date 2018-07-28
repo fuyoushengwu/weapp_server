@@ -35,9 +35,9 @@ public interface StoreControllerApi {
    * 
    * @param token
    * @param currentpage
-   *          当前页 默认值:1 (currentpage必须>=1,否则重置为1)
+   *          当前页 默认值:1 (currentpage必须&ge;1,否则重置为1)
    * @param pagesize
-   *          每页大小 默认值:10(pagesize必须>0,否则重置为1)
+   *          每页大小 默认值:10(pagesize必须&gt;0,否则重置为1)
    * @return
    */
   @GET(value = "/store")
@@ -48,8 +48,6 @@ public interface StoreControllerApi {
    * 创建门店
    * 
    * @param token
-   * @param coverImage
-   * @param detailImages
    * @param storeRequest
    * @return
    */

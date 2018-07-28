@@ -43,16 +43,17 @@ public class StoreClassifyService {
     return store.getClassifyList();
   }
 
+
   /**
    * 门店下添加顶层条目
    * 
    * @param storeid
    * @param classifyid
    */
-  public void addClassify(String storeid, String classifyId) {
-    Classify classify = classifyRepository.findOne(classifyId);
+  public void addClassify(String storeid, String classifyid) {
+    Classify classify = classifyRepository.findOne(classifyid);
     if (null == classify) {
-      throw new GoodsException(ResponseCode.CLASSIFY_NOT_EXIST, classifyId);
+      throw new GoodsException(ResponseCode.CLASSIFY_NOT_EXIST, classifyid);
     }
     Store store = storeRepository.findOne(storeid);
     if (null == store) {

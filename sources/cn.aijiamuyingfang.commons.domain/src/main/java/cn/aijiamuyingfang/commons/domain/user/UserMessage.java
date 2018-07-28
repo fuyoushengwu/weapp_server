@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.commons.domain.user;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
 import javax.persistence.Column;
@@ -21,7 +23,8 @@ import org.hibernate.annotations.GenericGenerator;
  * @date 2018-06-27 17:11:10
  */
 @Entity
-public class UserMessage {
+public class UserMessage implements Parcelable {
+
   @Id
   @GeneratedValue(generator = "strategy_uuid")
   @GenericGenerator(name = "strategy_uuid", strategy = "uuid")
@@ -142,5 +145,50 @@ public class UserMessage {
   public void setReaded(boolean readed) {
     this.readed = readed;
   }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(id);
+    dest.writeString(userid);
+    dest.writeParcelable(type, flags);
+    dest.writeString(title);
+    dest.writeString(roundup);
+    dest.writeString(content);
+    dest.writeLong(createTime.getTime());
+    dest.writeLong(finishTime.getTime());
+    dest.writeByte((byte) (readed ? 1 : 0));
+  }
+
+  public UserMessage() {
+  }
+
+  private UserMessage(Parcel in) {
+    id = in.readString();
+    userid = in.readString();
+    type = in.readParcelable(UserMessageType.class.getClassLoader());
+    title = in.readString();
+    roundup = in.readString();
+    content = in.readString();
+    createTime = new Date(in.readLong());
+    finishTime = new Date(in.readLong());
+    readed = in.readByte() != 0;
+  }
+
+  public static final Parcelable.Creator<UserMessage> CREATOR = new Parcelable.Creator<UserMessage>() {
+    @Override
+    public UserMessage createFromParcel(Parcel in) {
+      return new UserMessage(in);
+    }
+
+    @Override
+    public UserMessage[] newArray(int size) {
+      return new UserMessage[size];
+    }
+  };
 
 }

@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.commons.domain.coupon;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -17,7 +19,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @date 2018-06-27 03:11:54
  */
 @Entity
-public class VoucherItem {
+public class VoucherItem implements Parcelable {
   @Id
   @GeneratedValue(generator = "strategy_uuid")
   @GenericGenerator(name = "strategy_uuid", strategy = "uuid")
@@ -95,4 +97,44 @@ public class VoucherItem {
   public void setDeprecated(boolean deprecated) {
     this.deprecated = deprecated;
   }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(id);
+    dest.writeByte((byte) (deprecated ? 1 : 0));
+    dest.writeString(name);
+    dest.writeString(description);
+    dest.writeString(goodid);
+    dest.writeInt(score);
+  }
+
+  public VoucherItem() {
+
+  }
+
+  protected VoucherItem(Parcel in) {
+    id = in.readString();
+    deprecated = in.readByte() != 0;
+    name = in.readString();
+    description = in.readString();
+    goodid = in.readString();
+    score = in.readInt();
+  }
+
+  public static final Creator<VoucherItem> CREATOR = new Creator<VoucherItem>() {
+    @Override
+    public VoucherItem createFromParcel(Parcel in) {
+      return new VoucherItem(in);
+    }
+
+    @Override
+    public VoucherItem[] newArray(int size) {
+      return new VoucherItem[size];
+    }
+  };
 }

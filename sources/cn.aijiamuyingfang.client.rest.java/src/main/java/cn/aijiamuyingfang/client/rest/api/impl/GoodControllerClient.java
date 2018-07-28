@@ -291,7 +291,6 @@ public class GoodControllerClient {
    * @param token
    * @param goodid
    * @param async
-   * @return
    * @throws IOException
    */
   public void deprecateGood(String token, String goodid, boolean async) throws IOException {
