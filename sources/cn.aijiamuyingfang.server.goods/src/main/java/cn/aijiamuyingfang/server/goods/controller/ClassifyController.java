@@ -2,7 +2,6 @@ package cn.aijiamuyingfang.server.goods.controller;
 
 import cn.aijiamuyingfang.commons.domain.exception.GoodsException;
 import cn.aijiamuyingfang.commons.domain.goods.Classify;
-import cn.aijiamuyingfang.commons.domain.goods.response.GetTopClassifyListResponse;
 import cn.aijiamuyingfang.commons.domain.response.ResponseCode;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import cn.aijiamuyingfang.server.goods.service.ClassifyService;
@@ -60,15 +59,12 @@ public class ClassifyController {
   /**
    * 分页获取所有顶层条目
    * 
-   * @param currentpage
-   * @param pagesize
    * @return
    */
   @PreAuthorize(value = "isAuthenticated()")
   @GetMapping(value = "/classify")
-  public GetTopClassifyListResponse getTopClassifyList(@RequestParam("currentpage") int currentpage,
-      @RequestParam("pagesize") int pagesize) {
-    return classifyService.getTopClassifyList(currentpage, pagesize);
+  public List<Classify> getTopClassifyList() {
+    return classifyService.getTopClassifyList();
   }
 
   /**
@@ -152,7 +148,7 @@ public class ClassifyController {
 
     String coverImgUrl = imageService.saveClassifyLogo(subClassify.getId(), coverImage);
     if (StringUtils.hasContent(coverImgUrl)) {
-      coverImgUrl = String.format("http://%s:%s/%s", request.getServerName(), request.getServerPort(), coverImgUrl);
+      coverImgUrl = String.format("http://%s:8000/%s", request.getServerName(), coverImgUrl);
       subClassify.setCoverImg(coverImgUrl);
     }
     return classifyService.updateClassify(subClassify.getId(), subClassify);

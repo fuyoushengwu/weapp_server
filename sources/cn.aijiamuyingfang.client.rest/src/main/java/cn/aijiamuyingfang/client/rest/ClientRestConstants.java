@@ -31,6 +31,11 @@ public final class ClientRestConstants {
    */
   public static final String DEFAULT_HOST_NAME = "www.aijiamuyingfang.cn";
 
+  /**
+   * 基础地质
+   */
+  public static final String DEFAULT_BASE_URL = "https://www.aijiamuyingfang.cn";
+
   private ClientRestConstants() {
   }
 

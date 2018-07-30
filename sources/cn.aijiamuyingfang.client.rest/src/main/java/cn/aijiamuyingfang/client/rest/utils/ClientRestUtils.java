@@ -1,5 +1,6 @@
 package cn.aijiamuyingfang.client.rest.utils;
 
+import static cn.aijiamuyingfang.client.rest.ClientRestConstants.DEFAULT_BASE_URL;
 import static cn.aijiamuyingfang.client.rest.ClientRestConstants.DEFAULT_CONNECT_TIMEOUT;
 import static cn.aijiamuyingfang.client.rest.ClientRestConstants.DEFAULT_HOST_NAME;
 import static cn.aijiamuyingfang.client.rest.ClientRestConstants.DEFAULT_READ_TIMEOUT;
@@ -73,12 +74,12 @@ public class ClientRestUtils {
   /**
    * 创建 Retrofit.Builder实例(默认添加Converter:ScalarsConverter,GsonConverter,EnumRetrofitConverter)
    * 
-   * @param hostname
+   * @param baseurl
    * @return
    */
-  public static Retrofit.Builder getRetrofitBuilder(String hostname) {
-    if (StringUtils.isEmpty(hostname)) {
-      hostname = DEFAULT_HOST_NAME;
+  public static Retrofit.Builder getRetrofitBuilder(String baseurl) {
+    if (StringUtils.isEmpty(baseurl)) {
+      baseurl = DEFAULT_BASE_URL;
     }
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(Date.class, new TypeAdapter<Date>() {
@@ -113,7 +114,7 @@ public class ClientRestUtils {
     retrofitBuilder.addConverterFactory(ScalarsConverterFactory.create());
     retrofitBuilder.addConverterFactory(GsonConverterFactory.create(builder.create()));
     retrofitBuilder.addConverterFactory(new EnumRetrofitConverterFactory());
-    retrofitBuilder.baseUrl(hostname);
+    retrofitBuilder.baseUrl(baseurl);
     return retrofitBuilder;
   }
 

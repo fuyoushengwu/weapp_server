@@ -5,7 +5,6 @@ import cn.aijiamuyingfang.client.rest.api.ClassifyControllerApi;
 import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
 import cn.aijiamuyingfang.commons.domain.exception.GoodsException;
 import cn.aijiamuyingfang.commons.domain.goods.Classify;
-import cn.aijiamuyingfang.commons.domain.goods.response.GetTopClassifyListResponse;
 import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
 import cn.aijiamuyingfang.commons.domain.response.ResponseCode;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
@@ -73,29 +72,12 @@ public class ClassifyControllerClient {
    * 分页获取所有顶层条目
    * 
    * @param token
-   * @param currentpage
-   * @param pagesize
    * @return
    * @throws IOException
    */
-  public GetTopClassifyListResponse getTopClassifyList(String token, int currentpage, int pagesize) throws IOException {
-    Response<ResponseBean> response = classifyControllerApi.getTopClassifyList(token, currentpage, pagesize).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    Object returnData = responseBean.getData();
-    if ("200".equals(returnCode)) {
-      GetTopClassifyListResponse gettopClassifyListResponse = JsonUtils
-          .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetTopClassifyListResponse.class);
-      if (null == gettopClassifyListResponse) {
-        throw new GoodsException("500", "get top classify list return code is '200',but return data is null");
-      }
-      return gettopClassifyListResponse;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new GoodsException(returnCode, responseBean.getMsg());
+  public List<Classify> getTopClassifyList(String token) throws IOException {
+    Response<ResponseBean> response = classifyControllerApi.getTopClassifyList(token).execute();
+    return getClassifyListFromResponse(response, "get top classify list return code is '200',but return data is null");
   }
 
   /**

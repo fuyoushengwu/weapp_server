@@ -3,7 +3,6 @@ package cn.aijiamuyingfang.client.rest.api;
 import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
 import cn.aijiamuyingfang.commons.constants.AuthConstants;
 import cn.aijiamuyingfang.commons.domain.goods.Classify;
-import cn.aijiamuyingfang.commons.domain.goods.response.GetTopClassifyListResponse;
 import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
 import io.reactivex.Observable;
 import java.util.List;
@@ -15,7 +14,6 @@ import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
-import retrofit2.http.Query;
 
 /**
  * [描述]:
@@ -45,14 +43,10 @@ public interface ClassifyControllerApi {
    * 分页获取所有顶层条目
    * 
    * @param token
-   * @param currentpage
-   * @param pagesize
    * @return
    */
   @GET(value = "/classify")
-  public Observable<ResponseBean<GetTopClassifyListResponse>> getTopClassifyList(
-      @Header(AuthConstants.HEADER_STRING) String token, @Query("currentpage") int currentpage,
-      @Query("pagesize") int pagesize);
+  public Observable<ResponseBean<List<Classify>>> getTopClassifyList(@Header(AuthConstants.HEADER_STRING) String token);
 
   /**
    * 获取某个条目

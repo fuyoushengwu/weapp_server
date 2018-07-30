@@ -25,6 +25,7 @@ import cn.aijiamuyingfang.server.goods.GoodsApplication;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -77,6 +78,7 @@ public class CouponControllerTest {
 
   @Test
   public void test() {
+    System.out.println(UUID.randomUUID().toString());
     System.out.println(encoder.encode("18061756483"));
   }
 

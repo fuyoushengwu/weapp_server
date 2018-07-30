@@ -117,7 +117,7 @@ public class GoodController {
 
     String coverImgUrl = imageService.saveGoodLogo(good.getId(), coverImage);
     if (StringUtils.hasContent(coverImgUrl)) {
-      coverImgUrl = String.format("http://%s:%s/%s", request.getServerName(), request.getServerPort(), coverImgUrl);
+      coverImgUrl = String.format("http://%s:8000/%s", request.getServerName(), coverImgUrl);
       good.setCoverImg(coverImgUrl);
     }
 
@@ -127,8 +127,7 @@ public class GoodController {
       for (MultipartFile img : detailImages) {
         String detailImgUrl = imageService.saveGoodDetailImg(good.getId(), img);
         if (StringUtils.hasContent(detailImgUrl)) {
-          detailImgUrl = String.format("http://%s:%s/%s", request.getServerName(), request.getServerPort(),
-              detailImgUrl);
+          detailImgUrl = String.format("http://%s:8000/%s", request.getServerName(), detailImgUrl);
           detailImgList.add(detailImgUrl);
         }
       }
