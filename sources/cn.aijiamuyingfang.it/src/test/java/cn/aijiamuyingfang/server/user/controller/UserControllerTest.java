@@ -6,6 +6,7 @@ import cn.aijiamuyingfang.client.rest.api.impl.UserControllerClient;
 import cn.aijiamuyingfang.commons.annotation.TestDescription;
 import cn.aijiamuyingfang.commons.domain.address.RecieveAddress;
 import cn.aijiamuyingfang.commons.domain.exception.UserException;
+import cn.aijiamuyingfang.commons.domain.user.Gender;
 import cn.aijiamuyingfang.commons.domain.user.User;
 import cn.aijiamuyingfang.server.goods.GoodsApplication;
 import java.io.IOException;
@@ -65,6 +66,7 @@ public class UserControllerTest {
     User user = client.getUser(testActions.senderoneToken, testActions.senderoneId);
     Assert.assertNotNull(user);
     Assert.assertEquals(testActions.senderoneId, user.getId());
+    Assert.assertEquals(Gender.MALE, user.getGender());
   }
 
   @Test

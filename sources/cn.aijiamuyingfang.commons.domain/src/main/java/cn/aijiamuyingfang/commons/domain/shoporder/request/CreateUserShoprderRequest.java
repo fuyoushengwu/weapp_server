@@ -44,7 +44,7 @@ public class CreateUserShoprderRequest {
   /**
    * 买家留言
    */
-  private String buyerMessage;
+  private String businessMessage;
 
   /**
    * 提交订单的表单ID
@@ -104,12 +104,12 @@ public class CreateUserShoprderRequest {
     this.formid = formid;
   }
 
-  public String getBuyerMessage() {
-    return buyerMessage;
+  public String getBusinessMessage() {
+    return businessMessage;
   }
 
-  public void setBuyerMessage(String buyerMessage) {
-    this.buyerMessage = buyerMessage;
+  public void setBusinessMessage(String businessMessage) {
+    this.businessMessage = businessMessage;
   }
 
   public int getJfNum() {

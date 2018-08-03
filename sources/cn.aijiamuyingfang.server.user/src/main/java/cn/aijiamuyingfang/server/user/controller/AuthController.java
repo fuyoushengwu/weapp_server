@@ -5,6 +5,7 @@ import cn.aijiamuyingfang.commons.constants.AuthConstants;
 import cn.aijiamuyingfang.commons.domain.exception.AuthException;
 import cn.aijiamuyingfang.commons.domain.exception.WXServiceException;
 import cn.aijiamuyingfang.commons.domain.response.ResponseCode;
+import cn.aijiamuyingfang.commons.domain.user.Gender;
 import cn.aijiamuyingfang.commons.domain.user.User;
 import cn.aijiamuyingfang.commons.domain.user.response.TokenResponse;
 import cn.aijiamuyingfang.commons.domain.wxservice.WXSession;
@@ -50,19 +51,22 @@ public class AuthController {
    * @param jscode
    * @param nickname
    * @param avatar
+   * @param gender
    * @return
    * @throws IOException
    */
+  @PreAuthorize("permitAll()")
   @GetMapping(value = AuthConstants.GET_TOKEN_URL)
   public TokenResponse getToken(@RequestParam("jscode") String jscode,
       @RequestParam(value = "nickname", required = false) String nickname,
-      @RequestParam(value = "avatar", required = false) String avatar) throws IOException {
+      @RequestParam(value = "avatar", required = false) String avatar,
+      @RequestParam(value = "gender", required = false) Gender gender) throws IOException {
     try {
       WXSession wxsession = wxsessionControllerClient.jscode2Session(jscode);
       if (StringUtils.isEmpty(wxsession.getOpenid())) {
         throw new AuthException(ResponseCode.GET_OPENID_NULL);
       }
-      return authService.getNormalUserToken(wxsession.getOpenid(), nickname, avatar);
+      return authService.getNormalUserToken(wxsession.getOpenid(), nickname, avatar, gender);
     } catch (WXServiceException e) {
       if ("40029".equals(e.getCode())) {
         LOGGER.error(e);

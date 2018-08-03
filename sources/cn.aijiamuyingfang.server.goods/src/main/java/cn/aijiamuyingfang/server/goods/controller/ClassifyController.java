@@ -50,18 +50,18 @@ public class ClassifyController {
    * @param storeid
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated()")
+  @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/store/{storeid}/classify")
   public List<Classify> getStoreTopClassifyList(@PathVariable(value = "storeid") String storeid) {
     return storeclassifyService.getStoreClassifyList(storeid);
   }
 
   /**
-   * 分页获取所有顶层条目
+   * 获取所有顶层条目
    * 
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated()")
+  @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/classify")
   public List<Classify> getTopClassifyList() {
     return classifyService.getTopClassifyList();
@@ -73,7 +73,7 @@ public class ClassifyController {
    * @param classifyid
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated()")
+  @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/classify/{classifyid}")
   public Classify getClassify(@PathVariable(value = "classifyid") String classifyid) {
     Classify classify = classifyService.getClassify(classifyid);
@@ -119,7 +119,7 @@ public class ClassifyController {
    * @param classifyid
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated()")
+  @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/classify/{classifyid}/subclassify")
   public List<Classify> getSubClassifyList(@PathVariable(value = "classifyid") String classifyid) {
     return classifyService.getSubClassifyList(classifyid);

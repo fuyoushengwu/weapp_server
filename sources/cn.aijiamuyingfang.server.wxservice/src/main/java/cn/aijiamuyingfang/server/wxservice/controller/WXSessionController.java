@@ -1,8 +1,10 @@
 package cn.aijiamuyingfang.server.wxservice.controller;
 
+import cn.aijiamuyingfang.commons.constants.AuthConstants;
 import cn.aijiamuyingfang.commons.domain.wxservice.WXSession;
 import cn.aijiamuyingfang.server.wxservice.service.WXSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +31,8 @@ public class WXSessionController {
    * @param jscode
    * @return
    */
-  @GetMapping(value = "/wxservice/wxsession")
+  @PreAuthorize("permitAll()")
+  @GetMapping(value = AuthConstants.WXSESSION_URL)
   public WXSession jscode2Session(@RequestParam("jscode") String jscode) {
     return userSessionService.jscode2Session(jscode);
   }

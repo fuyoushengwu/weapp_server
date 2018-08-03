@@ -3,6 +3,7 @@ package cn.aijiamuyingfang.server.domain;
 import cn.aijiamuyingfang.commons.domain.BaseEnum;
 import cn.aijiamuyingfang.commons.domain.shoporder.SendType;
 import cn.aijiamuyingfang.commons.domain.shoporder.ShopOrderStatus;
+import cn.aijiamuyingfang.commons.domain.user.Gender;
 import cn.aijiamuyingfang.commons.domain.user.UserMessageType;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -27,6 +28,7 @@ public class EnumConvertFactory implements ConverterFactory<String, BaseEnum> {
       Converter<String, ? extends BaseEnum>> converterMap = new WeakHashMap<>();
 
   static {
+    converterMap.put(Gender.class, new GenderConverter());
     converterMap.put(SendType.class, new SendTypeConverter());
     converterMap.put(ShopOrderStatus.class, new ShopOrderStatusConverter());
     converterMap.put(UserMessageType.class, new UserMessageTypeConverter());
@@ -36,6 +38,31 @@ public class EnumConvertFactory implements ConverterFactory<String, BaseEnum> {
   @SuppressWarnings("unchecked")
   public <T extends BaseEnum> Converter<String, T> getConverter(Class<T> targetType) {
     return (Converter<String, T>) converterMap.get(targetType);
+  }
+
+  /**
+   * [描述]:
+   * <p>
+   * Gender枚举类型转换器
+   * </p>
+   * 
+   * @version 1.0.0
+   * @author ShiWei
+   * @email shiweideyouxiang@sina.cn
+   * @date 2018-06-27 17:12:16
+   */
+  private static class GenderConverter implements Converter<String, Gender> {
+
+    @Override
+    public Gender convert(String source) {
+      for (Gender gender : Gender.values()) {
+        if (String.valueOf(gender.getValue()).equals(source)) {
+          return gender;
+        }
+      }
+      return Gender.UNKNOW;
+    }
+
   }
 
   /**
@@ -60,7 +87,6 @@ public class EnumConvertFactory implements ConverterFactory<String, BaseEnum> {
       }
       return SendType.UNKNOW;
     }
-
   }
 
   /**

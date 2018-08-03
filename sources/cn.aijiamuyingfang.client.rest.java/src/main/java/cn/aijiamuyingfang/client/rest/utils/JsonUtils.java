@@ -2,6 +2,7 @@ package cn.aijiamuyingfang.client.rest.utils;
 
 import cn.aijiamuyingfang.commons.domain.shoporder.SendType;
 import cn.aijiamuyingfang.commons.domain.shoporder.ShopOrderStatus;
+import cn.aijiamuyingfang.commons.domain.user.Gender;
 import cn.aijiamuyingfang.commons.domain.user.UserMessageType;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import com.google.gson.Gson;
@@ -34,6 +35,29 @@ public final class JsonUtils {
   private static final ThreadLocal<Gson> threadLocal = ThreadLocal.withInitial(() -> {
     GsonBuilder builder = new GsonBuilder();
     builder.setDateFormat("yyyy-MM-dd HH:mm:ss");
+    builder.registerTypeHierarchyAdapter(Gender.class, new TypeAdapter<Gender>() {
+
+      @Override
+      public void write(JsonWriter out, Gender value) throws IOException {
+        out.value(value == null ? null : value.getValue());
+      }
+
+      @Override
+      public Gender read(JsonReader in) throws IOException {
+        if (in.peek() == JsonToken.NULL) {
+          in.nextNull();
+          return Gender.UNKNOW;
+        }
+        int source = in.nextInt();
+        for (Gender gender : Gender.values()) {
+          if (gender.getValue() == source) {
+            return gender;
+          }
+        }
+        return Gender.UNKNOW;
+      }
+    });
+
     builder.registerTypeHierarchyAdapter(SendType.class, new TypeAdapter<SendType>() {
 
       @Override

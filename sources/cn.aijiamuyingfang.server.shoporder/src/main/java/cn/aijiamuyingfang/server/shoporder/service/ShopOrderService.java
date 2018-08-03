@@ -381,7 +381,7 @@ public class ShopOrderService {
     GetFinishedPreOrderListResponse response = new GetFinishedPreOrderListResponse();
     response.setCurrentpage(shoporderPage.getNumber() + 1);
     response.setDataList(shoporderPage.getContent());
-    response.setTotalpage(shoporderPage.getSize());
+    response.setTotalpage(shoporderPage.getTotalPages());
     return response;
   }
 
@@ -426,7 +426,7 @@ public class ShopOrderService {
     shoporder.setStatus(requestBean.getStatus() != null ? requestBean.getStatus() : ShopOrderStatus.UNSTART);
     shoporder.setPickupTime(requestBean.getPickupTime());
     shoporder.setRecieveAddress(recieveaddressRepository.findOne(requestBean.getAddressid()));
-    shoporder.setBusinessMessage(requestBean.getBuyerMessage());
+    shoporder.setBusinessMessage(requestBean.getBusinessMessage());
     shoporder.setFormid(requestBean.getFormid());
 
     double totalGoodsPrice = 0;
@@ -602,7 +602,7 @@ public class ShopOrderService {
     GetPreOrderGoodListResponse response = new GetPreOrderGoodListResponse();
     response.setCurrentpage(pageResponse.getNumber() + 1);
     response.setDataList(preorderGoodList);
-    response.setTotalpage(pageResponse.getSize());
+    response.setTotalpage(pageResponse.getTotalPages());
     return response;
 
   }

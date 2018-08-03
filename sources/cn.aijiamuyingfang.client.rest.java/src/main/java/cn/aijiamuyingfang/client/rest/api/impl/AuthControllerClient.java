@@ -6,6 +6,7 @@ import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
 import cn.aijiamuyingfang.commons.domain.exception.AuthException;
 import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
 import cn.aijiamuyingfang.commons.domain.response.ResponseCode;
+import cn.aijiamuyingfang.commons.domain.user.Gender;
 import cn.aijiamuyingfang.commons.domain.user.User;
 import cn.aijiamuyingfang.commons.domain.user.response.TokenResponse;
 import java.io.IOException;
@@ -41,11 +42,12 @@ public class AuthControllerClient {
    * @param jscode
    * @param nickname
    * @param avatar
+   * @param gender
    * @return
    * @throws IOException
    */
-  public TokenResponse getToken(String jscode, String nickname, String avatar) throws IOException {
-    Response<ResponseBean> response = authControllerApi.getToken(jscode, nickname, avatar).execute();
+  public TokenResponse getToken(String jscode, String nickname, String avatar, Gender gender) throws IOException {
+    Response<ResponseBean> response = authControllerApi.getToken(jscode, nickname, avatar, gender).execute();
     return getTokenFromResponse(response);
   }
 

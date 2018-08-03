@@ -57,7 +57,7 @@ public class StoreController {
    *          每页大小 默认值:10(pagesize必&gt;0,否则重置为1)
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated()")
+  @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/store")
   public GetInUseStoreListResponse getInUseStoreList(@RequestParam(value = "currentpage") int currentpage,
       @RequestParam(value = "pagesize") int pagesize) {
@@ -112,7 +112,7 @@ public class StoreController {
    * 
    * @param storeid
    */
-  @PreAuthorize(value = "isAuthenticated()")
+  @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/store/{storeid}")
   public Store getStore(@PathVariable("storeid") String storeid) {
     Store store = storeService.getStore(storeid);
@@ -155,7 +155,7 @@ public class StoreController {
    * 
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated()")
+  @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/store/defaultid")
   public GetDefaultStoreIdResponse getDefaultStoreId() {
     GetInUseStoreListResponse response = storeService.getInUseStoreList(1, 1);
@@ -172,7 +172,7 @@ public class StoreController {
    * 
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated()")
+  @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/store/city")
   public Set<String> getStoresCity() {
     return storeService.getStoresCity();

@@ -75,7 +75,7 @@ public class GoodController {
    * @param pagesize
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated()")
+  @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/classify/{classifyid}/good")
   public GetClassifyGoodListResponse getClassifyGoodList(@PathVariable(value = "classifyid") String classifyid,
       @RequestParam(value = "packFilter", required = false) List<String> packFilter,
@@ -148,7 +148,7 @@ public class GoodController {
    * @param goodid
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated()")
+  @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/good/{goodid}")
   public Good getGood(@PathVariable(value = "goodid") String goodid) {
     Good good = goodService.getGood(goodid);
@@ -180,7 +180,7 @@ public class GoodController {
    * @param goodid
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated()")
+  @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/good/{goodid}/detail")
   public GoodDetail getGoodDetail(@PathVariable(value = "goodid") String goodid) {
     GoodDetail goodDetail = gooddetailService.getGoodDetail(goodid);

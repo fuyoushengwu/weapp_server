@@ -3,6 +3,7 @@ package cn.aijiamuyingfang.client.rest.api;
 import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
 import cn.aijiamuyingfang.commons.constants.AuthConstants;
 import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
+import cn.aijiamuyingfang.commons.domain.user.Gender;
 import cn.aijiamuyingfang.commons.domain.user.User;
 import cn.aijiamuyingfang.commons.domain.user.response.TokenResponse;
 import io.reactivex.Observable;
@@ -32,12 +33,12 @@ public interface AuthControllerApi {
    * @param jscode
    * @param nickname
    * @param avatar
+   * @param gender
    * @return
    */
-
   @GET(value = AuthConstants.GET_TOKEN_URL)
   public Observable<ResponseBean<TokenResponse>> getToken(@Query("jscode") String jscode,
-      @Query("nickname") String nickname, @Query("avatar") String avatar);
+      @Query("nickname") String nickname, @Query("avatar") String avatar, @Query("gender") Gender gender);
 
   /**
    * 注册用户

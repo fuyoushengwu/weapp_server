@@ -2,6 +2,7 @@ package cn.aijiamuyingfang.server.user.service;
 
 import cn.aijiamuyingfang.commons.constants.AuthConstants;
 import cn.aijiamuyingfang.commons.domain.exception.AuthException;
+import cn.aijiamuyingfang.commons.domain.user.Gender;
 import cn.aijiamuyingfang.commons.domain.user.User;
 import cn.aijiamuyingfang.commons.domain.user.UserAuthority;
 import cn.aijiamuyingfang.commons.domain.user.response.TokenResponse;
@@ -57,9 +58,10 @@ public class AuthService {
    * @param openid
    * @param nickname
    * @param avatar
+   * @param gender
    * @return
    */
-  public TokenResponse getNormalUserToken(String openid, String nickname, String avatar) {
+  public TokenResponse getNormalUserToken(String openid, String nickname, String avatar, Gender gender) {
     User user = userRepository.findByOpenid(openid);
     if (null == user) {
       user = new User();
@@ -68,6 +70,7 @@ public class AuthService {
       user.setAppid(appid);
       user.setNickname(nickname);
       user.setAvatar(avatar);
+      user.setGender(gender);
       userRepository.saveAndFlush(user);
     }
     return login(user);
@@ -116,16 +119,11 @@ public class AuthService {
     if (user != null) {
       return user;
     }
-    user = new User();
-    user.setOpenid(jscode);
-    user.setPassword(encoder.encode(jscode));
-    user.setJscode(request.getJscode());
-    user.setPhone(request.getPhone());
-    user.setAvatar(request.getAvatar());
-    user.setNickname(request.getNickname());
-    user.addAuthority(UserAuthority.SENDER);
-    userRepository.saveAndFlush(user);
-    return user;
+    request.setOpenid(jscode);
+    request.setPassword(encoder.encode(jscode));
+    request.addAuthority(UserAuthority.SENDER);
+    userRepository.saveAndFlush(request);
+    return request;
   }
 
   /**

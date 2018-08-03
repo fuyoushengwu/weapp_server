@@ -139,7 +139,7 @@ public class ClassifyService {
   }
 
   /**
-   * 分页获取所有顶层条目
+   * 获取所有顶层条目
    * 
    * @return
    */
