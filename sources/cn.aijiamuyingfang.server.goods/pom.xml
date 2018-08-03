@@ -5,6 +5,7 @@
 		<groupId>cn.aijiamuyingfang</groupId>
 		<artifactId>cn.aijiamuyingfang.server</artifactId>
 		<version>0.0.1</version>
+		<relativePath>../cn.aijiamuyingfang.server/pom.xml</relativePath>
 	</parent>
 
 	<artifactId>cn.aijiamuyingfang.server.goods</artifactId>

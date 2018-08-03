@@ -25,6 +25,7 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>cn.aijiamuyingfang.commons.domain.adapter</artifactId>
 			<version>${project.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.squareup.retrofit2</groupId>
