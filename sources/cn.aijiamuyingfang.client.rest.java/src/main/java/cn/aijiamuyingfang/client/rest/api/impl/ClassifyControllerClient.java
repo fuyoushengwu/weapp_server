@@ -62,11 +62,13 @@ public class ClassifyControllerClient {
    * @return
    * @throws IOException
    */
-  public List<Classify> getStoreTopClassifyList(String token, String storeid) throws IOException {
-    Response<ResponseBean> response = classifyControllerApi.getStoreTopClassifyList(token, storeid).execute();
-    return getClassifyListFromResponse(response,
-        "get store top classify list return code is '200',but return data is null");
-  }
+  // public List<Classify> getStoreTopClassifyList(String token, String storeid) throws IOException
+  // {
+  // Response<ResponseBean> response = classifyControllerApi.getStoreTopClassifyList(token,
+  // storeid).execute();
+  // return getClassifyListFromResponse(response,
+  // "get store top classify list return code is '200',but return data is null");
+  // }
 
   /**
    * 获取所有顶层条目

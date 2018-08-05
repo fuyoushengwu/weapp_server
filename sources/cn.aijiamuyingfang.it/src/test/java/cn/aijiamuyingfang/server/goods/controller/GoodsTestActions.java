@@ -61,10 +61,6 @@ public class GoodsTestActions extends AbstractTestAction {
     return classify;
   }
 
-  public void applyClassifyOneForStoreOne() throws IOException {
-    storeControllerClient.addStoreClassify(ADMIN_USER_TOKEN, storeoneId, classifyoneId, false);
-  }
-
   public String subclassifyoneId;
 
   public void createSubClassifyOneForClassifyOne() throws IOException {

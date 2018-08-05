@@ -119,7 +119,8 @@ public interface StoreControllerApi {
    * @param classifyid
    * @return
    */
-  @PUT(value = "/store/{storeid}/classify/{classifyid}")
-  public Observable<ResponseBean<Void>> addStoreClassify(@Header(AuthConstants.HEADER_STRING) String token,
-      @Path("storeid") String storeid, @Path("classifyid") String classifyid);
+  // @PUT(value = "/store/{storeid}/classify/{classifyid}")
+  // public Observable<ResponseBean<Void>> addStoreClassify(@Header(AuthConstants.HEADER_STRING)
+  // String token,
+  // @Path("storeid") String storeid, @Path("classifyid") String classifyid);
 }

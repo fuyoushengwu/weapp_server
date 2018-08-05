@@ -464,21 +464,23 @@ public class StoreControllerClient {
    * @param async
    * @throws IOException
    */
-  public void addStoreClassify(String token, String storeid, String classifyid, boolean async) throws IOException {
-    if (async) {
-      storeControllerApi.addStoreClassify(token, storeid, classifyid).enqueue(Empty_Callback);
-      return;
-    }
-    Response<ResponseBean> response = storeControllerApi.addStoreClassify(token, storeid, classifyid).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    if ("200".equals(returnCode)) {
-      return;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new GoodsException(returnCode, responseBean.getMsg());
-  }
+  // public void addStoreClassify(String token, String storeid, String classifyid, boolean async)
+  // throws IOException {
+  // if (async) {
+  // storeControllerApi.addStoreClassify(token, storeid, classifyid).enqueue(Empty_Callback);
+  // return;
+  // }
+  // Response<ResponseBean> response = storeControllerApi.addStoreClassify(token, storeid,
+  // classifyid).execute();
+  // ResponseBean responseBean = response.body();
+  // if (null == responseBean) {
+  // throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
+  // }
+  // String returnCode = responseBean.getCode();
+  // if ("200".equals(returnCode)) {
+  // return;
+  // }
+  // LOGGER.error(responseBean.getMsg());
+  // throw new GoodsException(returnCode, responseBean.getMsg());
+  // }
 }

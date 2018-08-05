@@ -50,11 +50,12 @@ public class ClassifyController {
    * @param storeid
    * @return
    */
-  @PreAuthorize(value = "permitAll()")
-  @GetMapping(value = "/store/{storeid}/classify")
-  public List<Classify> getStoreTopClassifyList(@PathVariable(value = "storeid") String storeid) {
-    return storeclassifyService.getStoreClassifyList(storeid);
-  }
+  // @PreAuthorize(value = "permitAll()")
+  // @GetMapping(value = "/store/{storeid}/classify")
+  // public List<Classify> getStoreTopClassifyList(@PathVariable(value = "storeid") String storeid)
+  // {
+  // return storeclassifyService.getStoreClassifyList(storeid);
+  // }
 
   /**
    * 获取所有顶层条目

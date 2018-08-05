@@ -35,9 +35,10 @@ public interface ClassifyControllerApi {
    * @param storeid
    * @return
    */
-  @GET(value = "/store/{storeid}/classify")
-  public Call<ResponseBean> getStoreTopClassifyList(@Header(AuthConstants.HEADER_STRING) String token,
-      @Path(value = "storeid") String storeid);
+  // @GET(value = "/store/{storeid}/classify")
+  // public Call<ResponseBean> getStoreTopClassifyList(@Header(AuthConstants.HEADER_STRING) String
+  // token,
+  // @Path(value = "storeid") String storeid);
 
   /**
    * 获取所有顶层条目

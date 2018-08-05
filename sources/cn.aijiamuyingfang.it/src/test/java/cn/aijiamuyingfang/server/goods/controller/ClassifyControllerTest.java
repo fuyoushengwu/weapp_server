@@ -60,28 +60,16 @@ public class ClassifyControllerTest {
   }
 
   @Test
-  @TestDescription(description = "当有一条顶级的条目数据但不属于门店时查询")
-  public void testGetStoreTopClassifyList_002() throws IOException {
-    testActions.createStoreOne();
-    testActions.createClassifyOne();
-    List<Classify> classifyList = classifyControllerClient.getStoreTopClassifyList(ADMIN_USER_TOKEN,
-        testActions.storeoneId);
-    Assert.assertEquals(0, classifyList.size());
-  }
-
-  @Test
   @TestDescription(description = "当门店中有一条顶级的条目数据时查询")
   public void testGetStoreTopClassifyList_003() throws IOException {
     testActions.createStoreOne();
     testActions.createClassifyOne();
-    testActions.applyClassifyOneForStoreOne();
-    List<Classify> classifyList = classifyControllerClient.getStoreTopClassifyList(ADMIN_USER_TOKEN,
-        testActions.storeoneId);
+    List<Classify> classifyList = classifyControllerClient.getTopClassifyList(ADMIN_USER_TOKEN);
     Assert.assertEquals(1, classifyList.size());
     classifyList = classifyControllerClient.getTopClassifyList(ADMIN_USER_TOKEN);
     Assert.assertEquals(1, classifyList.size());
     testActions.deleteClassifyOne();
-    classifyList = classifyControllerClient.getStoreTopClassifyList(ADMIN_USER_TOKEN, testActions.storeoneId);
+    classifyList = classifyControllerClient.getTopClassifyList(ADMIN_USER_TOKEN);
     Assert.assertEquals(0, classifyList.size());
   }
 

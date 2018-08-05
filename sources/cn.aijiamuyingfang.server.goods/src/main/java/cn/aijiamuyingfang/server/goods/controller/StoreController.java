@@ -8,7 +8,6 @@ import cn.aijiamuyingfang.commons.domain.response.ResponseCode;
 import cn.aijiamuyingfang.commons.utils.CollectionUtils;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import cn.aijiamuyingfang.server.goods.service.ImageService;
-import cn.aijiamuyingfang.server.goods.service.StoreClassifyService;
 import cn.aijiamuyingfang.server.goods.service.StoreService;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,9 +40,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class StoreController {
   @Autowired
   private StoreService storeService;
-
-  @Autowired
-  private StoreClassifyService storeclassifyService;
 
   @Autowired
   private ImageService imageService;
@@ -184,9 +180,10 @@ public class StoreController {
    * @param storeid
    * @param classifyId
    */
-  @PreAuthorize(value = "hasAuthority('admin')")
-  @PutMapping(value = "/store/{storeid}/classify/{classifyid}")
-  public void addStoreClassify(@PathVariable("storeid") String storeid, @PathVariable("classifyid") String classifyId) {
-    storeclassifyService.addClassify(storeid, classifyId);
-  }
+  // @PreAuthorize(value = "hasAuthority('admin')")
+  // @PutMapping(value = "/store/{storeid}/classify/{classifyid}")
+  // public void addStoreClassify(@PathVariable("storeid") String storeid,
+  // @PathVariable("classifyid") String classifyId) {
+  // storeclassifyService.addClassify(storeid, classifyId);
+  // }
 }

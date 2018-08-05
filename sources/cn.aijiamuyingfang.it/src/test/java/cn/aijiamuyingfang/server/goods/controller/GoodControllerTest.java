@@ -62,7 +62,6 @@ public class GoodControllerTest {
   public void test_GetClassifyGoodList_002() throws IOException {
     testActions.createStoreOne();
     testActions.createClassifyOne();
-    testActions.applyClassifyOneForStoreOne();
     GetClassifyGoodListResponse response = goodcontrollerClient.getClassifyGoodList(ADMIN_USER_TOKEN,
         testActions.classifyoneId, null, null, null, null, 1, 10);
     Assert.assertNotNull(response);
@@ -75,7 +74,6 @@ public class GoodControllerTest {
     testActions.createStoreOne();
     testActions.createClassifyOne();
     testActions.createSubClassifyOneForClassifyOne();
-    testActions.applyClassifyOneForStoreOne();
     testActions.createGoodOne();
     testActions.applyGoodOneForSubClassifyOne();
     GetClassifyGoodListResponse response = goodcontrollerClient.getClassifyGoodList(ADMIN_USER_TOKEN,
