@@ -120,6 +120,9 @@ public class UserService {
       return null;
     }
     recieveAddress.setUserid(userid);
+    if (recieveAddress.isDef()) {
+      recieveaddressRepository.setAllRecieveAddressNotDef();
+    }
     recieveaddressRepository.saveAndFlush(recieveAddress);
     return recieveAddress;
   }
@@ -163,6 +166,9 @@ public class UserService {
     }
 
     recieveAddress.update(updateRecieveAddress);
+    if (recieveAddress.isDef()) {
+      recieveaddressRepository.setAllRecieveAddressNotDef();
+    }
     recieveaddressRepository.saveAndFlush(recieveAddress);
     return recieveAddress;
   }

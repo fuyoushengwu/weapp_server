@@ -32,11 +32,6 @@ public class CreateUserShoprderRequest {
   private String addressid;
 
   /**
-   * 自提单的门店ID
-   */
-  private String storeid;
-
-  /**
    * 取货时间
    */
   private Date pickupTime;
@@ -78,14 +73,6 @@ public class CreateUserShoprderRequest {
 
   public void setAddressid(String addressid) {
     this.addressid = addressid;
-  }
-
-  public String getStoreid() {
-    return storeid;
-  }
-
-  public void setStoreid(String storeid) {
-    this.storeid = storeid;
   }
 
   public Date getPickupTime() {

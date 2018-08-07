@@ -2,7 +2,9 @@ package cn.aijiamuyingfang.server.domain.address.db;
 
 import cn.aijiamuyingfang.commons.domain.address.RecieveAddress;
 import java.util.List;
+import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Repository;
 public interface RecieveAddressRepository extends JpaRepository<RecieveAddress, String> {
   // TODO:要设置条件:deprecated=false
 
+  @Override
   @Query(value = "select r from RecieveAddress r where r.id=:id and r.deprecated=false")
   RecieveAddress findOne(@Param("id") String id);
 
@@ -33,4 +36,12 @@ public interface RecieveAddressRepository extends JpaRepository<RecieveAddress, 
    */
   @Query(value = "select * from recieve_address where userid=:userid and deprecated=false", nativeQuery = true)
   List<RecieveAddress> findByUserid(@Param("userid") String userid);
+
+  /**
+   * 设置所有收件地址非默认
+   */
+  @Modifying
+  @Transactional
+  @Query(value = "update recieve_address set def=false", nativeQuery = true)
+  void setAllRecieveAddressNotDef();
 }
