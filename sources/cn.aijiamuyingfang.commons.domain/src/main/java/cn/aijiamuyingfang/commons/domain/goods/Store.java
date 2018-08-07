@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import cn.aijiamuyingfang.commons.domain.address.StoreAddress;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.AttributeOverride;
@@ -16,7 +15,6 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -77,10 +75,6 @@ public class Store implements Parcelable {
   @OneToOne(cascade = CascadeType.ALL)
   private StoreAddress storeAddress;
 
-  @ManyToMany
-  @JsonIgnore
-  private List<Classify> classifyList = new ArrayList<>();
-
   /**
    * 根据提供的Store更新本门店的信息
    * 
@@ -105,26 +99,6 @@ public class Store implements Parcelable {
     if (updateStore.storeAddress != null) {
       this.storeAddress = updateStore.storeAddress;
     }
-    if (updateStore.classifyList != null && !updateStore.classifyList.isEmpty()) {
-      this.classifyList = updateStore.classifyList;
-    }
-  }
-
-  /**
-   * 为门店添加顶层条目
-   * 
-   * @param classify
-   */
-  public void addClassify(Classify classify) {
-    if (null == classify) {
-      return;
-    }
-    synchronized (this) {
-      if (null == this.classifyList) {
-        this.classifyList = new ArrayList<>();
-      }
-    }
-    this.classifyList.add(classify);
   }
 
   public boolean isDeprecated() {
@@ -183,14 +157,6 @@ public class Store implements Parcelable {
     this.storeAddress = storeAddress;
   }
 
-  public List<Classify> getClassifyList() {
-    return classifyList;
-  }
-
-  public void setClassifyList(List<Classify> classifyList) {
-    this.classifyList = classifyList;
-  }
-
   @Override
   public int describeContents() {
     return 0;
@@ -205,7 +171,6 @@ public class Store implements Parcelable {
     dest.writeString(coverImg);
     dest.writeStringList(detailImgList);
     dest.writeParcelable(storeAddress, flags);
-    dest.writeParcelableArray(classifyList.toArray(new Classify[classifyList.size()]), flags);
   }
 
   public Store() {
@@ -215,14 +180,10 @@ public class Store implements Parcelable {
     id = in.readString();
     deprecated = in.readByte() != 0;
     name = in.readString();
-    in.readParcelable(WorkTime.class.getClassLoader());
+    workTime = in.readParcelable(WorkTime.class.getClassLoader());
     coverImg = in.readString();
     in.readStringList(detailImgList);
     storeAddress = in.readParcelable(StoreAddress.class.getClassLoader());
-    classifyList = new ArrayList<>();
-    for (Parcelable p : in.readParcelableArray(Classify.class.getClassLoader())) {
-      classifyList.add((Classify) p);
-    }
   }
 
   public static final Parcelable.Creator<Store> CREATOR = new Parcelable.Creator<Store>() {

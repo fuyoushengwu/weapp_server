@@ -1,12 +1,6 @@
 package cn.aijiamuyingfang.server.goods.service;
 
-import cn.aijiamuyingfang.commons.domain.exception.GoodsException;
-import cn.aijiamuyingfang.commons.domain.goods.Classify;
-import cn.aijiamuyingfang.commons.domain.goods.Store;
-import cn.aijiamuyingfang.commons.domain.response.ResponseCode;
-import cn.aijiamuyingfang.server.domain.goods.db.ClassifyRepository;
 import cn.aijiamuyingfang.server.domain.goods.db.StoreRepository;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,43 +19,6 @@ import org.springframework.stereotype.Service;
 public class StoreClassifyService {
   @Autowired
   private StoreRepository storeRepository;
-
-  @Autowired
-  private ClassifyRepository classifyRepository;
-
-  /**
-   * 获得门店下的所有条目
-   * 
-   * @param storeid
-   * @return
-   */
-  public List<Classify> getStoreClassifyList(String storeid) {
-    Store store = storeRepository.findOne(storeid);
-    if (null == store) {
-      throw new GoodsException(ResponseCode.STORE_NOT_EXIST, storeid);
-    }
-    return store.getClassifyList();
-  }
-
-
-  /**
-   * 门店下添加顶层条目
-   * 
-   * @param storeid
-   * @param classifyid
-   */
-  public void addClassify(String storeid, String classifyid) {
-    Classify classify = classifyRepository.findOne(classifyid);
-    if (null == classify) {
-      throw new GoodsException(ResponseCode.CLASSIFY_NOT_EXIST, classifyid);
-    }
-    Store store = storeRepository.findOne(storeid);
-    if (null == store) {
-      throw new GoodsException(ResponseCode.STORE_NOT_EXIST, storeid);
-    }
-    store.addClassify(classify);
-    storeRepository.saveAndFlush(store);
-  }
 
   /**
    * 删除门店的条目

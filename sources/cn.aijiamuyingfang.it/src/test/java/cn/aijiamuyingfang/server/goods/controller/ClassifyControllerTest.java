@@ -6,7 +6,6 @@ import cn.aijiamuyingfang.client.rest.api.impl.ClassifyControllerClient;
 import cn.aijiamuyingfang.commons.annotation.TestDescription;
 import cn.aijiamuyingfang.commons.domain.exception.GoodsException;
 import cn.aijiamuyingfang.commons.domain.goods.Classify;
-import cn.aijiamuyingfang.commons.domain.goods.Store;
 import cn.aijiamuyingfang.server.goods.GoodsApplication;
 import java.io.IOException;
 import java.util.List;
@@ -49,14 +48,6 @@ public class ClassifyControllerTest {
   @After
   public void after() {
     testActions.clearData();
-  }
-
-  @Test
-  @TestDescription(description = "当门店中没有条目数据时查询")
-  public void testGetStoreTopClassifyList_001() throws IOException {
-    Store store = testActions.createStoreOne();
-    Assert.assertNotNull(store);
-    Assert.assertEquals(0, store.getClassifyList().size());
   }
 
   @Test

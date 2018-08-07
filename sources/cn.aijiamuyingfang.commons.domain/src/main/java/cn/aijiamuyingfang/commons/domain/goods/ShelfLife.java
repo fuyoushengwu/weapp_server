@@ -12,13 +12,13 @@ public class ShelfLife implements Parcelable {
   /**
    * 保质期-开始时间
    */
-  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
   private Date start;
 
   /**
    * 保质期-结束时间
    */
-  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
   private Date end;
 
   public Date getStart() {
