@@ -2,70 +2,66 @@ package cn.aijiamuyingfang.commons.domain.goods;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import java.util.Date;
 
 /**
  * 保质期
  */
 public class ShelfLife implements Parcelable {
-  /**
-   * 保质期-开始时间
-   */
-  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
-  private Date start;
+	/**
+	 * 保质期-开始时间
+	 */
+	private String start;
 
-  /**
-   * 保质期-结束时间
-   */
-  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
-  private Date end;
+	/**
+	 * 保质期-结束时间
+	 */
+	private String end;
 
-  public Date getStart() {
-    return start;
-  }
+	public String getStart() {
+		return start;
+	}
 
-  public void setStart(Date start) {
-    this.start = start;
-  }
+	public void setStart(String start) {
+		this.start = start;
+	}
 
-  public Date getEnd() {
-    return end;
-  }
+	public String getEnd() {
+		return end;
+	}
 
-  public void setEnd(Date end) {
-    this.end = end;
-  }
+	public void setEnd(String end) {
+		this.end = end;
+	}
 
-  @Override
-  public int describeContents() {
-    return 0;
-  }
+	@Override
+	public int describeContents() {
+		return 0;
+	}
 
-  @Override
-  public void writeToParcel(Parcel dest, int flags) {
-    dest.writeLong(start.getTime());
-    dest.writeLong(end.getTime());
-  }
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(start);
+		dest.writeString(end);
+	}
 
-  public ShelfLife() {
+	public ShelfLife() {
 
-  }
+	}
 
-  private ShelfLife(Parcel in) {
-    this.start = new Date(in.readLong());
-    this.end = new Date(in.readLong());
-  }
+	private ShelfLife(Parcel in) {
+		this.start = in.readString();
+		this.end = in.readString();
+	}
 
-  public static final Parcelable.Creator<ShelfLife> CREATOR = new Parcelable.Creator<ShelfLife>() {
-    @Override
-    public ShelfLife createFromParcel(Parcel in) {
-      return new ShelfLife(in);
-    }
+	public static final Parcelable.Creator<ShelfLife> CREATOR = new Parcelable.Creator<ShelfLife>() {
+		@Override
+		public ShelfLife createFromParcel(Parcel in) {
+			return new ShelfLife(in);
+		}
 
-    @Override
-    public ShelfLife[] newArray(int size) {
-      return new ShelfLife[size];
-    }
-  };
+		@Override
+		public ShelfLife[] newArray(int size) {
+			return new ShelfLife[size];
+		}
+	};
 }

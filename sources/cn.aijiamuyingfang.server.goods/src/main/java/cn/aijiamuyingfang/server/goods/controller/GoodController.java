@@ -1,20 +1,15 @@
 package cn.aijiamuyingfang.server.goods.controller;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -93,11 +88,6 @@ public class GoodController {
 			@RequestParam(value = "currentpage") int currentpage, @RequestParam(value = "pagesize") int pagesize) {
 		return classifygoodService.getClassifyGoodList(classifyid, packFilter, levelFilter, orderType, orderValue,
 				currentpage, pagesize);
-	}
-
-	@InitBinder // 必须有一个参数WebDataBinder
-	public void initBinder(WebDataBinder binder) {
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), false));
 	}
 
 	/**

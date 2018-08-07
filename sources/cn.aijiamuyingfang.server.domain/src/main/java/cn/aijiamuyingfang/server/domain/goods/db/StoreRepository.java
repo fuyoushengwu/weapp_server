@@ -1,15 +1,15 @@
 package cn.aijiamuyingfang.server.domain.goods.db;
 
-import cn.aijiamuyingfang.commons.domain.goods.Store;
 import java.util.List;
-import javax.transaction.Transactional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import cn.aijiamuyingfang.commons.domain.goods.Store;
 
 /**
  * [描述]:
@@ -48,15 +48,5 @@ public interface StoreRepository extends JpaRepository<Store, String> {
    */
   @Query(value = "select  * from store where deprecated=false", nativeQuery = true)
   List<Store> findInUseStores();
-
-  /**
-   * 移除门店下的条目
-   * 
-   * @param classifyid
-   */
-  @Modifying
-  @Transactional
-  @Query(value = "delete from store_classify_list where classify_list_id=:classifyid", nativeQuery = true)
-  public void removeStoreClassify(@Param("classifyid") String classifyid);
 
 }

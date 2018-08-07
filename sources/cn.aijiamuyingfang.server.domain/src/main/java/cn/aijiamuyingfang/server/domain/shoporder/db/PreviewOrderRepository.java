@@ -1,8 +1,11 @@
 package cn.aijiamuyingfang.server.domain.shoporder.db;
 
-import cn.aijiamuyingfang.commons.domain.shoporder.PreviewOrder;
+import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import cn.aijiamuyingfang.commons.domain.shoporder.PreviewOrder;
 
 /**
  * [描述]:
@@ -17,18 +20,19 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface PreviewOrderRepository extends JpaRepository<PreviewOrder, String> {
-  /**
-   * 查找用户的预览订单
-   * 
-   * @param userid
-   * @return
-   */
-  PreviewOrder findByUserid(String userid);
+	/**
+	 * 查找用户的预览订单
+	 * 
+	 * @param userid
+	 * @return
+	 */
+	PreviewOrder findByUserid(String userid);
 
-  /**
-   * 删除用户的预览订单
-   * 
-   * @param userid
-   */
-  void deleteByUserid(String userid);
+	/**
+	 * 删除用户的预览订单
+	 * 
+	 * @param userid
+	 */
+	@Transactional
+	void deleteByUserid(String userid);
 }
