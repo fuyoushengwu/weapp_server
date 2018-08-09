@@ -141,6 +141,7 @@ public class GoodController {
 		goodDetail.setLifetime(good.getLifetime());
 		goodDetail.setDetailImgList(detailImgList);
 
+		goodService.createGood(good);
 		gooddetailService.createGoodDetail(goodDetail);
 		return good;
 	}
