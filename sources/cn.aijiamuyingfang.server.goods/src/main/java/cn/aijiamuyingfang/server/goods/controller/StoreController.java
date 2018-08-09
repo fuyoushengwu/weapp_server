@@ -79,9 +79,10 @@ public class StoreController {
       throw new GoodsException("400", "store name is empty");
     }
     storeService.createStore(storeRequest);
+    imageService.clearLogo(storeRequest.getCoverImg());
     String coverImgUrl = imageService.saveStoreLogo(storeRequest.getId(), coverImage);
     if (StringUtils.hasContent(coverImgUrl)) {
-      coverImgUrl = String.format("http://%s:8000/%s", request.getServerName(), coverImgUrl);
+      coverImgUrl = String.format(ImageService.IMAGE_URL_PATTERN, request.getServerName(), coverImgUrl);
       storeRequest.setCoverImg(coverImgUrl);
     }
 
@@ -91,7 +92,7 @@ public class StoreController {
       for (MultipartFile img : detailImages) {
         String detailImgUrl = imageService.saveStoreDetailImg(storeRequest.getId(), img);
         if (StringUtils.hasContent(detailImgUrl)) {
-          detailImgUrl = String.format("http://%s:8000/%s", request.getServerName(), detailImgUrl);
+          detailImgUrl = String.format(ImageService.IMAGE_URL_PATTERN, request.getServerName(), detailImgUrl);
           detailImgList.add(detailImgUrl);
         }
       }
