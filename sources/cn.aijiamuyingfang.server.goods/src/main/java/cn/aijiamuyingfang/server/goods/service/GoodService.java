@@ -3,6 +3,7 @@ package cn.aijiamuyingfang.server.goods.service;
 import cn.aijiamuyingfang.commons.domain.exception.GoodsException;
 import cn.aijiamuyingfang.commons.domain.goods.Good;
 import cn.aijiamuyingfang.commons.domain.response.ResponseCode;
+import cn.aijiamuyingfang.commons.utils.StringUtils;
 import cn.aijiamuyingfang.server.domain.goods.db.GoodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,9 +29,16 @@ public class GoodService {
    * 
    * @param good
    */
-  public Good createGood(Good good) {
+  public Good createORUpdateGood(Good good) {
     if (null == good) {
       return good;
+    }
+    if (StringUtils.hasContent(good.getId())) {
+      Good oriGood = goodRepository.findOne(good.getId());
+      if (oriGood != null) {
+        oriGood.update(good);
+        return goodRepository.saveAndFlush(oriGood);
+      }
     }
     return goodRepository.saveAndFlush(good);
   }
@@ -62,8 +70,7 @@ public class GoodService {
       return good;
     }
     good.update(updateGood);
-    goodRepository.saveAndFlush(good);
-    return good;
+    return goodRepository.saveAndFlush(good);
   }
 
   /**

@@ -2,6 +2,7 @@ package cn.aijiamuyingfang.commons.domain.goods;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -9,6 +10,8 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+
+import cn.aijiamuyingfang.commons.utils.CollectionUtils;
 
 /**
  * [描述]:
@@ -42,6 +45,18 @@ public class GoodDetail {
    */
   @ElementCollection
   private List<String> detailImgList = new ArrayList<>();
+
+  public void update(GoodDetail updateGoodDetail) {
+    if (null == updateGoodDetail) {
+      return;
+    }
+    if (updateGoodDetail.lifetime != null) {
+      this.lifetime = updateGoodDetail.lifetime;
+    }
+    if (!CollectionUtils.isEmpty(updateGoodDetail.detailImgList)) {
+      this.detailImgList = updateGoodDetail.detailImgList;
+    }
+  }
 
   public String getId() {
     return id;

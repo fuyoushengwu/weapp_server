@@ -8,6 +8,7 @@ import cn.aijiamuyingfang.commons.domain.coupon.response.GetShopOrderVoucherList
 import cn.aijiamuyingfang.commons.domain.coupon.response.GetUserVoucherListResponse;
 import cn.aijiamuyingfang.commons.domain.coupon.response.GetVoucherItemListResponse;
 import cn.aijiamuyingfang.commons.domain.shoporder.ShopOrderVoucher;
+import cn.aijiamuyingfang.commons.utils.StringUtils;
 import cn.aijiamuyingfang.server.domain.coupon.db.GoodVoucherRepository;
 import cn.aijiamuyingfang.server.domain.coupon.db.UserVoucherRepository;
 import cn.aijiamuyingfang.server.domain.coupon.db.VoucherItemRepository;
@@ -120,11 +121,18 @@ public class CouponService {
    * @param goodVoucher
    * @return
    */
-  public GoodVoucher createGoodVoucher(GoodVoucher goodVoucher) {
-    if (goodVoucher != null) {
-      goodvoucherRepository.saveAndFlush(goodVoucher);
+  public GoodVoucher createORUpdateGoodVoucher(GoodVoucher goodVoucher) {
+    if (null == goodVoucher) {
+      return null;
     }
-    return goodVoucher;
+    if (StringUtils.hasContent(goodVoucher.getId())) {
+      GoodVoucher oriGoodVoucher = goodvoucherRepository.findOne(goodVoucher.getId());
+      if (oriGoodVoucher != null) {
+        oriGoodVoucher.update(goodVoucher);
+        return goodvoucherRepository.saveAndFlush(oriGoodVoucher);
+      }
+    }
+    return goodvoucherRepository.saveAndFlush(goodVoucher);
   }
 
   /**
@@ -188,11 +196,18 @@ public class CouponService {
    * @param voucherItem
    * @return
    */
-  public VoucherItem createVoucherItem(VoucherItem voucherItem) {
-    if (voucherItem != null) {
-      voucheritemRepository.saveAndFlush(voucherItem);
+  public VoucherItem createORUpdateVoucherItem(VoucherItem voucherItem) {
+    if (null == voucherItem) {
+      return null;
     }
-    return voucherItem;
+    if (StringUtils.hasContent(voucherItem.getId())) {
+      VoucherItem oriVoucherItem = voucheritemRepository.findOne(voucherItem.getId());
+      if (oriVoucherItem != null) {
+        oriVoucherItem.update(voucherItem);
+        return voucheritemRepository.saveAndFlush(oriVoucherItem);
+      }
+    }
+    return voucheritemRepository.saveAndFlush(voucherItem);
   }
 
   /**

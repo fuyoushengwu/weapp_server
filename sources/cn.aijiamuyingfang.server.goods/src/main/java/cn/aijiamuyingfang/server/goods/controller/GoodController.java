@@ -113,7 +113,7 @@ public class GoodController {
     if (good.getPrice() == 0) {
       throw new GoodsException("400", "good price  is 0");
     }
-    goodService.createGood(good);
+    good = goodService.createORUpdateGood(good);
 
     imageService.clearLogo(good.getCoverImg());
     String coverImgUrl = imageService.saveGoodLogo(good.getId(), coverImage);
@@ -138,11 +138,9 @@ public class GoodController {
     goodDetail.setId(good.getId());
     goodDetail.setLifetime(good.getLifetime());
     goodDetail.setDetailImgList(detailImgList);
-
-		goodService.createGood(good);
-		gooddetailService.createGoodDetail(goodDetail);
-		return good;
-	}
+    gooddetailService.createORUpdateGoodDetail(goodDetail);
+    return goodService.createORUpdateGood(good);
+  }
 
   /**
    * 获取商品信息

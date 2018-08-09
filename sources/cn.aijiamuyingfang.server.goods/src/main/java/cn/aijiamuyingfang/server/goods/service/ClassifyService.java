@@ -4,6 +4,7 @@ import cn.aijiamuyingfang.commons.domain.exception.GoodsException;
 import cn.aijiamuyingfang.commons.domain.goods.Classify;
 import cn.aijiamuyingfang.commons.domain.goods.Good;
 import cn.aijiamuyingfang.commons.domain.response.ResponseCode;
+import cn.aijiamuyingfang.commons.utils.StringUtils;
 import cn.aijiamuyingfang.server.domain.goods.db.ClassifyRepository;
 import cn.aijiamuyingfang.server.domain.goods.db.GoodRepository;
 import java.util.List;
@@ -55,11 +56,18 @@ public class ClassifyService {
    * @param classify
    * @return
    */
-  public Classify createTopClassify(Classify classify) {
+  public Classify createORUpdateTopClassify(Classify classify) {
     if (null == classify) {
-      return classify;
+      return null;
     }
     classify.setLevel(1);
+    if (StringUtils.hasContent(classify.getId())) {
+      Classify oriClassify = classifyRepository.findOne(classify.getId());
+      if (oriClassify != null) {
+        oriClassify.update(classify);
+        return classifyRepository.saveAndFlush(oriClassify);
+      }
+    }
     return classifyRepository.saveAndFlush(classify);
   }
 
@@ -70,11 +78,19 @@ public class ClassifyService {
    * @param subclassify
    * @return
    */
-  public Classify createSubClassify(String topclassifyid, Classify subclassify) {
+  public Classify createORUpdateSubClassify(String topclassifyid, Classify subclassify) {
     if (null == subclassify) {
       return null;
     }
     subclassify.setLevel(2);
+
+    if (StringUtils.hasContent(subclassify.getId())) {
+      Classify oriSubClassify = classifyRepository.findOne(subclassify.getId());
+      if (oriSubClassify != null) {
+        oriSubClassify.update(subclassify);
+        return classifyRepository.saveAndFlush(oriSubClassify);
+      }
+    }
     Classify topclassify = classifyRepository.findOne(topclassifyid);
     if (null == topclassify) {
       throw new GoodsException(ResponseCode.CLASSIFY_NOT_EXIST, topclassifyid);

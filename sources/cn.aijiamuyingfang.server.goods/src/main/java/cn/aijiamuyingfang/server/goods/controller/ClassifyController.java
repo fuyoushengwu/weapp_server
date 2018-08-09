@@ -93,7 +93,7 @@ public class ClassifyController {
     if (StringUtils.isEmpty(request.getName())) {
       throw new GoodsException("400", "classify name is empty");
     }
-    return classifyService.createTopClassify(request);
+    return classifyService.createORUpdateTopClassify(request);
   }
 
   /**
@@ -127,7 +127,7 @@ public class ClassifyController {
     if (StringUtils.isEmpty(classifyRequest.getName())) {
       throw new GoodsException("400", "classify name is empty");
     }
-    Classify subClassify = classifyService.createSubClassify(classifyid, classifyRequest);
+    Classify subClassify = classifyService.createORUpdateSubClassify(classifyid, classifyRequest);
 
     imageService.clearLogo(subClassify.getCoverImg());
     String coverImgUrl = imageService.saveClassifyLogo(subClassify.getId(), coverImage);

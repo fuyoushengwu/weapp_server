@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.UUID;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.aspectj.util.FileUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -63,7 +64,7 @@ public class ImageService {
     String logoFilePath = logourl.substring(logourl.indexOf('/'));
     File logoFile = new File(imagesPath, logoFilePath);
     try {
-      FileUtils.cleanDirectory(logoFile);
+      FileUtils.forceDelete(logoFile);
     } catch (IOException e) {
       LOGGER.error(e);
     }

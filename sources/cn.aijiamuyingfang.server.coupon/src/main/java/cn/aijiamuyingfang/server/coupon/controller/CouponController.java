@@ -124,7 +124,7 @@ public class CouponController {
     if (CollectionUtils.isEmpty(request.getVoucheritemIdList())) {
       throw new CouponException("400", "good voucher items is empyt");
     }
-    return couponService.createGoodVoucher(request);
+    return couponService.createORUpdateGoodVoucher(request);
   }
 
   /**
@@ -186,7 +186,7 @@ public class CouponController {
       throw new CouponException("400", "voucher item score is 0");
     }
 
-    return couponService.createVoucherItem(request);
+    return couponService.createORUpdateVoucherItem(request);
   }
 
   /**

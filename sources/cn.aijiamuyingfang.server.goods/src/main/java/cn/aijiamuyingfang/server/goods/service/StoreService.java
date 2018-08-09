@@ -70,11 +70,18 @@ public class StoreService {
    * 
    * @param store
    */
-  public void createStore(Store store) {
+  public Store createORUpdateStore(Store store) {
     if (null == store) {
-      return;
+      store = new Store();
     }
-    storeRepository.saveAndFlush(store);
+    if (StringUtils.hasContent(store.getId())) {
+      Store oriStore = storeRepository.findOne(store.getId());
+      if (oriStore != null) {
+        oriStore.update(store);
+        return storeRepository.saveAndFlush(oriStore);
+      }
+    }
+    return storeRepository.saveAndFlush(store);
   }
 
   /**
@@ -103,8 +110,7 @@ public class StoreService {
       return store;
     }
     store.update(updateStore);
-    storeRepository.saveAndFlush(store);
-    return store;
+    return storeRepository.saveAndFlush(store);
   }
 
   /**

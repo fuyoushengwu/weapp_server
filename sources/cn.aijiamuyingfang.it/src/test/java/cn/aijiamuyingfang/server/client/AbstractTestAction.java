@@ -70,7 +70,7 @@ public abstract class AbstractTestAction {
   /**
    * Admin用户的Id
    */
-  public static final String ADMIN_USER_ID = "5c6a132a-829f-11e8-96fc-00cfe0430e2a";
+  public static final String ADMIN_USER_ID = "5c6a132a829f11e896fc00cfe0430e2a";
 
   /**
    * Admin用户的JWT
