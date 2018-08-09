@@ -159,8 +159,8 @@ public class UserMessage implements Parcelable {
     dest.writeString(title);
     dest.writeString(roundup);
     dest.writeString(content);
-    dest.writeLong(createTime.getTime());
-    dest.writeLong(finishTime.getTime());
+    dest.writeLong(createTime != null ? createTime.getTime() : -1);
+    dest.writeLong(finishTime != null ? finishTime.getTime() : -1);
     dest.writeByte((byte) (readed ? 1 : 0));
   }
 
@@ -174,8 +174,14 @@ public class UserMessage implements Parcelable {
     title = in.readString();
     roundup = in.readString();
     content = in.readString();
-    createTime = new Date(in.readLong());
-    finishTime = new Date(in.readLong());
+    long createTimeValue = in.readLong();
+    if (createTimeValue != -1) {
+      createTime = new Date(createTimeValue);
+    }
+    long finishTimeValue = in.readLong();
+    if (finishTimeValue != -1) {
+      finishTime = new Date(finishTimeValue);
+    }
     readed = in.readByte() != 0;
   }
 

@@ -27,54 +27,54 @@ import cn.aijiamuyingfang.server.rest.auth.service.JwtTokenService;
 
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
-	private static final Logger LOGGER = LogManager.getLogger(JwtAuthenticationTokenFilter.class);
+  private static final Logger LOGGER = LogManager.getLogger(JwtAuthenticationTokenFilter.class);
 
-	@Autowired
-	private UserDetailsService userDetailsService;
+  @Autowired
+  private UserDetailsService userDetailsService;
 
-	@Autowired
-	private JwtTokenService jwtTokenUtil;
+  @Autowired
+  private JwtTokenService jwtTokenUtil;
 
-	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-			throws ServletException, IOException {
-		String authHeader = request.getHeader(AuthConstants.HEADER_STRING);
+  @Override
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+      throws ServletException, IOException {
+    String authHeader = request.getHeader(AuthConstants.HEADER_STRING);
 
-		if (authHeader == null || !authHeader.startsWith(AuthConstants.TOKEN_PREFIX)) {
-			chain.doFilter(request, response);
-			return;
-		}
+    if (authHeader == null || !authHeader.startsWith(AuthConstants.TOKEN_PREFIX)) {
+      chain.doFilter(request, response);
+      return;
+    }
 
-		UsernamePasswordAuthenticationToken authentication = getAuthentication(request);
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		MutableHttpServletRequest mutableRequest = new MutableHttpServletRequest(request);
-		mutableRequest.putHeader("userid", authentication != null ? authentication.getName() : "");
-		chain.doFilter(mutableRequest, response);
-		SecurityContextHolder.getContext().setAuthentication(null);
-	}
+    UsernamePasswordAuthenticationToken authentication = getAuthentication(request);
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+    MutableHttpServletRequest mutableRequest = new MutableHttpServletRequest(request);
+    mutableRequest.putHeader("userid", authentication != null ? authentication.getName() : "");
+    chain.doFilter(mutableRequest, response);
+    SecurityContextHolder.getContext().setAuthentication(null);
+  }
 
-	private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
-		String authHeader = request.getHeader(AuthConstants.HEADER_STRING);
-		String authToken = authHeader.replace(AuthConstants.TOKEN_PREFIX, "");
-		String username = jwtTokenUtil.getUsernameFromToken(authToken);
-		if (StringUtils.isEmpty(username)) {
-			return null;
-		}
+  private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
+    String authHeader = request.getHeader(AuthConstants.HEADER_STRING);
+    String authToken = authHeader.replace(AuthConstants.TOKEN_PREFIX, "");
+    String username = jwtTokenUtil.getUsernameFromToken(authToken);
+    if (StringUtils.isEmpty(username)) {
+      return null;
+    }
 
-		UserDetails userDetails;
-		try {
-			userDetails = this.userDetailsService.loadUserByUsername(username);
-		} catch (UsernameNotFoundException e) {
-			LOGGER.error("username not found", e);
-			throw new AuthException(ResponseCode.USER_NOT_EXIST, username);
-		}
-		if (!jwtTokenUtil.validateToken(authToken, userDetails)) {
-			return null;
-		}
+    UserDetails userDetails;
+    try {
+      userDetails = this.userDetailsService.loadUserByUsername(username);
+    } catch (UsernameNotFoundException e) {
+      LOGGER.error("username not found", e);
+      throw new AuthException(ResponseCode.USER_NOT_EXIST, username);
+    }
+    if (!jwtTokenUtil.validateToken(authToken, userDetails)) {
+      return null;
+    }
 
-		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
-				userDetails.getAuthorities());
-		authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-		return authentication;
-	}
+    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
+        userDetails.getAuthorities());
+    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+    return authentication;
+  }
 }

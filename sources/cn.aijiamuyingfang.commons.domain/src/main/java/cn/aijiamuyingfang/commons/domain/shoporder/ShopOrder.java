@@ -389,15 +389,15 @@ public class ShopOrder implements Parcelable {
     dest.writeParcelable(status, flags);
     dest.writeByte((byte) (fromPreOrder ? 1 : 0));
     dest.writeParcelable(sendtype, flags);
-    dest.writeLong(createTime.getTime());
-    dest.writeLong(finishTime.getTime());
-    dest.writeLong(pickupTime.getTime());
+    dest.writeLong(createTime != null ? createTime.getTime() : -1);
+    dest.writeLong(finishTime != null ? finishTime.getTime() : -1);
+    dest.writeLong(pickupTime != null ? pickupTime.getTime() : -1);
     dest.writeParcelable(recieveAddress, flags);
     dest.writeParcelableArray(orderItemList.toArray(new ShopOrderItem[orderItemList.size()]), flags);
     dest.writeString(thirdsendCompany);
     dest.writeString(thirdsendNo);
     dest.writeStringList(operator);
-    dest.writeLong(lastModify.getTime());
+    dest.writeLong(lastModify != null ? lastModify.getTime() : -1);
     dest.writeString(businessMessage);
     dest.writeString(formid);
     dest.writeDouble(totalGoodsPrice);
@@ -420,9 +420,18 @@ public class ShopOrder implements Parcelable {
     status = in.readParcelable(ShopOrderStatus.class.getClassLoader());
     fromPreOrder = in.readByte() != 0;
     sendtype = in.readParcelable(SendType.class.getClassLoader());
-    createTime = new Date(in.readLong());
-    finishTime = new Date(in.readLong());
-    pickupTime = new Date(in.readLong());
+    long createTimeValue = in.readLong();
+    if (createTimeValue != -1) {
+      createTime = new Date(createTimeValue);
+    }
+    long finishTimeValue = in.readLong();
+    if (finishTimeValue != -1) {
+      finishTime = new Date(finishTimeValue);
+    }
+    long pickupTimeValue = in.readLong();
+    if (pickupTimeValue != -1) {
+      pickupTime = new Date(pickupTimeValue);
+    }
     recieveAddress = in.readParcelable(RecieveAddress.class.getClassLoader());
     orderItemList = new ArrayList<>();
     for (Parcelable p : in.readParcelableArray(ShopOrderItem.class.getClassLoader())) {
@@ -431,7 +440,10 @@ public class ShopOrder implements Parcelable {
     thirdsendCompany = in.readString();
     thirdsendNo = in.readString();
     in.readStringList(operator);
-    lastModify = new Date(in.readLong());
+    long lastModifyValue = in.readLong();
+    if (lastModifyValue != -1) {
+      lastModify = new Date(lastModifyValue);
+    }
     businessMessage = in.readString();
     formid = in.readString();
     totalGoodsPrice = in.readDouble();
