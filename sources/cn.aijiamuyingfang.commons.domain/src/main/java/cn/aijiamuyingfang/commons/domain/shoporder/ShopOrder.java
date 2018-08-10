@@ -230,6 +230,7 @@ public class ShopOrder implements Parcelable {
 
   public void setStatus(ShopOrderStatus status) {
     this.status = status;
+    this.lastModify = new Date();
   }
 
   public boolean isFromPreOrder() {

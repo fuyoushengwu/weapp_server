@@ -210,17 +210,17 @@ public class ShopOrderService {
       goodRepository.flush();
 
       switch (shoporder.getSendtype()) {
-        case OWNSEND:
-          templatemsgControllerClient.sendOwnSendMsg(token, user.getOpenid(), shoporder, true);
-          break;
-        case THIRDSEND:
-          templatemsgControllerClient.sendThirdSendMsg(token, user.getOpenid(), shoporder, true);
-          break;
-        case PICKUP:
-          templatemsgControllerClient.sendPickupMsg(token, user.getOpenid(), shoporder, true);
-          break;
-        default:
-          break;
+      case OWNSEND:
+        templatemsgControllerClient.sendOwnSendMsg(token, user.getOpenid(), shoporder, true);
+        break;
+      case THIRDSEND:
+        templatemsgControllerClient.sendThirdSendMsg(token, user.getOpenid(), shoporder, true);
+        break;
+      case PICKUP:
+        templatemsgControllerClient.sendPickupMsg(token, user.getOpenid(), shoporder, true);
+        break;
+      default:
+        break;
       }
       shopOrderRepository.saveAndFlush(shoporder);
     }
@@ -303,6 +303,7 @@ public class ShopOrderService {
 
     ConfirmUserShopOrderFinishedResponse response = new ConfirmUserShopOrderFinishedResponse();
     shoporder.setStatus(ShopOrderStatus.FINISHED);
+    shoporder.setFinishTime(new Date());
     shopOrderRepository.saveAndFlush(shoporder);
 
     User user = userRepository.findOne(userid);
