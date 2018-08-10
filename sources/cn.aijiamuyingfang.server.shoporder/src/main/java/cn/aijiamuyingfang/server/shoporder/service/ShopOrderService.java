@@ -29,6 +29,7 @@ import cn.aijiamuyingfang.commons.domain.user.User;
 import cn.aijiamuyingfang.commons.utils.CollectionUtils;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import cn.aijiamuyingfang.server.domain.address.db.RecieveAddressRepository;
+import cn.aijiamuyingfang.server.domain.address.db.StoreAddressRepository;
 import cn.aijiamuyingfang.server.domain.coupon.db.GoodVoucherRepository;
 import cn.aijiamuyingfang.server.domain.coupon.db.UserVoucherRepository;
 import cn.aijiamuyingfang.server.domain.goods.db.GoodRepository;
@@ -87,6 +88,9 @@ public class ShopOrderService {
 
   @Autowired
   private RecieveAddressRepository recieveaddressRepository;
+
+  @Autowired
+  private StoreAddressRepository storeaddressRepository;
 
   @Autowired
   private TemplateMsgControllerClient templatemsgControllerClient;
@@ -426,7 +430,13 @@ public class ShopOrderService {
     shoporder.setSendtype(requestBean.getSendtype());
     shoporder.setStatus(requestBean.getStatus() != null ? requestBean.getStatus() : ShopOrderStatus.UNSTART);
     shoporder.setPickupTime(requestBean.getPickupTime());
-    shoporder.setRecieveAddress(recieveaddressRepository.findOne(requestBean.getAddressid()));
+
+    if (SendType.PICKUP.equals(requestBean.getSendtype())) {
+      shoporder.setPickupAddress(storeaddressRepository.findOne(requestBean.getAddressid()));
+    } else {
+      shoporder.setRecieveAddress(recieveaddressRepository.findOne(requestBean.getAddressid()));
+    }
+
     shoporder.setBusinessMessage(requestBean.getBusinessMessage());
     shoporder.setFormid(requestBean.getFormid());
 

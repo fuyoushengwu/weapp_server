@@ -3,6 +3,7 @@ package cn.aijiamuyingfang.commons.domain.shoporder;
 import android.os.Parcel;
 import android.os.Parcelable;
 import cn.aijiamuyingfang.commons.domain.address.RecieveAddress;
+import cn.aijiamuyingfang.commons.domain.address.StoreAddress;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.text.DateFormat;
@@ -86,7 +87,13 @@ public class ShopOrder implements Parcelable {
   private Date pickupTime;
 
   /**
-   * 取货/收货地址;根据sendtype决定Address的意义
+   * 取货地址
+   */
+  @ManyToOne
+  private StoreAddress pickupAddress;
+
+  /**
+   * 收货地址
    */
   @ManyToOne
   private RecieveAddress recieveAddress;
@@ -271,6 +278,14 @@ public class ShopOrder implements Parcelable {
 
   public void setPickupTime(Date pickupTime) {
     this.pickupTime = pickupTime;
+  }
+
+  public StoreAddress getPickupAddress() {
+    return pickupAddress;
+  }
+
+  public void setPickupAddress(StoreAddress pickupAddress) {
+    this.pickupAddress = pickupAddress;
   }
 
   public RecieveAddress getRecieveAddress() {
