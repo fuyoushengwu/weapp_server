@@ -91,6 +91,29 @@ public class ShopOrderVoucher implements Parcelable {
   public void writeToParcel(Parcel dest, int flag) {
     dest.writeString(id);
     dest.writeParcelable(userVoucher, flag);
+    dest.writeParcelable(voucherItem, flag);
+    dest.writeParcelable(good, flag);
   }
 
+  public ShopOrderVoucher() {
+  }
+
+  private ShopOrderVoucher(Parcel in) {
+    id = in.readString();
+    userVoucher = in.readParcelable(UserVoucher.class.getClassLoader());
+    voucherItem = in.readParcelable(VoucherItem.class.getClassLoader());
+    good = in.readParcelable(Good.class.getClassLoader());
+  }
+
+  public static final Parcelable.Creator<ShopOrderVoucher> CREATOR = new Parcelable.Creator<ShopOrderVoucher>() {
+    @Override
+    public ShopOrderVoucher createFromParcel(Parcel in) {
+      return new ShopOrderVoucher(in);
+    }
+
+    @Override
+    public ShopOrderVoucher[] newArray(int size) {
+      return new ShopOrderVoucher[size];
+    }
+  };
 }
