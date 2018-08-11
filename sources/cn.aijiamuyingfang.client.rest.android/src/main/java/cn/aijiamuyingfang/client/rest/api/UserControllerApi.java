@@ -5,6 +5,7 @@ import cn.aijiamuyingfang.commons.constants.AuthConstants;
 import cn.aijiamuyingfang.commons.domain.address.RecieveAddress;
 import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
 import cn.aijiamuyingfang.commons.domain.user.User;
+import cn.aijiamuyingfang.commons.domain.user.response.GetUserPhoneResponse;
 import io.reactivex.Observable;
 import java.util.List;
 import retrofit2.http.Body;
@@ -38,6 +39,17 @@ public interface UserControllerApi {
    */
   @GET(value = "/user/{userid}")
   public Observable<ResponseBean<User>> getUser(@Header(AuthConstants.HEADER_STRING) String token,
+      @Path("userid") String userid);
+
+  /**
+   * 获取用户手机号
+   * 
+   * @param token
+   * @param userid
+   * @return
+   */
+  @GET(value = "/user/{userid}/phone")
+  public Observable<ResponseBean<GetUserPhoneResponse>> getUserPhone(@Header(AuthConstants.HEADER_STRING) String token,
       @Path("userid") String userid);
 
   /**

@@ -1,12 +1,7 @@
 package cn.aijiamuyingfang.server.user.controller;
 
-import cn.aijiamuyingfang.commons.domain.address.RecieveAddress;
-import cn.aijiamuyingfang.commons.domain.exception.AuthException;
-import cn.aijiamuyingfang.commons.domain.exception.UserException;
-import cn.aijiamuyingfang.commons.domain.user.User;
-import cn.aijiamuyingfang.commons.utils.StringUtils;
-import cn.aijiamuyingfang.server.user.service.UserService;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +12,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+
+import cn.aijiamuyingfang.commons.domain.address.RecieveAddress;
+import cn.aijiamuyingfang.commons.domain.exception.AuthException;
+import cn.aijiamuyingfang.commons.domain.exception.UserException;
+import cn.aijiamuyingfang.commons.domain.user.User;
+import cn.aijiamuyingfang.commons.domain.user.response.GetUserPhoneResponse;
+import cn.aijiamuyingfang.commons.utils.StringUtils;
+import cn.aijiamuyingfang.server.user.service.UserService;
 
 /**
  * [描述]:
@@ -49,6 +52,18 @@ public class UserController {
       throw new AuthException("403", "no permission get other user's info");
     }
     return userService.getUser(userid);
+  }
+
+  /**
+   * 获取用户手机号
+   * 
+   * @param userid
+   * @return
+   */
+  @PreAuthorize("hasAuthority('admin') or hasAuthority('sender')")
+  @GetMapping(value = "/user/{userid}/phone")
+  public GetUserPhoneResponse getUserPhone(@PathVariable("userid") String userid) {
+    return userService.getUserPhone(userid);
   }
 
   /**

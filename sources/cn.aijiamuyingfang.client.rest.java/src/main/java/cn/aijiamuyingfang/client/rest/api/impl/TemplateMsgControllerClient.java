@@ -147,7 +147,7 @@ public class TemplateMsgControllerClient {
     String keyword2Value = goodsNameStr.substring(0, goodsNameStr.length() - 1);
 
     String keyword3Value = "爱家母婴坊";
-    String keyword4Value = order.getRecieveAddress().getDetail();
+    String keyword4Value = order.getPickupAddress().getDetail();
 
     SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_PATTERN);
     String keyword5Value = dateFormat.format(order.getPickupTime());

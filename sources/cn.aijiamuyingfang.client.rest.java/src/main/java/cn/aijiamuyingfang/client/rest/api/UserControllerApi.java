@@ -40,6 +40,17 @@ public interface UserControllerApi {
   public Call<ResponseBean> getUser(@Header(AuthConstants.HEADER_STRING) String token, @Path("userid") String userid);
 
   /**
+   * 获取用户手机号
+   * 
+   * @param token
+   * @param userid
+   * @return
+   */
+  @GET(value = "/user/{userid}/phone")
+  public Call<ResponseBean> getUserPhone(@Header(AuthConstants.HEADER_STRING) String token,
+      @Path("userid") String userid);
+
+  /**
    * 更新用户信息
    * 
    * @param token

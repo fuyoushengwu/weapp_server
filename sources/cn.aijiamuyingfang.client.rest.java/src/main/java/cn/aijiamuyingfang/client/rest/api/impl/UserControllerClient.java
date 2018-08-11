@@ -8,6 +8,8 @@ import cn.aijiamuyingfang.commons.domain.exception.UserException;
 import cn.aijiamuyingfang.commons.domain.response.ResponseBean;
 import cn.aijiamuyingfang.commons.domain.response.ResponseCode;
 import cn.aijiamuyingfang.commons.domain.user.User;
+import cn.aijiamuyingfang.commons.domain.user.response.GetUserPhoneResponse;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +63,34 @@ public class UserControllerClient {
   public User getUser(String token, String userid) throws IOException {
     Response<ResponseBean> response = userControllerApi.getUser(token, userid).execute();
     return getUserFromResponse(response, "get user  return code is '200',but return data is null");
+  }
+
+  /**
+   * 获取用户
+   * 
+   * @param token
+   * @param userid
+   * @return
+   * @throws IOException
+   */
+  public GetUserPhoneResponse getUserPhone(String token, String userid) throws IOException {
+    Response<ResponseBean> response = userControllerApi.getUserPhone(token, userid).execute();
+    ResponseBean responseBean = response.body();
+    if (null == responseBean) {
+      throw new UserException(ResponseCode.RESPONSE_BODY_IS_NULL);
+    }
+    String returnCode = responseBean.getCode();
+    Object returnData = responseBean.getData();
+    if ("200".equals(returnCode)) {
+      GetUserPhoneResponse getUserPhoneResponse = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
+          GetUserPhoneResponse.class);
+      if (null == getUserPhoneResponse) {
+        throw new UserException("500", "get user phone return code is '200',but return data is null");
+      }
+      return getUserPhoneResponse;
+    }
+    LOGGER.error(responseBean.getMsg());
+    throw new UserException(returnCode, responseBean.getMsg());
   }
 
   /**

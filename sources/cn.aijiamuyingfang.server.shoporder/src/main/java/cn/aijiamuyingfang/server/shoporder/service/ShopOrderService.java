@@ -187,12 +187,16 @@ public class ShopOrderService {
     if (null == shoporder) {
       throw new ShopOrderException(ResponseCode.SHOPORDER_NOT_EXIST, shoporderid);
     }
+    ShopOrderStatus updateStatus = requestBean.getStatus();
+    if (shoporder.getStatus() == updateStatus) {
+      throw new ShopOrderException("500", "shoporder has get target status");
+    }
+
     User user = userRepository.findOne(shoporder.getUserid());
     if (null == user) {
       throw new ShopOrderException(ResponseCode.USER_NOT_EXIST, shoporder.getUserid());
     }
 
-    ShopOrderStatus updateStatus = requestBean.getStatus();
     if (updateStatus != null) {
       shoporder.setStatus(updateStatus);
     }

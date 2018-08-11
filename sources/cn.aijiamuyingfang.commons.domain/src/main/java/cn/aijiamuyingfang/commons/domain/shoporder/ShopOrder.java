@@ -409,6 +409,7 @@ public class ShopOrder implements Parcelable {
     dest.writeLong(finishTime != null ? finishTime.getTime() : -1);
     dest.writeLong(pickupTime != null ? pickupTime.getTime() : -1);
     dest.writeParcelable(recieveAddress, flags);
+    dest.writeParcelable(pickupAddress, flags);
     dest.writeParcelableArray(orderItemList.toArray(new ShopOrderItem[orderItemList.size()]), flags);
     dest.writeString(thirdsendCompany);
     dest.writeString(thirdsendNo);
@@ -449,6 +450,7 @@ public class ShopOrder implements Parcelable {
       pickupTime = new Date(pickupTimeValue);
     }
     recieveAddress = in.readParcelable(RecieveAddress.class.getClassLoader());
+    pickupAddress = in.readParcelable(StoreAddress.class.getClassLoader());
     orderItemList = new ArrayList<>();
     for (Parcelable p : in.readParcelableArray(ShopOrderItem.class.getClassLoader())) {
       orderItemList.add((ShopOrderItem) p);
