@@ -25,7 +25,6 @@ import cn.aijiamuyingfang.server.goods.GoodsApplication;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -34,7 +33,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 /**
@@ -71,15 +69,6 @@ public class CouponControllerTest {
   @After
   public void after() {
     testActions.clearData();
-  }
-
-  @Autowired
-  private PasswordEncoder encoder;
-
-  @Test
-  public void test() {
-    System.out.println(UUID.randomUUID().toString());
-    System.out.println(encoder.encode("18061756483"));
   }
 
   @Test
