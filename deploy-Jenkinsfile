@@ -32,7 +32,7 @@ pipeline {
                                 configName: '172.16.0.4-SSH', 
                                 transfers: [
                                     sshTransfer(
-                                        execCommand: 'rm -rf *'
+                                        execCommand: 'rm -rf weapp/;rm -rf weapp.tar.gz;'
                                     ),
                                     sshTransfer(
                                         sourceFiles: 'sources/distribute/weapp.tar.gz',
