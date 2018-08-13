@@ -42,10 +42,7 @@ public class UserMessageService {
    * @return
    */
   public int getUserUnReadMessageCount(String userid) {
-    List<String> useridList = new ArrayList<>();
-    useridList.add(userid);
-    useridList.add(userRepository.findAdminUserId());
-    return usermessageRepository.getUNReadMessageCount(useridList);
+    return usermessageRepository.getUNReadMessageCount(userid, userRepository.findAdminUserId());
   }
 
   /**

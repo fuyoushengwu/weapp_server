@@ -44,10 +44,11 @@ public interface UserMessageRepository extends JpaRepository<UserMessage, String
   /**
    * 获取未读消息数目
    * 
-   * @param useridList
+   * @param userid
+   * @param adminid
    * @return
    */
-  @Query(value = "select count(*) from user_message um inner join user u on um.userid=u.id "
-      + "where um.create_time>u.last_read_msg_time and um.userid in :userid", nativeQuery = true)
-  int getUNReadMessageCount(@Param("userid") List<String> useridList);
+  @Query(value = "select count(*) from user_message where userid in (:userid,:adminid) and "
+      + "create_time>(select last_read_msg_time from user where id=:userid)", nativeQuery = true)
+  int getUNReadMessageCount(@Param("userid") String userid, @Param("adminid") String adminid);
 }
