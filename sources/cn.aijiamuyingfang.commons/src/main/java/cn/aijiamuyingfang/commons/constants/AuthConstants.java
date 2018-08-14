@@ -26,7 +26,7 @@ public final class AuthConstants {
   /**
    * JWT的有效时间
    */
-  public static final long EXPIRATION_TIME = 864_000_000; // 10 days
+  public static final long EXPIRATION_TIME = Long.MAX_VALUE; // 将JWT有效期设置很大
 
   /**
    * JWT Header的前缀
