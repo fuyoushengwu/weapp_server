@@ -23,6 +23,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class TemplateMsgService {
   /**
+   * 快递发货通知
+   */
+  private static final String THIRDSEND_TEMPLATE_ID = "-VmbcooMwz5afl7hBrkQF1SvY48Ta1H8N6GSJeeLGoU";
+
+  /**
    * 预约到货通知
    */
   private static final String PREORDER_TEMPLATE_ID = "hm-Gye_mB5CgFOn2v_jneFILQo8Mb7VkxvSeld_euDk";
@@ -31,11 +36,6 @@ public class TemplateMsgService {
    * 订单自提通知
    */
   private static final String PICKUP_TEMPLATE_ID = "8pupoKmzj3dton53L5VDhKFtlNP4HOPVkTNvxs7TsIQ";
-
-  /**
-   * 快递发货通知
-   */
-  private static final String THIRDSEND_TEMPLATE_ID = "-VmbcooMwz5afl7hBrkQFzVrct0iGcMZ2-MEBDkPStI";
 
   /**
    * 订单配送通知

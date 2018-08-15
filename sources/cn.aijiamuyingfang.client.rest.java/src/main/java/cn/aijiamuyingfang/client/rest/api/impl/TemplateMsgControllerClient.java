@@ -135,15 +135,16 @@ public class TemplateMsgControllerClient {
 
     String keyword1Value = order.getOrderNo();
 
-    StringBuilder sb = new StringBuilder();
+    StringBuilder contentSB = new StringBuilder();
     List<ShopOrderItem> shoporderitemList = order.getOrderItemList();
     if (!CollectionUtils.isEmpty(shoporderitemList)) {
       for (ShopOrderItem item : shoporderitemList) {
-        sb.append(item.getGood().getName() + ",");
+        contentSB.append(item.getGood().getName()).append(" ");
+        contentSB.append(item.getCount()).append(item.getGood().getPack()).append("\n");
       }
     }
 
-    String goodsNameStr = sb.toString();
+    String goodsNameStr = contentSB.toString();
     String keyword2Value = goodsNameStr.substring(0, goodsNameStr.length() - 1);
 
     String keyword3Value = "爱家母婴坊";
@@ -151,7 +152,7 @@ public class TemplateMsgControllerClient {
 
     SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_PATTERN);
     String keyword5Value = dateFormat.format(order.getPickupTime());
-    String keyword6Value = "亲您的商品已经准备完毕,请准时取货";
+    String keyword6Value = "亲您的商品已经准备完毕,请准时取货;如有疑问:请联系13852827612,13815740142";
 
     TemplateMsg message = createTemplateMsg(order, keyword1Value, keyword2Value, keyword3Value, keyword4Value,
         keyword5Value, keyword6Value);
@@ -203,30 +204,26 @@ public class TemplateMsgControllerClient {
       return;
     }
     String keyword1Value = order.getOrderNo();
-    String keyword2Value = order.getThirdsendCompany();
-    String keyword3Value = order.getThirdsendNo();
 
-    StringBuilder goodsNameSB = new StringBuilder();
+    StringBuilder contentSB = new StringBuilder();
     List<ShopOrderItem> shoporderitemList = order.getOrderItemList();
     if (!CollectionUtils.isEmpty(shoporderitemList)) {
       for (ShopOrderItem item : shoporderitemList) {
-        goodsNameSB.append(item.getGood().getName() + ",");
+        contentSB.append(item.getGood().getName()).append(" ");
+        contentSB.append(item.getCount()).append(item.getGood().getPack()).append("\n");
       }
     }
-    String goodsNameStr = goodsNameSB.toString();
-    String keyword4Value = goodsNameStr.substring(0, goodsNameStr.length() - 1);
+    String goodsNameStr = contentSB.toString();
+    String keyword2Value = goodsNameStr.substring(0, goodsNameStr.length() - 1);
+
+    String keyword3Value = order.getThirdsendCompany();
+    String keyword4Value = order.getThirdsendNo();
+
     String keyword5Value = order.getRecieveAddress().getDetail();
 
-    StringBuilder contentSB = new StringBuilder();
-    if (!CollectionUtils.isEmpty(shoporderitemList)) {
-      for (ShopOrderItem item : shoporderitemList) {
-        contentSB.append(item.getGood().getName()).append(" ");
-        contentSB.append(item.getCount()).append(item.getGood().getPack()).append(",");
-      }
-    }
-    String contentStr = contentSB.toString();
-    String keyword6Value = contentStr.substring(0, contentStr.length() - 1);
-    String keyword7Value = "侍伟";
+    List<String> operatorList = order.getOperator();
+    String keyword6Value = operatorList.get(operatorList.size() - 1);
+    String keyword7Value = "您的商品已发货,请注意查收;如有疑问:请联系13852827612,13815740142";
 
     TemplateMsg message = createTemplateMsg(order, keyword1Value, keyword2Value, keyword3Value, keyword4Value,
         keyword5Value, keyword6Value, keyword7Value);
@@ -281,14 +278,14 @@ public class TemplateMsgControllerClient {
     SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_PATTERN);
     String keyword2Value = dateFormat.format(order.getCreateTime());
     String keyword3Value = order.getRecieveAddress().getDetail();
-    String keyword4Value = order.getOrderNo();
+    String keyword4Value = order.getThirdsendNo();
 
     StringBuilder contentSB = new StringBuilder();
     List<ShopOrderItem> shoporderitemList = order.getOrderItemList();
     if (!CollectionUtils.isEmpty(shoporderitemList)) {
       for (ShopOrderItem item : shoporderitemList) {
         contentSB.append(item.getGood().getName()).append(" ");
-        contentSB.append(item.getCount()).append(item.getGood().getPack()).append(",");
+        contentSB.append(item.getCount()).append(item.getGood().getPack()).append("\n");
       }
     }
     String contentStr = contentSB.toString();
