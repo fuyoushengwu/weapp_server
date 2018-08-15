@@ -81,9 +81,9 @@ public abstract class AbstractTestAction {
     Map<String, Object> claims = new HashMap<>();
     claims.put(AuthConstants.CLAIM_KEY_USERNAME, ADMIN_USER_ID);
     claims.put(AuthConstants.CLAIM_KEY_CREATED, new Date());
-    ADMIN_USER_TOKEN = AuthConstants.TOKEN_PREFIX + Jwts.builder().setClaims(claims)
-        .setExpiration(new Date(System.currentTimeMillis() + AuthConstants.EXPIRATION_TIME))
-        .signWith(SignatureAlgorithm.HS512, System.getenv("weapp_jwt_secret")).compact();
+    ADMIN_USER_TOKEN = AuthConstants.TOKEN_PREFIX
+        + Jwts.builder().setClaims(claims).setExpiration(new Date(AuthConstants.EXPIRATION_TIME))
+            .signWith(SignatureAlgorithm.HS512, System.getenv("weapp_jwt_secret")).compact();
   }
 
   @Autowired

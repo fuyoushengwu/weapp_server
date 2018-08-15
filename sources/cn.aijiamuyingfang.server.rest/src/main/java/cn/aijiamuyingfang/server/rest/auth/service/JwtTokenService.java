@@ -70,7 +70,7 @@ public class JwtTokenService {
   }
 
   private Date generateExpirationDate() {
-    return new Date(System.currentTimeMillis() + AuthConstants.EXPIRATION_TIME);
+    return new Date(AuthConstants.EXPIRATION_TIME);
   }
 
   public Boolean canTokenBeRefreshed(String token) {
