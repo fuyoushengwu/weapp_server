@@ -33,28 +33,28 @@ public class TemplateMsgController {
     service.sendPreOrderMsg(openid, msgData);
   }
 
-  @PreAuthorize(value = "hasAuthority('sender')")
+  @PreAuthorize(value = "hasAuthority('admin') or hasAuthority('sender')")
   @PostMapping(value = "/user/{openid}/wxservice/templatemsg/pickup")
   public void sendPickupMsg(@PathVariable(name = "openid") String openid, @RequestBody TemplateMsg msgData)
       throws WxErrorException {
     service.sendPickupMsg(openid, msgData);
   }
 
-  @PreAuthorize(value = "hasAuthority('sender')")
+  @PreAuthorize(value = "hasAuthority('admin') or hasAuthority('sender')")
   @PostMapping(value = "/user/{openid}/wxservice/templatemsg/thirdsend")
   public void sendThirdSendMsg(@PathVariable(name = "openid") String openid, @RequestBody TemplateMsg msgData)
       throws WxErrorException {
     service.sendThirdSendMsg(openid, msgData);
   }
 
-  @PreAuthorize(value = "hasAuthority('sender')")
+  @PreAuthorize(value = "hasAuthority('admin') or hasAuthority('sender')")
   @PostMapping(value = "/user/{openid}/wxservice/templatemsg/ownsend")
   public void sendOwnSendMsg(@PathVariable(name = "openid") String openid, @RequestBody TemplateMsg msgData)
       throws WxErrorException {
     service.sendOwnSendMsg(openid, msgData);
   }
 
-  @PreAuthorize(value = "hasAuthority('sender')")
+  @PreAuthorize(value = "hasAuthority('admin') or hasAuthority('sender')")
   @PostMapping(value = "/user/{openid}/wxservice/templatemsg/overtime")
   public void sendOrderOverTimeMsg(@PathVariable(name = "openid") String openid, @RequestBody TemplateMsg msgData)
       throws WxErrorException {
