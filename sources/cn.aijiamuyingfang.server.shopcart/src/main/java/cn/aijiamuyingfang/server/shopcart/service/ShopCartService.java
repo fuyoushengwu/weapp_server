@@ -13,6 +13,7 @@ import cn.aijiamuyingfang.server.domain.user.db.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 /**
@@ -80,7 +81,7 @@ public class ShopCartService {
    */
   public GetShopCartItemListResponse getShopCartItemList(String userid, int currentpage, int pagesize) {
     // PageRequest的Page参数是基于0的,但是currentPage是基于1的,所有将currentPage作为参数传递给PgeRequest时需要'-1'
-    PageRequest pageRequest = new PageRequest(currentpage - 1, pagesize);
+    PageRequest pageRequest = new PageRequest(currentpage - 1, pagesize, Sort.Direction.DESC, "id");
     Page<ShopCartItem> shopcartItemPage = shopcartItemRepository.findByUserid(userid, pageRequest);
     GetShopCartItemListResponse response = new GetShopCartItemListResponse();
     response.setCurrentpage(shopcartItemPage.getNumber() + 1);
