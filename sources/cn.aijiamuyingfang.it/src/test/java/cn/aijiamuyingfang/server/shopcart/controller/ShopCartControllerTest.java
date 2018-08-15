@@ -153,8 +153,8 @@ public class ShopCartControllerTest {
 
     shopcartControllerClient.checkShopCartItem(ADMIN_USER_TOKEN, ADMIN_USER_ID, testActions.itemoneId, false, false);
     response = shopcartControllerClient.getShopCartItemList(ADMIN_USER_TOKEN, ADMIN_USER_ID, 1, 10);
-    Assert.assertFalse(response.getDataList().get(0).isIschecked());
-    Assert.assertTrue(response.getDataList().get(1).isIschecked());
+    Assert.assertTrue(response.getDataList().get(0).isIschecked());
+    Assert.assertFalse(response.getDataList().get(1).isIschecked());
 
     shopcartControllerClient.checkShopCartItem(ADMIN_USER_TOKEN, ADMIN_USER_ID, testActions.itemoneId, true, false);
     response = shopcartControllerClient.getShopCartItemList(ADMIN_USER_TOKEN, ADMIN_USER_ID, 1, 10);
@@ -180,8 +180,8 @@ public class ShopCartControllerTest {
     GetShopCartItemListResponse response = shopcartControllerClient.getShopCartItemList(ADMIN_USER_TOKEN, ADMIN_USER_ID,
         1, 10);
     Assert.assertEquals(2, response.getDataList().size());
-    Assert.assertEquals(20, response.getDataList().get(0).getCount());
-    Assert.assertEquals(10, response.getDataList().get(1).getCount());
+    Assert.assertEquals(10, response.getDataList().get(0).getCount());
+    Assert.assertEquals(20, response.getDataList().get(1).getCount());
 
   }
 }
