@@ -1,0 +1,18 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>cn.aijiamuyingfang</groupId>
+		<artifactId>cn.aijiamuyingfang.server.foundation</artifactId>
+		<version>0.0.2</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<artifactId>cn.aijiamuyingfang.server.shoporder</artifactId>
+	<name>shoporder-service</name>
+	<properties>
+		<main.class>cn.aijiamuyingfang.server.shoporder.ShopOrderApplication</main.class>
+		<dockerfile.skip>false</dockerfile.skip>
+	</properties>
+	<dependencies>
+	</dependencies>
+</project>

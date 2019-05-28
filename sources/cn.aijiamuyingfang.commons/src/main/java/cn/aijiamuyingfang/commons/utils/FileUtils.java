@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
+import lombok.experimental.UtilityClass;
+
 /**
  * [描述]:
  * <p>
@@ -15,16 +17,14 @@ import java.nio.file.Files;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-06-28 23:40:49
  */
-public final class FileUtils {
+@UtilityClass
+public class FileUtils {
   private static final char SYSTEM_SEPARATOR = File.separatorChar;
 
-  private FileUtils() {
-  }
-
   /**
-   * 创建文件夹
-   * 
    * @param directory
+   *          要创建的文件夹
+   * @return 是否创建成功
    */
   public static boolean createDirectory(File directory) {
     if (null == directory) {
@@ -40,7 +40,8 @@ public final class FileUtils {
    * 创建文件
    * 
    * @param file
-   * @return
+   *          要创建的文件
+   * @return 是否创建成功
    */
   public static boolean createFile(File file) {
     if (null == file) {
@@ -63,7 +64,9 @@ public final class FileUtils {
    * 清理文件夹
    * 
    * @param directory
+   *          要清理的文件夹
    * @throws IOException
+   *           抛出异常,清理失败
    */
   public static void cleanDirectory(File directory) throws IOException {
     if (!directory.exists()) {
@@ -94,10 +97,11 @@ public final class FileUtils {
   }
 
   /**
-   * 强制删除文件
    * 
    * @param file
+   *          要删除的文件
    * @throws IOException
+   *           抛出异常,删除失败
    */
   public static void forceDelete(File file) throws IOException {
     if (file.isDirectory()) {
@@ -108,10 +112,11 @@ public final class FileUtils {
   }
 
   /**
-   * . 删除文件夹
    * 
    * @param directory
+   *          要删除的文件夹
    * @throws IOException
+   *           抛出异常,删除失败
    */
   public static void deleteDirectory(File directory) throws IOException {
     if (!directory.exists()) {
@@ -125,11 +130,12 @@ public final class FileUtils {
   }
 
   /**
-   * 是否是符号链接文件
    * 
    * @param file
-   * @return
+   *          要判断的文件
+   * @return 是否是符号链接文件
    * @throws IOException
+   *           抛出异常,判断失败
    */
   public static boolean isSymlink(File file) throws IOException {
     if (file == null) {
@@ -150,9 +156,8 @@ public final class FileUtils {
   }
 
   /**
-   * 是否是Windows操作系统
    * 
-   * @return
+   * @return 是否是Windows操作系统
    */
   static boolean isSystemWindows() {
     return SYSTEM_SEPARATOR == '\\';

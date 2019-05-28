@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+cn.aijiamuyingfang.server.logstarter.LogAutoConfiguration,\
+cn.aijiamuyingfang.server.logstarter.LogAop

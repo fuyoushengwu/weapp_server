@@ -2,28 +2,39 @@ package cn.aijiamuyingfang.commons.utils;
 
 import java.util.Collection;
 
-/**
- * Miscellaneous collection utility methods. Mainly for internal use within the framework.
- *
- * @author Juergen Hoeller
- * @author Rob Harrop
- * @author Arjen Poutsma
- * @since 1.1.3
- */
-public final class CollectionUtils {
+import lombok.experimental.UtilityClass;
 
-  private CollectionUtils() {
+/**
+ * [描述]:
+ * <p>
+ * Collection工具集
+ * </p>
+ * 
+ * @version 1.0.0
+ * @author ShiWei
+ * @email shiweideyouxiang@sina.cn
+ * @date 2019-04-08 20:18:58
+ */
+@UtilityClass
+public class CollectionUtils {
+
+  /**
+   * Collection是否为空
+   * 
+   * @param collection
+   * @return
+   */
+  public static boolean isEmpty(Collection<?> collection) {
+    return (null == collection || collection.isEmpty());
   }
 
   /**
-   * Return {@code true} if the supplied Collection is {@code null} or empty. Otherwise, return
-   * {@code false}.
+   * Collection是否包含元素
    * 
    * @param collection
-   *          the Collection to check
-   * @return whether the given Collection is empty
+   * @return
    */
-  public static boolean isEmpty(Collection<?> collection) {
-    return (collection == null || collection.isEmpty());
+  public static boolean hasContent(Collection<?> collection) {
+    return !isEmpty(collection);
   }
 }

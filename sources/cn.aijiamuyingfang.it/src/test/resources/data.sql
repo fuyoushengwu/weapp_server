@@ -1,2 +1,0 @@
-insert into user(id,openid,password,generic_score) values('5c6a132a829f11e896fc00cfe0430e2a','admin','$2a$10$79.gNAUlFzkIZ7twWEBJQ.L6sXJk90KlCH1tduxA/n6iU5nWLpeRC',0);
-insert into user_authority_list(user_id,authority_list) values('5c6a132a829f11e896fc00cfe0430e2a',0);

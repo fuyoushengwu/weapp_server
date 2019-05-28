@@ -1,0 +1,643 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: weapp-namespace
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: weapp-default-limitrange
+  namespace: weapp-namespace
+spec:
+  limits:
+    - type: Container
+      default:
+        cpu: 800m
+        memory: 1024Mi
+      defaultRequest:
+        cpu: 100m
+        memory: 512Mi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: database
+  namespace: weapp-namespace
+data:
+  WEAPP_DATASOURCE_HOST: '192.168.0.102'
+  WEAPP_DATASOURCE_PORT: '3306'
+  WEAPP_DATASOURCE_USERNAME: root
+  WEAPP_DATASOURCE_PASSWORD: huawei123
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: weapp
+  namespace: weapp-namespace
+data:
+  WEAPP_APPID: wxbe3725e2fe517faa
+  WEAPP_SECRET: 02bc75f7860d5bd54e5302942a09b639
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hwt
+  namespace: weapp-namespace
+data:
+  MAIN_ARGS: --spring.profiles.active=prod
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: register-service
+  namespace: weapp-namespace
+  labels:
+    app: register-service
+spec:
+  selector:
+    app: register-service
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8761
+      targetPort: 8761
+      nodePort: 8761
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: register-service
+  namespace: weapp-namespace
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 10%
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: register-service
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              preference:
+                matchExpressions:
+                  - key: node-role.kubernetes.io/master
+                    operator: Exists
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/master
+      containers:
+        - name: register-service
+          image: registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/register-service:latest
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: hwt
+          ports:
+            - containerPort: 8761
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: monitor-service
+#   namespace: weapp-namespace
+#   labels:
+#     app: monitor-service
+# spec:
+#   selector:
+#     app: monitor-service
+#   ports:
+#     - name: prod-port
+#       port: 8080
+# ---
+# apiVersion: extensions/v1beta1
+# kind: Deployment
+# metadata:
+#   name:  monitor-service
+#   namespace: weapp-namespace
+# spec:
+#   replicas: 1
+#   strategy:
+#     rollingUpdate:
+#       maxSurge: 10%
+#       maxUnavailable: 0
+#   template:
+#     metadata:
+#       labels:
+#         app: monitor-service
+#     spec:
+#       initContainers:
+#         - name: check-register
+#           image: busybox:1.28.3
+#           command: ['sh', '-c', 'until wget http://register-service.weapp-namespace:8761/; do echo waiting for register-service; sleep 2; done;']
+#       containers:
+#         - name:  monitor-service
+#           image: registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/monitor-service:latest
+#           imagePullPolicy: IfNotPresent
+#           envFrom:
+#             - configMapRef:
+#                 name: hwt
+#           ports:
+#             - containerPort: 8080
+#               name: prod-port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: config-service
+  namespace: weapp-namespace
+  labels:
+    app: config-service
+spec:
+  selector:
+    app: config-service
+  ports:
+    - name: prod-port
+      port: 8080
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name:  config-service
+  namespace: weapp-namespace
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 10%
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: config-service
+    spec:
+      initContainers:
+        - name: check-register
+          image: busybox:1.28.3
+          command: ['sh', '-c', 'until wget http://register-service.weapp-namespace:8761/; do echo waiting for register-service; sleep 2; done;']
+      containers:
+        - name:  config-service
+          image: registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/config-service:latest
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: hwt
+          ports:
+            - containerPort: 8080
+              name: prod-port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway-service
+  namespace: weapp-namespace
+  labels:
+    app: gateway-service
+spec:
+  selector:
+    app: gateway-service
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 8080
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gateway-service
+  namespace: weapp-namespace
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 10%
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: gateway-service
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              preference:
+                matchExpressions:
+                  - key: node-role.kubernetes.io/master
+                    operator: Exists
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/master
+      initContainers:
+        - name: check-register
+          image: busybox:1.28.3
+          command: ['sh', '-c', 'until wget http://register-service.weapp-namespace:8761/; do echo waiting for register-service; sleep 2; done;']  
+        - name: check-config
+          image: busybox:1.28.3
+          command: ['sh', '-c', 'until wget http://config-service.weapp-namespace:8080/application/prod; do echo waiting for config-service; sleep 2; done;']                  
+      containers:
+        - name: gateway-service
+          image: registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/gateway-service:latest
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: hwt
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: logcenter-service
+  namespace: weapp-namespace
+  labels:
+    app: logcenter-service
+spec:
+  selector:
+    app: logcenter-service
+  ports:
+    - name: prod-port
+      port: 8080
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name:  logcenter-service
+  namespace: weapp-namespace
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 10%
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: logcenter-service
+    spec:
+      initContainers:
+        - name: check-register
+          image: busybox:1.28.3
+          command: ['sh', '-c', 'until wget http://register-service.weapp-namespace:8761/; do echo waiting for register-service; sleep 2; done;']  
+        - name: check-config
+          image: busybox:1.28.3
+          command: ['sh', '-c', 'until wget http://config-service.weapp-namespace:8080/application/prod; do echo waiting for config-service; sleep 2; done;']       
+      containers:
+        - name:  logcenter-service
+          image: registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/logcenter-service:latest
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: hwt
+            - configMapRef:
+                name: database
+          env:
+            - name: WEAPP_DATASOURCE_DATABASE
+              value: weapp-logcenter
+          ports:
+            - containerPort: 8080
+              name: prod-port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+  namespace: weapp-namespace
+  labels:
+    app: user-service
+spec:
+  selector:
+    app: user-service
+  ports:
+    - name: prod-port
+      port: 8080
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name:  user-service
+  namespace: weapp-namespace
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 10%
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      initContainers:
+        - name: check-register
+          image: busybox:1.28.3
+          command: ['sh', '-c', 'until wget http://register-service.weapp-namespace:8761/; do echo waiting for register-service; sleep 2; done;']  
+        - name: check-config
+          image: busybox:1.28.3
+          command: ['sh', '-c', 'until wget http://config-service.weapp-namespace:8080/application/prod; do echo waiting for config-service; sleep 2; done;']       
+      containers:
+        - name:  user-service
+          image: registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/user-service:latest
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: hwt
+            - configMapRef:
+                name: database
+            - configMapRef:
+                name: weapp
+          env:
+            - name: WEAPP_DATASOURCE_DATABASE
+              value: weapp-user
+          ports:
+            - containerPort: 8080
+              name: prod-port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shoporder-service
+  namespace: weapp-namespace
+  labels:
+    app: shoporder-service
+spec:
+  selector:
+    app: shoporder-service
+  ports:
+    - name: prod-port
+      port: 8080
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name:  shoporder-service
+  namespace: weapp-namespace
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 10%
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: shoporder-service
+    spec:
+      initContainers:
+        - name: check-register
+          image: busybox:1.28.3
+          command: ['sh', '-c', 'until wget http://register-service.weapp-namespace:8761/; do echo waiting for register-service; sleep 2; done;']  
+        - name: check-config
+          image: busybox:1.28.3
+          command: ['sh', '-c', 'until wget http://config-service.weapp-namespace:8080/application/prod; do echo waiting for config-service; sleep 2; done;']       
+      containers:
+        - name:  shoporder-service
+          image: registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/shoporder-service:latest
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: hwt
+            - configMapRef:
+                name: database
+          env:
+            - name: WEAPP_DATASOURCE_DATABASE
+              value: weapp-shoporder
+          ports:
+            - containerPort: 8080
+              name: prod-port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: goods-service
+  namespace: weapp-namespace
+  labels:
+    app: goods-service
+spec:
+  selector:
+    app: goods-service
+  ports:
+    - name: prod-port
+      port: 8080
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name:  goods-service
+  namespace: weapp-namespace
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 10%
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: goods-service
+    spec:
+      initContainers:
+        - name: check-register
+          image: busybox:1.28.3
+          command: ['sh', '-c', 'until wget http://register-service.weapp-namespace:8761/; do echo waiting for register-service; sleep 2; done;']  
+        - name: check-config
+          image: busybox:1.28.3
+          command: ['sh', '-c', 'until wget http://config-service.weapp-namespace:8080/application/prod; do echo waiting for config-service; sleep 2; done;']       
+      containers:
+        - name:  goods-service
+          image: registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/goods-service:latest
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: hwt
+            - configMapRef:
+                name: database
+          env:
+            - name: WEAPP_DATASOURCE_DATABASE
+              value: weapp-goods
+          ports:
+            - containerPort: 8080
+              name: prod-port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: coupon-service
+  namespace: weapp-namespace
+  labels:
+    app: coupon-service
+spec:
+  selector:
+    app: coupon-service
+  ports:
+    - name: prod-port
+      port: 8080
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name:  coupon-service
+  namespace: weapp-namespace
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 10%
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: coupon-service
+    spec:
+      initContainers:
+        - name: check-register
+          image: busybox:1.28.3
+          command: ['sh', '-c', 'until wget http://register-service.weapp-namespace:8761/; do echo waiting for register-service; sleep 2; done;']  
+        - name: check-config
+          image: busybox:1.28.3
+          command: ['sh', '-c', 'until wget http://config-service.weapp-namespace:8080/application/prod; do echo waiting for config-service; sleep 2; done;']       
+      containers:
+        - name:  coupon-service
+          image: registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/coupon-service:latest
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: hwt
+            - configMapRef:
+                name: database
+          env:
+            - name: WEAPP_DATASOURCE_DATABASE
+              value: weapp-coupon
+          ports:
+            - containerPort: 8080
+              name: prod-port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: filecenter-service
+  namespace: weapp-namespace
+  labels:
+    app: filecenter-service
+spec:
+  selector:
+    app: filecenter-service
+  ports:
+    - name: prod-port
+      port: 8080
+---
+apiVersion: apps/v1beta2
+kind: StatefulSet
+metadata:
+  name:  filecenter-service
+  namespace: weapp-namespace
+spec:
+  selector:
+    matchLabels:
+      app: filecenter-service
+  replicas: 1
+  serviceName: filecenter-service
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: filecenter-service
+    spec:
+      initContainers:
+        - name: check-register
+          image: busybox:1.28.3
+          command: ['sh', '-c', 'until wget http://register-service.weapp-namespace:8761/; do echo waiting for register-service; sleep 2; done;']  
+        - name: check-config
+          image: busybox:1.28.3
+          command: ['sh', '-c', 'until wget http://config-service.weapp-namespace:8080/application/prod; do echo waiting for config-service; sleep 2; done;']       
+      containers:
+        - name:  filecenter-service
+          image: registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/filecenter-service:latest
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: hwt
+            - configMapRef:
+                name: database
+          env:
+            - name: WEAPP_DATASOURCE_DATABASE
+              value: weapp-filecenter
+            - name: WEAPP_FILECENTER_STOREDIR
+              value: /root/store
+          ports:
+            - containerPort: 8080
+              name: prod-port
+          volumeMounts:
+            - name: weapp-filecenter
+              mountPath: /root/store        
+  volumeClaimTemplates:
+    - metadata:
+        name: weapp-filecenter
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: "managed-nfs-storage"
+        resources:
+          requests:
+            storage: 15Gi             
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+  namespace: weapp-namespace
+  labels:
+    app: auth-service
+spec:
+  selector:
+    app: auth-service
+  ports:
+    - name: prod-port
+      port: 8080
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name:  auth-service
+  namespace: weapp-namespace
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 10%
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: auth-service
+    spec:
+      initContainers:
+        - name: check-register
+          image: busybox:1.28.3
+          command: ['sh', '-c', 'until wget http://register-service.weapp-namespace:8761/; do echo waiting for register-service; sleep 2; done;']  
+        - name: check-config
+          image: busybox:1.28.3
+          command: ['sh', '-c', 'until wget http://config-service.weapp-namespace:8080/application/prod; do echo waiting for config-service; sleep 2; done;']       
+      containers:
+        - name:  auth-service
+          image: registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/auth-service:latest
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: hwt
+            - configMapRef:
+                name: database
+            - configMapRef:
+                name: weapp
+          env:
+            - name: WEAPP_DATASOURCE_DATABASE
+              value: weapp-auth
+          ports:
+            - containerPort: 8080
+              name: prod-port

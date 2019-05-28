@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>cn.aijiamuyingfang</groupId>
+		<artifactId>cn.aijiamuyingfang.server.app</artifactId>
+		<version>0.0.2</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<artifactId>cn.aijiamuyingfang.server.foundation</artifactId>
+	<packaging>pom</packaging>
+	<name>cn.aijiamuyingfang.server.foundation</name>
+	<modules>
+		<module>cn.aijiamuyingfang.server.coupon</module>
+		<module>cn.aijiamuyingfang.server.goods</module>
+		<module>cn.aijiamuyingfang.server.shoporder</module>
+		<module>cn.aijiamuyingfang.server.user</module>
+		<module>cn.aijiamuyingfang.server.auth</module>
+		<module>cn.aijiamuyingfang.server.filecenter</module>
+		<module>cn.aijiamuyingfang.server.logcenter</module>
+	</modules>
+
+	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>cn.aijiamuyingfang.server.foundation.commons</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>
