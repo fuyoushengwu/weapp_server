@@ -19,11 +19,15 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.TokenGranter;
+import org.springframework.security.oauth2.provider.TokenRequest;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
+import cn.aijiamuyingfang.server.auth.granter.JSCodeTokenGranter;
+import cn.aijiamuyingfang.server.auth.service.OAuth2Service;
 import cn.aijiamuyingfang.server.auth.service.RedisAuthorizationCodeServices;
 import cn.aijiamuyingfang.server.feign.domain.user.User;
 
@@ -45,6 +49,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
   @Value("${access_token.store-jwt:false}")
   private boolean storeWithJwt;
+
+  @Autowired
+  private OAuth2Service oauth2Service;
 
   @Autowired
   private RedisAuthorizationCodeServices redisAuthorizationCodeServices;
@@ -103,7 +110,22 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     if (storeWithJwt) {
       endpoints.accessTokenConverter(accessTokenConverter());
     }
-
+    JSCodeTokenGranter jscodeTokenGranter = new JSCodeTokenGranter(oauth2Service, authenticationManager,
+        endpoints.getTokenServices(), endpoints.getClientDetailsService(), endpoints.getOAuth2RequestFactory());
+    final TokenGranter delegate = endpoints.getTokenGranter();
+    endpoints.tokenGranter(new TokenGranter() {
+      @Override
+      public OAuth2AccessToken grant(String grantType, TokenRequest tokenRequest) {
+        OAuth2AccessToken result = null;
+        if (delegate != null) {
+          result = delegate.grant(grantType, tokenRequest);
+        }
+        if (null == result) {
+          result = jscodeTokenGranter.grant(grantType, tokenRequest);
+        }
+        return result;
+      }
+    });
   }
 
 }

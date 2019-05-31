@@ -1,10 +1,14 @@
 package cn.aijiamuyingfang.server.auth.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import cn.aijiamuyingfang.server.auth.domain.WeChatSession;
+import cn.aijiamuyingfang.server.domain.Gender;
 import cn.aijiamuyingfang.server.exception.WeChatServiceException;
+import cn.aijiamuyingfang.server.feign.UserClient;
+import cn.aijiamuyingfang.server.feign.domain.user.User;
 import cn.binarywang.wx.miniapp.api.WxMaUserService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import me.chanjar.weixin.common.bean.result.WxError;
@@ -13,18 +17,24 @@ import me.chanjar.weixin.common.exception.WxErrorException;
 /**
  * [描述]:
  * <p>
- * 微信会话的Service
+ * 用户鉴权相关服务的Service层
  * </p>
  * 
  * @version 1.0.0
  * @author ShiWei
  * @email shiweideyouxiang@sina.cn
- * @date 2018-06-26 02:11:02
+ * @date 2018-07-07 02:43:49
  */
 @Service
-public class WeChatSessionService {
+public class OAuth2Service {
   @Autowired
   private WxMaUserService wxmaxUserService;
+
+  @Autowired
+  private UserClient userClient;
+
+  @Value("${wechat.miniapp.appid}")
+  private String appid;
 
   /**
    * 根据jscode获得用户会话信息
@@ -47,5 +57,30 @@ public class WeChatSessionService {
       }
       throw new WeChatServiceException("500", e.getMessage());
     }
+  }
+
+  /**
+   * 獲取用戶(儅系統中沒有時則創建)
+   * 
+   * @param openid
+   * @param password
+   * @param nickname
+   * @param avatar
+   * @param gender
+   * @return
+   */
+  public User getOrCreateUserIfAbsent(String openid, String password,String nickname, String avatar, Gender gender) {
+    User user = userClient.getUserInternal(null, openid).getData();
+    if (null == user) {
+      user = new User();
+      user.setOpenid(openid);
+      user.setPassword(password);
+      user.setAppid(appid);
+      user.setNickname(nickname);
+      user.setAvatar(avatar);
+      user.setGender(gender);
+      return userClient.registerUserInternal(user).getData();
+    }
+    return user;
   }
 }

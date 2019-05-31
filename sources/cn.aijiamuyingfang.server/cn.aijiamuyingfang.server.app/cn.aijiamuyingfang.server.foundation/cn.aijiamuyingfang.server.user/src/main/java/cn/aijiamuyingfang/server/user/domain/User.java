@@ -82,11 +82,6 @@ public class User implements UserDetails {
   private String phone;
 
   /**
-   * 小程序调用wx.login() 获取的临时登录凭证code
-   */
-  private String jscode;
-
-  /**
    * 用户角色
    */
   @JsonDeserialize(contentUsing = AuthorityListDeserializer.class)
@@ -112,7 +107,6 @@ public class User implements UserDetails {
   /**
    * 用户所在的APP ID
    */
-  @JsonIgnore
   private String appid;
 
   /**

@@ -63,8 +63,7 @@ public class GoodControllerTest {
   @Test(expected = GoodsException.class)
   @UseCaseDescription(description = "条目不存在")
   public void test_GetClassifyGoodList_001() throws IOException {
-    goodcontrollerClient.getClassifyGoodList("not_exist_classify", null, null, null, null, 1, 10,
-        testActions.getAdminAccessToken());
+    goodcontrollerClient.getClassifyGoodList("not_exist_classify", null, null, null, null, 1, 10);
     Assert.fail();
   }
 
@@ -75,7 +74,7 @@ public class GoodControllerTest {
     Assert.assertNotNull(storeOne);
     Classify classifyOne = testActions.getClassifyOne();
     GetClassifyGoodListResponse response = goodcontrollerClient.getClassifyGoodList(classifyOne.getId(), null, null,
-        null, null, 1, 10, testActions.getAdminAccessToken());
+        null, null, 1, 10);
     Assert.assertNotNull(response);
     Assert.assertEquals(0, response.getDataList().size());
   }
@@ -86,7 +85,7 @@ public class GoodControllerTest {
     Classify subClassifyOne = testActions.getSubClassifyOneForClassifyOne();
     testActions.addGoodOneForSubClassifyOne();
     GetClassifyGoodListResponse response = goodcontrollerClient.getClassifyGoodList(subClassifyOne.getId(), null, null,
-        null, null, 1, 10, testActions.getAdminAccessToken());
+        null, null, 1, 10);
     Assert.assertNotNull(response);
     Assert.assertEquals(1, response.getDataList().size());
   }
@@ -94,7 +93,7 @@ public class GoodControllerTest {
   @Test(expected = GoodsException.class)
   @UseCaseDescription(description = "获取不存在的Good")
   public void test_GetGood_001() throws IOException {
-    goodcontrollerClient.getGood("not_exist_goodid", testActions.getAdminAccessToken());
+    goodcontrollerClient.getGood("not_exist_goodid");
     Assert.fail();
   }
 
@@ -102,7 +101,7 @@ public class GoodControllerTest {
   @UseCaseDescription(description = "获取存在的Good")
   public void test_GetGood_002() throws IOException {
     Good goodOne = testActions.getGoodOne();
-    Good good = goodcontrollerClient.getGood(goodOne.getId(), testActions.getAdminAccessToken());
+    Good good = goodcontrollerClient.getGood(goodOne.getId());
     Assert.assertEquals(goodOne.getId(), good.getId());
   }
 
@@ -110,10 +109,10 @@ public class GoodControllerTest {
   @UseCaseDescription(description = "获取废弃的Good")
   public void test_GetGood_003() throws IOException {
     Good goodOne = testActions.getGoodOne();
-    Good good = goodcontrollerClient.getGood(goodOne.getId(), testActions.getAdminAccessToken());
+    Good good = goodcontrollerClient.getGood(goodOne.getId());
     Assert.assertEquals(goodOne.getId(), good.getId());
     testActions.deleteGoodOne();
-    goodcontrollerClient.getGood(goodOne.getId(), testActions.getAdminAccessToken());
+    goodcontrollerClient.getGood(goodOne.getId());
     Assert.fail();
   }
 
@@ -144,14 +143,14 @@ public class GoodControllerTest {
     Good goodRequest = new Good();
     goodRequest.setName("good one rename");
     goodcontrollerClient.updateGood(goodOne.getId(), goodRequest, testActions.getAdminAccessToken());
-    Good good = goodcontrollerClient.getGood(goodOne.getId(), testActions.getAdminAccessToken());
+    Good good = goodcontrollerClient.getGood(goodOne.getId());
     Assert.assertEquals("good one rename", good.getName());
   }
 
   @Test(expected = GoodsException.class)
   @UseCaseDescription(description = "不存在的gooddetail")
   public void test_GetGoodDetail_001() throws IOException {
-    goodcontrollerClient.getGoodDetail("not_exist_goodid", testActions.getAdminAccessToken());
+    goodcontrollerClient.getGoodDetail("not_exist_goodid");
     Assert.fail();
   }
 
@@ -160,7 +159,7 @@ public class GoodControllerTest {
   public void test_GetGoodDetail_002() throws IOException {
     Good goodOne = testActions.getGoodOne();
     testActions.deleteGoodOne();
-    goodcontrollerClient.getGoodDetail(goodOne.getId(), testActions.getAdminAccessToken());
+    goodcontrollerClient.getGoodDetail(goodOne.getId());
     Assert.fail();
   }
 
@@ -168,7 +167,7 @@ public class GoodControllerTest {
   @UseCaseDescription(description = "gooddetail")
   public void test_GetGoodDetail_003() throws IOException {
     Good goodOne = testActions.getGoodOne();
-    GoodDetail goodDetail = goodcontrollerClient.getGoodDetail(goodOne.getId(), testActions.getAdminAccessToken());
+    GoodDetail goodDetail = goodcontrollerClient.getGoodDetail(goodOne.getId());
     Assert.assertNotNull(goodDetail);
     Assert.assertEquals(goodOne.getId(), goodDetail.getId());
   }

@@ -39,15 +39,13 @@ public interface GoodControllerApi {
    * @param orderValue
    * @param currentpage
    * @param pagesize
-   * @param accessToken
    * @return
    */
   @GET(value = "/goods-service/classify/{classifyid}/good")
   public Call<ResponseBean> getClassifyGoodList(@Path("classifyid") String classifyid,
       @Query(value = "packFilter") List<String> packFilter, @Query(value = "levelFilter") List<String> levelFilter,
       @Query(value = "orderType") String orderType, @Query(value = "orderValue") String orderValue,
-      @Query(value = "currentpage") int currentpage, @Query(value = "pagesize") int pagesize,
-      @Query("access_token") String accessToken);
+      @Query(value = "currentpage") int currentpage, @Query(value = "pagesize") int pagesize);
 
   /**
    * 添加商品
@@ -63,11 +61,10 @@ public interface GoodControllerApi {
    * 获取商品信息
    * 
    * @param goodid
-   * @param accessToken
    * @return
    */
   @GET(value = "/goods-service/good/{goodid}")
-  public Call<ResponseBean> getGood(@Path("goodid") String goodid, @Query("access_token") String accessToken);
+  public Call<ResponseBean> getGood(@Path("goodid") String goodid);
 
   /**
    * 废弃商品
@@ -83,11 +80,10 @@ public interface GoodControllerApi {
    * 获取商品详细信息
    * 
    * @param goodid
-   * @param accessToken
    * @return
    */
   @GET(value = "/goods-service/good/{goodid}/detail")
-  public Call<ResponseBean> getGoodDetail(@Path("goodid") String goodid, @Query("access_token") String accessToken);
+  public Call<ResponseBean> getGoodDetail(@Path("goodid") String goodid);
 
   /**
    * 更新Good信息

@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import cn.aijiamuyingfang.server.domain.response.ResponseBean;
 import cn.aijiamuyingfang.server.feign.domain.user.RecieveAddress;
@@ -16,13 +18,30 @@ import cn.aijiamuyingfang.server.feign.domain.user.User;
 public interface UserClient {
 
   /**
-   * 查询用户信息
+   * 
    * 
    * @param userid
    * @return
    */
-  @GetMapping("/users-anon/internal/user/{userid}")
-  ResponseBean<User> getUserById(@PathVariable("userid") String userid);
+  /**
+   * 查询用户信息( 供系统内部其它服务使用的,不需要鉴权)
+   * 
+   * @param userid
+   * @param openid
+   * @return
+   */
+  @GetMapping("/users-anon/internal/user")
+  ResponseBean<User> getUserInternal(@RequestParam(value = "userid", required = false) String userid,
+      @RequestParam(value = "openid", required = false) String openid);
+
+  /**
+   * 注册用户(供系统内部其它服务使用的,不需要鉴权)
+   * 
+   * @param user
+   * @return
+   */
+  @PostMapping(value = "/users-anon/internal/user")
+  ResponseBean<User> registerUserInternal(@RequestBody User user);
 
   /**
    * 更新用户信息

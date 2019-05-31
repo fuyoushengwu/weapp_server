@@ -48,23 +48,20 @@ public interface CouponControllerApi {
    * 
    * @param currentpage
    * @param pagesize
-   * @param accessToken
    * @return
    */
   @GET(value = "/coupon-service/coupon/goodvoucher")
   public Observable<ResponseBean<GetGoodVoucherListResponse>> getGoodVoucherList(@Query("currentpage") int currentpage,
-      @Query("pagesize") int pagesize, @Query("access_token") String accessToken);
+      @Query("pagesize") int pagesize);
 
   /**
    * 获取商品兑换券
    * 
    * @param voucherid
-   * @param accessToken
    * @return
    */
   @GET(value = "/coupon-service/coupon/goodvoucher/{voucherid}")
-  public Observable<ResponseBean<GoodVoucher>> getGoodVoucher(@Path("voucherid") String voucherid,
-      @Query("access_token") String accessToken);
+  public Observable<ResponseBean<GoodVoucher>> getGoodVoucher(@Path("voucherid") String voucherid);
 
   /**
    * 创建商品兑换券
@@ -93,23 +90,20 @@ public interface CouponControllerApi {
    * 
    * @param currentpage
    * @param pagesize
-   * @param accessToken
    * @return
    */
   @GET(value = "/coupon-service/coupon/voucheritem")
   public Observable<ResponseBean<GetVoucherItemListResponse>> getVoucherItemList(@Query("currentpage") int currentpage,
-      @Query("pagesize") int pagesize, @Query("access_token") String accessToken);
+      @Query("pagesize") int pagesize);
 
   /**
    * 获取兑换方式
    * 
    * @param voucheritemId
-   * @param accessToken
    * @return
    */
   @GET(value = "/coupon-service/coupon/voucheritem/{voucheritemId}")
-  public Observable<ResponseBean<VoucherItem>> getVoucherItem(@Path("voucheritemId") String voucheritemId,
-      @Query("access_token") String accessToken);
+  public Observable<ResponseBean<VoucherItem>> getVoucherItem(@Path("voucheritemId") String voucheritemId);
 
   /**
    * 创建兑换方式

@@ -29,35 +29,21 @@ import retrofit2.http.Query;
 public interface ClassifyControllerApi {
 
   /**
-   * 获取门店下所有的顶层条目
-   * 
-   * @param storeid
-   * @param accessToken
-   * @return
-   */
-  @GET(value = "/store/{storeid}/classify")
-  public Call<ResponseBean> getStoreTopClassifyList(@Path(value = "storeid") String storeid,
-      @Query("access_token") String accessToken);
-
-  /**
    * 获取所有顶层条目
    * 
-   * @param accessToken
    * @return
    */
   @GET(value = "/goods-service/classify")
-  public Call<ResponseBean> getTopClassifyList(@Query("access_token") String accessToken);
+  public Call<ResponseBean> getTopClassifyList();
 
   /**
    * 获取某个条目
    * 
    * @param classifyid
-   * @param accessToken
    * @return
    */
   @GET(value = "/goods-service/classify/{classifyid}")
-  public Call<ResponseBean> getClassify(@Path(value = "classifyid") String classifyid,
-      @Query("access_token") String accessToken);
+  public Call<ResponseBean> getClassify(@Path(value = "classifyid") String classifyid);
 
   /**
    * 废弃条目
@@ -84,12 +70,10 @@ public interface ClassifyControllerApi {
    * 获得条目下的所有子条目
    * 
    * @param classifyid
-   * @param accessToken
    * @return
    */
   @GET(value = "/goods-service/classify/{classifyid}/subclassify")
-  public Call<ResponseBean> getSubClassifyList(@Path(value = "classifyid") String classifyid,
-      @Query("access_token") String accessToken);
+  public Call<ResponseBean> getSubClassifyList(@Path(value = "classifyid") String classifyid);
 
   /**
    * 创建子条目

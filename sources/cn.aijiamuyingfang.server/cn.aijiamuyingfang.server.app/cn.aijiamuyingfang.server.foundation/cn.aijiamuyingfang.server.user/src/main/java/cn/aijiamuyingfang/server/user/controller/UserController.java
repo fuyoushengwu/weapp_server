@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import cn.aijiamuyingfang.commons.utils.StringUtils;
@@ -45,14 +46,13 @@ public class UserController {
       value = "isAuthenticated() and (#userid.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
   @GetMapping(value = "/user/{userid}")
   public User getUser(@PathVariable("userid") String userid) {
-    return getUserById(userid);
+    return getUserInternal(userid, null);
   }
 
   @PreAuthorize("hasAuthority('permission:manager:*')")
   @PostMapping("/user/register")
   public User registerUser(@RequestBody User user) {
     return userService.registerUser(user);
-
   }
 
   /**
@@ -61,9 +61,27 @@ public class UserController {
    * @param userid
    * @return
    */
-  @GetMapping(value = "/users-anon/internal/user/{userid}")
-  public User getUserById(@PathVariable("userid") String userid) {
-    return userService.getUser(userid);
+  @GetMapping(value = "/users-anon/internal/user")
+  public User getUserInternal(@RequestParam(value = "userid", required = false) String userid,
+      @RequestParam(value = "openid", required = false) String openid) {
+    if (StringUtils.hasContent(userid)) {
+      return userService.getUser(userid);
+    }
+    if (StringUtils.hasContent(openid)) {
+      return userService.getUserByOpenid(openid);
+    }
+    throw new IllegalArgumentException("userid or openid must provided one");
+  }
+
+  /**
+   * 注册用户(供系统内部其它服务使用的,不需要鉴权)
+   * 
+   * @param user
+   * @return
+   */
+  @PostMapping(value = "/users-anon/internal/user")
+  public User registerUserInternal(@RequestBody User user) {
+    return userService.registerUser(user);
   }
 
   /**

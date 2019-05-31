@@ -175,7 +175,7 @@ public class ShopOrderService {
       throw new ShopOrderException("500", "shoporder has get target status");
     }
 
-    User user = userClient.getUserById(shoporder.getUserid()).getData();
+    User user = userClient.getUserInternal(shoporder.getUserid(), null).getData();
     if (null == user) {
       throw new ShopOrderException(ResponseCode.USER_NOT_EXIST, shoporder.getUserid());
     }
@@ -238,7 +238,7 @@ public class ShopOrderService {
       throw new ShopOrderException(ResponseCode.SHOPORDER_NOT_EXIST, shoporderid);
     }
 
-    User user = userClient.getUserById(userid).getData();
+    User user = userClient.getUserInternal(userid, null).getData();
     if (null == user) {
       throw new ShopOrderException("404", "shoporder owner not exist");
     }
@@ -295,7 +295,7 @@ public class ShopOrderService {
     shoporder.setFinishTime(new Date());
     shopOrderRepository.saveAndFlush(shoporder);
 
-    User user = userClient.getUserById(userid).getData();
+    User user = userClient.getUserInternal(userid, null).getData();
     if (null == user) {
       return response;
     }
@@ -486,7 +486,7 @@ public class ShopOrderService {
 
     shoporder.setTotalPrice(totalPrice);
 
-    User user = userClient.getUserById(userid).getData();
+    User user = userClient.getUserInternal(userid, null).getData();
     if (user != null) {
       shoporder.setUserOpenId(user.getOpenid());
       shoporder.setUserid(userid);
@@ -614,7 +614,6 @@ public class ShopOrderService {
     return shopOrderRepository.countByUseridAndStatusInAndSendtypeIn(userid, statusList, sendtypeList);
   }
 
-  
   /**
    * 分页获取预定的商品信息
    *
@@ -655,7 +654,7 @@ public class ShopOrderService {
         count++;
       }
       if (count == pagesize) {
-        //这里不好算出totalpage,所以当所有数据还没有遍历完时,用currentpage+1作为totalpage,让调用者认为还有数据
+        // 这里不好算出totalpage,所以当所有数据还没有遍历完时,用currentpage+1作为totalpage,让调用者认为还有数据
         response.setTotalpage(currentpage + 1);
         break;
       }

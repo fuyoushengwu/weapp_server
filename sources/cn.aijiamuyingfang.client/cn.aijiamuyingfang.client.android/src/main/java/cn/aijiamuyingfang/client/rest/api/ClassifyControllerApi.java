@@ -32,22 +32,19 @@ public interface ClassifyControllerApi {
   /**
    * 获取所有顶层条目
    * 
-   * @param accessToken
    * @return
    */
   @GET(value = "/goods-service/classify")
-  public Observable<ResponseBean<List<Classify>>> getTopClassifyList(@Query("access_token") String accessToken);
+  public Observable<ResponseBean<List<Classify>>> getTopClassifyList();
 
   /**
    * 获取某个条目
    * 
    * @param classifyid
-   * @param accessToken
    * @return
    */
   @GET(value = "/goods-service/classify/{classifyid}")
-  public Observable<ResponseBean<Classify>> getClassify(@Path(value = "classifyid") String classifyid,
-      @Query("access_token") String accessToken);
+  public Observable<ResponseBean<Classify>> getClassify(@Path(value = "classifyid") String classifyid);
 
   /**
    * 废弃条目
@@ -75,12 +72,10 @@ public interface ClassifyControllerApi {
    * 获得条目下的所有子条目
    * 
    * @param classifyid
-   * @param accessToken
    * @return
    */
   @GET(value = "/goods-service/classify/{classifyid}/subclassify")
-  public Observable<ResponseBean<List<Classify>>> getSubClassifyList(@Path(value = "classifyid") String classifyid,
-      @Query("access_token") String accessToken);
+  public Observable<ResponseBean<List<Classify>>> getSubClassifyList(@Path(value = "classifyid") String classifyid);
 
   /**
    * 创建子条目

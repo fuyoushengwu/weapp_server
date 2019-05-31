@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import cn.aijiamuyingfang.commons.utils.NumberUtils;
+import cn.aijiamuyingfang.server.domain.Gender;
 import lombok.Data;
 
 @Data
@@ -35,7 +36,24 @@ public class User implements UserDetails {
    * 密码
    */
   private String password;
+  
+  /**
+   * 头像
+   */
+  private String avatar;
 
+  /**
+   * 性别
+   */
+  private Gender gender;
+  /**
+   * 昵称
+   */
+  private String nickname;
+  /**
+   * 用户所在的APP ID
+   */
+  private String appid;
   /**
    * 用户角色
    */

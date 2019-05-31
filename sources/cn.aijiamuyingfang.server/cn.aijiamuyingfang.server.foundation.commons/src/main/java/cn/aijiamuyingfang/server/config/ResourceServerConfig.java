@@ -2,7 +2,6 @@ package cn.aijiamuyingfang.server.config;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,22 +26,20 @@ import cn.aijiamuyingfang.commons.utils.PermitAllUrl;
 @EnableResourceServer
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@ConditionalOnBean(name = "resourceServerConfig")
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
   private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-  
+
   @Bean
   public BCryptPasswordEncoder bCryptPasswordEncoder() {
     return bCryptPasswordEncoder;
   }
-  
+
   @Override
   public void configure(HttpSecurity http) throws Exception {
-    http.csrf().disable().exceptionHandling()
+    http.exceptionHandling()
         .authenticationEntryPoint(
             (request, response, exception) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED))
-        .and().authorizeRequests().antMatchers(PermitAllUrl.permitAllUrl()).permitAll().anyRequest().authenticated()
-        .and().httpBasic();
+        .and().authorizeRequests().antMatchers(PermitAllUrl.permitAllUrl()).permitAll().and().httpBasic().and().csrf().disable();
     http.headers().frameOptions().sameOrigin();
   }
 }

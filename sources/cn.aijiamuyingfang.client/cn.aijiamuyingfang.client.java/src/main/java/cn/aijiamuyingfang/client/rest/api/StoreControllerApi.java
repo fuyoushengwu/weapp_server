@@ -35,12 +35,11 @@ public interface StoreControllerApi {
    *          当前页 默认值:1 (currentpage必须&ge;1,否则重置为1)
    * @param pagesize
    *          每页大小 默认值:10(pagesize必须&gt;0,否则重置为1)
-   * @param accessToken
    * @return
    */
   @GET(value = "/goods-service/store")
   public Call<ResponseBean> getInUseStoreList(@Query(value = "currentpage") int currentpage,
-      @Query(value = "pagesize") int pagesize, @Query("access_token") String accessToken);
+      @Query(value = "pagesize") int pagesize);
 
   /**
    * 创建门店
@@ -56,11 +55,10 @@ public interface StoreControllerApi {
    * 获取门店信息
    * 
    * @param storeid
-   * @param accessToken
    * @return
    */
   @GET(value = "/goods-service/store/{storeid}")
-  public Call<ResponseBean> getStore(@Path("storeid") String storeid, @Query("access_token") String accessToken);
+  public Call<ResponseBean> getStore(@Path("storeid") String storeid);
 
   /**
    * 更新门店信息
@@ -87,20 +85,18 @@ public interface StoreControllerApi {
   /**
    * 获取默认门店Id
    * 
-   * @param accessToken
    * @return
    */
   @GET(value = "/goods-service/store/defaultid")
-  public Call<ResponseBean> getDefaultStoreId(@Query("access_token") String accessToken);
+  public Call<ResponseBean> getDefaultStoreId();
 
   /**
    * 获取在哪些城市有门店分布
    * 
-   * @param accessToken
    * @return
    */
   @GET(value = "/goods-service/store/city")
-  public Call<ResponseBean> getStoresCity(@Query("access_token") String accessToken);
+  public Call<ResponseBean> getStoresCity();
 
   /**
    * 门店下添加条目

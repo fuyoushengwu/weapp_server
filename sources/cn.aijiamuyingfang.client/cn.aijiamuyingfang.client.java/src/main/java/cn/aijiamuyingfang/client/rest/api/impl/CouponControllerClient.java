@@ -94,14 +94,11 @@ public class CouponControllerClient {
    * 
    * @param currentpage
    * @param pagesize
-   * @param accessToken
    * @return
    * @throws IOException
    */
-  public GetGoodVoucherListResponse getGoodVoucherList(int currentpage, int pagesize, String accessToken)
-      throws IOException {
-    Response<
-        ResponseBean> response = couponControllerApi.getGoodVoucherList(currentpage, pagesize, accessToken).execute();
+  public GetGoodVoucherListResponse getGoodVoucherList(int currentpage, int pagesize) throws IOException {
+    Response<ResponseBean> response = couponControllerApi.getGoodVoucherList(currentpage, pagesize).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -127,12 +124,11 @@ public class CouponControllerClient {
    * 获取商品兑换券
    * 
    * @param voucherid
-   * @param accessToken
    * @return
    * @throws IOException
    */
-  public GoodVoucher getGoodVoucher(String voucherid, String accessToken) throws IOException {
-    Response<ResponseBean> response = couponControllerApi.getGoodVoucher(voucherid, accessToken).execute();
+  public GoodVoucher getGoodVoucher(String voucherid) throws IOException {
+    Response<ResponseBean> response = couponControllerApi.getGoodVoucher(voucherid).execute();
     return getGoodVoucherFromResponse(response, "get good voucher  return code is '200',but return data is null");
   }
 
@@ -223,14 +219,11 @@ public class CouponControllerClient {
    * 
    * @param currentpage
    * @param pagesize
-   * @param accessToken
    * @return
    * @throws IOException
    */
-  public GetVoucherItemListResponse getVoucherItemList(int currentpage, int pagesize, String accessToken)
-      throws IOException {
-    Response<
-        ResponseBean> response = couponControllerApi.getVoucherItemList(currentpage, pagesize, accessToken).execute();
+  public GetVoucherItemListResponse getVoucherItemList(int currentpage, int pagesize) throws IOException {
+    Response<ResponseBean> response = couponControllerApi.getVoucherItemList(currentpage, pagesize).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -257,12 +250,11 @@ public class CouponControllerClient {
    * 获取兑换方式
    * 
    * @param voucheritemId
-   * @param accessToken
    * @return
    * @throws IOException
    */
-  public VoucherItem getVoucherItem(String voucheritemId, String accessToken) throws IOException {
-    Response<ResponseBean> response = couponControllerApi.getVoucherItem(voucheritemId, accessToken).execute();
+  public VoucherItem getVoucherItem(String voucheritemId) throws IOException {
+    Response<ResponseBean> response = couponControllerApi.getVoucherItem(voucheritemId).execute();
     return getVoucherItemFromResponse(response, "get voucher item list  return code is '200',but return data is null");
   }
 

@@ -50,11 +50,6 @@ public class User {
   private String phone;
 
   /**
-   * 小程序调用wx.login() 获取的临时登录凭证code
-   */
-  private String jscode;
-
-  /**
    * 性别
    */
   private Gender gender;

@@ -50,7 +50,7 @@ public class ShopCartService {
    * @return
    */
   public ShopCart addShopCart(String userid, String goodid, int goodNum) {
-    User user = userClient.getUserById(userid).getData();
+    User user = userClient.getUserInternal(userid, null).getData();
     if (null == user) {
       throw new ShopCartException(ResponseCode.USER_NOT_EXIST, userid);
     }

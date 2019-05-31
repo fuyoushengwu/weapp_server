@@ -206,14 +206,14 @@ public abstract class AbstractTestAction {
   public User getSenderOne() throws IOException {
     if (null == senderOne) {
       User createSenderRequest = new User();
-      createSenderRequest.setJscode("senderonejscode");
-      createSenderRequest.setPassword("senderonejscode");
+      createSenderRequest.setOpenid("senderoneopenid");
+      createSenderRequest.setPassword("senderoneopenid");
       createSenderRequest.setPhone("11111111111");
       createSenderRequest.setNickname("SenderOne User NickName");
       createSenderRequest.setGender(Gender.MALE);
       createSenderRequest.addAuthority(UserAuthority.SENDER_PERMISSION);
       this.senderOne = userControllerClient.registerUser(createSenderRequest, getAdminAccessToken());
-      this.senderOne.setPassword("senderonejscode");
+      this.senderOne.setPassword("senderoneopenid");
     }
     return this.senderOne;
   }
@@ -256,12 +256,12 @@ public abstract class AbstractTestAction {
   public User getSenderTwo() throws IOException {
     if (null == senderTwo) {
       User createSenderRequest = new User();
-      createSenderRequest.setJscode("sendertwojscode");
-      createSenderRequest.setPassword("sendertwojscode");
+      createSenderRequest.setOpenid("sendertwoopenid");
+      createSenderRequest.setPassword("sendertwoopenid");
       createSenderRequest.setPhone("22222222");
       createSenderRequest.setNickname("SenderTwo User NickName");
       this.senderTwo = userControllerClient.registerUser(createSenderRequest, getAdminAccessToken());
-      this.senderTwo.setPassword("sendertwojscode");
+      this.senderTwo.setPassword("sendertwoopenid");
     }
     return senderTwo;
   }
@@ -360,11 +360,11 @@ public abstract class AbstractTestAction {
   }
 
   public ShopOrder senderOneBuy() throws IOException {
-      CreateShopOrderRequest shoporderRequest = new CreateShopOrderRequest();
-      shoporderRequest.setSendtype(SendType.THIRDSEND);
-      shoporderRequest.setAddressid(getSenderOneRecieveOne().getId());
-      return shoporderControllerClient.createUserShopOrder(getSenderOne().getId(),
-          shoporderRequest, getSenderOneAccessToken());
+    CreateShopOrderRequest shoporderRequest = new CreateShopOrderRequest();
+    shoporderRequest.setSendtype(SendType.THIRDSEND);
+    shoporderRequest.setAddressid(getSenderOneRecieveOne().getId());
+    return shoporderControllerClient.createUserShopOrder(getSenderOne().getId(), shoporderRequest,
+        getSenderOneAccessToken());
   }
 
   public void sendSenderOneShopOrder(ShopOrder shoporder) throws IOException {
@@ -383,11 +383,11 @@ public abstract class AbstractTestAction {
   }
 
   public ShopOrder senderTwoBuy() throws IOException {
-      CreateShopOrderRequest shoporderRequest = new CreateShopOrderRequest();
-      shoporderRequest.setSendtype(SendType.THIRDSEND);
-      shoporderRequest.setAddressid(getSenderTwoRecieveOne().getId());
-      return shoporderControllerClient.createUserShopOrder(getSenderTwo().getId(),
-          shoporderRequest, getSenderTwoAccessToken());
+    CreateShopOrderRequest shoporderRequest = new CreateShopOrderRequest();
+    shoporderRequest.setSendtype(SendType.THIRDSEND);
+    shoporderRequest.setAddressid(getSenderTwoRecieveOne().getId());
+    return shoporderControllerClient.createUserShopOrder(getSenderTwo().getId(), shoporderRequest,
+        getSenderTwoAccessToken());
   }
 
   public PreviewOrder senderOnePreviewGoodOne() throws IOException {

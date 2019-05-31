@@ -69,16 +69,6 @@ public enum ResponseCode {
   SHOPORDER_NOT_BELONGTO_USER("500", "shoporder[%s] not belong to user[%]"),
 
   /**
-   * 调用'GET /oauth/session'返回null
-   */
-  GET_WXSESSION_NULL("500", "get null response from 'GET /oauth/session'"),
-
-  /**
-   * 调用'GET /oauth/session'返回错误信息
-   */
-  GET_WXSESSION_ERR("500", "get error from 'GET /oauth/session':%s"),
-
-  /**
    * 返回的openid为空(null或者空字符串)
    */
   GET_OPENID_NULL("500", "openid is empty"),

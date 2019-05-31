@@ -57,28 +57,13 @@ public class ClassifyControllerClient {
   private ClassifyControllerApi classifyControllerApi;
 
   /**
-   * 获取门店下所有的顶层条目
-   * 
-   * @param storeid
-   * @param accessToken
-   * @return
-   * @throws IOException
-   */
-  public List<Classify> getStoreTopClassifyList(String storeid, String accessToken) throws IOException {
-    Response<ResponseBean> response = classifyControllerApi.getStoreTopClassifyList(storeid, accessToken).execute();
-    return getClassifyListFromResponse(response,
-        "get store top classify list return code is '200',but return data is null");
-  }
-
-  /**
    * 获取所有顶层条目
    * 
-   * @param accessToken
    * @return
    * @throws IOException
    */
-  public List<Classify> getTopClassifyList(String accessToken) throws IOException {
-    Response<ResponseBean> response = classifyControllerApi.getTopClassifyList(accessToken).execute();
+  public List<Classify> getTopClassifyList() throws IOException {
+    Response<ResponseBean> response = classifyControllerApi.getTopClassifyList().execute();
     return getClassifyListFromResponse(response, "get top classify list return code is '200',but return data is null");
   }
 
@@ -116,12 +101,11 @@ public class ClassifyControllerClient {
    * 获取某个条目
    * 
    * @param classifyid
-   * @param accessToken
    * @return
    * @throws IOException
    */
-  public Classify getClassify(String classifyid, String accessToken) throws IOException {
-    Response<ResponseBean> response = classifyControllerApi.getClassify(classifyid, accessToken).execute();
+  public Classify getClassify(String classifyid) throws IOException {
+    Response<ResponseBean> response = classifyControllerApi.getClassify(classifyid).execute();
     return getClassifyFromResponse(response, "get classify  return code is '200',but return data is null");
   }
 
@@ -211,12 +195,11 @@ public class ClassifyControllerClient {
    * 获得条目下的所有子条目
    * 
    * @param classifyid
-   * @param accessToken
    * @return
    * @throws IOException
    */
-  public List<Classify> getSubClassifyList(String classifyid, String accessToken) throws IOException {
-    Response<ResponseBean> response = classifyControllerApi.getSubClassifyList(classifyid, accessToken).execute();
+  public List<Classify> getSubClassifyList(String classifyid) throws IOException {
+    Response<ResponseBean> response = classifyControllerApi.getSubClassifyList(classifyid).execute();
     return getClassifyListFromResponse(response, "get sub classify list return code is '200',but return data is null");
   }
 

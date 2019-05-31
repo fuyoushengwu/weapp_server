@@ -74,14 +74,11 @@ public class StoreControllerClient {
    *          当前页 默认值:1 (currentpage必须&ge;1,否则重置为1)
    * @param pagesize
    *          每页大小 默认值:10(pagesize必须&gt;0,否则重置为1)
-   * @param accessToken
    * @return
    * @throws IOException
    */
-  public GetInUseStoreListResponse getInUseStoreList(int currentpage, int pagesize, String accessToken)
-      throws IOException {
-    Response<
-        ResponseBean> response = storeControllerApi.getInUseStoreList(currentpage, pagesize, accessToken).execute();
+  public GetInUseStoreListResponse getInUseStoreList(int currentpage, int pagesize) throws IOException {
+    Response<ResponseBean> response = storeControllerApi.getInUseStoreList(currentpage, pagesize).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -357,12 +354,11 @@ public class StoreControllerClient {
    * 获取门店信息
    * 
    * @param storeid
-   * @param accessToken
    * @return
    * @throws IOException
    */
-  public Store getStore(String storeid, String accessToken) throws IOException {
-    Response<ResponseBean> response = storeControllerApi.getStore(storeid, accessToken).execute();
+  public Store getStore(String storeid) throws IOException {
+    Response<ResponseBean> response = storeControllerApi.getStore(storeid).execute();
     return getStoreFromResponse(response, "get store return code is '200',but return data is null");
   }
 
@@ -425,12 +421,11 @@ public class StoreControllerClient {
   /**
    * 获取默认门店Id
    * 
-   * @param accessToken
    * @return
    * @throws IOException
    */
-  public GetDefaultStoreIdResponse getDefaultStoreId(String accessToken) throws IOException {
-    Response<ResponseBean> response = storeControllerApi.getDefaultStoreId(accessToken).execute();
+  public GetDefaultStoreIdResponse getDefaultStoreId() throws IOException {
+    Response<ResponseBean> response = storeControllerApi.getDefaultStoreId().execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -450,12 +445,11 @@ public class StoreControllerClient {
   /**
    * 获取在哪些城市有门店分布
    * 
-   * @param accessToken
    * @return
    * @throws IOException
    */
-  public List<String> getStoresCity(String accessToken) throws IOException {
-    Response<ResponseBean> response = storeControllerApi.getStoresCity(accessToken).execute();
+  public List<String> getStoresCity() throws IOException {
+    Response<ResponseBean> response = storeControllerApi.getStoresCity().execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {

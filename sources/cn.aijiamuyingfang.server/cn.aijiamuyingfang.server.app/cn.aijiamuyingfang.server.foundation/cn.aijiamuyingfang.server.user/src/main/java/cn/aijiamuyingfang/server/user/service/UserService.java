@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import cn.aijiamuyingfang.commons.utils.StringUtils;
@@ -31,7 +31,7 @@ import cn.aijiamuyingfang.server.user.domain.response.GetUserPhoneResponse;
 @Service
 public class UserService {
   @Autowired
-  private PasswordEncoder encoder;
+  private BCryptPasswordEncoder encoder;
 
   @Autowired
   private UserRepository userRepository;
@@ -58,16 +58,20 @@ public class UserService {
    * @param request
    */
   public User registerUser(User request) {
-    if (StringUtils.isEmpty(request.getJscode())) {
-      throw new IllegalArgumentException("register failed,because not provide jscode as openid");
+    String openid = request.getOpenid();
+    if (StringUtils.isEmpty(openid)) {
+      throw new IllegalArgumentException("register failed,because not provide  openid");
     }
-    String jscode = request.getJscode();
-    User user = userRepository.findByOpenid(jscode);
+    String password = request.getPassword();
+    if (StringUtils.isEmpty(password)) {
+      throw new IllegalArgumentException("register failed,because not provide  password");
+    }
+
+    User user = userRepository.findByOpenid(openid);
     if (user != null) {
       return user;
     }
-    request.setOpenid(jscode);
-    request.setPassword(encoder.encode(jscode));
+    request.setPassword(encoder.encode(password));
     request.addAuthority(UserAuthority.SENDER_PERMISSION);
     userRepository.saveAndFlush(request);
     return request;

@@ -268,16 +268,13 @@ public class CouponControllerTest {
         getUserVoucherListResponse.getDataList().get(1).getGoodVoucher().getId());
     Assert.assertEquals(150, getUserVoucherListResponse.getDataList().get(1).getScore());
 
-    GetVoucherItemListResponse getVoucherItemListResponse = couponControllerClient.getVoucherItemList(1, 10,
-        testActions.getSenderOneAccessToken());
+    GetVoucherItemListResponse getVoucherItemListResponse = couponControllerClient.getVoucherItemList(1, 10);
     Assert.assertNotNull(getVoucherItemListResponse);
     Assert.assertEquals(2, getVoucherItemListResponse.getDataList().size());
 
-    voucherItemOne = couponControllerClient.getVoucherItem(voucherItemOne.getId(),
-        testActions.getSenderOneAccessToken());
+    voucherItemOne = couponControllerClient.getVoucherItem(voucherItemOne.getId());
     Assert.assertNotNull(voucherItemOne);
-    voucherItemTwo = couponControllerClient.getVoucherItem(voucherItemTwo.getId(),
-        testActions.getSenderTwoAccessToken());
+    voucherItemTwo = couponControllerClient.getVoucherItem(voucherItemTwo.getId());
     Assert.assertNotNull(voucherItemTwo);
 
     List<String> goodids = new ArrayList<>();
@@ -290,8 +287,7 @@ public class CouponControllerTest {
     Assert.assertEquals(2, getShopOrderVoucherListResponse.getVoucherList().size());
 
     couponControllerClient.deprecateVoucherItem(voucherItemOne.getId(), testActions.getAdminAccessToken(), false);
-    getVoucherItemListResponse = couponControllerClient.getVoucherItemList(1, 10,
-        testActions.getSenderOneAccessToken());
+    getVoucherItemListResponse = couponControllerClient.getVoucherItemList(1, 10);
     Assert.assertNotNull(getVoucherItemListResponse);
     Assert.assertEquals(1, getVoucherItemListResponse.getDataList().size());
     Assert.assertEquals(voucherItemTwo.getId(), getVoucherItemListResponse.getDataList().get(0).getId());
@@ -307,8 +303,7 @@ public class CouponControllerTest {
   @Test
   @UseCaseDescription(description = "原来有两个商品兑换券,废弃其中一个")
   public void test_GetGoodVoucherList_001() throws IOException {
-    GetGoodVoucherListResponse response = couponControllerClient.getGoodVoucherList(1, 10,
-        testActions.getAdminAccessToken());
+    GetGoodVoucherListResponse response = couponControllerClient.getGoodVoucherList(1, 10);
     Assert.assertNotNull(response);
     Assert.assertEquals(0, response.getDataList().size());
     Assert.assertEquals(0, response.getTotalpage());
@@ -322,7 +317,7 @@ public class CouponControllerTest {
     testActions.applyGoodVoucherOneForGoodOne();
     testActions.applyGoodVoucherTwoForGoodTwo();
 
-    response = couponControllerClient.getGoodVoucherList(1, 10, testActions.getAdminAccessToken());
+    response = couponControllerClient.getGoodVoucherList(1, 10);
     Assert.assertNotNull(response);
     Assert.assertEquals(2, response.getDataList().size());
     Assert.assertEquals(1, response.getTotalpage());
@@ -330,14 +325,13 @@ public class CouponControllerTest {
     // 4.废弃GoodVoucherOne
     couponControllerClient.deprecateGoodVoucher(goodVoucherOne.getId(), false, testActions.getAdminAccessToken());
 
-    response = couponControllerClient.getGoodVoucherList(1, 10, testActions.getAdminAccessToken());
+    response = couponControllerClient.getGoodVoucherList(1, 10);
     Assert.assertNotNull(response);
     Assert.assertEquals(1, response.getDataList().size());
     Assert.assertEquals(goodVoucherTwo.getId(), response.getDataList().get(0).getId());
     Assert.assertEquals(1, response.getTotalpage());
 
-    GoodVoucher goodVoucher = couponControllerClient.getGoodVoucher(goodVoucherTwo.getId(),
-        testActions.getAdminAccessToken());
+    GoodVoucher goodVoucher = couponControllerClient.getGoodVoucher(goodVoucherTwo.getId());
     Assert.assertNotNull(goodVoucher);
   }
 

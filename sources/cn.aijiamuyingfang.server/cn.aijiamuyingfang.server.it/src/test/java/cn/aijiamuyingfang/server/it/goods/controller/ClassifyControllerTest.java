@@ -63,19 +63,19 @@ public class ClassifyControllerTest {
   public void testGetStoreTopClassifyList_003() throws IOException {
     testActions.getStoreOne();
     testActions.getClassifyOne();
-    List<Classify> classifyList = classifyControllerClient.getTopClassifyList(testActions.getAdminAccessToken());
+    List<Classify> classifyList = classifyControllerClient.getTopClassifyList();
     Assert.assertEquals(1, classifyList.size());
-    classifyList = classifyControllerClient.getTopClassifyList(testActions.getAdminAccessToken());
+    classifyList = classifyControllerClient.getTopClassifyList();
     Assert.assertEquals(1, classifyList.size());
     testActions.deleteClassifyOne();
-    classifyList = classifyControllerClient.getTopClassifyList(testActions.getAdminAccessToken());
+    classifyList = classifyControllerClient.getTopClassifyList();
     Assert.assertEquals(0, classifyList.size());
   }
 
   @Test(expected = GoodsException.class)
   @UseCaseDescription(description = "获取不存在的Classify")
   public void testGetClassify_001() throws IOException {
-    classifyControllerClient.getClassify("not_exist_classify", testActions.getAdminAccessToken());
+    classifyControllerClient.getClassify("not_exist_classify");
   }
 
   @Test
@@ -83,8 +83,7 @@ public class ClassifyControllerTest {
   public void testGetClassify_002() throws IOException {
     Classify classifyOne = testActions.getClassifyOne();
     Assert.assertNotNull(classifyOne);
-    Classify actualClassify = classifyControllerClient.getClassify(classifyOne.getId(),
-        testActions.getAdminAccessToken());
+    Classify actualClassify = classifyControllerClient.getClassify(classifyOne.getId());
     Assert.assertNotNull(actualClassify);
     Assert.assertEquals(actualClassify.getId(), classifyOne.getId());
   }
@@ -93,8 +92,7 @@ public class ClassifyControllerTest {
   @UseCaseDescription(description = "获取子条目(当没有子条目时)")
   public void test_GetSubClassifyList_001() throws IOException {
     Classify classifyOne = testActions.getClassifyOne();
-    List<Classify> classifyList = classifyControllerClient.getSubClassifyList(classifyOne.getId(),
-        testActions.getAdminAccessToken());
+    List<Classify> classifyList = classifyControllerClient.getSubClassifyList(classifyOne.getId());
     Assert.assertNotNull(classifyList);
     Assert.assertEquals(0, classifyList.size());
   }
@@ -104,8 +102,7 @@ public class ClassifyControllerTest {
   public void test_GetSubClassifyList_002() throws IOException {
     Classify classifyOne = testActions.getClassifyOne();
     Classify subClassifyOne = testActions.getSubClassifyOneForClassifyOne();
-    List<Classify> classifyList = classifyControllerClient.getSubClassifyList(classifyOne.getId(),
-        testActions.getAdminAccessToken());
+    List<Classify> classifyList = classifyControllerClient.getSubClassifyList(classifyOne.getId());
     Assert.assertNotNull(classifyList);
     Assert.assertEquals(1, classifyList.size());
     Assert.assertEquals(subClassifyOne.getId(), classifyList.get(0).getId());

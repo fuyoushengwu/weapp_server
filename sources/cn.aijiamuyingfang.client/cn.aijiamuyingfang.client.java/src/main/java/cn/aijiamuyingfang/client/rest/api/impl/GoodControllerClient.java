@@ -71,15 +71,14 @@ public class GoodControllerClient {
    * @param orderValue
    * @param currentpage
    * @param pagesize
-   * @param accessToken
    * @return
    * @throws IOException
    */
   public GetClassifyGoodListResponse getClassifyGoodList(String classifyid, List<String> packFilter,
-      List<String> levelFilter, String orderType, String orderValue, int currentpage, int pagesize, String accessToken)
-      throws IOException {
-    Response<ResponseBean> response = goodControllerApi.getClassifyGoodList(classifyid, packFilter, levelFilter,
-        orderType, orderValue, currentpage, pagesize, accessToken).execute();
+      List<String> levelFilter, String orderType, String orderValue, int currentpage, int pagesize) throws IOException {
+    Response<ResponseBean> response = goodControllerApi
+        .getClassifyGoodList(classifyid, packFilter, levelFilter, orderType, orderValue, currentpage, pagesize)
+        .execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -271,12 +270,11 @@ public class GoodControllerClient {
    * 获取商品信息
    * 
    * @param goodid
-   * @param accessToken
    * @return
    * @throws IOException
    */
-  public Good getGood(String goodid, String accessToken) throws IOException {
-    Response<ResponseBean> response = goodControllerApi.getGood(goodid, accessToken).execute();
+  public Good getGood(String goodid) throws IOException {
+    Response<ResponseBean> response = goodControllerApi.getGood(goodid).execute();
     return getGoodFromResponse(response, "get good  return code is '200',but return data is null");
   }
 
@@ -313,12 +311,11 @@ public class GoodControllerClient {
    * 获取商品详细信息
    * 
    * @param goodid
-   * @param accessToken
    * @return
    * @throws IOException
    */
-  public GoodDetail getGoodDetail(String goodid, String accessToken) throws IOException {
-    Response<ResponseBean> response = goodControllerApi.getGoodDetail(goodid, accessToken).execute();
+  public GoodDetail getGoodDetail(String goodid) throws IOException {
+    Response<ResponseBean> response = goodControllerApi.getGoodDetail(goodid).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {

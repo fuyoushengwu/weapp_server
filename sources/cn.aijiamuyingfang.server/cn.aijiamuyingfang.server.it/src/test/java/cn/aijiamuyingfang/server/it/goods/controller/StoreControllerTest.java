@@ -74,8 +74,7 @@ public class StoreControllerTest {
   @Test
   @UseCaseDescription(description = "分页查询门店数据", condition = "数据库中没有分页数据")
   public void testGetInUseStores_001() throws JsonParseException, JsonMappingException, IOException {
-    GetInUseStoreListResponse getInUseStoreResponse = storeControllerClient.getInUseStoreList(1, 2,
-        testActions.getAdminAccessToken());
+    GetInUseStoreListResponse getInUseStoreResponse = storeControllerClient.getInUseStoreList(1, 2);
     Assert.assertEquals(0, getInUseStoreResponse.getTotalpage());
     Assert.assertEquals(1, getInUseStoreResponse.getCurrentpage());
     Assert.assertEquals(0, getInUseStoreResponse.getDataList().size());
@@ -101,7 +100,7 @@ public class StoreControllerTest {
       int[] parameter = parameterArr[i];
 
       GetInUseStoreListResponse getInUseStoreResponse = storeControllerClient.getInUseStoreList(parameter[0],
-          parameter[1], testActions.getAdminAccessToken());
+          parameter[1]);
 
       int[] expected = expectedArr[i];
       Assert.assertEquals(expected[0], getInUseStoreResponse.getTotalpage());
@@ -151,7 +150,7 @@ public class StoreControllerTest {
   @Test(expected = GoodsException.class)
   @UseCaseDescription(description = "获取门店信息", condition = "门店不存在")
   public void testGetStore_001() throws IOException {
-    storeControllerClient.getStore("notexist", testActions.getAdminAccessToken());
+    storeControllerClient.getStore("notexist");
     Assert.fail();
   }
 
@@ -160,7 +159,7 @@ public class StoreControllerTest {
   public void testGetStore_002() throws IOException {
     Store storeOne = testActions.getStoreOne();
     Assert.assertNotNull(storeOne);
-    Store actualStore = storeControllerClient.getStore(storeOne.getId(), testActions.getAdminAccessToken());
+    Store actualStore = storeControllerClient.getStore(storeOne.getId());
     Assert.assertEquals(storeOne.getName(), actualStore.getName());
   }
 
@@ -193,14 +192,13 @@ public class StoreControllerTest {
     Store storeTwo = testActions.getStoreTwo();
     Assert.assertNotNull(storeTwo);
 
-    GetInUseStoreListResponse getInUseStoreResponse = storeControllerClient.getInUseStoreList(1, 10,
-        testActions.getAdminAccessToken());
+    GetInUseStoreListResponse getInUseStoreResponse = storeControllerClient.getInUseStoreList(1, 10);
     Assert.assertEquals(1, getInUseStoreResponse.getTotalpage());
     Assert.assertEquals(1, getInUseStoreResponse.getCurrentpage());
     Assert.assertEquals(2, getInUseStoreResponse.getDataList().size());
 
     testActions.deprecatedStoreOne();
-    getInUseStoreResponse = storeControllerClient.getInUseStoreList(1, 10, testActions.getAdminAccessToken());
+    getInUseStoreResponse = storeControllerClient.getInUseStoreList(1, 10);
     Assert.assertEquals(1, getInUseStoreResponse.getTotalpage());
     Assert.assertEquals(1, getInUseStoreResponse.getCurrentpage());
     Assert.assertEquals(1, getInUseStoreResponse.getDataList().size());
@@ -216,7 +214,7 @@ public class StoreControllerTest {
   @Test
   @UseCaseDescription(description = "没有门店存在的情况下获取默认门店Id")
   public void testGetDefaultStoreId_001() throws IOException {
-    GetDefaultStoreIdResponse response = storeControllerClient.getDefaultStoreId(testActions.getAdminAccessToken());
+    GetDefaultStoreIdResponse response = storeControllerClient.getDefaultStoreId();
     Assert.assertNotNull(response);
     Assert.assertNull(response.getDefaultId());
 
@@ -230,7 +228,7 @@ public class StoreControllerTest {
     Store storeTwo = testActions.getStoreTwo();
     Assert.assertNotNull(storeTwo);
 
-    GetDefaultStoreIdResponse response = storeControllerClient.getDefaultStoreId(testActions.getAdminAccessToken());
+    GetDefaultStoreIdResponse response = storeControllerClient.getDefaultStoreId();
     Assert.assertNotNull(response);
     Assert.assertEquals(storeOne.getId(), response.getDefaultId());
   }
@@ -238,7 +236,7 @@ public class StoreControllerTest {
   @Test
   @UseCaseDescription(description = "不存在门店的情况下获取门店分布的城市")
   public void testGetStoresCity_001() throws IOException {
-    List<String> cities = storeControllerClient.getStoresCity(testActions.getAdminAccessToken());
+    List<String> cities = storeControllerClient.getStoresCity();
     Assert.assertEquals(0, cities.size());
   }
 
@@ -292,7 +290,7 @@ public class StoreControllerTest {
     storeRequest3.setStoreAddress(storeAddressRequest3);
     storeControllerClient.createStore(null, null, storeRequest3, testActions.getAdminAccessToken());
 
-    List<String> cities = storeControllerClient.getStoresCity(testActions.getAdminAccessToken());
+    List<String> cities = storeControllerClient.getStoresCity();
     Assert.assertEquals(2, cities.size());
   }
 }
