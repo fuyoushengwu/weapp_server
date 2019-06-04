@@ -21,13 +21,14 @@ import cn.aijiamuyingfang.commons.utils.StringUtils;
 import cn.aijiamuyingfang.server.it.ITApplication;
 
 /***
- * [描述]:*
+ * [描述]:
  * <p>
- * *AuthController的集成测试类*
+ * AuthController的集成测试类
  * </p>
- * **
  * 
- * @version 1.0.0*@author ShiWei*@email shiweideyouxiang @sina.cn
+ * @version 1.0.0
+ * @author ShiWei
+ * @email shiweideyouxiang@sina.cn
  * @date 2018-07-20 21:38:00
  */
 @RunWith(SpringRunner.class)

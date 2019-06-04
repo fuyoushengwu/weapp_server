@@ -33,12 +33,12 @@ public interface UserControllerApi {
   /**
    * 获取用户
    * 
-   * @param userid
+   * @param userId
    * @param accessToken
    * @return
    */
-  @GET(value = "/user-service/user/{userid}")
-  public Observable<ResponseBean<User>> getUser(@Path("userid") String userid,
+  @GET(value = "/user-service/user/{user_id}")
+  public Observable<ResponseBean<User>> getUser(@Path("user_id") String userId,
       @Query("access_token") String accessToken);
 
   /**
@@ -54,83 +54,83 @@ public interface UserControllerApi {
   /**
    * 获取用户手机号
    * 
-   * @param userid
+   * @param userId
    * @param accessToken
    * @return
    */
-  @GET(value = "/user-service/user/{userid}/phone")
-  public Observable<ResponseBean<GetUserPhoneResponse>> getUserPhone(@Path("userid") String userid,
+  @GET(value = "/user-service/user/{user_id}/phone")
+  public Observable<ResponseBean<GetUserPhoneResponse>> getUserPhone(@Path("user_id") String userId,
       @Query("access_token") String accessToken);
 
   /**
    * 更新用户信息
    * 
-   * @param userid
+   * @param userId
    * @param user
    * @param accessToken
    * @return
    */
-  @PUT(value = "/user-service/user/{userid}")
-  public Observable<ResponseBean<User>> updateUser(@Path("userid") String userid, @Body User user,
+  @PUT(value = "/user-service/user/{user_id}")
+  public Observable<ResponseBean<User>> updateUser(@Path("user_id") String userId, @Body User user,
       @Query("access_token") String accessToken);
 
   /**
    * 获取用户收件地址
    * 
-   * @param userid
+   * @param userId
    * @param accessToken
    * @return
    */
-  @GET(value = "/user-service/user/{userid}/recieveaddress")
-  public Observable<ResponseBean<List<RecieveAddress>>> getUserRecieveAddressList(@Path("userid") String userid,
+  @GET(value = "/user-service/user/{user_id}/recieveaddress")
+  public Observable<ResponseBean<List<RecieveAddress>>> getUserRecieveAddressList(@Path("user_id") String userId,
       @Query("access_token") String accessToken);
 
   /**
    * 给用户添加收件地址
    * 
-   * @param userid
+   * @param userId
    * @param request
    * @param accessToken
    * @return
    */
-  @POST(value = "/user-service/user/{userid}/recieveaddress")
-  public Observable<ResponseBean<RecieveAddress>> addUserRecieveAddress(@Path("userid") String userid,
+  @POST(value = "/user-service/user/{user_id}/recieveaddress")
+  public Observable<ResponseBean<RecieveAddress>> addUserRecieveAddress(@Path("user_id") String userId,
       @Body RecieveAddress request, @Query("access_token") String accessToken);
 
   /**
    * 获取收件地址
    * 
-   * @param userid
-   * @param addressid
+   * @param userId
+   * @param addressId
    * @param accessToken
    * @return
    */
-  @GET(value = "/user-service/user/{userid}/recieveaddress/{addressid}")
-  public Observable<ResponseBean<RecieveAddress>> getRecieveAddress(@Path("userid") String userid,
-      @Path("addressid") String addressid, @Query("access_token") String accessToken);
+  @GET(value = "/user-service/user/{user_id}/recieveaddress/{address_id}")
+  public Observable<ResponseBean<RecieveAddress>> getRecieveAddress(@Path("user_id") String userId,
+      @Path("address_id") String addressId, @Query("access_token") String accessToken);
 
   /**
    * 更新收件地址信息
    * 
-   * @param userid
-   * @param addressid
+   * @param userId
+   * @param addressId
    * @param request
    * @param accessToken
    * @return
    */
-  @PUT(value = "/user-service/user/{userid}/recieveaddress/{addressid}")
-  public Observable<ResponseBean<RecieveAddress>> updateRecieveAddress(@Path("userid") String userid,
-      @Path("addressid") String addressid, @Body RecieveAddress request, @Query("access_token") String accessToken);
+  @PUT(value = "/user-service/user/{user_id}/recieveaddress/{address_id}")
+  public Observable<ResponseBean<RecieveAddress>> updateRecieveAddress(@Path("user_id") String userId,
+      @Path("address_id") String addressId, @Body RecieveAddress request, @Query("access_token") String accessToken);
 
   /**
    * 废弃收件地址
    * 
-   * @param userid
-   * @param addressid
+   * @param userId
+   * @param addressId
    * @param accessToken
    * @return
    */
-  @DELETE(value = "/user-service/user/{userid}/recieveaddress/{addressid}")
-  public Observable<ResponseBean<Void>> deprecateRecieveAddress(@Path("userid") String userid,
-      @Path("addressid") String addressid, @Query("access_token") String accessToken);
+  @DELETE(value = "/user-service/user/{user_id}/recieveaddress/{address_id}")
+  public Observable<ResponseBean<Void>> deprecateRecieveAddress(@Path("user_id") String userId,
+      @Path("address_id") String addressId, @Query("access_token") String accessToken);
 }

@@ -21,7 +21,12 @@ public class PreOrderGood {
   /**
    * 预约商品的Id
    */
-  private String goodid;
+  private String goodId;
+
+  /**
+   * 预约商品的Name
+   */
+  private String goodName;
 
   /**
    * 预约的数量

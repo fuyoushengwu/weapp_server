@@ -1,5 +1,10 @@
 package cn.aijiamuyingfang.server.goods.service;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import cn.aijiamuyingfang.server.domain.response.ResponseCode;
 import cn.aijiamuyingfang.server.exception.GoodsException;
@@ -7,10 +12,6 @@ import cn.aijiamuyingfang.server.goods.db.ClassifyRepository;
 import cn.aijiamuyingfang.server.goods.db.GoodRepository;
 import cn.aijiamuyingfang.server.goods.domain.Classify;
 import cn.aijiamuyingfang.server.goods.domain.Good;
-
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
  * [描述]:
@@ -34,21 +35,21 @@ public class ClassifyService {
   /**
    * 获取条目信息
    * 
-   * @param classifyid
+   * @param classifyId
    *          条目Id
    * @return
    */
-  public Classify getClassify(String classifyid) {
-    return classifyRepository.findOne(classifyid);
+  public Classify getClassify(String classifyId) {
+    return classifyRepository.findOne(classifyId);
   }
 
   /**
    * 废弃条目
    * 
-   * @param classifyid
+   * @param classifyId
    */
-  public void deleteClassify(String classifyid) {
-    classifyRepository.delete(classifyid);
+  public void deleteClassify(String classifyId) {
+    classifyRepository.delete(classifyId);
   }
 
   /**
@@ -104,14 +105,14 @@ public class ClassifyService {
   /**
    * 获取子条目
    * 
-   * @param classifyid
+   * @param classifyId
    *          父条目Id
    * @return
    */
-  public List<Classify> getSubClassifyList(String classifyid) {
-    Classify classify = classifyRepository.findOne(classifyid);
+  public List<Classify> getSubClassifyList(String classifyId) {
+    Classify classify = classifyRepository.findOne(classifyId);
     if (null == classify) {
-      throw new GoodsException(ResponseCode.CLASSIFY_NOT_EXIST, classifyid);
+      throw new GoodsException(ResponseCode.CLASSIFY_NOT_EXIST, classifyId);
     }
     return classify.getSubClassifyList();
   }
@@ -119,18 +120,18 @@ public class ClassifyService {
   /**
    * 在条目下添加商品
    * 
-   * @param classifyid
-   * @param goodid
+   * @param classifyId
+   * @param goodId
    *          商品id
    */
-  public void addGood(String classifyid, String goodid) {
-    Good good = goodRepository.findOne(goodid);
+  public void addGood(String classifyId, String goodId) {
+    Good good = goodRepository.findOne(goodId);
     if (null == good) {
-      throw new GoodsException(ResponseCode.GOOD_NOT_EXIST, goodid);
+      throw new GoodsException(ResponseCode.GOOD_NOT_EXIST, goodId);
     }
-    Classify classify = classifyRepository.findOne(classifyid);
+    Classify classify = classifyRepository.findOne(classifyId);
     if (null == classify) {
-      throw new GoodsException(ResponseCode.CLASSIFY_NOT_EXIST, classifyid);
+      throw new GoodsException(ResponseCode.CLASSIFY_NOT_EXIST, classifyId);
     }
     classify.addGood(good);
     classifyRepository.saveAndFlush(classify);
@@ -139,14 +140,14 @@ public class ClassifyService {
   /**
    * 更新条目信息
    * 
-   * @param classifyid
+   * @param classifyId
    * @param updateClassify
    * @return
    */
-  public Classify updateClassify(String classifyid, Classify updateClassify) {
-    Classify classify = classifyRepository.findOne(classifyid);
+  public Classify updateClassify(String classifyId, Classify updateClassify) {
+    Classify classify = classifyRepository.findOne(classifyId);
     if (null == classify) {
-      throw new GoodsException(ResponseCode.CLASSIFY_NOT_EXIST, classifyid);
+      throw new GoodsException(ResponseCode.CLASSIFY_NOT_EXIST, classifyId);
     }
     if (null == updateClassify) {
       return classify;

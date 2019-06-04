@@ -26,7 +26,7 @@ public class RecieveAddress extends cn.aijiamuyingfang.server.it.address.Address
   /**
    * 收货地址-关联用户
    */
-  private String userid;
+  private String userId;
 
   /**
    * 收货地址-联系电话
@@ -54,8 +54,8 @@ public class RecieveAddress extends cn.aijiamuyingfang.server.it.address.Address
       return;
     }
     super.update(updateRecieveAddress);
-    if (StringUtils.hasContent(updateRecieveAddress.userid)) {
-      this.userid = updateRecieveAddress.userid;
+    if (StringUtils.hasContent(updateRecieveAddress.userId)) {
+      this.userId = updateRecieveAddress.userId;
     }
     if (StringUtils.hasContent(updateRecieveAddress.phone)) {
       this.phone = updateRecieveAddress.phone;

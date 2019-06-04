@@ -30,38 +30,38 @@ public interface PreviewOrderControllerApi {
   /**
    * 更新预览的商品项
    * 
-   * @param userid
-   * @param previewitemId
+   * @param userId
+   * @param previewItemId
    * @param request
    * @param accessToken
    * @return
    */
-  @PUT(value = "/shoporder-service/user/{userid}/previeworder/item/{previewitemId}")
-  public Observable<ResponseBean<PreviewOrderItem>> updatePreviewOrderItem(@Path("userid") String userid,
-      @Path("previewitemId") String previewitemId, @Body PreviewOrderItem request,
+  @PUT(value = "/shoporder-service/user/{user_id}/previeworder/item/{preview_item_id}")
+  public Observable<ResponseBean<PreviewOrderItem>> updatePreviewOrderItem(@Path("user_id") String userId,
+      @Path("preview_item_id") String previewItemId, @Body PreviewOrderItem request,
       @Query("access_token") String accessToken);
 
   /**
    * 删除预览的商品项
    * 
-   * @param userid
+   * @param userId
    * @param previewItemId
    * @param accessToken
    * @return
    */
-  @DELETE(value = "/shoporder-service/user/{userid}/previeworder/item/{previewItemId}")
-  public Observable<ResponseBean<Void>> deletePreviewOrderItem(@Path("userid") String userid,
+  @DELETE(value = "/shoporder-service/user/{user_id}/previeworder/item/{previewItemId}")
+  public Observable<ResponseBean<Void>> deletePreviewOrderItem(@Path("user_id") String userId,
       @Path("previewItemId") String previewItemId, @Query("access_token") String accessToken);
 
   /**
    * 生成用户的预览订单
    * 
-   * @param userid
-   * @param goodids
+   * @param userId
+   * @param goodIdList
    * @param accessToken
    * @return
    */
-  @GET(value = "/shoporder-service/user/{userid}/previeworder")
-  public Observable<ResponseBean<PreviewOrder>> generatePreviewOrder(@Path("userid") String userid,
-      @Query("goodids") List<String> goodids, @Query("access_token") String accessToken);
+  @GET(value = "/shoporder-service/user/{user_id}/previeworder")
+  public Observable<ResponseBean<PreviewOrder>> generatePreviewOrder(@Path("user_id") String userId,
+      @Query("good_id") List<String> goodIdList, @Query("access_token") String accessToken);
 }

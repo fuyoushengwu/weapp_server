@@ -56,7 +56,7 @@ public class ShopOrder {
   /**
    * 订单所属用户ID
    */
-  private String userid;
+  private String userId;
 
   /**
    * 该小程序中用户的唯一Id
@@ -98,7 +98,7 @@ public class ShopOrder {
    * 订单的配送方式: 0:到店自取(pickup); 1:送货上门(ownsend); 2:快递(thirdsend);
    */
   @JsonDeserialize(using = SendTypeDeserializer.class)
-  private SendType sendtype;
+  private SendType sendType;
 
   private static class SendTypeDeserializer extends JsonDeserializer<SendType> {
 

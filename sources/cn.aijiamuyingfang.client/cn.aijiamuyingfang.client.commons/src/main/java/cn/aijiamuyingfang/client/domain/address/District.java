@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.client.domain.address;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,14 +22,25 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class District {
+public abstract class District implements Parcelable {
   /**
    * 行政区名
    */
-  private String name;
+  protected String name;
 
   /**
    * 行政区编码
    */
-  private String code;
+  protected String code;
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(name);
+    dest.writeString(code);
+  }
 }

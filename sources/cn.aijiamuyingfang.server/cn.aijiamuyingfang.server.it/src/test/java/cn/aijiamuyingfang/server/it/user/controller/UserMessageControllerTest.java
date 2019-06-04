@@ -21,14 +21,15 @@ import cn.aijiamuyingfang.client.rest.api.impl.UserMessageControllerClient;
 import cn.aijiamuyingfang.commons.annotation.UseCaseDescription;
 import cn.aijiamuyingfang.server.it.ITApplication;
 
-/****
- * [描述]:**
+/***
+ * [描述]:
  * <p>
- * **UserMessageController的集成测试类**
+ * UserMessageController的集成测试类
  * </p>
- * *****
  * 
- * @version 1.0.0*@author ShiWei*@email shiweideyouxiang @sina.cn
+ * @version 1.0.0
+ * @author ShiWei
+ * @email shiweideyouxiang@sina.cn
  * @date 2018-07-04 11:12:24
  */
 @RunWith(SpringRunner.class)
@@ -74,20 +75,20 @@ public class UserMessageControllerTest {
     count = client.getUserUnReadMessageCount(senderOne.getId(), testActions.getSenderOneAccessToken());
     Assert.assertEquals(1, count);
 
-    GetMessagesListResponse usermessageList = client.getUserMessageList(senderOne.getId(), 1, 10,
+    GetMessagesListResponse userMessageList = client.getUserMessageList(senderOne.getId(), 1, 10,
         testActions.getSenderOneAccessToken());
-    Assert.assertNotNull(usermessageList);
-    Assert.assertEquals(1, usermessageList.getDataList().size());
-    Assert.assertEquals(userMessage.getId(), usermessageList.getDataList().get(0).getId());
+    Assert.assertNotNull(userMessageList);
+    Assert.assertEquals(1, userMessageList.getDataList().size());
+    Assert.assertEquals(userMessage.getId(), userMessageList.getDataList().get(0).getId());
 
     testActions.deleteSenderOneMessage();
 
     count = client.getUserUnReadMessageCount(senderOne.getId(), testActions.getSenderOneAccessToken());
     Assert.assertEquals(0, count);
 
-    usermessageList = client.getUserMessageList(senderOne.getId(), 1, 10, testActions.getSenderOneAccessToken());
-    Assert.assertNotNull(usermessageList);
-    Assert.assertEquals(0, usermessageList.getDataList().size());
+    userMessageList = client.getUserMessageList(senderOne.getId(), 1, 10, testActions.getSenderOneAccessToken());
+    Assert.assertNotNull(userMessageList);
+    Assert.assertEquals(0, userMessageList.getDataList().size());
   }
 
   @Test
@@ -103,7 +104,7 @@ public class UserMessageControllerTest {
     systemMessage.setRoundup("系统消息");
     systemMessage.setTitle("系统消息");
     systemMessage.setType(UserMessageType.NOTICE);
-    systemMessage.setUserid(UserTestActions.ADMIN_USER_ID);
+    systemMessage.setUserId(UserTestActions.ADMIN_USER_ID);
     client.createMessage(senderOne.getId(), systemMessage, testActions.getSenderOneAccessToken());
 
     count = client.getUserUnReadMessageCount(senderOne.getId(), testActions.getSenderOneAccessToken());

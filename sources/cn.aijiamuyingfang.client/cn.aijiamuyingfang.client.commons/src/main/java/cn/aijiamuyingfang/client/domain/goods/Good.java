@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.client.domain.goods;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import cn.aijiamuyingfang.client.domain.ImageSource;
 import lombok.Data;
 
@@ -15,7 +17,7 @@ import lombok.Data;
  * @date 2018-06-27 00:12:50
  */
 @Data
-public class Good {
+public class Good implements Parcelable {
   /**
    * 商品Id
    */
@@ -59,7 +61,7 @@ public class Good {
   /**
    * 超市零售价
    */
-  private double marketprice;
+  private double marketPrice;
 
   /**
    * 商品包装(听,盒,袋)
@@ -85,4 +87,60 @@ public class Good {
    * 购买商品可以获得的兑换券
    */
   private String voucherId;
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(id);
+    dest.writeParcelable(coverImg, flags);
+    dest.writeByte((byte) (deprecated ? 1 : 0));
+    dest.writeParcelable(lifetime, flags);
+    dest.writeString(name);
+    dest.writeInt(count);
+    dest.writeInt(salecount);
+    dest.writeDouble(price);
+    dest.writeDouble(marketPrice);
+    dest.writeString(pack);
+    dest.writeString(level);
+    dest.writeString(barcode);
+    dest.writeInt(score);
+    dest.writeString(voucherId);
+  }
+
+  public Good() {
+  }
+
+  private Good(Parcel in) {
+    this.id = in.readString();
+    this.coverImg = in.readParcelable(ImageSource.class.getClassLoader());
+    this.deprecated = in.readByte() != 0;
+    this.lifetime = in.readParcelable(ShelfLife.class.getClassLoader());
+    this.name = in.readString();
+    this.count = in.readInt();
+    this.salecount = in.readInt();
+    this.price = in.readDouble();
+    this.marketPrice = in.readDouble();
+    this.pack = in.readString();
+    this.level = in.readString();
+    this.barcode = in.readString();
+    this.score = in.readInt();
+    this.voucherId = in.readString();
+  }
+
+  public static final Parcelable.Creator<Good> CREATOR = new Parcelable.Creator<Good>() {
+    @Override
+    public Good createFromParcel(Parcel in) {
+      return new Good(in);
+    }
+
+    @Override
+    public Good[] newArray(int size) {
+      return new Good[size];
+    }
+  };
+
 }

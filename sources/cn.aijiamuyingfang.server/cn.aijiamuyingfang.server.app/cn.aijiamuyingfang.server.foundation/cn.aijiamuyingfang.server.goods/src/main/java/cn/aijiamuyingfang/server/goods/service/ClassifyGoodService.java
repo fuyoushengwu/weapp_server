@@ -1,5 +1,13 @@
 package cn.aijiamuyingfang.server.goods.service;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
 import cn.aijiamuyingfang.commons.utils.CollectionUtils;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import cn.aijiamuyingfang.server.domain.response.ResponseCode;
@@ -9,13 +17,6 @@ import cn.aijiamuyingfang.server.goods.db.GoodRepository;
 import cn.aijiamuyingfang.server.goods.domain.Classify;
 import cn.aijiamuyingfang.server.goods.domain.Good;
 import cn.aijiamuyingfang.server.goods.domain.response.GetClassifyGoodListResponse;
-
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
 
 /**
  * [描述]:
@@ -39,7 +40,7 @@ public class ClassifyGoodService {
   /**
    * 分页查询条目下的商品
    * 
-   * @param classifyid
+   * @param classifyId
    *          条目id
    * @param packFilter
    *          商品过滤条件:包装类型
@@ -49,37 +50,37 @@ public class ClassifyGoodService {
    *          商品排序条件:排序字段
    * @param orderValue
    *          商品排序条件:DESC:降序;ASC:升序.
-   * @param currentpage
+   * @param currentPage
    *          请求页
-   * @param pagesize
+   * @param pageSize
    *          每页商品数
    * @return
    */
-  public GetClassifyGoodListResponse getClassifyGoodList(String classifyid, List<String> packFilter,
-      List<String> levelFilter, String orderType, String orderValue, int currentpage, int pagesize) {
-    Classify classify = classifyRepository.findOne(classifyid);
+  public GetClassifyGoodListResponse getClassifyGoodList(String classifyId, List<String> packFilter,
+      List<String> levelFilter, String orderType, String orderValue, int currentPage, int pageSize) {
+    Classify classify = classifyRepository.findOne(classifyId);
     if (null == classify) {
-      throw new GoodsException(ResponseCode.CLASSIFY_NOT_EXIST, classifyid);
+      throw new GoodsException(ResponseCode.CLASSIFY_NOT_EXIST, classifyId);
     }
     // PageRequest的Page参数是基于0的,但是currentPage是基于1的,所有将currentPage作为参数传递给PgeRequest时需要'-1'
     PageRequest pageRequest;
     if (StringUtils.hasContent(orderType)) {
-      pageRequest = new PageRequest(currentpage - 1, pagesize, Sort.Direction.fromString(orderValue), orderType);
+      pageRequest = new PageRequest(currentPage - 1, pageSize, Sort.Direction.fromString(orderValue), orderType);
     } else {
-      pageRequest = new PageRequest(currentpage - 1, pagesize);
+      pageRequest = new PageRequest(currentPage - 1, pageSize);
     }
     Page<Good> goodPage;
     if (CollectionUtils.isEmpty(packFilter) && CollectionUtils.isEmpty(levelFilter)) {
-      goodPage = goodRepository.findClassifyGood(classifyid, pageRequest);
+      goodPage = goodRepository.findClassifyGood(classifyId, pageRequest);
     } else if (CollectionUtils.isEmpty(packFilter)) {
-      goodPage = goodRepository.findClassifyGoodByLevelIn(classifyid, levelFilter, pageRequest);
+      goodPage = goodRepository.findClassifyGoodByLevelIn(classifyId, levelFilter, pageRequest);
     } else if (CollectionUtils.isEmpty(levelFilter)) {
-      goodPage = goodRepository.findClassifyGoodByPackIn(classifyid, packFilter, pageRequest);
+      goodPage = goodRepository.findClassifyGoodByPackIn(classifyId, packFilter, pageRequest);
     } else {
-      goodPage = goodRepository.findClassifyGoodByPackInAndLevelIn(classifyid, packFilter, levelFilter, pageRequest);
+      goodPage = goodRepository.findClassifyGoodByPackInAndLevelIn(classifyId, packFilter, levelFilter, pageRequest);
     }
     GetClassifyGoodListResponse response = new GetClassifyGoodListResponse();
-    response.setCurrentpage(goodPage.getNumber() + 1);
+    response.setCurrentPage(goodPage.getNumber() + 1);
     response.setDataList(goodPage.getContent());
     response.setTotalpage(goodPage.getTotalPages());
     return response;
@@ -88,10 +89,10 @@ public class ClassifyGoodService {
   /**
    * 移除条目下的商品
    * 
-   * @param goodid
+   * @param goodId
    *          商品id
    */
-  public void removeClassifyGood(String goodid) {
-    classifyRepository.removeClassifyGood(goodid);
+  public void removeClassifyGood(String goodId) {
+    classifyRepository.removeClassifyGood(goodId);
   }
 }

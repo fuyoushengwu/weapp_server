@@ -15,7 +15,7 @@ public class GoodVoucher {
    * 兑换券可以兑换的项目
    */
   @ElementCollection
-  private List<String> voucheritemIdList = new ArrayList<>();
+  private List<String> voucherItemIdList = new ArrayList<>();
 
   /**
    * 兑换券中可用的兑换值

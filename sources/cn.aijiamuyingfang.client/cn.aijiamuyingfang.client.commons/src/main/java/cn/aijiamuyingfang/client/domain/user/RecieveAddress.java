@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.client.domain.user;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import cn.aijiamuyingfang.client.domain.address.City;
 import cn.aijiamuyingfang.client.domain.address.Coordinate;
 import cn.aijiamuyingfang.client.domain.address.County;
@@ -19,7 +21,7 @@ import lombok.Data;
  * @date 2018-06-25 20:38:53
  */
 @Data
-public class RecieveAddress {
+public class RecieveAddress implements Parcelable {
   /**
    * 地址-Id
    */
@@ -63,7 +65,7 @@ public class RecieveAddress {
   /**
    * 收货地址-关联用户
    */
-  private String userid;
+  private String userId;
 
   /**
    * 收货地址-联系电话
@@ -80,4 +82,56 @@ public class RecieveAddress {
    */
   private boolean def;
 
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(id);
+    dest.writeByte((byte) (deprecated ? 1 : 0));
+    dest.writeParcelable(province, flags);
+    dest.writeParcelable(city, flags);
+    dest.writeParcelable(county, flags);
+    dest.writeParcelable(town, flags);
+    dest.writeString(detail);
+    dest.writeParcelable(coordinate, flags);
+    dest.writeString(userId);
+    dest.writeString(phone);
+    dest.writeString(reciever);
+    dest.writeByte((byte) (def ? 1 : 0));
+  }
+
+  public RecieveAddress() {
+  }
+
+  private RecieveAddress(Parcel in) {
+    id = in.readString();
+    deprecated = in.readByte() != 0;
+    province = in.readParcelable(Province.class.getClassLoader());
+    city = in.readParcelable(City.class.getClassLoader());
+    county = in.readParcelable(County.class.getClassLoader());
+    town = in.readParcelable(Town.class.getClassLoader());
+    detail = in.readString();
+    coordinate = in.readParcelable(Coordinate.class.getClassLoader());
+    userId = in.readString();
+    phone = in.readString();
+    reciever = in.readString();
+    def = in.readByte() != 0;
+  }
+
+  public static final Parcelable.Creator<RecieveAddress> CREATOR = new Parcelable.Creator<RecieveAddress>() {
+
+    @Override
+    public RecieveAddress createFromParcel(Parcel source) {
+      return new RecieveAddress(source);
+    }
+
+    @Override
+    public RecieveAddress[] newArray(int size) {
+      return new RecieveAddress[size];
+    }
+
+  };
 }

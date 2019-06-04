@@ -312,7 +312,7 @@ public class ShopOrderControllerTest {
         testActions.getAdminAccessToken());
     Assert.assertEquals(1, getPreOrderGoodListResponse.getDataList().size());
     Assert.assertEquals(10, getPreOrderGoodListResponse.getDataList().get(0).getCount());
-    Assert.assertEquals(testActions.getGoodOne().getId(), getPreOrderGoodListResponse.getDataList().get(0).getGoodid());
+    Assert.assertEquals(testActions.getGoodOne().getId(), getPreOrderGoodListResponse.getDataList().get(0).getGoodId());
 
     Map<String, Double> statusCount = shoporderControllerClient
         .getUserShopOrderStatusCount(testActions.getSenderOne().getId(), testActions.getSenderOneAccessToken());

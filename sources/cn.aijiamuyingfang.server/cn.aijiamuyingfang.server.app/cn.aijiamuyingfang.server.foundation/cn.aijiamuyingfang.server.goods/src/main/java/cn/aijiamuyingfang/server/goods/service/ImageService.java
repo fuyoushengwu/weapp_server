@@ -21,13 +21,14 @@ import cn.aijiamuyingfang.server.goods.domain.ImageSource;
 import lombok.extern.slf4j.Slf4j;
 
 /***
- * [描述]:*
+ * [描述]:
  * <p>
- * *图片服务,用于Store、Classify、Good上传图片的保存*
+ * 图片服务,用于Store、Classify、Good上传图片的保存
  * </p>
- * **
  * 
- * @version 1.0.0*@author ShiWei*@email shiweideyouxiang @sina.cn
+ * @version 1.0.0
+ * @author ShiWei
+ * @email shiweideyouxiang@sina.cn
  * @date 2018-06-28 23:37:42
  */
 @Service

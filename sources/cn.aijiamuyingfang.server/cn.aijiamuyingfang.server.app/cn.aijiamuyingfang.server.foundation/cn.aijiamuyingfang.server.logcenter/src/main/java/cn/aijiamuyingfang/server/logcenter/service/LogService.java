@@ -54,9 +54,9 @@ public class LogService {
    * @return
    */
   public GetLogListResponse getLogList(Map<String, String> params) {
-    int currentpage = NumberUtils.toInt(params.remove("currentpage"), 1);
-    int pagesize = NumberUtils.toInt(params.remove("pagesize"), 10);
-    PageRequest pagable = new PageRequest(currentpage - 1, pagesize);
+    int currentPage = NumberUtils.toInt(params.remove("current_page"), 1);
+    int pageSize = NumberUtils.toInt(params.remove("page_size"), 10);
+    PageRequest pagable = new PageRequest(currentPage - 1, pageSize);
     StringBuilder whereSqlBuilder = new StringBuilder();
     whereSqlBuilder.append(params.size() > 0 ? "where " : "");
     for (Entry<String, String> entry : params.entrySet()) {
@@ -66,7 +66,7 @@ public class LogService {
     whereSql = whereSql.substring(0, whereSql.length() - 5);
     Page<Log> logPage = logRepository.findLog(whereSql, pagable);
     GetLogListResponse response = new GetLogListResponse();
-    response.setCurrentpage(logPage.getNumber() + 1);
+    response.setCurrentPage(logPage.getNumber() + 1);
     response.setDataList(logPage.getContent());
     response.setTotalpage(logPage.getTotalPages());
     return response;

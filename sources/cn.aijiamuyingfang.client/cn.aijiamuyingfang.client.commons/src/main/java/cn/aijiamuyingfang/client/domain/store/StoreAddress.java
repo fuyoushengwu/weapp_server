@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.client.domain.store;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import cn.aijiamuyingfang.client.domain.address.City;
 import cn.aijiamuyingfang.client.domain.address.Coordinate;
 import cn.aijiamuyingfang.client.domain.address.County;
@@ -19,7 +21,7 @@ import lombok.Data;
  * @date 2018-06-25 20:37:56
  */
 @Data
-public class StoreAddress {
+public class StoreAddress implements Parcelable {
   /**
    * 地址-Id
    */
@@ -69,4 +71,51 @@ public class StoreAddress {
    * 店铺地址-联系人
    */
   private String contactor;
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(id);
+    dest.writeByte((byte) (deprecated ? 1 : 0));
+    dest.writeParcelable(province, flags);
+    dest.writeParcelable(city, flags);
+    dest.writeParcelable(county, flags);
+    dest.writeParcelable(town, flags);
+    dest.writeString(detail);
+    dest.writeParcelable(coordinate, flags);
+    dest.writeString(phone);
+    dest.writeString(contactor);
+  }
+
+  public StoreAddress() {
+  }
+
+  private StoreAddress(Parcel in) {
+    id = in.readString();
+    deprecated = in.readByte() != 0;
+    province = in.readParcelable(Province.class.getClassLoader());
+    city = in.readParcelable(City.class.getClassLoader());
+    county = in.readParcelable(County.class.getClassLoader());
+    town = in.readParcelable(Town.class.getClassLoader());
+    detail = in.readString();
+    coordinate = in.readParcelable(Coordinate.class.getClassLoader());
+    phone = in.readString();
+    contactor = in.readString();
+  }
+
+  public static final Parcelable.Creator<StoreAddress> CREATOR = new Parcelable.Creator<StoreAddress>() {
+    @Override
+    public StoreAddress createFromParcel(Parcel in) {
+      return new StoreAddress(in);
+    }
+
+    @Override
+    public StoreAddress[] newArray(int size) {
+      return new StoreAddress[size];
+    }
+  };
 }

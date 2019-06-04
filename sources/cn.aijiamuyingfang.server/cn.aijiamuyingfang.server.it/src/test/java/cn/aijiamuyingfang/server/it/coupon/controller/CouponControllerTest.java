@@ -101,7 +101,7 @@ public class CouponControllerTest {
     GetUserVoucherListResponse response = couponControllerClient.getUserVoucherList(AbstractTestAction.ADMIN_USER_ID, 1,
         10, testActions.getAdminAccessToken());
     Assert.assertNotNull(response);
-    Assert.assertEquals(1, response.getCurrentpage());
+    Assert.assertEquals(1, response.getCurrentPage());
     Assert.assertEquals(0, response.getTotalpage());
     Assert.assertEquals(0, response.getDataList().size());
   }
@@ -122,8 +122,8 @@ public class CouponControllerTest {
     Assert.assertNotNull(updatedGood.getVoucherId());
 
     // 4.用户(Sender)添加购物车
-    ShopCart shopcart = testActions.senderOneAdd10GoodOne();
-    Assert.assertNotNull(shopcart);
+    ShopCart shopCart = testActions.senderOneAdd10GoodOne();
+    Assert.assertNotNull(shopCart);
 
     // 5.用户(Sender)预览订单
     PreviewOrder previeworder = testActions.senderOnePreviewGoodOne();
@@ -277,11 +277,11 @@ public class CouponControllerTest {
     voucherItemTwo = couponControllerClient.getVoucherItem(voucherItemTwo.getId());
     Assert.assertNotNull(voucherItemTwo);
 
-    List<String> goodids = new ArrayList<>();
-    goodids.add(testActions.getGoodOne().getId());
-    goodids.add(testActions.getGoodTwo().getId());
+    List<String> goodIdList = new ArrayList<>();
+    goodIdList.add(testActions.getGoodOne().getId());
+    goodIdList.add(testActions.getGoodTwo().getId());
     GetShopOrderVoucherListResponse getShopOrderVoucherListResponse = shoporderControllerClient
-        .getUserShopOrderVoucherList(testActions.getSenderOne().getId(), goodids,
+        .getUserShopOrderVoucherList(testActions.getSenderOne().getId(), goodIdList,
             testActions.getSenderOneAccessToken());
     Assert.assertNotNull(getShopOrderVoucherListResponse);
     Assert.assertEquals(2, getShopOrderVoucherListResponse.getVoucherList().size());
@@ -293,11 +293,11 @@ public class CouponControllerTest {
     Assert.assertEquals(voucherItemTwo.getId(), getVoucherItemListResponse.getDataList().get(0).getId());
 
     getShopOrderVoucherListResponse = shoporderControllerClient.getUserShopOrderVoucherList(
-        testActions.getSenderOne().getId(), goodids, testActions.getSenderOneAccessToken());
+        testActions.getSenderOne().getId(), goodIdList, testActions.getSenderOneAccessToken());
     Assert.assertNotNull(getShopOrderVoucherListResponse);
     Assert.assertEquals(1, getShopOrderVoucherListResponse.getVoucherList().size());
     Assert.assertEquals(voucherItemTwo.getId(),
-        getShopOrderVoucherListResponse.getVoucherList().get(0).getVoucheritemId());
+        getShopOrderVoucherListResponse.getVoucherList().get(0).getVoucherItemId());
   }
 
   @Test

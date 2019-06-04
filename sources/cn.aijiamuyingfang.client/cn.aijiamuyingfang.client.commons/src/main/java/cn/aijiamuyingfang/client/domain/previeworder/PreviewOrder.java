@@ -23,7 +23,7 @@ public class PreviewOrder {
   /**
    * 订单所属用户
    */
-  private String userid;
+  private String userId;
 
   /**
    * 收货地址

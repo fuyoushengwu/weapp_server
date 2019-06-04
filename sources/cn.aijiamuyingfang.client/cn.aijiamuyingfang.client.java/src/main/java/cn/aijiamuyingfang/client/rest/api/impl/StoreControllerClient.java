@@ -70,15 +70,15 @@ public class StoreControllerClient {
   /**
    * 分页获取在使用中的Store
    * 
-   * @param currentpage
-   *          当前页 默认值:1 (currentpage必须&ge;1,否则重置为1)
-   * @param pagesize
-   *          每页大小 默认值:10(pagesize必须&gt;0,否则重置为1)
+   * @param currentPage
+   *          当前页 默认值:1 (currentPage必须&ge;1,否则重置为1)
+   * @param pageSize
+   *          每页大小 默认值:10(pageSize必须&gt;0,否则重置为1)
    * @return
    * @throws IOException
    */
-  public GetInUseStoreListResponse getInUseStoreList(int currentpage, int pagesize) throws IOException {
-    Response<ResponseBean> response = storeControllerApi.getInUseStoreList(currentpage, pagesize).execute();
+  public GetInUseStoreListResponse getInUseStoreList(int currentPage, int pageSize) throws IOException {
+    Response<ResponseBean> response = storeControllerApi.getInUseStoreList(currentPage, pageSize).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -353,56 +353,56 @@ public class StoreControllerClient {
   /**
    * 获取门店信息
    * 
-   * @param storeid
+   * @param storeId
    * @return
    * @throws IOException
    */
-  public Store getStore(String storeid) throws IOException {
-    Response<ResponseBean> response = storeControllerApi.getStore(storeid).execute();
+  public Store getStore(String storeId) throws IOException {
+    Response<ResponseBean> response = storeControllerApi.getStore(storeId).execute();
     return getStoreFromResponse(response, "get store return code is '200',but return data is null");
   }
 
   /**
    * 更新门店信息
    * 
-   * @param storeid
+   * @param storeId
    * @param storeRequest
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public Store updateStore(String storeid, Store storeRequest, String accessToken) throws IOException {
-    Response<ResponseBean> response = storeControllerApi.updateStore(storeid, storeRequest, accessToken).execute();
+  public Store updateStore(String storeId, Store storeRequest, String accessToken) throws IOException {
+    Response<ResponseBean> response = storeControllerApi.updateStore(storeId, storeRequest, accessToken).execute();
     return getStoreFromResponse(response, "update store return code is '200',but return data is null");
   }
 
   /**
    * 异步更新门店信息
    * 
-   * @param storeid
+   * @param storeId
    * @param storeRequest
    * @param accessToken
    * @param callback
    */
-  public void updateStoreAsync(String storeid, Store storeRequest, String accessToken,
+  public void updateStoreAsync(String storeId, Store storeRequest, String accessToken,
       Callback<ResponseBean> callback) {
-    storeControllerApi.updateStore(storeid, storeRequest, accessToken).enqueue(callback);
+    storeControllerApi.updateStore(storeId, storeRequest, accessToken).enqueue(callback);
   }
 
   /**
    * 废弃门店
    * 
-   * @param storeid
+   * @param storeId
    * @param accessToken
    * @param async
    * @throws IOException
    */
-  public void deprecateStore(String storeid, String accessToken, boolean async) throws IOException {
+  public void deprecateStore(String storeId, String accessToken, boolean async) throws IOException {
     if (async) {
-      storeControllerApi.deprecateStore(storeid, accessToken).enqueue(Empty_Callback);
+      storeControllerApi.deprecateStore(storeId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = storeControllerApi.deprecateStore(storeid, accessToken).execute();
+    Response<ResponseBean> response = storeControllerApi.deprecateStore(storeId, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -473,19 +473,19 @@ public class StoreControllerClient {
   /**
    * 门店下添加条目
    * 
-   * @param storeid
-   * @param classifyid
+   * @param storeId
+   * @param classifyId
    * @param accessToken
    * @param async
    * @throws IOException
    */
-  public void addStoreClassify(String storeid, String classifyid, String accessToken, boolean async)
+  public void addStoreClassify(String storeId, String classifyId, String accessToken, boolean async)
       throws IOException {
     if (async) {
-      storeControllerApi.addStoreClassify(storeid, classifyid, accessToken).enqueue(Empty_Callback);
+      storeControllerApi.addStoreClassify(storeId, classifyId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = storeControllerApi.addStoreClassify(storeid, classifyid, accessToken).execute();
+    Response<ResponseBean> response = storeControllerApi.addStoreClassify(storeId, classifyId, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {

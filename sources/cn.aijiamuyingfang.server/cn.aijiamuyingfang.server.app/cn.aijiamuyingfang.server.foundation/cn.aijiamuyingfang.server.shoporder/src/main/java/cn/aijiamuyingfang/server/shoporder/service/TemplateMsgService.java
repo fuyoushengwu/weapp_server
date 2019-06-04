@@ -143,7 +143,7 @@ public class TemplateMsgService {
     String keyword3Value = order.getThirdsendCompany();
     String keyword4Value = order.getThirdsendNo();
 
-    RecieveAddress recieveAddress = userClient.getRecieveAddress(order.getUserid(), order.getRecieveAddressId())
+    RecieveAddress recieveAddress = userClient.getRecieveAddress(order.getUserId(), order.getRecieveAddressId())
         .getData();
     String keyword5Value = recieveAddress.getDetail();
 
@@ -173,7 +173,7 @@ public class TemplateMsgService {
     String keyword1Value = order.getOrderNo();
     SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_PATTERN);
     String keyword2Value = dateFormat.format(order.getCreateTime());
-    RecieveAddress recieveAddress = userClient.getRecieveAddress(order.getUserid(), order.getRecieveAddressId())
+    RecieveAddress recieveAddress = userClient.getRecieveAddress(order.getUserId(), order.getRecieveAddressId())
         .getData();
     String keyword3Value = recieveAddress.getDetail();
     String keyword4Value = order.getThirdsendNo();
@@ -225,7 +225,7 @@ public class TemplateMsgService {
    */
   private TemplateMsg createTemplateMsg(ShopOrder shoporder, String... messagedata) {
     TemplateMsg message = new TemplateMsg();
-    message.setPage("/pages/order_detail?shoporderid=" + shoporder.getId());
+    message.setPage("/pages/order_detail?shop_order_id=" + shoporder.getId());
     message.setFormid(shoporder.getFormid());
 
     List<TemplateMsgKeyValue> messagedataList = new ArrayList<>();

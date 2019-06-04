@@ -76,7 +76,7 @@ public class StoreControllerTest {
   public void testGetInUseStores_001() throws JsonParseException, JsonMappingException, IOException {
     GetInUseStoreListResponse getInUseStoreResponse = storeControllerClient.getInUseStoreList(1, 2);
     Assert.assertEquals(0, getInUseStoreResponse.getTotalpage());
-    Assert.assertEquals(1, getInUseStoreResponse.getCurrentpage());
+    Assert.assertEquals(1, getInUseStoreResponse.getCurrentPage());
     Assert.assertEquals(0, getInUseStoreResponse.getDataList().size());
   }
 
@@ -89,10 +89,10 @@ public class StoreControllerTest {
       storeControllerClient.createStore(null, null, storeRequest, testActions.getAdminAccessToken());
     }
 
-    // {currentpage,pageisze}
+    // {currentPage,pageisze}
     int[][] parameterArr = { { 0, 0 }, { 0, 1 }, { 0, 2 }, { 0, 3 }, { 1, 0 }, { 1, 1 }, { 1, 2 }, { 1, 3 }, { 2, 0 },
         { 2, 1 }, { 2, 2 }, { 2, 3 }, { 3, 0 }, { 3, 1 }, { 3, 2 }, { 3, 3 }, };
-    // {totalpage,currentpage,datasize}
+    // {totalpage,currentPage,datasize}
     int[][] expectedArr = { { 4, 1, 1 }, { 4, 1, 1 }, { 2, 1, 2 }, { 2, 1, 3 }, { 4, 1, 1 }, { 4, 1, 1 }, { 2, 1, 2 },
         { 2, 1, 3 }, { 4, 2, 1 }, { 4, 2, 1 }, { 2, 2, 2 }, { 2, 2, 1 }, { 4, 3, 1 }, { 4, 3, 1 }, { 2, 3, 0 },
         { 2, 3, 0 }, };
@@ -104,7 +104,7 @@ public class StoreControllerTest {
 
       int[] expected = expectedArr[i];
       Assert.assertEquals(expected[0], getInUseStoreResponse.getTotalpage());
-      Assert.assertEquals(expected[1], getInUseStoreResponse.getCurrentpage());
+      Assert.assertEquals(expected[1], getInUseStoreResponse.getCurrentPage());
       Assert.assertEquals(expected[2], getInUseStoreResponse.getDataList().size());
     }
   }
@@ -180,7 +180,7 @@ public class StoreControllerTest {
   public void testUpdateStore_003() throws URISyntaxException, IOException {
     Store storeRequest = new Store();
     storeRequest.setName("store one rename");
-    storeControllerClient.updateStore("not_exit_storeid", storeRequest, testActions.getAdminAccessToken());
+    storeControllerClient.updateStore("NOT_EXIT_STOREID", storeRequest, testActions.getAdminAccessToken());
     Assert.fail();
   }
 
@@ -194,13 +194,13 @@ public class StoreControllerTest {
 
     GetInUseStoreListResponse getInUseStoreResponse = storeControllerClient.getInUseStoreList(1, 10);
     Assert.assertEquals(1, getInUseStoreResponse.getTotalpage());
-    Assert.assertEquals(1, getInUseStoreResponse.getCurrentpage());
+    Assert.assertEquals(1, getInUseStoreResponse.getCurrentPage());
     Assert.assertEquals(2, getInUseStoreResponse.getDataList().size());
 
     testActions.deprecatedStoreOne();
     getInUseStoreResponse = storeControllerClient.getInUseStoreList(1, 10);
     Assert.assertEquals(1, getInUseStoreResponse.getTotalpage());
-    Assert.assertEquals(1, getInUseStoreResponse.getCurrentpage());
+    Assert.assertEquals(1, getInUseStoreResponse.getCurrentPage());
     Assert.assertEquals(1, getInUseStoreResponse.getDataList().size());
     Assert.assertEquals(storeTwo.getId(), getInUseStoreResponse.getDataList().get(0).getId());
   }

@@ -18,20 +18,14 @@ import cn.aijiamuyingfang.server.feign.domain.user.User;
 public interface UserClient {
 
   /**
-   * 
-   * 
-   * @param userid
-   * @return
-   */
-  /**
    * 查询用户信息( 供系统内部其它服务使用的,不需要鉴权)
    * 
-   * @param userid
+   * @param userId
    * @param openid
    * @return
    */
   @GetMapping("/users-anon/internal/user")
-  ResponseBean<User> getUserInternal(@RequestParam(value = "userid", required = false) String userid,
+  ResponseBean<User> getUserInternal(@RequestParam(value = "user_id", required = false) String userId,
       @RequestParam(value = "openid", required = false) String openid);
 
   /**
@@ -46,30 +40,30 @@ public interface UserClient {
   /**
    * 更新用户信息
    * 
-   * @param userid
+   * @param userId
    * @param user
    * @return
    */
-  @PutMapping(value = "/user/{userid}")
-  ResponseBean<User> updateUser(@PathVariable("userid") String userid, @RequestBody User user);
+  @PutMapping(value = "/user/{user_id}")
+  ResponseBean<User> updateUser(@PathVariable("user_id") String userId, @RequestBody User user);
 
   /**
    * 获取用户收件地址
    * 
-   * @param userid
+   * @param userId
    * @return
    */
-  @GetMapping(value = "/user/{userid}/recieveaddress")
-  ResponseBean<List<RecieveAddress>> getUserRecieveAddressList(@PathVariable("userid") String userid);
+  @GetMapping(value = "/user/{user_id}/recieveaddress")
+  ResponseBean<List<RecieveAddress>> getUserRecieveAddressList(@PathVariable("user_id") String userId);
 
   /**
    * 获取收件地址
    * 
-   * @param userid
-   * @param addressid
+   * @param userId
+   * @param addressId
    * @return
    */
-  @GetMapping(value = "/user/{userid}/recieveaddress/{addressid}")
-  ResponseBean<RecieveAddress> getRecieveAddress(@PathVariable("userid") String userid,
-      @PathVariable("addressid") String addressid);
+  @GetMapping(value = "/user/{user_id}/recieveaddress/{address_id}")
+  ResponseBean<RecieveAddress> getRecieveAddress(@PathVariable("user_id") String userId,
+      @PathVariable("address_id") String addressId);
 }

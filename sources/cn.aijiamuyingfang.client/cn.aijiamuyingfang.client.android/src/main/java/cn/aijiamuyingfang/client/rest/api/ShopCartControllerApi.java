@@ -30,88 +30,88 @@ public interface ShopCartControllerApi {
   /**
    * 往用户购物车添加商品
    * 
-   * @param userid
+   * @param userId
    * @param requestBean
    * @param accessToken
    * @return
    */
-  @POST(value = "/shoporder-service/user/{userid}/shopcart")
-  public Observable<ResponseBean<ShopCart>> addShopCart(@Path("userid") String userid,
+  @POST(value = "/shoporder-service/user/{user_id}/shop_cart")
+  public Observable<ResponseBean<ShopCart>> addShopCart(@Path("user_id") String userId,
       @Body CreateShopCartRequest requestBean, @Query("access_token") String accessToken);
 
   /**
    * 分页获取用户购物车中的项目
    * 
-   * @param userid
-   * @param currentpage
-   * @param pagesize
+   * @param userId
+   * @param currentPage
+   * @param pageSize
    * @param accessToken
    * @return
    */
-  @GET(value = "/shoporder-service/user/{userid}/shopcart")
-  public Observable<ResponseBean<GetShopCartListResponse>> getShopCartList(@Path("userid") String userid,
-      @Query(value = "currentpage") int currentpage, @Query(value = "pagesize") int pagesize,
+  @GET(value = "/shoporder-service/user/{user_id}/shop_cart")
+  public Observable<ResponseBean<GetShopCartListResponse>> getShopCartList(@Path("user_id") String userId,
+      @Query(value = "current_page") int currentPage, @Query(value = "page_size") int pageSize,
       @Query("access_token") String accessToken);
 
   /**
    * 全选/全不选用户购物车中的商品
    * 
-   * @param userid
-   * @param ischecked
+   * @param userId
+   * @param isChecked
    * @param accessToken
    * @return
    */
-  @PUT(value = "/shoporder-service/user/{userid}/shopcart/allcheck/{ischecked}")
-  public Observable<ResponseBean<Void>> checkAllShopCart(@Path("userid") String userid,
-      @Path("ischecked") boolean ischecked, @Query("access_token") String accessToken);
+  @PUT(value = "/shoporder-service/user/{user_id}/shop_cart/allcheck/{is_checked}")
+  public Observable<ResponseBean<Void>> checkAllShopCart(@Path("user_id") String userId,
+      @Path("is_checked") boolean isChecked, @Query("access_token") String accessToken);
 
   /**
    * 选中用户购物车下的某一项
    * 
-   * @param userid
-   * @param shopcartid
-   * @param ischecked
+   * @param userId
+   * @param shopCartId
+   * @param isChecked
    * @param accessToken
    * @return
    */
-  @PUT(value = "/shoporder-service/user/{userid}/shopcart/{shopcartid}/check/{ischecked}")
-  public Observable<ResponseBean<Void>> checkShopCart(@Path("userid") String userid,
-      @Path("shopcartid") String shopcartid, @Path("ischecked") boolean ischecked,
+  @PUT(value = "/shoporder-service/user/{user_id}/shop_cart/{shop_cart_id}/check/{is_checked}")
+  public Observable<ResponseBean<Void>> checkShopCart(@Path("user_id") String userId,
+      @Path("shop_cart_id") String shopCartId, @Path("is_checked") boolean isChecked,
       @Query("access_token") String accessToken);
 
   /**
    * 删除用户购物车中的某项
    * 
-   * @param userid
-   * @param shopcartid
+   * @param userId
+   * @param shopCartId
    * @param accessToken
    * @return
    */
-  @DELETE(value = "/shoporder-service/user/{userid}/shopcart/{shopcartid}")
-  public Observable<ResponseBean<Void>> deleteShopCart(@Path("userid") String userid,
-      @Path("shopcartid") String shopcartid, @Query("access_token") String accessToken);
+  @DELETE(value = "/shoporder-service/user/{user_id}/shop_cart/{shop_cart_id}")
+  public Observable<ResponseBean<Void>> deleteShopCart(@Path("user_id") String userId,
+      @Path("shop_cart_id") String shopCartId, @Query("access_token") String accessToken);
 
   /**
    * 修改用户购物车中商品数量
    * 
-   * @param userid
-   * @param shopcartid
+   * @param userId
+   * @param shopCartId
    * @param count
    * @param accessToken
    * @return
    */
-  @PUT(value = "/shoporder-service/user/{userid}/shopcart/{shopcartid}/count/{count}")
-  public Observable<ResponseBean<ShopCart>> updateShopCartCount(@Path("userid") String userid,
-      @Path("shopcartid") String shopcartid, @Path("count") int count, @Query("access_token") String accessToken);
+  @PUT(value = "/shoporder-service/user/{user_id}/shop_cart/{shop_cart_id}/count/{count}")
+  public Observable<ResponseBean<ShopCart>> updateShopCartCount(@Path("user_id") String userId,
+      @Path("shop_cart_id") String shopCartId, @Path("count") int count, @Query("access_token") String accessToken);
 
   /**
    * 删除购物车中的商品(该方法在废弃商品的时候使用,所以只有Admin才能调用该方法)
    * 
-   * @param goodid
+   * @param goodId
    * @param accessToken
    * @return
    */
-  @DELETE(value = "/shoporder-service/shopcart/good/{goodid}")
-  public Observable<ResponseBean<Void>> deleteGood(@Path("goodid") String goodid,
+  @DELETE(value = "/shoporder-service/shop_cart/good/{good_id}")
+  public Observable<ResponseBean<Void>> deleteGood(@Path("good_id") String goodId,
       @Query("access_token") String accessToken);
 }

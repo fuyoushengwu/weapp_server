@@ -28,7 +28,7 @@ public class PreviewOrderItem {
   /**
    * 关联的购物车项Id
    */
-  private String shopcartId;
+  private String shopCartId;
 
   /**
    * 商品Id

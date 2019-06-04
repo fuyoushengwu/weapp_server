@@ -23,16 +23,16 @@ public interface PreviewOrderRepository extends JpaRepository<PreviewOrder, Stri
   /**
    * 查找用户的预览订单
    * 
-   * @param userid
+   * @param userId
    * @return
    */
-  PreviewOrder findByUserid(String userid);
+  PreviewOrder findByUserId(String userId);
 
   /**
    * 删除用户的预览订单
    * 
-   * @param userid
+   * @param userId
    */
   @Transactional
-  void deleteByUserid(String userid);
+  void deleteByUserId(String userId);
 }

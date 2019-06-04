@@ -57,16 +57,16 @@ public class CouponControllerClient {
   /**
    * 分页获取用户兑换券
    * 
-   * @param userid
-   * @param currentpage
-   * @param pagesize
+   * @param userId
+   * @param currentPage
+   * @param pageSize
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public GetUserVoucherListResponse getUserVoucherList(String userid, int currentpage, int pagesize, String accessToken)
+  public GetUserVoucherListResponse getUserVoucherList(String userId, int currentPage, int pageSize, String accessToken)
       throws IOException {
-    Response<ResponseBean> response = couponControllerApi.getUserVoucherList(userid, currentpage, pagesize, accessToken)
+    Response<ResponseBean> response = couponControllerApi.getUserVoucherList(userId, currentPage, pageSize, accessToken)
         .execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
@@ -92,13 +92,13 @@ public class CouponControllerClient {
   /**
    * 分页获取商品兑换券
    * 
-   * @param currentpage
-   * @param pagesize
+   * @param currentPage
+   * @param pageSize
    * @return
    * @throws IOException
    */
-  public GetGoodVoucherListResponse getGoodVoucherList(int currentpage, int pagesize) throws IOException {
-    Response<ResponseBean> response = couponControllerApi.getGoodVoucherList(currentpage, pagesize).execute();
+  public GetGoodVoucherListResponse getGoodVoucherList(int currentPage, int pageSize) throws IOException {
+    Response<ResponseBean> response = couponControllerApi.getGoodVoucherList(currentPage, pageSize).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -123,12 +123,12 @@ public class CouponControllerClient {
   /**
    * 获取商品兑换券
    * 
-   * @param voucherid
+   * @param voucherId
    * @return
    * @throws IOException
    */
-  public GoodVoucher getGoodVoucher(String voucherid) throws IOException {
-    Response<ResponseBean> response = couponControllerApi.getGoodVoucher(voucherid).execute();
+  public GoodVoucher getGoodVoucher(String voucherId) throws IOException {
+    Response<ResponseBean> response = couponControllerApi.getGoodVoucher(voucherId).execute();
     return getGoodVoucherFromResponse(response, "get good voucher  return code is '200',but return data is null");
   }
 
@@ -188,17 +188,17 @@ public class CouponControllerClient {
   /**
    * 废弃商品兑换券
    * 
-   * @param voucherid
+   * @param voucherId
    * @param async
    * @param accessToken
    * @throws IOException
    */
-  public void deprecateGoodVoucher(String voucherid, boolean async, String accessToken) throws IOException {
+  public void deprecateGoodVoucher(String voucherId, boolean async, String accessToken) throws IOException {
     if (async) {
-      couponControllerApi.deprecateGoodVoucher(voucherid, accessToken).enqueue(Empty_Callback);
+      couponControllerApi.deprecateGoodVoucher(voucherId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = couponControllerApi.deprecateGoodVoucher(voucherid, accessToken).execute();
+    Response<ResponseBean> response = couponControllerApi.deprecateGoodVoucher(voucherId, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -217,13 +217,13 @@ public class CouponControllerClient {
   /**
    * 分页获取可用的兑换方式
    * 
-   * @param currentpage
-   * @param pagesize
+   * @param currentPage
+   * @param pageSize
    * @return
    * @throws IOException
    */
-  public GetVoucherItemListResponse getVoucherItemList(int currentpage, int pagesize) throws IOException {
-    Response<ResponseBean> response = couponControllerApi.getVoucherItemList(currentpage, pagesize).execute();
+  public GetVoucherItemListResponse getVoucherItemList(int currentPage, int pageSize) throws IOException {
+    Response<ResponseBean> response = couponControllerApi.getVoucherItemList(currentPage, pageSize).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -234,12 +234,12 @@ public class CouponControllerClient {
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
-      GetVoucherItemListResponse voucheritemListResponse = JsonUtils
+      GetVoucherItemListResponse voucherItemListResponse = JsonUtils
           .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetVoucherItemListResponse.class);
-      if (null == voucheritemListResponse) {
+      if (null == voucherItemListResponse) {
         throw new CouponException("500", "get voucher item list  return code is '200',but return data is null");
       }
-      return voucheritemListResponse;
+      return voucherItemListResponse;
     }
     LOGGER.error(responseBean.getMsg());
     throw new CouponException(returnCode, responseBean.getMsg());
@@ -249,12 +249,12 @@ public class CouponControllerClient {
   /**
    * 获取兑换方式
    * 
-   * @param voucheritemId
+   * @param voucherItemId
    * @return
    * @throws IOException
    */
-  public VoucherItem getVoucherItem(String voucheritemId) throws IOException {
-    Response<ResponseBean> response = couponControllerApi.getVoucherItem(voucheritemId).execute();
+  public VoucherItem getVoucherItem(String voucherItemId) throws IOException {
+    Response<ResponseBean> response = couponControllerApi.getVoucherItem(voucherItemId).execute();
     return getVoucherItemFromResponse(response, "get voucher item list  return code is '200',but return data is null");
   }
 
@@ -277,11 +277,11 @@ public class CouponControllerClient {
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
-      VoucherItem voucheritem = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), VoucherItem.class);
-      if (null == voucheritem) {
+      VoucherItem voucherItem = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), VoucherItem.class);
+      if (null == voucherItem) {
         throw new CouponException("500", errormsg);
       }
-      return voucheritem;
+      return voucherItem;
     }
     LOGGER.error(responseBean.getMsg());
     throw new CouponException(returnCode, responseBean.getMsg());
@@ -314,17 +314,17 @@ public class CouponControllerClient {
   /**
    * 废弃兑换方式
    * 
-   * @param voucheritemId
+   * @param voucherItemId
    * @param accessToken
    * @param async
    * @throws IOException
    */
-  public void deprecateVoucherItem(String voucheritemId, String accessToken, boolean async) throws IOException {
+  public void deprecateVoucherItem(String voucherItemId, String accessToken, boolean async) throws IOException {
     if (async) {
-      couponControllerApi.deprecateVoucherItem(voucheritemId, accessToken).enqueue(Empty_Callback);
+      couponControllerApi.deprecateVoucherItem(voucherItemId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = couponControllerApi.deprecateVoucherItem(voucheritemId, accessToken).execute();
+    Response<ResponseBean> response = couponControllerApi.deprecateVoucherItem(voucherItemId, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {

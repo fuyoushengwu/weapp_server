@@ -31,12 +31,12 @@ public interface UserControllerApi {
   /**
    * 获取用户
    * 
-   * @param userid
+   * @param userId
    * @param accessToken
    * @return
    */
-  @GET(value = "/user-service/user/{userid}")
-  public Call<ResponseBean> getUser(@Path("userid") String userid, @Query("access_token") String accessToken);
+  @GET(value = "/user-service/user/{user_id}")
+  public Call<ResponseBean> getUser(@Path("user_id") String userId, @Query("access_token") String accessToken);
 
   /**
    * 注册用户
@@ -51,82 +51,82 @@ public interface UserControllerApi {
   /**
    * 获取用户手机号
    * 
-   * @param userid
+   * @param userId
    * @param accessToken
    * @return
    */
-  @GET(value = "/user-service/user/{userid}/phone")
-  public Call<ResponseBean> getUserPhone(@Path("userid") String userid, @Query("access_token") String accessToken);
+  @GET(value = "/user-service/user/{user_id}/phone")
+  public Call<ResponseBean> getUserPhone(@Path("user_id") String userId, @Query("access_token") String accessToken);
 
   /**
    * 更新用户信息
    * 
-   * @param userid
+   * @param userId
    * @param user
    * @param accessToken
    * @return
    */
-  @PUT(value = "/user-service/user/{userid}")
-  public Call<ResponseBean> updateUser(@Path("userid") String userid, @Body User user,
+  @PUT(value = "/user-service/user/{user_id}")
+  public Call<ResponseBean> updateUser(@Path("user_id") String userId, @Body User user,
       @Query("access_token") String accessToken);
 
   /**
    * 获取用户收件地址
    * 
-   * @param userid
+   * @param userId
    * @param accessToken
    * @return
    */
-  @GET(value = "/user-service/user/{userid}/recieveaddress")
-  public Call<ResponseBean> getUserRecieveAddressList(@Path("userid") String userid,
+  @GET(value = "/user-service/user/{user_id}/recieveaddress")
+  public Call<ResponseBean> getUserRecieveAddressList(@Path("user_id") String userId,
       @Query("access_token") String accessToken);
 
   /**
    * 给用户添加收件地址
    * 
-   * @param userid
+   * @param userId
    * @param request
    * @param accessToken
    * @return
    */
-  @POST(value = "/user-service/user/{userid}/recieveaddress")
-  public Call<ResponseBean> addUserRecieveAddress(@Path("userid") String userid, @Body RecieveAddress request,
+  @POST(value = "/user-service/user/{user_id}/recieveaddress")
+  public Call<ResponseBean> addUserRecieveAddress(@Path("user_id") String userId, @Body RecieveAddress request,
       @Query("access_token") String accessToken);
 
   /**
    * 获取收件地址
    * 
-   * @param userid
-   * @param addressid
+   * @param userId
+   * @param addressId
    * @param accessToken
    * @return
    */
-  @GET(value = "/user-service/user/{userid}/recieveaddress/{addressid}")
-  public Call<ResponseBean> getRecieveAddress(@Path("userid") String userid, @Path("addressid") String addressid,
+  @GET(value = "/user-service/user/{user_id}/recieveaddress/{address_id}")
+  public Call<ResponseBean> getRecieveAddress(@Path("user_id") String userId, @Path("address_id") String addressId,
       @Query("access_token") String accessToken);
 
   /**
    * 更新收件地址信息
    * 
-   * @param userid
-   * @param addressid
+   * @param userId
+   * @param addressId
    * @param request
    * @param accessToken
    * @return
    */
-  @PUT(value = "/user-service/user/{userid}/recieveaddress/{addressid}")
-  public Call<ResponseBean> updateRecieveAddress(@Path("userid") String userid, @Path("addressid") String addressid,
+  @PUT(value = "/user-service/user/{user_id}/recieveaddress/{address_id}")
+  public Call<ResponseBean> updateRecieveAddress(@Path("user_id") String userId, @Path("address_id") String addressId,
       @Body RecieveAddress request, @Query("access_token") String accessToken);
 
   /**
    * 废弃收件地址
    * 
-   * @param userid
-   * @param addressid
+   * @param userId
+   * @param addressId
    * @param accessToken
    * @return
    */
-  @DELETE(value = "/user-service/user/{userid}/recieveaddress/{addressid}")
-  public Call<ResponseBean> deprecateRecieveAddress(@Path("userid") String userid, @Path("addressid") String addressid,
-      @Query("access_token") String accessToken);
+  @DELETE(value = "/user-service/user/{user_id}/recieveaddress/{address_id}")
+  public Call<ResponseBean> deprecateRecieveAddress(@Path("user_id") String userId,
+      @Path("address_id") String addressId, @Query("access_token") String accessToken);
 }

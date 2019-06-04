@@ -93,7 +93,7 @@ public class GoodControllerTest {
   @Test(expected = GoodsException.class)
   @UseCaseDescription(description = "获取不存在的Good")
   public void test_GetGood_001() throws IOException {
-    goodcontrollerClient.getGood("not_exist_goodid");
+    goodcontrollerClient.getGood("NOT_EXIST_GOODID");
     Assert.fail();
   }
 
@@ -121,7 +121,7 @@ public class GoodControllerTest {
   public void test_UpdateGood_001() throws IOException {
     Good goodRequest = new Good();
     goodRequest.setName("good one rename");
-    goodcontrollerClient.updateGood("not_exist_goodid", goodRequest, testActions.getAdminAccessToken());
+    goodcontrollerClient.updateGood("NOT_EXIST_GOODID", goodRequest, testActions.getAdminAccessToken());
     Assert.fail();
   }
 
@@ -150,7 +150,7 @@ public class GoodControllerTest {
   @Test(expected = GoodsException.class)
   @UseCaseDescription(description = "不存在的gooddetail")
   public void test_GetGoodDetail_001() throws IOException {
-    goodcontrollerClient.getGoodDetail("not_exist_goodid");
+    goodcontrollerClient.getGoodDetail("NOT_EXIST_GOODID");
     Assert.fail();
   }
 

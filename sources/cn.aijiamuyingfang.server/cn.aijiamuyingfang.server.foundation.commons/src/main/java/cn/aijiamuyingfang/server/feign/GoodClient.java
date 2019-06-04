@@ -25,15 +25,15 @@ import cn.aijiamuyingfang.server.feign.domain.good.SaleGood;
  */
 @FeignClient(name = "goods-service")
 public interface GoodClient {
-  @GetMapping(value = "/good/{goodid}")
-  ResponseBean<Good> getGood(@PathVariable(value = "goodid") String goodid);
+  @GetMapping(value = "/good/{good_id}")
+  ResponseBean<Good> getGood(@PathVariable(value = "good_id") String goodId);
 
-  @PutMapping(value = "/good/{goodid}/sale")
-  ResponseBean<Void> saleGood(@PathVariable(value = "goodid") String goodid, @RequestBody SaleGood saleGood);
+  @PutMapping(value = "/good/{good_id}/sale")
+  ResponseBean<Void> saleGood(@PathVariable(value = "good_id") String goodId, @RequestBody SaleGood saleGood);
 
   @PutMapping(value = "/good/sale")
   ResponseBean<Void> saleGoodList(@RequestBody List<SaleGood> saleGoodList);
-  
+
   /**
    * 废弃商品兑换券
    * 

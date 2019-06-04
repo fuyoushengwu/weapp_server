@@ -32,20 +32,20 @@ public interface GoodControllerApi {
   /**
    * 分页查询条目下的商品
    * 
-   * @param classifyid
+   * @param classifyId
    * @param packFilter
    * @param levelFilter
    * @param orderType
    * @param orderValue
-   * @param currentpage
-   * @param pagesize
+   * @param currentPage
+   * @param pageSize
    * @return
    */
-  @GET(value = "/goods-service/classify/{classifyid}/good")
-  public Call<ResponseBean> getClassifyGoodList(@Path("classifyid") String classifyid,
+  @GET(value = "/goods-service/classify/{classify_id}/good")
+  public Call<ResponseBean> getClassifyGoodList(@Path("classify_id") String classifyId,
       @Query(value = "packFilter") List<String> packFilter, @Query(value = "levelFilter") List<String> levelFilter,
       @Query(value = "orderType") String orderType, @Query(value = "orderValue") String orderValue,
-      @Query(value = "currentpage") int currentpage, @Query(value = "pagesize") int pagesize);
+      @Query(value = "current_page") int currentPage, @Query(value = "page_size") int pageSize);
 
   /**
    * 添加商品
@@ -60,40 +60,40 @@ public interface GoodControllerApi {
   /**
    * 获取商品信息
    * 
-   * @param goodid
+   * @param goodId
    * @return
    */
-  @GET(value = "/goods-service/good/{goodid}")
-  public Call<ResponseBean> getGood(@Path("goodid") String goodid);
+  @GET(value = "/goods-service/good/{good_id}")
+  public Call<ResponseBean> getGood(@Path("good_id") String goodId);
 
   /**
    * 废弃商品
    * 
-   * @param goodid
+   * @param goodId
    * @param accessToken
    * @return
    */
-  @DELETE(value = "/goods-service/good/{goodid}")
-  public Call<ResponseBean> deprecateGood(@Path("goodid") String goodid, @Query("access_token") String accessToken);
+  @DELETE(value = "/goods-service/good/{good_id}")
+  public Call<ResponseBean> deprecateGood(@Path("good_id") String goodId, @Query("access_token") String accessToken);
 
   /**
    * 获取商品详细信息
    * 
-   * @param goodid
+   * @param goodId
    * @return
    */
-  @GET(value = "/goods-service/good/{goodid}/detail")
-  public Call<ResponseBean> getGoodDetail(@Path("goodid") String goodid);
+  @GET(value = "/goods-service/good/{good_id}/detail")
+  public Call<ResponseBean> getGoodDetail(@Path("good_id") String goodId);
 
   /**
    * 更新Good信息
    * 
-   * @param goodid
+   * @param goodId
    * @param request
    * @param accessToken
    * @return
    */
-  @PUT(value = "/goods-service/good/{goodid}")
-  public Call<ResponseBean> updateGood(@Path(value = "goodid") String goodid, @Body Good request,
+  @PUT(value = "/goods-service/good/{good_id}")
+  public Call<ResponseBean> updateGood(@Path(value = "good_id") String goodId, @Body Good request,
       @Query("access_token") String accessToken);
 }

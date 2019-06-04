@@ -25,13 +25,14 @@ import cn.aijiamuyingfang.server.goods.service.ClassifyService;
 import cn.aijiamuyingfang.server.goods.service.ImageService;
 
 /***
- * [描述]:*
+ * [描述]:
  * <p>
- * *条目服务-控制层*
+ * 条目服务-控制层
  * </p>
- * **
  * 
- * @version 1.0.0*@author ShiWei*@email shiweideyouxiang @sina.cn
+ * @version 1.0.0
+ * @author ShiWei
+ * @email shiweideyouxiang@sina.cn
  * @date 2018-06-26 23:43:44
  */
 @RestController
@@ -57,15 +58,15 @@ public class ClassifyController {
   /**
    * 获取某个条目
    *
-   * @param classifyid
+   * @param classifyId
    * @return
    */
   @PreAuthorize(value = "permitAll()")
-  @GetMapping(value = "/classify/{classifyid}")
-  public Classify getClassify(@PathVariable(value = "classifyid") String classifyid) {
-    Classify classify = classifyService.getClassify(classifyid);
+  @GetMapping(value = "/classify/{classify_id}")
+  public Classify getClassify(@PathVariable(value = "classify_id") String classifyId) {
+    Classify classify = classifyService.getClassify(classifyId);
     if (null == classify) {
-      throw new GoodsException(ResponseCode.CLASSIFY_NOT_EXIST, classifyid);
+      throw new GoodsException(ResponseCode.CLASSIFY_NOT_EXIST, classifyId);
     }
     return classify;
   }
@@ -73,12 +74,12 @@ public class ClassifyController {
   /**
    * 废弃条目
    *
-   * @param classifyid
+   * @param classifyId
    */
   @PreAuthorize("hasAuthority('permission:manager:*')")
-  @DeleteMapping(value = "/classify/{classifyid}")
-  public void deleteClassify(@PathVariable(value = "classifyid") String classifyid) {
-    classifyService.deleteClassify(classifyid);
+  @DeleteMapping(value = "/classify/{classify_id}")
+  public void deleteClassify(@PathVariable(value = "classify_id") String classifyId) {
+    classifyService.deleteClassify(classifyId);
   }
 
   /**
@@ -102,26 +103,26 @@ public class ClassifyController {
   /**
    * 获得条目下的所有子条目
    *
-   * @param classifyid
+   * @param classifyId
    * @return
    */
   @PreAuthorize(value = "permitAll()")
-  @GetMapping(value = "/classify/{classifyid}/subclassify")
-  public List<Classify> getSubClassifyList(@PathVariable(value = "classifyid") String classifyid) {
-    return classifyService.getSubClassifyList(classifyid);
+  @GetMapping(value = "/classify/{classify_id}/subclassify")
+  public List<Classify> getSubClassifyList(@PathVariable(value = "classify_id") String classifyId) {
+    return classifyService.getSubClassifyList(classifyId);
   }
 
   /**
    * 创建子条目
    *
-   * @param classifyid
+   * @param classifyId
    * @param classifyRequest
    * @param request
    * @return
    */
   @PreAuthorize("hasAuthority('permission:manager:*')")
-  @PostMapping(value = "/classify/{classifyid}/subclassify")
-  public Classify createSubClassify(@PathVariable(value = "classifyid") String classifyid,
+  @PostMapping(value = "/classify/{classify_id}/subclassify")
+  public Classify createSubClassify(@PathVariable(value = "classify_id") String classifyId,
       @RequestParam(value = "coverImage", required = false) MultipartFile coverImagePart, Classify classifyRequest,
       HttpServletRequest request) {
     if (null == classifyRequest) {
@@ -130,7 +131,7 @@ public class ClassifyController {
     if (StringUtils.isEmpty(classifyRequest.getName())) {
       throw new IllegalArgumentException("classify name is empty");
     }
-    Classify subClassify = classifyService.createORUpdateSubClassify(classifyid, classifyRequest);
+    Classify subClassify = classifyService.createORUpdateSubClassify(classifyId, classifyRequest);
 
     ImageSource coverImageSource = imageService.saveImage(coverImagePart);
     if (coverImageSource != null) {
@@ -142,14 +143,14 @@ public class ClassifyController {
   /**
    * 条目下添加商品
    *
-   * @param classifyid
-   * @param goodid
+   * @param classifyId
+   * @param goodId
    *          商品id
    */
   @PreAuthorize("hasAuthority('permission:manager:*')")
-  @PutMapping(value = "/classify/{classifyid}/good/{goodid}")
-  public void addClassifyGood(@PathVariable(value = "classifyid") String classifyid,
-      @PathVariable(value = "goodid") String goodid) {
-    classifyService.addGood(classifyid, goodid);
+  @PutMapping(value = "/classify/{classify_id}/good/{good_id}")
+  public void addClassifyGood(@PathVariable(value = "classify_id") String classifyId,
+      @PathVariable(value = "good_id") String goodId) {
+    classifyService.addGood(classifyId, goodId);
   }
 }

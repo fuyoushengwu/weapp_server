@@ -40,21 +40,21 @@ public interface ClassifyControllerApi {
   /**
    * 获取某个条目
    * 
-   * @param classifyid
+   * @param classifyId
    * @return
    */
-  @GET(value = "/goods-service/classify/{classifyid}")
-  public Observable<ResponseBean<Classify>> getClassify(@Path(value = "classifyid") String classifyid);
+  @GET(value = "/goods-service/classify/{classify_id}")
+  public Observable<ResponseBean<Classify>> getClassify(@Path(value = "classify_id") String classifyId);
 
   /**
    * 废弃条目
    * 
-   * @param classifyid
+   * @param classifyId
    * @param accessToken
    * @return
    */
-  @DELETE(value = "/goods-service/classify/{classifyid}")
-  public Observable<ResponseBean<Void>> deleteClassify(@Path(value = "classifyid") String classifyid,
+  @DELETE(value = "/goods-service/classify/{classify_id}")
+  public Observable<ResponseBean<Void>> deleteClassify(@Path(value = "classify_id") String classifyId,
       @Query("access_token") String accessToken);
 
   /**
@@ -71,33 +71,33 @@ public interface ClassifyControllerApi {
   /**
    * 获得条目下的所有子条目
    * 
-   * @param classifyid
+   * @param classifyId
    * @return
    */
-  @GET(value = "/goods-service/classify/{classifyid}/subclassify")
-  public Observable<ResponseBean<List<Classify>>> getSubClassifyList(@Path(value = "classifyid") String classifyid);
+  @GET(value = "/goods-service/classify/{classify_id}/subclassify")
+  public Observable<ResponseBean<List<Classify>>> getSubClassifyList(@Path(value = "classify_id") String classifyId);
 
   /**
    * 创建子条目
    * 
-   * @param classifyid
+   * @param classifyId
    * @param classifyRequest
    * @param accessToken
    * @return
    */
-  @POST(value = "/goods-service/classify/{classifyid}/subclassify")
-  public Observable<ResponseBean<Classify>> createSubClassify(@Path(value = "classifyid") String classifyid,
+  @POST(value = "/goods-service/classify/{classify_id}/subclassify")
+  public Observable<ResponseBean<Classify>> createSubClassify(@Path(value = "classify_id") String classifyId,
       @Body MultipartBody classifyRequest, @Query("access_token") String accessToken);
 
   /**
    * 条目下添加商品
    * 
-   * @param classifyid
-   * @param goodid
+   * @param classifyId
+   * @param goodId
    * @param accessToken
    * @return
    */
-  @PUT(value = "/goods-service/classify/{classifyid}/good/{goodid}")
-  public Observable<ResponseBean<Void>> addClassifyGood(@Path(value = "classifyid") String classifyid,
-      @Path(value = "goodid") String goodid, @Query("access_token") String accessToken);
+  @PUT(value = "/goods-service/classify/{classify_id}/good/{good_id}")
+  public Observable<ResponseBean<Void>> addClassifyGood(@Path(value = "classify_id") String classifyId,
+      @Path(value = "good_id") String goodId, @Query("access_token") String accessToken);
 }

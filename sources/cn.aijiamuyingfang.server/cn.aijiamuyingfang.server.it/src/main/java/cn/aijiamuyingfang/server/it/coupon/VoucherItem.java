@@ -48,7 +48,7 @@ public class VoucherItem {
   /**
    * 兑换券关联的商品ID
    */
-  private String goodid;
+  private String goodId;
 
   /**
    * 多少兑换值可以兑换商品
@@ -71,8 +71,8 @@ public class VoucherItem {
     if (StringUtils.hasContent(updateVoucherItem.description)) {
       this.description = updateVoucherItem.description;
     }
-    if (StringUtils.hasContent(updateVoucherItem.goodid)) {
-      this.goodid = updateVoucherItem.goodid;
+    if (StringUtils.hasContent(updateVoucherItem.goodId)) {
+      this.goodId = updateVoucherItem.goodId;
     }
     if (updateVoucherItem.score > 0) {
       this.score = updateVoucherItem.score;

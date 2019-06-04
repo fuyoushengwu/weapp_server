@@ -13,9 +13,9 @@ public interface ShopOrderClient {
   /**
    * 预定的商品到货,更新预约单
    * 
-   * @param goodid
+   * @param goodId
    * @return
    */
-  @PutMapping(value = "/shoporder/preorder/good/{goodid}")
-  Future<ResponseBean<Void>> updatePreOrder(@PathVariable("goodid") String goodid);
+  @PutMapping(value = "/shoporder/preorder/good/{good_id}")
+  Future<ResponseBean<Void>> updatePreOrder(@PathVariable("good_id") String goodId);
 }

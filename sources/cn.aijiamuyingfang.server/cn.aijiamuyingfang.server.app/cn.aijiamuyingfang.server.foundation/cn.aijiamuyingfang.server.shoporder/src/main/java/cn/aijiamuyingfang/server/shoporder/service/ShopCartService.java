@@ -31,7 +31,7 @@ import cn.aijiamuyingfang.server.shoporder.domain.response.GetShopCartListRespon
 @Service
 public class ShopCartService {
   @Autowired
-  private ShopCartRepository shopcartRepository;
+  private ShopCartRepository shopCartRepository;
 
   @Autowired
   private GoodClient goodClient;
@@ -42,140 +42,140 @@ public class ShopCartService {
   /**
    * 往购物车添加商品
    * 
-   * @param userid
+   * @param userId
    *          用户id
-   * @param goodid
+   * @param goodId
    *          商品id
    * @param goodNum
    * @return
    */
-  public ShopCart addShopCart(String userid, String goodid, int goodNum) {
-    User user = userClient.getUserInternal(userid, null).getData();
+  public ShopCart addShopCart(String userId, String goodId, int goodNum) {
+    User user = userClient.getUserInternal(userId, null).getData();
     if (null == user) {
-      throw new ShopCartException(ResponseCode.USER_NOT_EXIST, userid);
+      throw new ShopCartException(ResponseCode.USER_NOT_EXIST, userId);
     }
     if (goodNum <= 0) {
       return null;
     }
 
-    Good good = goodClient.getGood(goodid).getData();
+    Good good = goodClient.getGood(goodId).getData();
     if (null == good) {
-      throw new ShopCartException(ResponseCode.GOOD_NOT_EXIST, goodid);
+      throw new ShopCartException(ResponseCode.GOOD_NOT_EXIST, goodId);
     }
-    ShopCart shopcart = shopcartRepository.findByUseridAndGoodId(userid, goodid);
-    if (null == shopcart) {
-      shopcart = new ShopCart();
-      shopcart.setUserid(userid);
-      shopcart.setGoodId(good.getId());
-      shopcart.setCount(0);
+    ShopCart shopCart = shopCartRepository.findByUserIdAndGoodId(userId, goodId);
+    if (null == shopCart) {
+      shopCart = new ShopCart();
+      shopCart.setUserId(userId);
+      shopCart.setGoodId(good.getId());
+      shopCart.setCount(0);
     }
-    shopcart.addCount(goodNum);
-    shopcartRepository.saveAndFlush(shopcart);
-    return shopcart;
+    shopCart.addCount(goodNum);
+    shopCartRepository.saveAndFlush(shopCart);
+    return shopCart;
   }
 
   /**
    * 分页获取购物车中的项目
    * 
-   * @param userid
+   * @param userId
    *          用户id
-   * @param currentpage
-   * @param pagesize
+   * @param currentPage
+   * @param pageSize
    * @return
    */
-  public GetShopCartListResponse getShopCartList(String userid, int currentpage, int pagesize) {
+  public GetShopCartListResponse getShopCartList(String userId, int currentPage, int pageSize) {
     // PageRequest的Page参数是基于0的,但是currentPage是基于1的,所有将currentPage作为参数传递给PgeRequest时需要'-1'
-    PageRequest pageRequest = new PageRequest(currentpage - 1, pagesize, Sort.Direction.DESC, "id");
-    Page<ShopCart> shopcartPage = shopcartRepository.findByUserid(userid, pageRequest);
+    PageRequest pageRequest = new PageRequest(currentPage - 1, pageSize, Sort.Direction.DESC, "id");
+    Page<ShopCart> shopCartPage = shopCartRepository.findByUserId(userId, pageRequest);
     GetShopCartListResponse response = new GetShopCartListResponse();
-    response.setCurrentpage(shopcartPage.getNumber() + 1);
-    response.setDataList(shopcartPage.getContent());
-    response.setTotalpage(shopcartPage.getTotalPages());
+    response.setCurrentPage(shopCartPage.getNumber() + 1);
+    response.setDataList(shopCartPage.getContent());
+    response.setTotalpage(shopCartPage.getTotalPages());
     return response;
   }
 
   /**
    * 全选/全不选用户下的购物车
    * 
-   * @param userid
+   * @param userId
    *          用户id
-   * @param ischecked
+   * @param isChecked
    */
-  public void checkAllShopCart(String userid, boolean ischecked) {
-    shopcartRepository.checkAllShopCart(userid, ischecked);
+  public void checkAllShopCart(String userId, boolean isChecked) {
+    shopCartRepository.checkAllShopCart(userId, isChecked);
   }
 
   /**
    * 选中用户购物车下的某一项
    * 
-   * @param userid
+   * @param userId
    *          用户id
-   * @param shopcartid
-   * @param ischecked
+   * @param shopCartId
+   * @param isChecked
    */
-  public void checkShopCart(String userid, String shopcartid, boolean ischecked) {
-    ShopCart shopcart = shopcartRepository.findOne(shopcartid);
-    if (null == shopcart) {
+  public void checkShopCart(String userId, String shopCartId, boolean isChecked) {
+    ShopCart shopCart = shopCartRepository.findOne(shopCartId);
+    if (null == shopCart) {
       return;
     }
-    if (!userid.equals(shopcart.getUserid())) {
-      throw new AccessDeniedException("no permission check other user's shopcart");
+    if (!userId.equals(shopCart.getUserId())) {
+      throw new AccessDeniedException("no permission check other user's ShopCart");
     }
-    shopcart.setIschecked(ischecked);
-    shopcartRepository.saveAndFlush(shopcart);
+    shopCart.setChecked(isChecked);
+    shopCartRepository.saveAndFlush(shopCart);
   }
 
   /**
    * 删除购物项
    * 
-   * @param userid
+   * @param userId
    *          用户id
-   * @param shopcartid
+   * @param shopCartId
    */
-  public void deleteShopCart(String userid, String shopcartid) {
-    ShopCart shopcart = shopcartRepository.findOne(shopcartid);
-    if (null == shopcart) {
+  public void deleteShopCart(String userId, String shopCartId) {
+    ShopCart shopCart = shopCartRepository.findOne(shopCartId);
+    if (null == shopCart) {
       return;
     }
-    if (!userid.equals(shopcart.getUserid())) {
-      throw new AccessDeniedException("no permission delete other user's shopcart");
+    if (!userId.equals(shopCart.getUserId())) {
+      throw new AccessDeniedException("no permission delete other user's ShopCart");
     }
-    shopcartRepository.delete(shopcartid);
+    shopCartRepository.delete(shopCartId);
   }
 
   /**
    * 修改购物项商品数量
    * 
-   * @param userid
+   * @param userId
    *          用户id
-   * @param shopcartid
+   * @param shopCartId
    * @param count
    * @return
    */
-  public ShopCart updateShopCartCount(String userid, String shopcartid, int count) {
-    ShopCart shopcart = shopcartRepository.findOne(shopcartid);
-    if (null == shopcart) {
-      throw new IllegalArgumentException("shopcart item not exist");
+  public ShopCart updateShopCartCount(String userId, String shopCartId, int count) {
+    ShopCart shopCart = shopCartRepository.findOne(shopCartId);
+    if (null == shopCart) {
+      throw new IllegalArgumentException("ShopCart item not exist");
     }
     if (count <= 0) {
-      return shopcart;
+      return shopCart;
     }
 
-    if (!userid.equals(shopcart.getUserid())) {
-      throw new AccessDeniedException("no permission chage other user's shopcart");
+    if (!userId.equals(shopCart.getUserId())) {
+      throw new AccessDeniedException("no permission chage other user's ShopCart");
     }
-    shopcart.setCount(count);
-    shopcartRepository.saveAndFlush(shopcart);
-    return shopcart;
+    shopCart.setCount(count);
+    shopCartRepository.saveAndFlush(shopCart);
+    return shopCart;
   }
 
   /**
    * 删除购物车中的商品
    * 
-   * @param goodid
+   * @param goodId
    *          商品id
    */
-  public void deleteGood(String goodid) {
-    shopcartRepository.deleteGood(goodid);
+  public void deleteGood(String goodId) {
+    shopCartRepository.deleteGood(goodId);
   }
 }

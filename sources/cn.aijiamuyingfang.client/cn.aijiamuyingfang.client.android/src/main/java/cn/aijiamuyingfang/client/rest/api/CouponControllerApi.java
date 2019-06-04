@@ -32,36 +32,36 @@ public interface CouponControllerApi {
   /**
    * 分页获取用户兑换券
    * 
-   * @param userid
-   * @param currentpage
-   * @param pagesize
+   * @param userId
+   * @param currentPage
+   * @param pageSize
    * @param accessToken
    * @return
    */
-  @GET(value = "/coupon-service/user/{userid}/coupon/uservoucher")
-  public Observable<ResponseBean<GetUserVoucherListResponse>> getUserVoucherList(@Path("userid") String userid,
-      @Query("currentpage") int currentpage, @Query("pagesize") int pagesize,
+  @GET(value = "/coupon-service/user/{user_id}/coupon/uservoucher")
+  public Observable<ResponseBean<GetUserVoucherListResponse>> getUserVoucherList(@Path("user_id") String userId,
+      @Query("current_page") int currentPage, @Query("page_size") int pageSize,
       @Query("access_token") String accessToken);
 
   /**
    * 分页获取商品兑换券
    * 
-   * @param currentpage
-   * @param pagesize
+   * @param currentPage
+   * @param pageSize
    * @return
    */
   @GET(value = "/coupon-service/coupon/goodvoucher")
-  public Observable<ResponseBean<GetGoodVoucherListResponse>> getGoodVoucherList(@Query("currentpage") int currentpage,
-      @Query("pagesize") int pagesize);
+  public Observable<ResponseBean<GetGoodVoucherListResponse>> getGoodVoucherList(@Query("current_page") int currentPage,
+      @Query("page_size") int pageSize);
 
   /**
    * 获取商品兑换券
    * 
-   * @param voucherid
+   * @param voucherId
    * @return
    */
-  @GET(value = "/coupon-service/coupon/goodvoucher/{voucherid}")
-  public Observable<ResponseBean<GoodVoucher>> getGoodVoucher(@Path("voucherid") String voucherid);
+  @GET(value = "/coupon-service/coupon/goodvoucher/{voucher_id}")
+  public Observable<ResponseBean<GoodVoucher>> getGoodVoucher(@Path("voucher_id") String voucherId);
 
   /**
    * 创建商品兑换券
@@ -77,33 +77,33 @@ public interface CouponControllerApi {
   /**
    * 废弃商品兑换券
    * 
-   * @param voucherid
+   * @param voucherId
    * @param accessToken
    * @return
    */
-  @DELETE(value = "/coupon-service/coupon/goodvoucher/{voucherid}")
-  public Observable<ResponseBean<Void>> deprecateGoodVoucher(@Path("voucherid") String voucherid,
+  @DELETE(value = "/coupon-service/coupon/goodvoucher/{voucher_id}")
+  public Observable<ResponseBean<Void>> deprecateGoodVoucher(@Path("voucher_id") String voucherId,
       @Query("access_token") String accessToken);
 
   /**
    * 分页获取可用的兑换方式
    * 
-   * @param currentpage
-   * @param pagesize
+   * @param currentPage
+   * @param pageSize
    * @return
    */
-  @GET(value = "/coupon-service/coupon/voucheritem")
-  public Observable<ResponseBean<GetVoucherItemListResponse>> getVoucherItemList(@Query("currentpage") int currentpage,
-      @Query("pagesize") int pagesize);
+  @GET(value = "/coupon-service/coupon/voucher_item")
+  public Observable<ResponseBean<GetVoucherItemListResponse>> getVoucherItemList(@Query("current_page") int currentPage,
+      @Query("page_size") int pageSize);
 
   /**
    * 获取兑换方式
    * 
-   * @param voucheritemId
+   * @param voucherItemId
    * @return
    */
-  @GET(value = "/coupon-service/coupon/voucheritem/{voucheritemId}")
-  public Observable<ResponseBean<VoucherItem>> getVoucherItem(@Path("voucheritemId") String voucheritemId);
+  @GET(value = "/coupon-service/coupon/voucher_item/{voucher_item_id}")
+  public Observable<ResponseBean<VoucherItem>> getVoucherItem(@Path("voucher_item_id") String voucherItemId);
 
   /**
    * 创建兑换方式
@@ -112,18 +112,18 @@ public interface CouponControllerApi {
    * @param accessToken
    * @return
    */
-  @POST(value = "/coupon-service/coupon/voucheritem")
+  @POST(value = "/coupon-service/coupon/voucher_item")
   public Observable<ResponseBean<VoucherItem>> createVoucherItem(@Body VoucherItem request,
       @Query("access_token") String accessToken);
 
   /**
    * 废弃兑换方式
    * 
-   * @param voucheritemId
+   * @param voucherItemId
    * @param accessToken
    * @return
    */
-  @DELETE(value = "/coupon-service/coupon/voucheritem/{voucheritemId}")
-  public Observable<ResponseBean<Void>> deprecateVoucherItem(@Path("voucheritemId") String voucheritemId,
+  @DELETE(value = "/coupon-service/coupon/voucher_item/{voucher_item_id}")
+  public Observable<ResponseBean<Void>> deprecateVoucherItem(@Path("voucher_item_id") String voucherItemId,
       @Query("access_token") String accessToken);
 }

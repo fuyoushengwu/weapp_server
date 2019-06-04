@@ -50,48 +50,48 @@ public class ShopCartControllerClient {
   };
 
   @HttpService
-  private ShopCartControllerApi shopcartControllerApi;
+  private ShopCartControllerApi shopCartControllerApi;
 
   /**
    * 往用户购物车添加商品
    * 
-   * @param userid
+   * @param userId
    * @param requestBean
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public ShopCart addShopCart(String userid, CreateShopCartRequest requestBean, String accessToken) throws IOException {
-    Response<ResponseBean> response = shopcartControllerApi.addShopCart(userid, requestBean, accessToken).execute();
-    return getShopCartFromResponse(response, "add shopcart item  return code is '200',but return data is null");
+  public ShopCart addShopCart(String userId, CreateShopCartRequest requestBean, String accessToken) throws IOException {
+    Response<ResponseBean> response = shopCartControllerApi.addShopCart(userId, requestBean, accessToken).execute();
+    return getShopCartFromResponse(response, "add ShopCartItem  return code is '200',but return data is null");
   }
 
   /**
    * 异步往用户购物车添加商品
    * 
-   * @param userid
+   * @param userId
    * @param requestBean
    * @param accessToken
    * @param callback
    */
-  public void addShopCartAsync(String userid, CreateShopCartRequest requestBean, String accessToken,
+  public void addShopCartAsync(String userId, CreateShopCartRequest requestBean, String accessToken,
       Callback<ResponseBean> callback) {
-    shopcartControllerApi.addShopCart(userid, requestBean, accessToken).enqueue(callback);
+    shopCartControllerApi.addShopCart(userId, requestBean, accessToken).enqueue(callback);
   }
 
   /**
    * 分页获取用户购物车中的项目
    * 
-   * @param userid
-   * @param currentpage
-   * @param pagesize
+   * @param userId
+   * @param currentPage
+   * @param pageSize
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public GetShopCartListResponse getShopCartList(String userid, int currentpage, int pagesize, String accessToken)
+  public GetShopCartListResponse getShopCartList(String userId, int currentPage, int pageSize, String accessToken)
       throws IOException {
-    Response<ResponseBean> response = shopcartControllerApi.getShopCartList(userid, currentpage, pagesize, accessToken)
+    Response<ResponseBean> response = shopCartControllerApi.getShopCartList(userId, currentPage, pageSize, accessToken)
         .execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
@@ -106,7 +106,7 @@ public class ShopCartControllerClient {
       GetShopCartListResponse getShopCartListResponse = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
           GetShopCartListResponse.class);
       if (null == getShopCartListResponse) {
-        throw new ShopCartException("500", "get shopcart list  return code is '200',but return data is null");
+        throw new ShopCartException("500", "get ShopCart list  return code is '200',but return data is null");
       }
       return getShopCartListResponse;
     }
@@ -117,18 +117,18 @@ public class ShopCartControllerClient {
   /**
    * 全选/全不选用户购物车中的商品
    * 
-   * @param userid
-   * @param ischecked
+   * @param userId
+   * @param isChecked
    * @param accessToken
    * @param async
    * @throws IOException
    */
-  public void checkAllShopCart(String userid, boolean ischecked, String accessToken, boolean async) throws IOException {
+  public void checkAllShopCart(String userId, boolean isChecked, String accessToken, boolean async) throws IOException {
     if (async) {
-      shopcartControllerApi.checkAllShopCart(userid, ischecked, accessToken).enqueue(Empty_Callback);
+      shopCartControllerApi.checkAllShopCart(userId, isChecked, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = shopcartControllerApi.checkAllShopCart(userid, ischecked, accessToken).execute();
+    Response<ResponseBean> response = shopCartControllerApi.checkAllShopCart(userId, isChecked, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -147,20 +147,20 @@ public class ShopCartControllerClient {
   /**
    * 选中用户购物车下的某一项
    * 
-   * @param userid
-   * @param shopcartid
-   * @param ischecked
+   * @param userId
+   * @param shopCartId
+   * @param isChecked
    * @param accessToken
    * @param async
    * @throws IOException
    */
-  public void checkShopCart(String userid, String shopcartid, boolean ischecked, String accessToken, boolean async)
+  public void checkShopCart(String userId, String shopCartId, boolean isChecked, String accessToken, boolean async)
       throws IOException {
     if (async) {
-      shopcartControllerApi.checkShopCart(userid, shopcartid, ischecked, accessToken).enqueue(Empty_Callback);
+      shopCartControllerApi.checkShopCart(userId, shopCartId, isChecked, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = shopcartControllerApi.checkShopCart(userid, shopcartid, ischecked, accessToken)
+    Response<ResponseBean> response = shopCartControllerApi.checkShopCart(userId, shopCartId, isChecked, accessToken)
         .execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
@@ -180,18 +180,18 @@ public class ShopCartControllerClient {
   /**
    * 删除用户购物车中的某项
    * 
-   * @param userid
-   * @param shopcartid
+   * @param userId
+   * @param shopCartId
    * @param accessToken
    * @param async
    * @throws IOException
    */
-  public void deleteShopCart(String userid, String shopcartid, String accessToken, boolean async) throws IOException {
+  public void deleteShopCart(String userId, String shopCartId, String accessToken, boolean async) throws IOException {
     if (async) {
-      shopcartControllerApi.deleteShopCart(userid, shopcartid, accessToken).enqueue(Empty_Callback);
+      shopCartControllerApi.deleteShopCart(userId, shopCartId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = shopcartControllerApi.deleteShopCart(userid, shopcartid, accessToken).execute();
+    Response<ResponseBean> response = shopCartControllerApi.deleteShopCart(userId, shopCartId, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -210,19 +210,18 @@ public class ShopCartControllerClient {
   /**
    * 修改用户购物车中商品数量
    * 
-   * @param userid
-   * @param shopcartid
+   * @param userId
+   * @param shopCartId
    * @param count
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public ShopCart updateShopCartCount(String userid, String shopcartid, int count, String accessToken)
+  public ShopCart updateShopCartCount(String userId, String shopCartId, int count, String accessToken)
       throws IOException {
-    Response<ResponseBean> response = shopcartControllerApi.updateShopCartCount(userid, shopcartid, count, accessToken)
+    Response<ResponseBean> response = shopCartControllerApi.updateShopCartCount(userId, shopCartId, count, accessToken)
         .execute();
-    return getShopCartFromResponse(response,
-        "update shopcart item  count return code is '200',but return data is null");
+    return getShopCartFromResponse(response, "update ShopCartItem count return code is '200',but return data is null");
   }
 
   /**
@@ -244,11 +243,11 @@ public class ShopCartControllerClient {
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
-      ShopCart shopcart = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), ShopCart.class);
-      if (null == shopcart) {
+      ShopCart shopCart = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), ShopCart.class);
+      if (null == shopCart) {
         throw new ShopCartException("500", exceptionmsg);
       }
-      return shopcart;
+      return shopCart;
     }
     LOGGER.error(responseBean.getMsg());
     throw new ShopCartException(returnCode, responseBean.getMsg());
@@ -257,31 +256,31 @@ public class ShopCartControllerClient {
   /**
    * 异步修改用户购物车中商品数量
    * 
-   * @param userid
-   * @param shopcartid
+   * @param userId
+   * @param shopCartId
    * @param count
    * @param accessToken
    * @param callback
    */
-  public void updateShopCartCountAsync(String userid, String shopcartid, int count, String accessToken,
+  public void updateShopCartCountAsync(String userId, String shopCartId, int count, String accessToken,
       Callback<ResponseBean> callback) {
-    shopcartControllerApi.updateShopCartCount(userid, shopcartid, count, accessToken).enqueue(callback);
+    shopCartControllerApi.updateShopCartCount(userId, shopCartId, count, accessToken).enqueue(callback);
   }
 
   /**
    * 删除购物车中的商品(该方法在废弃商品的时候使用,所以只有Admin才能调用该方法)
    * 
-   * @param goodid
+   * @param goodId
    * @param accessToken
    * @param async
    * @throws IOException
    */
-  public void deleteGood(String goodid, String accessToken, boolean async) throws IOException {
+  public void deleteGood(String goodId, String accessToken, boolean async) throws IOException {
     if (async) {
-      shopcartControllerApi.deleteGood(goodid, accessToken).enqueue(Empty_Callback);
+      shopCartControllerApi.deleteGood(goodId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = shopcartControllerApi.deleteGood(goodid, accessToken).execute();
+    Response<ResponseBean> response = shopCartControllerApi.deleteGood(goodId, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {

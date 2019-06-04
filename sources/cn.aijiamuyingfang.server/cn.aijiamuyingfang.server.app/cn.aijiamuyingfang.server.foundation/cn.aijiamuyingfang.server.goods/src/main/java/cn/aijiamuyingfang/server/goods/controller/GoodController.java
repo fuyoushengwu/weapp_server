@@ -2,7 +2,6 @@ package cn.aijiamuyingfang.server.goods.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -35,17 +34,23 @@ import cn.aijiamuyingfang.server.goods.service.GoodService;
 import cn.aijiamuyingfang.server.goods.service.ImageService;
 
 /***
- * [描述]:*
+ * [描述]:
  * <p>
- * *商品服务-控制层*
+ * 商品服务-控制层
  * </p>
- * **
  * 
- * @version 1.0.0*@author ShiWei*@email shiweideyouxiang @sina.cn
+ * @version 1.0.0
+ * @author ShiWei
+ * @email shiweideyouxiang@sina.cn
  * @date 2018-06-26 23:43:55
  */
 @RestController
 public class GoodController {
+
+  /**
+   * request body is null
+   */
+  private static final String REQUEST_BODY_NULL = "request body is null";
 
   @Autowired
   private ClassifyGoodService classifygoodService;
@@ -60,7 +65,7 @@ public class GoodController {
   private ImageService imageService;
 
   @Autowired
-  private ShopCartClient shopcartClient;
+  private ShopCartClient shopCartClient;
 
   @Autowired
   private ShopOrderClient shoporderClient;
@@ -68,25 +73,25 @@ public class GoodController {
   /**
    * 分页查询条目下的商品
    *
-   * @param classifyid
+   * @param classifyId
    * @param packFilter
    * @param levelFilter
    * @param orderType
    * @param orderValue
-   * @param currentpage
-   * @param pagesize
+   * @param currentPage
+   * @param pageSize
    * @return
    */
   @PreAuthorize(value = "permitAll()")
-  @GetMapping(value = "/classify/{classifyid}/good")
-  public GetClassifyGoodListResponse getClassifyGoodList(@PathVariable(value = "classifyid") String classifyid,
+  @GetMapping(value = "/classify/{classify_id}/good")
+  public GetClassifyGoodListResponse getClassifyGoodList(@PathVariable(value = "classify_id") String classifyId,
       @RequestParam(value = "packFilter", required = false) List<String> packFilter,
       @RequestParam(value = "levelFilter", required = false) List<String> levelFilter,
       @RequestParam(value = "orderType", required = false) String orderType,
       @RequestParam(value = "orderValue", required = false) String orderValue,
-      @RequestParam(value = "currentpage") int currentpage, @RequestParam(value = "pagesize") int pagesize) {
-    return classifygoodService.getClassifyGoodList(classifyid, packFilter, levelFilter, orderType, orderValue,
-        currentpage, pagesize);
+      @RequestParam(value = "current_page") int currentPage, @RequestParam(value = "page_size") int pageSize) {
+    return classifygoodService.getClassifyGoodList(classifyId, packFilter, levelFilter, orderType, orderValue,
+        currentPage, pageSize);
   }
 
   /**
@@ -104,7 +109,7 @@ public class GoodController {
       @RequestParam(value = "detailImages", required = false) List<MultipartFile> detailImages, Good good,
       HttpServletRequest request) {
     if (null == good) {
-      throw new IllegalArgumentException("good request body is null");
+      throw new IllegalArgumentException(REQUEST_BODY_NULL);
     }
     if (StringUtils.isEmpty(good.getName())) {
       throw new IllegalArgumentException("good name is empty");
@@ -141,16 +146,16 @@ public class GoodController {
   /**
    * 获取商品信息
    *
-   * @param goodid
+   * @param goodId
    *          商品id
    * @return
    */
   @PreAuthorize(value = "permitAll()")
-  @GetMapping(value = "/good/{goodid}")
-  public Good getGood(@PathVariable(value = "goodid") String goodid) {
-    Good good = goodService.getGood(goodid);
+  @GetMapping(value = "/good/{good_id}")
+  public Good getGood(@PathVariable(value = "good_id") String goodId) {
+    Good good = goodService.getGood(goodId);
     if (null == good) {
-      throw new GoodsException(ResponseCode.GOOD_NOT_EXIST, goodid);
+      throw new GoodsException(ResponseCode.GOOD_NOT_EXIST, goodId);
     }
     return good;
   }
@@ -158,29 +163,29 @@ public class GoodController {
   /**
    * 废弃商品
    * 
-   * @param goodid
+   * @param goodId
    */
   @PreAuthorize("hasAuthority('permission:manager:*')")
-  @DeleteMapping(value = "/good/{goodid}")
-  public void deprecateGood(@PathVariable(value = "goodid") String goodid) {
-    goodService.deprecateGood(goodid);
-    classifygoodService.removeClassifyGood(goodid);
-    shopcartClient.deleteGood(goodid);
+  @DeleteMapping(value = "/good/{good_id}")
+  public void deprecateGood(@PathVariable(value = "good_id") String goodId) {
+    goodService.deprecateGood(goodId);
+    classifygoodService.removeClassifyGood(goodId);
+    shopCartClient.deleteGood(goodId);
   }
 
   /**
    * 获取商品详细信息
    *
-   * @param goodid
+   * @param goodId
    *          商品id
    * @return
    */
   @PreAuthorize(value = "permitAll()")
-  @GetMapping(value = "/good/{goodid}/detail")
-  public GoodDetail getGoodDetail(@PathVariable(value = "goodid") String goodid) {
-    GoodDetail goodDetail = gooddetailService.getGoodDetail(goodid);
+  @GetMapping(value = "/good/{good_id}/detail")
+  public GoodDetail getGoodDetail(@PathVariable(value = "good_id") String goodId) {
+    GoodDetail goodDetail = gooddetailService.getGoodDetail(goodId);
     if (null == goodDetail) {
-      throw new GoodsException(ResponseCode.GOODDETAIL_NOT_EXIST, goodid);
+      throw new GoodsException(ResponseCode.GOODDETAIL_NOT_EXIST, goodId);
     }
     return goodDetail;
   }
@@ -188,23 +193,20 @@ public class GoodController {
   /**
    * 更新Good信息
    * 
-   * @param goodid
+   * @param goodId
    *          商品id
    * @param request
    * @return
-   * @throws ExecutionException
-   * @throws InterruptedException
    */
   @PreAuthorize("hasAuthority('permission:manager:*')")
-  @PutMapping(value = "/good/{goodid}")
-  public Good updateGood(@PathVariable(value = "goodid") String goodid, @RequestBody Good request)
-      throws InterruptedException, ExecutionException {
+  @PutMapping(value = "/good/{good_id}")
+  public Good updateGood(@PathVariable(value = "good_id") String goodId, @RequestBody Good request) {
     if (null == request) {
-      throw new IllegalArgumentException("request body is null");
+      throw new IllegalArgumentException(REQUEST_BODY_NULL);
     }
-    Good good = goodService.updateGood(goodid, request);
+    Good good = goodService.updateGood(goodId, request);
     if (good != null) {
-      shoporderClient.updatePreOrder(goodid);
+      shoporderClient.updatePreOrder(goodId);
     }
     return good;
   }
@@ -218,7 +220,7 @@ public class GoodController {
   @PutMapping(value = "/good")
   public void updateGood(@RequestBody List<Good> request) {
     if (null == request) {
-      throw new IllegalArgumentException("request body is null");
+      throw new IllegalArgumentException(REQUEST_BODY_NULL);
     }
     for (Good good : request) {
       if (null == good || StringUtils.isEmpty(good.getId())) {
@@ -232,16 +234,16 @@ public class GoodController {
   /**
    * 售卖商品
    * 
-   * @param goodid
+   * @param goodId
    * @param saleGood
    */
   @PreAuthorize(value = "isAuthenticated()")
-  @PutMapping(value = "/good/{goodid}/sale")
-  public void saleGood(@PathVariable(value = "goodid") String goodid, @RequestBody SaleGood saleGood) {
+  @PutMapping(value = "/good/{good_id}/sale")
+  public void saleGood(@PathVariable(value = "good_id") String goodId, @RequestBody SaleGood saleGood) {
     if (null == saleGood) {
-      throw new IllegalArgumentException("request body is null");
+      throw new IllegalArgumentException(REQUEST_BODY_NULL);
     }
-    goodService.saleGood(goodid, saleGood);
+    goodService.saleGood(goodId, saleGood);
   }
 
   /**
@@ -253,7 +255,7 @@ public class GoodController {
   @PutMapping(value = "/good/sale")
   public void saleGoodList(@RequestBody List<SaleGood> saleGoodList) {
     if (null == saleGoodList) {
-      throw new IllegalArgumentException("request body is null");
+      throw new IllegalArgumentException(REQUEST_BODY_NULL);
     }
     goodService.saleGoodList(saleGoodList);
   }

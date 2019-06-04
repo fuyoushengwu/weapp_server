@@ -12,7 +12,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>cn.aijiamuyingfang.client.commons</artifactId>
+			<artifactId>cn.aijiamuyingfang.client.java</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

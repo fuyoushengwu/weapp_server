@@ -24,93 +24,93 @@ public interface CouponClient {
   /**
    * 分页获取用户兑换券
    * 
-   * @param userid
-   * @param currentpage
-   * @param pagesize
+   * @param userId
+   * @param currentPage
+   * @param pageSize
    * @return
    */
-  @GetMapping(value = "/user/{userid}/coupon/uservoucher")
-  ResponseBean<GetUserVoucherListResponse> getUserVoucherList(@PathVariable("userid") String userid,
-      @RequestParam("currentpage") int currentpage, @RequestParam("pagesize") int pagesize);
+  @GetMapping(value = "/user/{user_id}/coupon/uservoucher")
+  ResponseBean<GetUserVoucherListResponse> getUserVoucherList(@PathVariable("user_id") String userId,
+      @RequestParam("current_page") int currentPage, @RequestParam("page_size") int pageSize);
 
   /**
    * 更新用户兑换券
    * 
-   * @param userid
+   * @param userId
    * @param userVoucherList
    */
-  @PutMapping(value = "/user/{userid}/coupon/uservoucher")
-  ResponseBean<Void> updateUserVoucherList(@PathVariable("userid") String userid,
+  @PutMapping(value = "/user/{user_id}/coupon/uservoucher")
+  ResponseBean<Void> updateUserVoucherList(@PathVariable("user_id") String userId,
       @RequestBody List<UserVoucher> userVoucherList);
 
   /**
    * 获得用户的兑换券
    * 
-   * @param userid
-   * @param voucherid
+   * @param userId
+   * @param voucherId
    * @return
    */
-  @GetMapping(value = "/user/{userid}/coupon/uservoucher/{voucherid}")
-  ResponseBean<UserVoucher> getUserVoucher(@PathVariable("userid") String userid,
-      @PathVariable("voucherid") String voucherid);
+  @GetMapping(value = "/user/{user_id}/coupon/uservoucher/{voucher_id}")
+  ResponseBean<UserVoucher> getUserVoucher(@PathVariable("user_id") String userId,
+      @PathVariable("voucher_id") String voucherId);
 
   /**
    * 获得用户用户GoodVoucher的兑换券
    * 
-   * @param userid
-   * @param voucherid
+   * @param userId
+   * @param voucherId
    * @return
    */
-  @GetMapping(value = "/user/{userid}/coupon/uservoucher/goodvoucher/{voucherid}")
-  ResponseBean<UserVoucher> getUserVoucherForGoodVoucher(@PathVariable("userid") String userid,
-      @PathVariable("voucherid") String voucherid);
+  @GetMapping(value = "/user/{user_id}/coupon/uservoucher/goodvoucher/{voucher_id}")
+  ResponseBean<UserVoucher> getUserVoucherForGoodVoucher(@PathVariable("user_id") String userId,
+      @PathVariable("voucher_id") String voucherId);
 
   /**
    * 分页获取商品兑换项
    * 
-   * @param currentpage
-   * @param pagesize
+   * @param currentPage
+   * @param pageSize
    * @return
    */
   @GetMapping(value = "/coupon/goodvoucher")
-  ResponseBean<GetGoodVoucherListResponse> getGoodVoucherList(@RequestParam(value = "currentpage") int currentpage,
-      @RequestParam("pagesize") int pagesize);
+  ResponseBean<GetGoodVoucherListResponse> getGoodVoucherList(@RequestParam(value = "current_page") int currentPage,
+      @RequestParam("page_size") int pageSize);
 
   /**
    * 获取商品兑换项
    * 
-   * @param voucherid
+   * @param voucherId
    * @return
    */
-  @GetMapping(value = "/coupon/goodvoucher/{voucherid}")
-  ResponseBean<GoodVoucher> getGoodVoucher(@PathVariable("voucherid") String voucherid);
+  @GetMapping(value = "/coupon/goodvoucher/{voucher_id}")
+  ResponseBean<GoodVoucher> getGoodVoucher(@PathVariable("voucher_id") String voucherId);
 
   /**
    * 废弃商品兑换券
    * 
-   * @param voucherid
+   * @param voucherId
    */
-  @DeleteMapping(value = "/coupon/goodvoucher/{voucherid}")
-  Future<ResponseBean<Void>> deprecateGoodVoucher(@PathVariable("voucherid") String voucherid);
+  @DeleteMapping(value = "/coupon/goodvoucher/{voucher_id}")
+  Future<ResponseBean<Void>> deprecateGoodVoucher(@PathVariable("voucher_id") String voucherId);
 
   /**
    * 分页获取可选的兑换方式
    * 
-   * @param currentpage
-   * @param pagesize
+   * @param currentPage
+   * @param pageSize
    * @return
    */
-  @GetMapping(value = "/coupon/voucheritem")
-  ResponseBean<GetVoucherItemListResponse> getVoucherItemList(@RequestParam("currentpage") int currentpage,
-      @RequestParam("pagesize") int pagesize);
+  @GetMapping(value = "/coupon/voucher_item")
+  ResponseBean<GetVoucherItemListResponse> getVoucherItemList(@RequestParam("current_page") int currentPage,
+      @RequestParam("page_size") int pageSize);
 
   /**
    * 获取兑换方式
    * 
-   * @param voucheritemId
+   * @param voucherItemId
    * @return
    */
-  @GetMapping(value = "/coupon/voucheritem/{voucheritemId}")
-  ResponseBean<VoucherItem> getVoucherItem(@PathVariable("voucheritemId") String voucheritemId);
+  @GetMapping(value = "/coupon/voucher_item/{voucher_item_id}")
+  ResponseBean<VoucherItem> getVoucherItem(@PathVariable("voucher_item_id") String voucherItemId);
 
 }

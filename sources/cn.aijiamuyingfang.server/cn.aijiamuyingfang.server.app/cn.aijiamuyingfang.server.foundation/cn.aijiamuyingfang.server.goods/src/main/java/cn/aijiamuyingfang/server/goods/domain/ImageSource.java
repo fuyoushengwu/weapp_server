@@ -5,7 +5,6 @@ import javax.persistence.Id;
 
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * [描述]:
@@ -20,7 +19,6 @@ import lombok.NoArgsConstructor;
  */
 @Entity
 @Data
-@NoArgsConstructor
 public class ImageSource {
   @Id
   private String id;
@@ -33,6 +31,15 @@ public class ImageSource {
     }
     this.url = coverImg.url;
     this.id = coverImg.id;
+  }
+
+  public ImageSource() {
+  }
+
+  public ImageSource(String id, String url) {
+    super();
+    this.id = id;
+    this.url = url;
   }
 
 }

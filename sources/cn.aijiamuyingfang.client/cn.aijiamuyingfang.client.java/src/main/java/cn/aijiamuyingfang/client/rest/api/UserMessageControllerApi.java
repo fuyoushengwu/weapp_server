@@ -28,48 +28,48 @@ public interface UserMessageControllerApi {
   /**
    * 获得用户未读消息数量
    * 
-   * @param userid
+   * @param userId
    * @param accessToken
    * @return
    */
-  @GET(value = "/user-service/user/{userid}/message/unread/count")
-  public Call<ResponseBean> getUserUnReadMessageCount(@Path("userid") String userid,
+  @GET(value = "/user-service/user/{user_id}/message/unread/count")
+  public Call<ResponseBean> getUserUnReadMessageCount(@Path("user_id") String userId,
       @Query("access_token") String accessToken);
 
   /**
    * 分页获取用户消息
    * 
-   * @param userid
-   * @param currentpage
-   * @param pagesize
+   * @param userId
+   * @param currentPage
+   * @param pageSize
    * @param accessToken
    * @return
    */
-  @GET(value = "/user-service/user/{userid}/message")
-  public Call<ResponseBean> getUserMessageList(@Path("userid") String userid, @Query("currentpage") int currentpage,
-      @Query("pagesize") int pagesize, @Query("access_token") String accessToken);
+  @GET(value = "/user-service/user/{user_id}/message")
+  public Call<ResponseBean> getUserMessageList(@Path("user_id") String userId, @Query("current_page") int currentPage,
+      @Query("page_size") int pageSize, @Query("access_token") String accessToken);
 
   /**
    * 为用户创建消息
    * 
-   * @param userid
+   * @param userId
    * @param message
    * @param accessToken
    * @return
    */
-  @POST(value = "/user-service/user/{userid}/message")
-  public Call<ResponseBean> createMessage(@Path("userid") String userid, @Body UserMessage message,
+  @POST(value = "/user-service/user/{user_id}/message")
+  public Call<ResponseBean> createMessage(@Path("user_id") String userId, @Body UserMessage message,
       @Query("access_token") String accessToken);
 
   /**
    * 删除消息
    * 
-   * @param userid
-   * @param messageid
+   * @param userId
+   * @param messageId
    * @param accessToken
    * @return
    */
-  @DELETE(value = "/user-service/user/{userid}/message/{messageid}")
-  public Call<ResponseBean> deleteMessage(@Path("userid") String userid, @Path("messageid") String messageid,
+  @DELETE(value = "/user-service/user/{user_id}/message/{message_id}")
+  public Call<ResponseBean> deleteMessage(@Path("user_id") String userId, @Path("message_id") String messageId,
       @Query("access_token") String accessToken);
 }

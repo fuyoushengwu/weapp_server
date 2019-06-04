@@ -9,7 +9,7 @@ public class VoucherItem {
   /**
    * 兑换券关联的商品ID
    */
-  private String goodid;
+  private String goodId;
 
   /**
    * 多少兑换值可以兑换商品

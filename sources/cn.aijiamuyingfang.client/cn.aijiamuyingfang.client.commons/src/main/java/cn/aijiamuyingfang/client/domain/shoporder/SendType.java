@@ -2,6 +2,8 @@ package cn.aijiamuyingfang.client.domain.shoporder;
 
 import com.google.gson.annotations.SerializedName;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import cn.aijiamuyingfang.client.domain.BaseEnum;
 
 /**
@@ -15,7 +17,7 @@ import cn.aijiamuyingfang.client.domain.BaseEnum;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-06-27 15:51:30
  */
-public enum SendType implements BaseEnum {
+public enum SendType implements BaseEnum, Parcelable {
   /**
    * 未知类型
    */
@@ -58,4 +60,31 @@ public enum SendType implements BaseEnum {
   public int getValue() {
     return value;
   }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeInt(value);
+  }
+
+  public static final Parcelable.Creator<SendType> CREATOR = new Parcelable.Creator<SendType>() {
+    @Override
+    public SendType createFromParcel(Parcel in) {
+      for (SendType status : SendType.values()) {
+        if (status.value == in.readInt()) {
+          return status;
+        }
+      }
+      return SendType.UNKNOW;
+    }
+
+    @Override
+    public SendType[] newArray(int size) {
+      return new SendType[size];
+    }
+  };
 }

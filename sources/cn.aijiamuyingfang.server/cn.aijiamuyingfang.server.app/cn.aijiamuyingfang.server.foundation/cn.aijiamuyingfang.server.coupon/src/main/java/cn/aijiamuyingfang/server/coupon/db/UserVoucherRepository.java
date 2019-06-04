@@ -1,6 +1,7 @@
 package cn.aijiamuyingfang.server.coupon.db;
 
 import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,38 +27,38 @@ public interface UserVoucherRepository extends JpaRepository<UserVoucher, String
   /**
    * 分页查询用户的兑换券
    * 
-   * @param userid
+   * @param userId
    *          用户id
    * @param pageable
    *          分页信息
    * @return
    */
-  @Query(value = "select * from user_voucher where userid=:userid and deprecated=false order by ?#{#pageable}",
-      countQuery = "select count(*) from user_voucher where userid=:userid and deprecated=false order by ?#{#pageable}",
+  @Query(value = "select * from user_voucher where user_id=:user_id and deprecated=false order by ?#{#pageable}",
+      countQuery = "select count(*) from user_voucher where user_id=:user_id and deprecated=false order by ?#{#pageable}",
       nativeQuery = true)
-  Page<UserVoucher> findByUserid(@Param("userid") String userid, Pageable pageable);
+  Page<UserVoucher> findByUserId(@Param("user_id") String userId, Pageable pageable);
 
   /**
    * 查询用户的兑换券
    * 
-   * @param userid
+   * @param userId
    *          用户id
    * @return
    */
-  @Query(value = "select * from user_voucher where userid=:userid and deprecated=false", nativeQuery = true)
-  List<UserVoucher> findByUserid(@Param("userid") String userid);
+  @Query(value = "select * from user_voucher where user_id=:user_id and deprecated=false", nativeQuery = true)
+  List<UserVoucher> findByUserId(@Param("user_id") String userId);
 
   /**
    * 查找用户领取过的某类兑换券信息
    * 
-   * @param userid
+   * @param userId
    *          用户id
    * @param goodvoucherId
    * @return
    */
-  @Query(value = "select * from user_voucher where userid=:userid and good_voucher_id="
+  @Query(value = "select * from user_voucher where user_id=:user_id and good_voucher_id="
       + ":good_vourcher_id and deprecated=false", nativeQuery = true)
-  UserVoucher findByUseridAndGoodVoucher(@Param("userid") String userid,
+  UserVoucher findByUserIdAndGoodVoucher(@Param("user_id") String userId,
       @Param("good_vourcher_id") String goodvoucherId);
 
   /**

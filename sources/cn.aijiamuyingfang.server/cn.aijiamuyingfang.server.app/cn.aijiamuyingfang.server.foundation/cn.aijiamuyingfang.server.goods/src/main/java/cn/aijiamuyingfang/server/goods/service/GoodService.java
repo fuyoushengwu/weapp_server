@@ -56,26 +56,26 @@ public class GoodService {
    * 
    * 获得具体商品信息
    * 
-   * @param goodid
+   * @param goodId
    *          商品id
    * @return
    */
-  public Good getGood(String goodid) {
-    return goodRepository.findOne(goodid);
+  public Good getGood(String goodId) {
+    return goodRepository.findOne(goodId);
   }
 
   /**
    * 更新Good信息
    * 
-   * @param goodid
+   * @param goodId
    *          商品id
    * @param updateGood
    * @return
    */
-  public Good updateGood(String goodid, Good updateGood) {
-    Good good = goodRepository.findOne(goodid);
+  public Good updateGood(String goodId, Good updateGood) {
+    Good good = goodRepository.findOne(goodId);
     if (null == good) {
-      throw new GoodsException(ResponseCode.GOOD_NOT_EXIST, goodid);
+      throw new GoodsException(ResponseCode.GOOD_NOT_EXIST, goodId);
     }
     if (null == updateGood) {
       return good;
@@ -87,15 +87,15 @@ public class GoodService {
   /**
    * 废弃商品
    * 
-   * @param goodid
+   * @param goodId
    *          商品id
    */
-  public void deprecateGood(String goodid) {
-    GoodDetail goodDetail = goodDetailRepository.findOne(goodid);
+  public void deprecateGood(String goodId) {
+    GoodDetail goodDetail = goodDetailRepository.findOne(goodId);
     if (goodDetail != null) {
       goodDetailRepository.delete(goodDetail);
     }
-    Good good = goodRepository.findOne(goodid);
+    Good good = goodRepository.findOne(goodId);
     if (good != null) {
       good.setDeprecated(true);
       goodRepository.saveAndFlush(good);
@@ -105,16 +105,16 @@ public class GoodService {
   /**
    * 售卖商品
    * 
-   * @param goodid
+   * @param goodId
    * @param saleGood
    */
-  public void saleGood(String goodid, SaleGood saleGood) {
-    if (StringUtils.isEmpty(goodid) || null == saleGood) {
+  public void saleGood(String goodId, SaleGood saleGood) {
+    if (StringUtils.isEmpty(goodId) || null == saleGood) {
       return;
     }
-    Good good = goodRepository.findOne(goodid);
+    Good good = goodRepository.findOne(goodId);
     if (null == good) {
-      throw new IllegalArgumentException("good[" + goodid + "] not exist");
+      throw new IllegalArgumentException("good[" + goodId + "] not exist");
     }
     int saleCount = saleGood.getSalecount();
     int goodCount = good.getCount();
@@ -135,7 +135,7 @@ public class GoodService {
   public void saleGoodList(List<SaleGood> saleGoodList) {
     for (SaleGood saleGood : saleGoodList) {
       if (saleGood != null) {
-        saleGood(saleGood.getGoodid(), saleGood);
+        saleGood(saleGood.getGoodId(), saleGood);
       }
     }
   }

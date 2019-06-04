@@ -60,12 +60,12 @@ public interface ClassifyRepository extends JpaRepository<Classify, String> {
   /**
    * 移除条目下的商品
    * 
-   * @param goodid
+   * @param goodId
    *          商品id
    */
   @Modifying
   @Transactional
-  @Query(value = "delete from classify_good_list where good_list_id=:goodid", nativeQuery = true)
-  public void removeClassifyGood(@Param("goodid") String goodid);
+  @Query(value = "delete from classify_good_list where good_list_id=:good_id", nativeQuery = true)
+  public void removeClassifyGood(@Param("good_id") String goodId);
 
 }

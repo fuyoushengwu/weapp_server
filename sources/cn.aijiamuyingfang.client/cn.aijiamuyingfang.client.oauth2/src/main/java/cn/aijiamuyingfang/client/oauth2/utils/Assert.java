@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.client.oauth2.utils;
 
+import cn.aijiamuyingfang.client.rest.utils.StringUtils;
+
 public abstract class Assert {
 
   /**

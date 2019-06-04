@@ -50,18 +50,18 @@ public class UserMessageControllerClient {
   };
 
   @HttpService
-  private UserMessageControllerApi usermessageControllerApi;
+  private UserMessageControllerApi userMessageControllerApi;
 
   /**
    * 获得用户未读消息数量
    * 
-   * @param userid
+   * @param userId
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public int getUserUnReadMessageCount(String userid, String accessToken) throws IOException {
-    Response<ResponseBean> response = usermessageControllerApi.getUserUnReadMessageCount(userid, accessToken).execute();
+  public int getUserUnReadMessageCount(String userId, String accessToken) throws IOException {
+    Response<ResponseBean> response = userMessageControllerApi.getUserUnReadMessageCount(userId, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -81,17 +81,17 @@ public class UserMessageControllerClient {
   /**
    * 分页获取用户消息
    * 
-   * @param userid
-   * @param currentpage
-   * @param pagesize
+   * @param userId
+   * @param currentPage
+   * @param pageSize
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public GetMessagesListResponse getUserMessageList(String userid, int currentpage, int pagesize, String accessToken)
+  public GetMessagesListResponse getUserMessageList(String userId, int currentPage, int pageSize, String accessToken)
       throws IOException {
-    Response<ResponseBean> response = usermessageControllerApi
-        .getUserMessageList(userid, currentpage, pagesize, accessToken).execute();
+    Response<ResponseBean> response = userMessageControllerApi
+        .getUserMessageList(userId, currentPage, pageSize, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -116,14 +116,14 @@ public class UserMessageControllerClient {
   /**
    * 为用户创建消息
    * 
-   * @param userid
+   * @param userId
    * @param message
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public UserMessage createMessage(String userid, UserMessage message, String accessToken) throws IOException {
-    Response<ResponseBean> response = usermessageControllerApi.createMessage(userid, message, accessToken).execute();
+  public UserMessage createMessage(String userId, UserMessage message, String accessToken) throws IOException {
+    Response<ResponseBean> response = userMessageControllerApi.createMessage(userId, message, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -134,11 +134,11 @@ public class UserMessageControllerClient {
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
-      UserMessage usermessage = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), UserMessage.class);
-      if (null == usermessage) {
+      UserMessage userMessage = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), UserMessage.class);
+      if (null == userMessage) {
         throw new UserException("500", "create message  return code is '200',but return data is null");
       }
-      return usermessage;
+      return userMessage;
     }
     LOGGER.error(responseBean.getMsg());
     throw new UserException(returnCode, responseBean.getMsg());
@@ -147,31 +147,31 @@ public class UserMessageControllerClient {
   /**
    * 异步为用户创建消息
    * 
-   * @param userid
+   * @param userId
    * @param message
    * @param accessToken
    * @param callback
    */
-  public void createMessageAsync(String userid, UserMessage message, String accessToken,
+  public void createMessageAsync(String userId, UserMessage message, String accessToken,
       Callback<ResponseBean> callback) {
-    usermessageControllerApi.createMessage(userid, message, accessToken).enqueue(callback);
+    userMessageControllerApi.createMessage(userId, message, accessToken).enqueue(callback);
   }
 
   /**
    * 删除消息
    * 
-   * @param userid
-   * @param messageid
+   * @param userId
+   * @param messageId
    * @param accessToken
    * @param async
    * @throws IOException
    */
-  public void deleteMessage(String userid, String messageid, String accessToken, boolean async) throws IOException {
+  public void deleteMessage(String userId, String messageId, String accessToken, boolean async) throws IOException {
     if (async) {
-      usermessageControllerApi.deleteMessage(userid, messageid, accessToken).enqueue(Empty_Callback);
+      userMessageControllerApi.deleteMessage(userId, messageId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = usermessageControllerApi.deleteMessage(userid, messageid, accessToken).execute();
+    Response<ResponseBean> response = userMessageControllerApi.deleteMessage(userId, messageId, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {

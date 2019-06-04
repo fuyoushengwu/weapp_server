@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.client.domain.coupon;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import lombok.Data;
 
 /**
@@ -14,7 +16,7 @@ import lombok.Data;
  * @date 2018-06-27 03:11:01
  */
 @Data
-public class UserVoucher {
+public class UserVoucher implements Parcelable {
   private String id;
 
   /**
@@ -25,7 +27,7 @@ public class UserVoucher {
   /**
    * 用户ID
    */
-  private String userid;
+  private String userId;
 
   /**
    * 兑换券
@@ -36,4 +38,41 @@ public class UserVoucher {
    * 用户拥有的该兑换券分值
    */
   private int score;
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(id);
+    dest.writeByte((byte) (deprecated ? 1 : 0));
+    dest.writeString(userId);
+    dest.writeParcelable(goodVoucher, flags);
+    dest.writeInt(score);
+  }
+
+  public UserVoucher() {
+  }
+
+  private UserVoucher(Parcel in) {
+    this.id = in.readString();
+    this.deprecated = in.readByte() != 0;
+    this.userId = in.readString();
+    this.goodVoucher = in.readParcelable(GoodVoucher.class.getClassLoader());
+    this.score = in.readInt();
+  }
+
+  public static final Parcelable.Creator<UserVoucher> CREATOR = new Parcelable.Creator<UserVoucher>() {
+    @Override
+    public UserVoucher createFromParcel(Parcel in) {
+      return new UserVoucher(in);
+    }
+
+    @Override
+    public UserVoucher[] newArray(int size) {
+      return new UserVoucher[size];
+    }
+  };
 }

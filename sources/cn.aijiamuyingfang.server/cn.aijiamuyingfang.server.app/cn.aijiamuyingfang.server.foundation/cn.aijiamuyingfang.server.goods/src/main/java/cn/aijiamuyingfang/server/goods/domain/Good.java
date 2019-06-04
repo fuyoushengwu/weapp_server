@@ -82,7 +82,7 @@ public class Good {
   /**
    * 超市零售价
    */
-  private double marketprice;
+  private double marketPrice;
 
   /**
    * 商品包装(听,盒,袋)
@@ -139,8 +139,8 @@ public class Good {
     if (updateGood.price != 0) {
       this.price = updateGood.price;
     }
-    if (updateGood.marketprice != 0) {
-      this.marketprice = updateGood.marketprice;
+    if (updateGood.marketPrice != 0) {
+      this.marketPrice = updateGood.marketPrice;
     }
     if (updateGood.score != 0) {
       this.score = updateGood.score;

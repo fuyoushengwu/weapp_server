@@ -25,7 +25,7 @@ public interface VoucherItemRepository extends JpaRepository<VoucherItem, String
 
   @Override
   @Query(value = "select v from VoucherItem v where v.id=:id and v.deprecated=false")
-  VoucherItem findOne(@Param("id") String voucheritemId);
+  VoucherItem findOne(@Param("id") String voucherItemId);
 
   @Override
   @Query(value = "select v from VoucherItem v  where v.deprecated=false order by ?#{#pageable}",

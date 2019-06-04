@@ -64,20 +64,20 @@ public class GoodControllerClient {
   /**
    * 分页查询条目下的商品
    * 
-   * @param classifyid
+   * @param classifyId
    * @param packFilter
    * @param levelFilter
    * @param orderType
    * @param orderValue
-   * @param currentpage
-   * @param pagesize
+   * @param currentPage
+   * @param pageSize
    * @return
    * @throws IOException
    */
-  public GetClassifyGoodListResponse getClassifyGoodList(String classifyid, List<String> packFilter,
-      List<String> levelFilter, String orderType, String orderValue, int currentpage, int pagesize) throws IOException {
+  public GetClassifyGoodListResponse getClassifyGoodList(String classifyId, List<String> packFilter,
+      List<String> levelFilter, String orderType, String orderValue, int currentPage, int pageSize) throws IOException {
     Response<ResponseBean> response = goodControllerApi
-        .getClassifyGoodList(classifyid, packFilter, levelFilter, orderType, orderValue, currentpage, pagesize)
+        .getClassifyGoodList(classifyId, packFilter, levelFilter, orderType, orderValue, currentPage, pageSize)
         .execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
@@ -235,8 +235,8 @@ public class GoodControllerClient {
     if (goodRequest.getCount() > 0) {
       requestBodyBuilder.addFormDataPart("count", goodRequest.getCount() + "");
     }
-    if (goodRequest.getMarketprice() > 0) {
-      requestBodyBuilder.addFormDataPart("marketprice", goodRequest.getMarketprice() + "");
+    if (goodRequest.getMarketPrice() > 0) {
+      requestBodyBuilder.addFormDataPart("marketPrice", goodRequest.getMarketPrice() + "");
     }
     if (goodRequest.getPrice() > 0) {
       requestBodyBuilder.addFormDataPart("price", goodRequest.getPrice() + "");
@@ -269,29 +269,29 @@ public class GoodControllerClient {
   /**
    * 获取商品信息
    * 
-   * @param goodid
+   * @param goodId
    * @return
    * @throws IOException
    */
-  public Good getGood(String goodid) throws IOException {
-    Response<ResponseBean> response = goodControllerApi.getGood(goodid).execute();
+  public Good getGood(String goodId) throws IOException {
+    Response<ResponseBean> response = goodControllerApi.getGood(goodId).execute();
     return getGoodFromResponse(response, "get good  return code is '200',but return data is null");
   }
 
   /**
    * 废弃商品
    * 
-   * @param goodid
+   * @param goodId
    * @param accessToken
    * @param async
    * @throws IOException
    */
-  public void deprecateGood(String goodid, String accessToken, boolean async) throws IOException {
+  public void deprecateGood(String goodId, String accessToken, boolean async) throws IOException {
     if (async) {
-      goodControllerApi.deprecateGood(goodid, accessToken).enqueue(Empty_Callback);
+      goodControllerApi.deprecateGood(goodId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = goodControllerApi.deprecateGood(goodid, accessToken).execute();
+    Response<ResponseBean> response = goodControllerApi.deprecateGood(goodId, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -310,12 +310,12 @@ public class GoodControllerClient {
   /**
    * 获取商品详细信息
    * 
-   * @param goodid
+   * @param goodId
    * @return
    * @throws IOException
    */
-  public GoodDetail getGoodDetail(String goodid) throws IOException {
-    Response<ResponseBean> response = goodControllerApi.getGoodDetail(goodid).execute();
+  public GoodDetail getGoodDetail(String goodId) throws IOException {
+    Response<ResponseBean> response = goodControllerApi.getGoodDetail(goodId).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -339,14 +339,14 @@ public class GoodControllerClient {
   /**
    * 更新Good信息
    * 
-   * @param goodid
+   * @param goodId
    * @param request
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public Good updateGood(String goodid, Good request, String accessToken) throws IOException {
-    Response<ResponseBean> response = goodControllerApi.updateGood(goodid, request, accessToken).execute();
+  public Good updateGood(String goodId, Good request, String accessToken) throws IOException {
+    Response<ResponseBean> response = goodControllerApi.updateGood(goodId, request, accessToken).execute();
     return getGoodFromResponse(response, "update good  return code is '200',but return data is null");
   }
 
@@ -382,12 +382,12 @@ public class GoodControllerClient {
   /**
    * 异步更新Good信息
    * 
-   * @param goodid
+   * @param goodId
    * @param request
    * @param accessToken
    * @param callback
    */
-  public void updateGoodAsync(String goodid, Good request, String accessToken, Callback<ResponseBean> callback) {
-    goodControllerApi.updateGood(goodid, request, accessToken).enqueue(callback);
+  public void updateGoodAsync(String goodId, Good request, String accessToken, Callback<ResponseBean> callback) {
+    goodControllerApi.updateGood(goodId, request, accessToken).enqueue(callback);
   }
 }

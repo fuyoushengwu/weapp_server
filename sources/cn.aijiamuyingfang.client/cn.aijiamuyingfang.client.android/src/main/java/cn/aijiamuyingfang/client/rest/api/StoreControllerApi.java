@@ -4,6 +4,7 @@ import java.util.List;
 
 import cn.aijiamuyingfang.client.domain.ResponseBean;
 import cn.aijiamuyingfang.client.domain.store.Store;
+import cn.aijiamuyingfang.client.domain.store.StoreAddress;
 import cn.aijiamuyingfang.client.domain.store.response.GetDefaultStoreIdResponse;
 import cn.aijiamuyingfang.client.domain.store.response.GetInUseStoreListResponse;
 import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
@@ -34,15 +35,15 @@ public interface StoreControllerApi {
   /**
    * 分页获取在使用中的Store
    * 
-   * @param currentpage
-   *          当前页 默认值:1 (currentpage必须&ge;1,否则重置为1)
-   * @param pagesize
-   *          每页大小 默认值:10(pagesize必须&gt;0,否则重置为1)
+   * @param currentPage
+   *          当前页 默认值:1 (currentPage必须&ge;1,否则重置为1)
+   * @param pageSize
+   *          每页大小 默认值:10(pageSize必须&gt;0,否则重置为1)
    * @return
    */
   @GET(value = "/goods-service/store")
   public Observable<ResponseBean<GetInUseStoreListResponse>> getInUseStoreList(
-      @Query(value = "currentpage") int currentpage, @Query(value = "pagesize") int pagesize);
+      @Query(value = "current_page") int currentPage, @Query(value = "page_size") int pageSize);
 
   /**
    * 创建门店
@@ -58,33 +59,42 @@ public interface StoreControllerApi {
   /**
    * 获取门店信息
    * 
-   * @param storeid
+   * @param storeId
    * @return
    */
-  @GET(value = "/goods-service/store/{storeid}")
-  public Observable<ResponseBean<Store>> getStore(@Path("storeid") String storeid);
+  @GET(value = "/goods-service/store/{store_id}")
+  public Observable<ResponseBean<Store>> getStore(@Path("store_id") String storeId);
+
+  /**
+   * 获取门店地址信息
+   * 
+   * @param addressId
+   * @return
+   */
+  @GET(value = "/goods-service/storeaddress/{address_id}")
+  public Observable<ResponseBean<StoreAddress>> getStoreAddressByAddressId(@Path("address_id") String addressId);
 
   /**
    * 更新门店信息
    * 
-   * @param storeid
+   * @param storeId
    * @param storeRequest
    * @param accessToken
    * @return
    */
-  @PUT(value = "/goods-service/store/{storeid}")
-  public Observable<ResponseBean<Store>> updateStore(@Path("storeid") String storeid, @Body Store storeRequest,
+  @PUT(value = "/goods-service/store/{store_id}")
+  public Observable<ResponseBean<Store>> updateStore(@Path("store_id") String storeId, @Body Store storeRequest,
       @Query("access_token") String accessToken);
 
   /**
    * 废弃门店
    * 
-   * @param storeid
+   * @param storeId
    * @param accessToken
    * @return
    */
-  @DELETE(value = "/goods-service/store/{storeid}")
-  public Observable<ResponseBean<Void>> deprecateStore(@Path("storeid") String storeid,
+  @DELETE(value = "/goods-service/store/{store_id}")
+  public Observable<ResponseBean<Void>> deprecateStore(@Path("store_id") String storeId,
       @Query("access_token") String accessToken);
 
   /**

@@ -27,8 +27,8 @@ import cn.aijiamuyingfang.server.it.coupon.GoodVoucher;
 public interface GoodVoucherRepository extends JpaRepository<GoodVoucher, String> {
 
   @Override
-  @Query(value = "select g from GoodVoucher g where g.id=:voucherid and g.deprecated=false")
-  GoodVoucher findOne(@Param("voucherid") String voucherid);
+  @Query(value = "select g from GoodVoucher g where g.id=:voucher_id and g.deprecated=false")
+  GoodVoucher findOne(@Param("voucher_id") String voucherId);
 
   @Override
   @Query(value = "select g from GoodVoucher g where g.deprecated=false order by ?#{#pageable}",
@@ -38,11 +38,11 @@ public interface GoodVoucherRepository extends JpaRepository<GoodVoucher, String
   /**
    * 删除GoodVoucher对某VoucherItem的引用
    * 
-   * @param voucheritemId
+   * @param voucherItemId
    */
   @Modifying
   @Transactional
-  @Query(value = "delete from good_voucher_voucheritem_id_list where voucheritem_id_list=:voucheritem_id",
+  @Query(value = "delete from good_voucher_voucher_item_id_list where voucher_item_id_list=:voucher_item_id",
       nativeQuery = true)
-  void deprecateVoucherItem(@Param("voucheritem_id") String voucheritemId);
+  void deprecateVoucherItem(@Param("voucher_item_id") String voucherItemId);
 }

@@ -19,7 +19,7 @@ public class UserTestActions extends AbstractTestAction {
   private UserMessage userMessage;
 
   @Autowired
-  private UserMessageControllerClient usermessageControllerClient;
+  private UserMessageControllerClient userMessageControllerClient;
 
   public UserMessage getSenderOneMessage() throws IOException {
     if (null == userMessage) {
@@ -27,10 +27,10 @@ public class UserTestActions extends AbstractTestAction {
       this.userMessage.setContent("content");
       this.userMessage.setCreateTime(new Date());
       this.userMessage.setFinishTime(new Date(System.currentTimeMillis() + 30 * 24 * 60 * 60 * 1000L));
-      this.userMessage.setUserid(this.getSenderOne().getId());
+      this.userMessage.setUserId(this.getSenderOne().getId());
       this.userMessage.setTitle("title");
       this.userMessage.setType(UserMessageType.NOTICE);
-      this.userMessage = this.usermessageControllerClient.createMessage(this.getSenderOne().getId(), this.userMessage,
+      this.userMessage = this.userMessageControllerClient.createMessage(this.getSenderOne().getId(), this.userMessage,
           this.getSenderOneAccessToken());
     }
     return userMessage;
@@ -38,7 +38,7 @@ public class UserTestActions extends AbstractTestAction {
 
   public void deleteSenderOneMessage() throws IOException {
     if (userMessage != null) {
-      usermessageControllerClient.deleteMessage(userMessage.getUserid(), userMessage.getId(), getSenderOneAccessToken(),
+      userMessageControllerClient.deleteMessage(userMessage.getUserId(), userMessage.getId(), getSenderOneAccessToken(),
           false);
       this.userMessage = null;
     }

@@ -40,7 +40,7 @@ public class ShopOrderVoucher {
   /**
    * 订单使用的兑换方式
    */
-  private String voucheritemId;
+  private String voucherItemId;
 
   /**
    * 该兑换项关联的商品Id

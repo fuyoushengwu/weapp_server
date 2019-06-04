@@ -33,12 +33,12 @@ public interface RecieveAddressRepository extends JpaRepository<RecieveAddress, 
   /**
    * 获取用户的收件地址
    * 
-   * @param userid
+   * @param userId
    *          用户id
    * @return 获取用户的收件地址
    */
-  @Query(value = "select * from recieve_address where userid=:userid and deprecated=false", nativeQuery = true)
-  List<RecieveAddress> findByUserid(@Param("userid") String userid);
+  @Query(value = "select * from recieve_address where user_id=:user_id and deprecated=false", nativeQuery = true)
+  List<RecieveAddress> findByUserId(@Param("user_id") String userId);
 
   /**
    * 设置所有收件地址非默认

@@ -28,7 +28,7 @@ public abstract class PageResponse<T> {
   /**
    * 当前页数
    */
-  private int currentpage;
+  private int currentPage;
 
   /**
    * 总页数

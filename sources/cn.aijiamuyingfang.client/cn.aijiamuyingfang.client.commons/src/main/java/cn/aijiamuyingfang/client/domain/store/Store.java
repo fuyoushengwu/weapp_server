@@ -3,6 +3,8 @@ package cn.aijiamuyingfang.client.domain.store;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import cn.aijiamuyingfang.client.domain.ImageSource;
 import lombok.Data;
 
@@ -18,7 +20,7 @@ import lombok.Data;
  * @date 2018-06-27 00:12:21
  */
 @Data
-public class Store {
+public class Store implements Parcelable {
 
   /**
    * 门店Id
@@ -55,4 +57,47 @@ public class Store {
    */
   private StoreAddress storeAddress;
 
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(id);
+    dest.writeByte((byte) (deprecated ? 1 : 0));
+    dest.writeString(name);
+    dest.writeParcelable(workTime, flags);
+    dest.writeParcelable(coverImg, flags);
+    dest.writeParcelableArray(detailImgList.toArray(new ImageSource[detailImgList.size()]), flags);
+    dest.writeParcelable(storeAddress, flags);
+  }
+
+  public Store() {
+  }
+
+  private Store(Parcel in) {
+    id = in.readString();
+    deprecated = in.readByte() != 0;
+    name = in.readString();
+    workTime = in.readParcelable(WorkTime.class.getClassLoader());
+    coverImg = in.readParcelable(ImageSource.class.getClassLoader());
+    detailImgList = new ArrayList<>();
+    for (Parcelable p : in.readParcelableArray(ImageSource.class.getClassLoader())) {
+      detailImgList.add((ImageSource) p);
+    }
+    storeAddress = in.readParcelable(StoreAddress.class.getClassLoader());
+  }
+
+  public static final Parcelable.Creator<Store> CREATOR = new Parcelable.Creator<Store>() {
+    @Override
+    public Store createFromParcel(Parcel in) {
+      return new Store(in);
+    }
+
+    @Override
+    public Store[] newArray(int size) {
+      return new Store[size];
+    }
+  };
 }

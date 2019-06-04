@@ -28,7 +28,6 @@ import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.PUT;
 
 /**
  * [描述]:
@@ -65,19 +64,19 @@ public class ShopOrderControllerClient {
   /**
    * 分页获取用户的订单信息
    * 
-   * @param userid
+   * @param userId
    * @param statusList
-   * @param sendtypeList
-   * @param currentpage
-   * @param pagesize
+   * @param sendTypeList
+   * @param currentPage
+   * @param pageSize
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public GetShopOrderListResponse getUserShopOrderList(String userid, List<ShopOrderStatus> statusList,
-      List<SendType> sendtypeList, int currentpage, int pagesize, String accessToken) throws IOException {
+  public GetShopOrderListResponse getUserShopOrderList(String userId, List<ShopOrderStatus> statusList,
+      List<SendType> sendTypeList, int currentPage, int pageSize, String accessToken) throws IOException {
     Response<ResponseBean> response = shoporderControllerApi
-        .getUserShopOrderList(userid, statusList, sendtypeList, currentpage, pagesize, accessToken).execute();
+        .getUserShopOrderList(userId, statusList, sendTypeList, currentPage, pageSize, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -102,16 +101,16 @@ public class ShopOrderControllerClient {
   /**
    * 获取用户购买商品时可以使用的兑换券
    * 
-   * @param userid
-   * @param goodids
+   * @param userId
+   * @param goodIdList
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public GetShopOrderVoucherListResponse getUserShopOrderVoucherList(String userid, List<String> goodids,
+  public GetShopOrderVoucherListResponse getUserShopOrderVoucherList(String userId, List<String> goodIdList,
       String accessToken) throws IOException {
-    Response<ResponseBean> response = shoporderControllerApi.getUserShopOrderVoucherList(userid, goodids, accessToken)
-        .execute();
+    Response<ResponseBean> response = shoporderControllerApi
+        .getUserShopOrderVoucherList(userId, goodIdList, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       throw new CouponException(ResponseCode.RESPONSE_BODY_IS_NULL);
@@ -134,17 +133,17 @@ public class ShopOrderControllerClient {
    * 分页获取所有的订单信息
    * 
    * @param statusList
-   * @param sendtypeList
-   * @param currentpage
-   * @param pagesize
+   * @param sendTypeList
+   * @param currentPage
+   * @param pageSize
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public GetShopOrderListResponse getShopOrderList(List<ShopOrderStatus> statusList, List<SendType> sendtypeList,
-      int currentpage, int pagesize, String accessToken) throws IOException {
+  public GetShopOrderListResponse getShopOrderList(List<ShopOrderStatus> statusList, List<SendType> sendTypeList,
+      int currentPage, int pageSize, String accessToken) throws IOException {
     Response<ResponseBean> response = shoporderControllerApi
-        .getShopOrderList(statusList, sendtypeList, currentpage, pagesize, accessToken).execute();
+        .getShopOrderList(statusList, sendTypeList, currentPage, pageSize, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -169,20 +168,20 @@ public class ShopOrderControllerClient {
   /**
    * 更新订单
    * 
-   * @param shoporderid
+   * @param shopOrderId
    * @param requestBean
    * @param accessToken
    * @param async
    * @throws IOException
    */
-  public void updateShopOrderStatus(String shoporderid, UpdateShopOrderStatusRequest requestBean, String accessToken,
+  public void updateShopOrderStatus(String shopOrderId, UpdateShopOrderStatusRequest requestBean, String accessToken,
       boolean async) throws IOException {
     if (async) {
-      shoporderControllerApi.updateShopOrderStatus(shoporderid, requestBean, accessToken).enqueue(Empty_Callback);
+      shoporderControllerApi.updateShopOrderStatus(shopOrderId, requestBean, accessToken).enqueue(Empty_Callback);
       return;
     }
     Response<ResponseBean> response = shoporderControllerApi
-        .updateShopOrderStatus(shoporderid, requestBean, accessToken).execute();
+        .updateShopOrderStatus(shopOrderId, requestBean, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -201,17 +200,17 @@ public class ShopOrderControllerClient {
   /**
    * 如果订单已经完成100天,可以删除(Admin和Sender都可以调用该方法)
    * 
-   * @param shoporderid
+   * @param shopOrderId
    * @param accessToken
    * @param async
    * @throws IOException
    */
-  public void delete100DaysFinishedShopOrder(String shoporderid, String accessToken, boolean async) throws IOException {
+  public void delete100DaysFinishedShopOrder(String shopOrderId, String accessToken, boolean async) throws IOException {
     if (async) {
-      shoporderControllerApi.delete100DaysFinishedShopOrder(shoporderid, accessToken).enqueue(Empty_Callback);
+      shoporderControllerApi.delete100DaysFinishedShopOrder(shopOrderId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = shoporderControllerApi.delete100DaysFinishedShopOrder(shoporderid, accessToken)
+    Response<ResponseBean> response = shoporderControllerApi.delete100DaysFinishedShopOrder(shopOrderId, accessToken)
         .execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
@@ -231,20 +230,20 @@ public class ShopOrderControllerClient {
   /**
    * 删除用户下的订单,该操作需要先判断该订单是否属于用户
    * 
-   * @param userid
-   * @param shoporderid
+   * @param userId
+   * @param shopOrderId
    * @param accessToken
    * @param async
    * @throws IOException
    */
-  public void deleteUserShopOrder(String userid, String shoporderid, String accessToken, boolean async)
+  public void deleteUserShopOrder(String userId, String shopOrderId, String accessToken, boolean async)
       throws IOException {
     if (async) {
-      shoporderControllerApi.deleteUserShopOrder(userid, shoporderid, accessToken).enqueue(Empty_Callback);
+      shoporderControllerApi.deleteUserShopOrder(userId, shopOrderId, accessToken).enqueue(Empty_Callback);
       return;
     }
     Response<
-        ResponseBean> response = shoporderControllerApi.deleteUserShopOrder(userid, shoporderid, accessToken).execute();
+        ResponseBean> response = shoporderControllerApi.deleteUserShopOrder(userId, shopOrderId, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -263,16 +262,16 @@ public class ShopOrderControllerClient {
   /**
    * 确认订单结束,先要判断该订单是否属于用户
    * 
-   * @param userid
-   * @param shoporderid
+   * @param userId
+   * @param shopOrderId
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public ConfirmShopOrderFinishedResponse confirmUserShopOrderFinished(String userid, String shoporderid,
+  public ConfirmShopOrderFinishedResponse confirmUserShopOrderFinished(String userId, String shopOrderId,
       String accessToken) throws IOException {
     Response<ResponseBean> response = shoporderControllerApi
-        .confirmUserShopOrderFinished(userid, shoporderid, accessToken).execute();
+        .confirmUserShopOrderFinished(userId, shopOrderId, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -298,36 +297,35 @@ public class ShopOrderControllerClient {
   /**
    * 异步确认订单结束,先要判断该订单是否属于用户
    * 
-   * @param userid
-   * @param shoporderid
+   * @param userId
+   * @param shopOrderId
    * @param accessToken
    * @param callback
    */
-  public void confirmUserShopOrderFinishedAsync(String userid, String shoporderid, String accessToken,
+  public void confirmUserShopOrderFinishedAsync(String userId, String shopOrderId, String accessToken,
       Callback<ResponseBean> callback) {
-    shoporderControllerApi.confirmUserShopOrderFinished(userid, shoporderid, accessToken).enqueue(callback);
+    shoporderControllerApi.confirmUserShopOrderFinished(userId, shopOrderId, accessToken).enqueue(callback);
   }
 
   /**
    * 更新订单的收货地址,先要判断该订单是否属于用户
    * 
-   * @param userid
-   * @param shoporderid
-   * @param addressid
+   * @param userId
+   * @param shopOrderId
+   * @param addressId
    * @param accessToken
    * @param async
    * @throws IOException
    */
-  @PUT(value = "/user/{userid}/shoporder/{shoporderid}/recieveaddress/{addressid}")
-  public void updateUserShopOrderRecieveAddress(String userid, String shoporderid, String addressid, String accessToken,
+  public void updateUserShopOrderRecieveAddress(String userId, String shopOrderId, String addressId, String accessToken,
       boolean async) throws IOException {
     if (async) {
-      shoporderControllerApi.updateUserShopOrderRecieveAddress(userid, shoporderid, addressid, accessToken)
+      shoporderControllerApi.updateUserShopOrderRecieveAddress(userId, shopOrderId, addressId, accessToken)
           .enqueue(Empty_Callback);
       return;
     }
     Response<ResponseBean> response = shoporderControllerApi
-        .updateUserShopOrderRecieveAddress(userid, shoporderid, addressid, accessToken).execute();
+        .updateUserShopOrderRecieveAddress(userId, shopOrderId, addressId, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -346,15 +344,15 @@ public class ShopOrderControllerClient {
   /**
    * 分页获取已完成预约单
    * 
-   * @param currentpage
-   * @param pagesize
+   * @param currentPage
+   * @param pageSize
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public GetFinishedPreOrderListResponse getFinishedPreOrderList(int currentpage, int pagesize, String accessToken)
+  public GetFinishedPreOrderListResponse getFinishedPreOrderList(int currentPage, int pageSize, String accessToken)
       throws IOException {
-    Response<ResponseBean> response = shoporderControllerApi.getFinishedPreOrderList(currentpage, pagesize, accessToken)
+    Response<ResponseBean> response = shoporderControllerApi.getFinishedPreOrderList(currentPage, pageSize, accessToken)
         .execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
@@ -380,31 +378,31 @@ public class ShopOrderControllerClient {
   /**
    * 获取用户订单,先要判断订单是否属于用户
    * 
-   * @param userid
-   * @param shoporderid
+   * @param userId
+   * @param shopOrderId
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public ShopOrder getUserShopOrder(String userid, String shoporderid, String accessToken) throws IOException {
+  public ShopOrder getUserShopOrder(String userId, String shopOrderId, String accessToken) throws IOException {
     Response<
-        ResponseBean> response = shoporderControllerApi.getUserShopOrder(userid, shoporderid, accessToken).execute();
+        ResponseBean> response = shoporderControllerApi.getUserShopOrder(userId, shopOrderId, accessToken).execute();
     return getShopOrderFromResponse(response, "get user shoporder return code is '200',but return data is null");
   }
 
   /**
    * 创建用户订单
    * 
-   * @param userid
+   * @param userId
    * @param requestBean
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public ShopOrder createUserShopOrder(String userid, CreateShopOrderRequest requestBean, String accessToken)
+  public ShopOrder createUserShopOrder(String userId, CreateShopOrderRequest requestBean, String accessToken)
       throws IOException {
     Response<
-        ResponseBean> response = shoporderControllerApi.createUserShopOrder(userid, requestBean, accessToken).execute();
+        ResponseBean> response = shoporderControllerApi.createUserShopOrder(userId, requestBean, accessToken).execute();
     return getShopOrderFromResponse(response, "create user shoporder return code is '200',but return data is null");
   }
 
@@ -440,27 +438,27 @@ public class ShopOrderControllerClient {
   /**
    * 异步创建用户订单
    * 
-   * @param userid
+   * @param userId
    * @param requestBean
    * @param accessToken
    * @param callback
    */
-  public void createUserShopOrderAsync(String userid, CreateShopOrderRequest requestBean, String accessToken,
+  public void createUserShopOrderAsync(String userId, CreateShopOrderRequest requestBean, String accessToken,
       Callback<ResponseBean> callback) {
-    shoporderControllerApi.createUserShopOrder(userid, requestBean, accessToken).enqueue(callback);
+    shoporderControllerApi.createUserShopOrder(userId, requestBean, accessToken).enqueue(callback);
   }
 
   /**
    * 得到用户订单根据状态分类的数目
    * 
-   * @param userid
+   * @param userId
    * @param accessToken
    * @return
    * @throws IOException
    */
   @SuppressWarnings("unchecked")
-  public Map<String, Double> getUserShopOrderStatusCount(String userid, String accessToken) throws IOException {
-    Response<ResponseBean> response = shoporderControllerApi.getUserShopOrderStatusCount(userid, accessToken).execute();
+  public Map<String, Double> getUserShopOrderStatusCount(String userId, String accessToken) throws IOException {
+    Response<ResponseBean> response = shoporderControllerApi.getUserShopOrderStatusCount(userId, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -484,15 +482,15 @@ public class ShopOrderControllerClient {
   /**
    * 分页获取预定的商品信息
    * 
-   * @param currentpage
-   * @param pagesize
+   * @param currentPage
+   * @param pageSize
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public GetPreOrderGoodListResponse getPreOrderGoodList(int currentpage, int pagesize, String accessToken)
+  public GetPreOrderGoodListResponse getPreOrderGoodList(int currentPage, int pageSize, String accessToken)
       throws IOException {
-    Response<ResponseBean> response = shoporderControllerApi.getPreOrderGoodList(currentpage, pagesize, accessToken)
+    Response<ResponseBean> response = shoporderControllerApi.getPreOrderGoodList(currentPage, pageSize, accessToken)
         .execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
@@ -518,17 +516,17 @@ public class ShopOrderControllerClient {
   /**
    * 预定的商品到货,更新预约单
    * 
-   * @param goodid
+   * @param goodId
    * @param accessToken
    * @param async
    * @throws IOException
    */
-  public void updatePreOrder(String goodid, String accessToken, boolean async) throws IOException {
+  public void updatePreOrder(String goodId, String accessToken, boolean async) throws IOException {
     if (async) {
-      shoporderControllerApi.updatePreOrder(goodid, accessToken).enqueue(Empty_Callback);
+      shoporderControllerApi.updatePreOrder(goodId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = shoporderControllerApi.updatePreOrder(goodid, accessToken).execute();
+    Response<ResponseBean> response = shoporderControllerApi.updatePreOrder(goodId, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {

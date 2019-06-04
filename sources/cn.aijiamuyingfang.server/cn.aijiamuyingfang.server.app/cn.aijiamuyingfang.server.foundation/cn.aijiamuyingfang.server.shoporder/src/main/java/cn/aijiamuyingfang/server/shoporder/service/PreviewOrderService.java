@@ -40,7 +40,7 @@ public class PreviewOrderService {
   private PreviewOrderItemRepository previeworderItemRepository;
 
   @Autowired
-  private ShopCartRepository shopcartRepository;
+  private ShopCartRepository shopCartRepository;
 
   @Autowired
   private UserClient userClient;
@@ -48,24 +48,24 @@ public class PreviewOrderService {
   /**
    * 更新预览的商品项
    * 
-   * @param userid
+   * @param userId
    *          用户id
-   * @param previewitemId
+   * @param previewItemId
    * @param updateOrderItem
    * @return
    */
-  public PreviewOrderItem updatePreviewOrderItem(String userid, String previewitemId,
+  public PreviewOrderItem updatePreviewOrderItem(String userId, String previewItemId,
       PreviewOrderItem updateOrderItem) {
     if (null == updateOrderItem) {
       return null;
     }
-    PreviewOrder previewOrder = previeworderRepository.findByUserid(userid);
+    PreviewOrder previewOrder = previeworderRepository.findByUserId(userId);
     if (null == previewOrder) {
-      throw new ShopOrderException(ResponseCode.PREVIEWORDER_NOT_EXIST, userid);
+      throw new ShopOrderException(ResponseCode.PREVIEWORDER_NOT_EXIST, userId);
     }
-    PreviewOrderItem orderItem = previeworderItemRepository.findOne(previewitemId);
+    PreviewOrderItem orderItem = previeworderItemRepository.findOne(previewItemId);
     if (null == orderItem) {
-      throw new ShopOrderException(ResponseCode.PREVIEWORDERITEM_NOT_EXIST, previewitemId);
+      throw new ShopOrderException(ResponseCode.PREVIEWORDERITEM_NOT_EXIST, previewItemId);
     }
     if (!previewOrder.getOrderItemList().contains(orderItem)) {
       throw new AccessDeniedException("no permission update other user's preview item");
@@ -78,12 +78,12 @@ public class PreviewOrderService {
   /**
    * 删除预览的商品项
    * 
-   * @param userid
+   * @param userId
    *          用户id
    * @param itemid
    */
-  public void deletePreviewOrderItem(String userid, String itemid) {
-    PreviewOrder previewOrder = previeworderRepository.findByUserid(userid);
+  public void deletePreviewOrderItem(String userId, String itemid) {
+    PreviewOrder previewOrder = previeworderRepository.findByUserId(userId);
     if (null == previewOrder) {
       return;
     }
@@ -96,21 +96,21 @@ public class PreviewOrderService {
   /**
    * 生成用户的预览订单
    * 
-   * @param userid
+   * @param userId
    *          用户id
-   * @param goodids
+   * @param goodIdList
    * @return
    */
   @Transactional
-  public PreviewOrder generatePreviewOrder(String userid, List<String> goodids) {
+  public PreviewOrder generatePreviewOrder(String userId, List<String> goodIdList) {
     PreviewOrder previeworder = new PreviewOrder();
-    previeworder.setUserid(userid);
-    List<ShopCart> itemList = getShopCartListByGoodIds(userid, goodids);
+    previeworder.setUserId(userId);
+    List<ShopCart> itemList = getShopCartListByGoodIds(userId, goodIdList);
     for (ShopCart item : itemList) {
       previeworder.addOrderItem(PreviewOrderItem.fromShopCart(item));
     }
 
-    List<RecieveAddress> addressList = userClient.getUserRecieveAddressList(userid).getData();
+    List<RecieveAddress> addressList = userClient.getUserRecieveAddressList(userId).getData();
     for (RecieveAddress address : addressList) {
       if (address.isDef()) {
         previeworder.setRecieveAddressId(address.getId());
@@ -118,23 +118,23 @@ public class PreviewOrderService {
       }
     }
 
-    previeworderRepository.deleteByUserid(userid);
+    previeworderRepository.deleteByUserId(userId);
     previeworderRepository.saveAndFlush(previeworder);
     return previeworder;
   }
 
   /**
    *
-   * @param userid
+   * @param userId
    *          用户id
-   * @param goodidList
+   * @param goodIdList
    * @return
    */
-  private List<ShopCart> getShopCartListByGoodIds(String userid, List<String> goodidList) {
-    if (goodidList != null && !goodidList.isEmpty()) {
-      return shopcartRepository.findByUseridAndGoodIdIn(userid, goodidList);
+  private List<ShopCart> getShopCartListByGoodIds(String userId, List<String> goodIdList) {
+    if (goodIdList != null && !goodIdList.isEmpty()) {
+      return shopCartRepository.findByUserIdAndGoodIdIn(userId, goodIdList);
     } else {
-      return shopcartRepository.findByUseridAndIschecked(userid, true);
+      return shopCartRepository.findByUserIdAndIschecked(userId, true);
     }
   }
 

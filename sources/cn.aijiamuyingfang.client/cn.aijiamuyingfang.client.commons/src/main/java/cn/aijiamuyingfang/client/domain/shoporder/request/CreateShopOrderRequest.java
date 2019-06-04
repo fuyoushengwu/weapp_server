@@ -9,7 +9,7 @@ import lombok.Data;
 /**
  * [描述]:
  * <p>
- * <code>POST '/user/{userid}/shoporder'</code>方法的请求体
+ * <code>POST '/user/{user_id}/shoporder'</code>方法的请求体
  * </p>
  * 
  * @version 1.0.0
@@ -27,12 +27,12 @@ public class CreateShopOrderRequest {
   /**
    * 订单的配送方式: 0:到店自取(pickup); 1:送货上门(ownsend); 2:快递(thirdsend);
    */
-  private SendType sendtype;
+  private SendType sendType;
 
   /**
    * 取货/收货地址的ID
    */
-  private String addressid;
+  private String addressId;
 
   /**
    * 取货时间

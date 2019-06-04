@@ -2,6 +2,8 @@ package cn.aijiamuyingfang.client.domain.message;
 
 import com.google.gson.annotations.SerializedName;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import cn.aijiamuyingfang.client.domain.BaseEnum;
 
 /**
@@ -15,7 +17,7 @@ import cn.aijiamuyingfang.client.domain.BaseEnum;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-06-27 17:10:30
  */
-public enum UserMessageType implements BaseEnum {
+public enum UserMessageType implements BaseEnum, Parcelable {
 
   /**
    * 未知类型
@@ -53,4 +55,26 @@ public enum UserMessageType implements BaseEnum {
     }
     return UNKNOW;
   }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeInt(value);
+  }
+
+  public static final Creator<UserMessageType> CREATOR = new Creator<UserMessageType>() {
+    @Override
+    public UserMessageType createFromParcel(Parcel in) {
+      return UserMessageType.fromValue(in.readInt());
+    }
+
+    @Override
+    public UserMessageType[] newArray(int size) {
+      return new UserMessageType[size];
+    }
+  };
 }

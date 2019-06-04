@@ -31,13 +31,14 @@ import cn.aijiamuyingfang.server.goods.service.ImageService;
 import cn.aijiamuyingfang.server.goods.service.StoreService;
 
 /***
- * [描述]:*
+ * [描述]:
  * <p>
- * *门店服务-控制层*
+ * 门店服务-控制层
  * </p>
- * **
  * 
- * @version 1.0.0*@author ShiWei*@email shiweideyouxiang @sina.cn
+ * @version 1.0.0
+ * @author ShiWei
+ * @email shiweideyouxiang@sina.cn
  * @date 2018-06-26 23:43:33
  */
 @RestController
@@ -52,17 +53,17 @@ public class StoreController {
   /**
    * 分页获取在使用中的Store
    *
-   * @param currentpage
-   *          当前页 默认值:1 (currentpage必须&ge;1,否则重置为1)
-   * @param pagesize
-   *          每页大小 默认值:10(pagesize必&gt;0,否则重置为1)
+   * @param currentPage
+   *          当前页 默认值:1 (currentPage必须&ge;1,否则重置为1)
+   * @param pageSize
+   *          每页大小 默认值:10(pageSize必&gt;0,否则重置为1)
    * @return
    */
   @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/store")
-  public GetInUseStoreListResponse getInUseStoreList(@RequestParam(value = "currentpage") int currentpage,
-      @RequestParam(value = "pagesize") int pagesize) {
-    return storeService.getInUseStoreList(currentpage, pagesize);
+  public GetInUseStoreListResponse getInUseStoreList(@RequestParam(value = "current_page") int currentPage,
+      @RequestParam(value = "page_size") int pageSize) {
+    return storeService.getInUseStoreList(currentPage, pageSize);
   }
 
   /**
@@ -106,14 +107,14 @@ public class StoreController {
   /**
    * 获取门店信息
    *
-   * @param storeid
+   * @param storeId
    */
   @PreAuthorize(value = "permitAll()")
-  @GetMapping(value = "/store/{storeid}")
-  public Store getStore(@PathVariable("storeid") String storeid) {
-    Store store = storeService.getStore(storeid);
+  @GetMapping(value = "/store/{store_id}")
+  public Store getStore(@PathVariable("store_id") String storeId) {
+    Store store = storeService.getStore(storeId);
     if (null == store) {
-      throw new GoodsException(ResponseCode.STORE_NOT_EXIST, storeid);
+      throw new GoodsException(ResponseCode.STORE_NOT_EXIST, storeId);
     }
     return store;
   }
@@ -121,54 +122,54 @@ public class StoreController {
   /**
    * 获取门店地址信息
    * 
-   * @param storeid
+   * @param storeId
    * @return
    */
   @PreAuthorize(value = "permitAll()")
-  @GetMapping(value = "/store/{storeid}/address")
-  public StoreAddress getStoreAddressByStoreId(@PathVariable("storeid") String storeid) {
-    return getStore(storeid).getStoreAddress();
+  @GetMapping(value = "/store/{store_id}/address")
+  public StoreAddress getStoreAddressByStoreId(@PathVariable("store_id") String storeId) {
+    return getStore(storeId).getStoreAddress();
   }
 
   /**
    * 获取门店地址信息
    * 
-   * @param addressid
+   * @param addressId
    * @return
    */
   @PreAuthorize(value = "permitAll()")
-  @GetMapping(value = "/storeaddress/{addressid}")
-  public StoreAddress getStoreAddressByAddressId(@PathVariable("addressid") String addressid) {
-    return storeService.getStoreAddress(addressid);
+  @GetMapping(value = "/storeaddress/{address_id}")
+  public StoreAddress getStoreAddressByAddressId(@PathVariable("address_id") String addressId) {
+    return storeService.getStoreAddress(addressId);
   }
 
   /**
    * 更新门店信息
    *
-   * @param storeid
+   * @param storeId
    * @param storeRequest
    * @return
    */
   @PreAuthorize("hasAuthority('permission:manager:*')")
-  @PutMapping(value = "/store/{storeid}")
-  public Store updateStore(@PathVariable("storeid") String storeid, @RequestBody Store storeRequest) {
+  @PutMapping(value = "/store/{store_id}")
+  public Store updateStore(@PathVariable("store_id") String storeId, @RequestBody Store storeRequest) {
     if (null == storeRequest) {
       throw new IllegalArgumentException("update store request body is null");
     }
-    return storeService.updateStore(storeid, storeRequest);
+    return storeService.updateStore(storeId, storeRequest);
   }
 
   /**
    * 废弃门店
    *
-   * @param storeid
+   * @param storeId
    */
   @PreAuthorize("hasAuthority('permission:manager:*')")
-  @DeleteMapping(value = "/store/{storeid}")
-  public void deprecateStore(@PathVariable("storeid") String storeid) {
-    Store store = storeService.getStore(storeid);
+  @DeleteMapping(value = "/store/{store_id}")
+  public void deprecateStore(@PathVariable("store_id") String storeId) {
+    Store store = storeService.getStore(storeId);
     if (store != null) {
-      storeService.deprecateStore(storeid);
+      storeService.deprecateStore(storeId);
       imageService.deleteImage(store.getCoverImg());
       imageService.deleteImage(store.getDetailImgList());
     }

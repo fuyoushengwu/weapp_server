@@ -29,67 +29,67 @@ import cn.aijiamuyingfang.server.user.service.UserMessageService;
 @RestController
 public class UserMessageController {
   @Autowired
-  private UserMessageService usermessageService;
+  private UserMessageService userMessageService;
 
   /**
    * 获得用户未读消息数量
    * 
-   * @param userid
+   * @param userId
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated() and #userid.equals(getAuthentication().getName())")
-  @GetMapping(value = "/user/{userid}/message/unread/count")
-  public int getUserUnReadMessageCount(@PathVariable("userid") String userid) {
-    return usermessageService.getUserUnReadMessageCount(userid);
+  @PreAuthorize(value = "isAuthenticated() and #userId.equals(getAuthentication().getName())")
+  @GetMapping(value = "/user/{user_id}/message/unread/count")
+  public int getUserUnReadMessageCount(@PathVariable("user_id") String userId) {
+    return userMessageService.getUserUnReadMessageCount(userId);
   }
 
   /**
    * 分页获取用户消息
    * 
-   * @param userid
-   * @param currentpage
-   * @param pagesize
+   * @param userId
+   * @param currentPage
+   * @param pageSize
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated() and #userid.equals(getAuthentication().getName())")
-  @GetMapping(value = "/user/{userid}/message")
-  public GetMessagesListResponse getUserMessageList(@PathVariable("userid") String userid,
-      @RequestParam("currentpage") int currentpage, @RequestParam("pagesize") int pagesize) {
-    return usermessageService.getUserMessageList(userid, currentpage, pagesize);
+  @PreAuthorize(value = "isAuthenticated() and #userId.equals(getAuthentication().getName())")
+  @GetMapping(value = "/user/{user_id}/message")
+  public GetMessagesListResponse getUserMessageList(@PathVariable("user_id") String userId,
+      @RequestParam("current_page") int currentPage, @RequestParam("page_size") int pageSize) {
+    return userMessageService.getUserMessageList(userId, currentPage, pageSize);
   }
 
   /**
    * 为用户创建消息
    * 
-   * @param userid
-   * @param usermessage
+   * @param userId
+   * @param userMessage
    * @return
    */
   @PreAuthorize(
-      value = "isAuthenticated() and (#userid.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
-  @PostMapping(value = "/user/{userid}/message")
-  public UserMessage createMessage(@PathVariable("userid") String userid, @RequestBody UserMessage usermessage) {
-    if (null == usermessage) {
+      value = "isAuthenticated() and (#userId.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
+  @PostMapping(value = "/user/{user_id}/message")
+  public UserMessage createMessage(@PathVariable("user_id") String userId, @RequestBody UserMessage userMessage) {
+    if (null == userMessage) {
       throw new IllegalArgumentException("usermessage request body is null");
     }
-    if (StringUtils.isEmpty(usermessage.getTitle())) {
+    if (StringUtils.isEmpty(userMessage.getTitle())) {
       throw new IllegalArgumentException("usermessage title is empty");
     }
-    if (null == usermessage.getType()) {
+    if (null == userMessage.getType()) {
       throw new IllegalArgumentException("usermessage type is null");
     }
-    return usermessageService.createMessage(userid, usermessage);
+    return userMessageService.createMessage(userId, userMessage);
   }
 
   /**
    * 删除消息
    * 
-   * @param userid
-   * @param messageid
+   * @param userId
+   * @param messageId
    */
-  @PreAuthorize(value = "isAuthenticated() and #userid.equals(getAuthentication().getName())")
-  @DeleteMapping(value = "/user/{userid}/message/{messageid}")
-  public void deleteMessage(@PathVariable("userid") String userid, @PathVariable("messageid") String messageid) {
-    usermessageService.deleteMessage(userid, messageid);
+  @PreAuthorize(value = "isAuthenticated() and #userId.equals(getAuthentication().getName())")
+  @DeleteMapping(value = "/user/{user_id}/message/{message_id}")
+  public void deleteMessage(@PathVariable("user_id") String userId, @PathVariable("message_id") String messageId) {
+    userMessageService.deleteMessage(userId, messageId);
   }
 }

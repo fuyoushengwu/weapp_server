@@ -2,6 +2,8 @@ package cn.aijiamuyingfang.client.domain.message;
 
 import java.util.Date;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import lombok.Data;
 
 /**
@@ -16,14 +18,14 @@ import lombok.Data;
  * @date 2018-06-27 17:11:10
  */
 @Data
-public class UserMessage {
+public class UserMessage implements Parcelable {
 
   private String id;
 
   /**
    * 用户消息:用户Id;系统消息:-1
    */
-  private String userid;
+  private String userId;
 
   /**
    * 用户消息类型
@@ -59,5 +61,56 @@ public class UserMessage {
    * 是否已读
    */
   private boolean readed;
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(id);
+    dest.writeString(userId);
+    dest.writeParcelable(type, flags);
+    dest.writeString(title);
+    dest.writeString(roundup);
+    dest.writeString(content);
+    dest.writeLong(createTime != null ? createTime.getTime() : -1);
+    dest.writeLong(finishTime != null ? finishTime.getTime() : -1);
+    dest.writeByte((byte) (readed ? 1 : 0));
+  }
+
+  public UserMessage() {
+  }
+
+  private UserMessage(Parcel in) {
+    id = in.readString();
+    userId = in.readString();
+    type = in.readParcelable(UserMessageType.class.getClassLoader());
+    title = in.readString();
+    roundup = in.readString();
+    content = in.readString();
+    long createTimeValue = in.readLong();
+    if (createTimeValue != -1) {
+      createTime = new Date(createTimeValue);
+    }
+    long finishTimeValue = in.readLong();
+    if (finishTimeValue != -1) {
+      finishTime = new Date(finishTimeValue);
+    }
+    readed = in.readByte() != 0;
+  }
+
+  public static final Parcelable.Creator<UserMessage> CREATOR = new Parcelable.Creator<UserMessage>() {
+    @Override
+    public UserMessage createFromParcel(Parcel in) {
+      return new UserMessage(in);
+    }
+
+    @Override
+    public UserMessage[] newArray(int size) {
+      return new UserMessage[size];
+    }
+  };
 
 }

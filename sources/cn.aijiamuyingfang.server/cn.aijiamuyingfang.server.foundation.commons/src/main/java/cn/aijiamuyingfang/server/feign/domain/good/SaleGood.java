@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SaleGood {
-  private String goodid;
+  private String goodId;
 
   private int salecount;
 }

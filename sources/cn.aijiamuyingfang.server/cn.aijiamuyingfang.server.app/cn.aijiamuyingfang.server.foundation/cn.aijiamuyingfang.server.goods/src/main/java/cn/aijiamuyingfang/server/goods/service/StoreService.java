@@ -41,27 +41,27 @@ public class StoreService {
   /**
    * 分页获取在使用中的Store
    * 
-   * @param currentpage
-   *          当前页 (currentpage必须&ge;1,否则重置为1)
-   * @param pagesize
-   *          每页大小 (pagesize必须&gt;0,否则重置为1)
+   * @param currentPage
+   *          当前页 (currentPage必须&ge;1,否则重置为1)
+   * @param pageSize
+   *          每页大小 (pageSize必须&gt;0,否则重置为1)
    * @return
    */
-  public GetInUseStoreListResponse getInUseStoreList(int currentpage, int pagesize) {
-    // currentpage必须>=1,否则重置为1
-    if (currentpage < 1) {
-      currentpage = 1;
+  public GetInUseStoreListResponse getInUseStoreList(int currentPage, int pageSize) {
+    // currentPage必须>=1,否则重置为1
+    if (currentPage < 1) {
+      currentPage = 1;
     }
-    // pagesize必须>0,否则重置为1
-    if (pagesize <= 0) {
-      pagesize = 1;
+    // pageSize必须>0,否则重置为1
+    if (pageSize <= 0) {
+      pageSize = 1;
     }
 
     // PageRequest的Page参数是基于0的,但是currentPage是基于1的,所有将currentPage作为参数传递给PgeRequest时需要'-1'
-    PageRequest pageRequest = new PageRequest(currentpage - 1, pagesize);
+    PageRequest pageRequest = new PageRequest(currentPage - 1, pageSize);
     Page<Store> storePage = storeRepository.findInUseStores(pageRequest);
     GetInUseStoreListResponse response = new GetInUseStoreListResponse();
-    response.setCurrentpage(storePage.getNumber() + 1);
+    response.setCurrentPage(storePage.getNumber() + 1);
     response.setDataList(storePage.getContent());
     response.setTotalpage(storePage.getTotalPages());
     return response;
@@ -89,12 +89,12 @@ public class StoreService {
   /**
    * 获取某个门店信息
    * 
-   * @param storeid
+   * @param storeId
    *          门店ID
    * @return
    */
-  public Store getStore(String storeid) {
-    return storeRepository.findOne(storeid);
+  public Store getStore(String storeId) {
+    return storeRepository.findOne(storeId);
   }
 
   /**
@@ -110,13 +110,13 @@ public class StoreService {
   /**
    * 更新门店信息
    * 
-   * @param storeid
+   * @param storeId
    * @param updateStore
    */
-  public Store updateStore(String storeid, Store updateStore) {
-    Store store = storeRepository.findOne(storeid);
+  public Store updateStore(String storeId, Store updateStore) {
+    Store store = storeRepository.findOne(storeId);
     if (null == store) {
-      throw new GoodsException(ResponseCode.STORE_NOT_EXIST, storeid);
+      throw new GoodsException(ResponseCode.STORE_NOT_EXIST, storeId);
     }
     if (null == updateStore) {
       return store;
@@ -128,12 +128,12 @@ public class StoreService {
   /**
    * 废弃门店
    * 
-   * @param storeid
+   * @param storeId
    */
-  public void deprecateStore(String storeid) {
-    Store store = storeRepository.findOne(storeid);
+  public void deprecateStore(String storeId) {
+    Store store = storeRepository.findOne(storeId);
     if (null == store) {
-      throw new GoodsException(ResponseCode.STORE_NOT_EXIST, storeid);
+      throw new GoodsException(ResponseCode.STORE_NOT_EXIST, storeId);
     }
     store.setDeprecated(true);
     storeRepository.saveAndFlush(store);

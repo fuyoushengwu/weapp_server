@@ -24,9 +24,9 @@ public interface ShopCartClient {
   /**
    * 删除商品
    * 
-   * @param goodid
+   * @param goodId
    * @return
    */
-  @DeleteMapping(value = "/shopcart/good/{goodid}")
-  Future<ResponseBean<Void>> deleteGood(@PathVariable("goodid") String goodid);
+  @DeleteMapping(value = "/shop_cart/good/{good_id}")
+  Future<ResponseBean<Void>> deleteGood(@PathVariable("good_id") String goodId);
 }

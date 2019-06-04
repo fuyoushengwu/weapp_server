@@ -30,24 +30,24 @@ public class CouponTestActions extends AbstractTestAction {
 
   public VoucherItem getVoucherItemOneForGoodOne() throws IOException {
     if (null == voucherItemOne) {
-      VoucherItem voucheritemRequest = new VoucherItem();
-      voucheritemRequest.setName("voucher item 1");
-      voucheritemRequest.setDescription("voucher item 1");
-      voucheritemRequest.setScore(120);
-      voucheritemRequest.setGoodid(getGoodOne().getId());
-      this.voucherItemOne = couponControllerClient.createVoucherItem(voucheritemRequest, getAdminAccessToken());
+      VoucherItem voucherItemRequest = new VoucherItem();
+      voucherItemRequest.setName("voucher item 1");
+      voucherItemRequest.setDescription("voucher item 1");
+      voucherItemRequest.setScore(120);
+      voucherItemRequest.setGoodId(getGoodOne().getId());
+      this.voucherItemOne = couponControllerClient.createVoucherItem(voucherItemRequest, getAdminAccessToken());
     }
     return voucherItemOne;
   }
 
   public VoucherItem getVoucherItemTwoForGoodTwo() throws IOException {
     if (null == voucherItemTwo) {
-      VoucherItem voucheritemRequest = new VoucherItem();
-      voucheritemRequest.setName("voucher item 2");
-      voucheritemRequest.setDescription("voucher item 2");
-      voucheritemRequest.setScore(120);
-      voucheritemRequest.setGoodid(getGoodTwo().getId());
-      this.voucherItemTwo = couponControllerClient.createVoucherItem(voucheritemRequest, getAdminAccessToken());
+      VoucherItem voucherItemRequest = new VoucherItem();
+      voucherItemRequest.setName("voucher item 2");
+      voucherItemRequest.setDescription("voucher item 2");
+      voucherItemRequest.setScore(120);
+      voucherItemRequest.setGoodId(getGoodTwo().getId());
+      this.voucherItemTwo = couponControllerClient.createVoucherItem(voucherItemRequest, getAdminAccessToken());
     }
     return voucherItemTwo;
   }
@@ -58,7 +58,7 @@ public class CouponTestActions extends AbstractTestAction {
       goodVoucherRequest.setName("good voucher 1");
       goodVoucherRequest.setDescription("good voucher 1");
       goodVoucherRequest.setScore(15);
-      goodVoucherRequest.addVoucheritemId(getVoucherItemOneForGoodOne().getId());
+      goodVoucherRequest.addVoucherItemId(getVoucherItemOneForGoodOne().getId());
       this.goodVoucherOne = couponControllerClient.createGoodVoucher(goodVoucherRequest, getAdminAccessToken());
     }
     return goodVoucherOne;
@@ -70,7 +70,7 @@ public class CouponTestActions extends AbstractTestAction {
       goodVoucherRequest.setName("good voucher 2");
       goodVoucherRequest.setDescription("good voucher 2");
       goodVoucherRequest.setScore(15);
-      goodVoucherRequest.addVoucheritemId(getVoucherItemTwoForGoodTwo().getId());
+      goodVoucherRequest.addVoucherItemId(getVoucherItemTwoForGoodTwo().getId());
       this.goodVoucherTwo = couponControllerClient.createGoodVoucher(goodVoucherRequest, getAdminAccessToken());
     }
     return goodVoucherTwo;

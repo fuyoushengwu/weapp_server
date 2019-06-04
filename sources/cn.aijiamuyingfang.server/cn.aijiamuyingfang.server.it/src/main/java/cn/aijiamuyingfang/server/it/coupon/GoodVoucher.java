@@ -49,7 +49,7 @@ public class GoodVoucher {
    * 兑换券可以兑换的项目
    */
   @ElementCollection
-  private List<String> voucheritemIdList = new ArrayList<>();
+  private List<String> voucherItemIdList = new ArrayList<>();
 
   /**
    * 兑换券描述
@@ -80,14 +80,14 @@ public class GoodVoucher {
     if (updateVoucher.score != 0) {
       this.score = updateVoucher.score;
     }
-    if (!CollectionUtils.isEmpty(updateVoucher.voucheritemIdList)) {
-      this.voucheritemIdList = updateVoucher.voucheritemIdList;
+    if (!CollectionUtils.isEmpty(updateVoucher.voucherItemIdList)) {
+      this.voucherItemIdList = updateVoucher.voucherItemIdList;
     }
   }
 
-  public void addVoucheritemId(String voucheritemId) {
-    if (StringUtils.hasContent(voucheritemId)) {
-      this.voucheritemIdList.add(voucheritemId);
+  public void addVoucherItemId(String voucherItemId) {
+    if (StringUtils.hasContent(voucherItemId)) {
+      this.voucherItemIdList.add(voucherItemId);
     }
 
   }

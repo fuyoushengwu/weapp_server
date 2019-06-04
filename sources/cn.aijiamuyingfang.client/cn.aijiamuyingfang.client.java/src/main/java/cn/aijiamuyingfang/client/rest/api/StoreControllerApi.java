@@ -31,15 +31,15 @@ public interface StoreControllerApi {
   /**
    * 分页获取在使用中的Store
    * 
-   * @param currentpage
-   *          当前页 默认值:1 (currentpage必须&ge;1,否则重置为1)
-   * @param pagesize
-   *          每页大小 默认值:10(pagesize必须&gt;0,否则重置为1)
+   * @param currentPage
+   *          当前页 默认值:1 (currentPage必须&ge;1,否则重置为1)
+   * @param pageSize
+   *          每页大小 默认值:10(pageSize必须&gt;0,否则重置为1)
    * @return
    */
   @GET(value = "/goods-service/store")
-  public Call<ResponseBean> getInUseStoreList(@Query(value = "currentpage") int currentpage,
-      @Query(value = "pagesize") int pagesize);
+  public Call<ResponseBean> getInUseStoreList(@Query(value = "current_page") int currentPage,
+      @Query(value = "page_size") int pageSize);
 
   /**
    * 创建门店
@@ -54,33 +54,33 @@ public interface StoreControllerApi {
   /**
    * 获取门店信息
    * 
-   * @param storeid
+   * @param storeId
    * @return
    */
-  @GET(value = "/goods-service/store/{storeid}")
-  public Call<ResponseBean> getStore(@Path("storeid") String storeid);
+  @GET(value = "/goods-service/store/{store_id}")
+  public Call<ResponseBean> getStore(@Path("store_id") String storeId);
 
   /**
    * 更新门店信息
    * 
-   * @param storeid
+   * @param storeId
    * @param storeRequest
    * @param accessToken
    * @return
    */
-  @PUT(value = "/goods-service/store/{storeid}")
-  public Call<ResponseBean> updateStore(@Path("storeid") String storeid, @Body Store storeRequest,
+  @PUT(value = "/goods-service/store/{store_id}")
+  public Call<ResponseBean> updateStore(@Path("store_id") String storeId, @Body Store storeRequest,
       @Query("access_token") String accessToken);
 
   /**
    * 废弃门店
    * 
-   * @param storeid
+   * @param storeId
    * @param accessToken
    * @return
    */
-  @DELETE(value = "/goods-service/store/{storeid}")
-  public Call<ResponseBean> deprecateStore(@Path("storeid") String storeid, @Query("access_token") String accessToken);
+  @DELETE(value = "/goods-service/store/{store_id}")
+  public Call<ResponseBean> deprecateStore(@Path("store_id") String storeId, @Query("access_token") String accessToken);
 
   /**
    * 获取默认门店Id
@@ -101,13 +101,13 @@ public interface StoreControllerApi {
   /**
    * 门店下添加条目
    * 
-   * @param storeid
-   * @param classifyid
+   * @param storeId
+   * @param classifyId
    * @param accessToken
    * @return
    */
-  @PUT(value = "/store/{storeid}/classify/{classifyid}")
-  public Call<ResponseBean> addStoreClassify(@Path("storeid") String storeid, @Path("classifyid") String classifyid,
+  @PUT(value = "/store/{store_id}/classify/{classify_id}")
+  public Call<ResponseBean> addStoreClassify(@Path("store_id") String storeId, @Path("classify_id") String classifyId,
       @Query("access_token") String accessToken);
 
 }

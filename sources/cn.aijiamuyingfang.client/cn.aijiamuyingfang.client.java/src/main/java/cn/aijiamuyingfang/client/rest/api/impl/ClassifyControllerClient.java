@@ -100,12 +100,12 @@ public class ClassifyControllerClient {
   /**
    * 获取某个条目
    * 
-   * @param classifyid
+   * @param classifyId
    * @return
    * @throws IOException
    */
-  public Classify getClassify(String classifyid) throws IOException {
-    Response<ResponseBean> response = classifyControllerApi.getClassify(classifyid).execute();
+  public Classify getClassify(String classifyId) throws IOException {
+    Response<ResponseBean> response = classifyControllerApi.getClassify(classifyId).execute();
     return getClassifyFromResponse(response, "get classify  return code is '200',but return data is null");
   }
 
@@ -141,17 +141,17 @@ public class ClassifyControllerClient {
   /**
    * 废弃条目
    * 
-   * @param classifyid
+   * @param classifyId
    * @param accessToken
    * @param async
    * @throws IOException
    */
-  public void deleteClassify(String classifyid, String accessToken, boolean async) throws IOException {
+  public void deleteClassify(String classifyId, String accessToken, boolean async) throws IOException {
     if (async) {
-      classifyControllerApi.deleteClassify(classifyid, accessToken).enqueue(Empty_Callback);
+      classifyControllerApi.deleteClassify(classifyId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = classifyControllerApi.deleteClassify(classifyid, accessToken).execute();
+    Response<ResponseBean> response = classifyControllerApi.deleteClassify(classifyId, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -194,34 +194,34 @@ public class ClassifyControllerClient {
   /**
    * 获得条目下的所有子条目
    * 
-   * @param classifyid
+   * @param classifyId
    * @return
    * @throws IOException
    */
-  public List<Classify> getSubClassifyList(String classifyid) throws IOException {
-    Response<ResponseBean> response = classifyControllerApi.getSubClassifyList(classifyid).execute();
+  public List<Classify> getSubClassifyList(String classifyId) throws IOException {
+    Response<ResponseBean> response = classifyControllerApi.getSubClassifyList(classifyId).execute();
     return getClassifyListFromResponse(response, "get sub classify list return code is '200',but return data is null");
   }
 
   /**
    * 创建子条目
    * 
-   * @param classifyid
+   * @param classifyId
    * @param coverImageFile
    * @param classifyRequest
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public Classify createSubClassify(String classifyid, File coverImageFile, Classify classifyRequest,
+  public Classify createSubClassify(String classifyId, File coverImageFile, Classify classifyRequest,
       String accessToken) throws IOException {
     Response<ResponseBean> response = null;
     if (null == coverImageFile) {
-      response = classifyControllerApi.createSubClassify(classifyid, convert(null, classifyRequest), accessToken)
+      response = classifyControllerApi.createSubClassify(classifyId, convert(null, classifyRequest), accessToken)
           .execute();
     } else {
       response = classifyControllerApi
-          .createSubClassify(classifyid, convert(coverImageFile, classifyRequest), accessToken).execute();
+          .createSubClassify(classifyId, convert(coverImageFile, classifyRequest), accessToken).execute();
     }
     return getClassifyFromResponse(response, "create sub classify  return code is '200',but return data is null");
   }
@@ -229,19 +229,19 @@ public class ClassifyControllerClient {
   /**
    * 异步创建子条目
    * 
-   * @param classifyid
+   * @param classifyId
    * @param coverImageFile
    * @param classifyRequest
    * @param accessToken
    * @param callback
    */
-  public void createSubClassifyAsync(String classifyid, File coverImageFile, Classify classifyRequest,
+  public void createSubClassifyAsync(String classifyId, File coverImageFile, Classify classifyRequest,
       String accessToken, Callback<ResponseBean> callback) {
     if (null == coverImageFile) {
-      classifyControllerApi.createSubClassify(classifyid, convert(null, classifyRequest), accessToken)
+      classifyControllerApi.createSubClassify(classifyId, convert(null, classifyRequest), accessToken)
           .enqueue(callback);
     } else {
-      classifyControllerApi.createSubClassify(classifyid, convert(coverImageFile, classifyRequest), accessToken)
+      classifyControllerApi.createSubClassify(classifyId, convert(coverImageFile, classifyRequest), accessToken)
           .enqueue(callback);
     }
   }
@@ -264,18 +264,18 @@ public class ClassifyControllerClient {
   /**
    * 条目下添加商品
    * 
-   * @param classifyid
-   * @param goodid
+   * @param classifyId
+   * @param goodId
    * @param accessToken
    * @param async
    * @throws IOException
    */
-  public void addClassifyGood(String classifyid, String goodid, String accessToken, boolean async) throws IOException {
+  public void addClassifyGood(String classifyId, String goodId, String accessToken, boolean async) throws IOException {
     if (async) {
-      classifyControllerApi.addClassifyGood(classifyid, goodid, accessToken).enqueue(Empty_Callback);
+      classifyControllerApi.addClassifyGood(classifyId, goodId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = classifyControllerApi.addClassifyGood(classifyid, goodid, accessToken).execute();
+    Response<ResponseBean> response = classifyControllerApi.addClassifyGood(classifyId, goodId, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {

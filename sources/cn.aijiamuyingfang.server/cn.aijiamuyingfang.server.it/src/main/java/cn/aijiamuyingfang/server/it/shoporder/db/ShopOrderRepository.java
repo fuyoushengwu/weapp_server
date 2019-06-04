@@ -30,39 +30,39 @@ public interface ShopOrderRepository extends JpaRepository<ShopOrder, String> {
   /**
    * 计算不同状态和送货方式下订单总数
    * 
-   * @param userid
+   * @param userId
    *          用户id
    * @param statusList
-   * @param sendtypeList
+   * @param sendTypeList
    * @return
    */
-  int countByUseridAndStatusInAndSendtypeIn(String userid, List<ShopOrderStatus> statusList,
-      List<SendType> sendtypeList);
+  int countByUserIdAndStatusInAndSendtypeIn(String userId, List<ShopOrderStatus> statusList,
+      List<SendType> sendTypeList);
 
   /**
    * 根据订单状态、配送方式分页查找用户的订单
    * 
-   * @param userid
+   * @param userId
    *          用户id
    * @param statusList
-   * @param sendtypeList
+   * @param sendTypeList
    * @param pageable
    *          分页信息
    * @return
    */
-  Page<ShopOrder> findByUseridAndStatusInAndSendtypeIn(String userid, List<ShopOrderStatus> statusList,
-      List<SendType> sendtypeList, Pageable pageable);
+  Page<ShopOrder> findByUserIdAndStatusInAndSendtypeIn(String userId, List<ShopOrderStatus> statusList,
+      List<SendType> sendTypeList, Pageable pageable);
 
   /**
    * 根据订单状态、配送方式分页查找所有订单
    * 
    * @param statusList
-   * @param sendtypeList
+   * @param sendTypeList
    * @param pageable
    *          分页信息
    * @return
    */
-  Page<ShopOrder> findByStatusInAndSendtypeIn(List<ShopOrderStatus> statusList, List<SendType> sendtypeList,
+  Page<ShopOrder> findByStatusInAndSendtypeIn(List<ShopOrderStatus> statusList, List<SendType> sendTypeList,
       Pageable pageable);
 
   /**
@@ -86,7 +86,7 @@ public interface ShopOrderRepository extends JpaRepository<ShopOrder, String> {
   /**
    * 查找包含某件商品的预约单
    * 
-   * @param goodid
+   * @param goodId
    *          商品id
    * @return
    */
@@ -94,5 +94,5 @@ public interface ShopOrderRepository extends JpaRepository<ShopOrder, String> {
       value = "select * from shop_order where status=1 and id in (select shop_order_id from shop_order_order_item_list where "
           + "order_item_list_id in (select id from shop_order_item  where good_id=:good_id))",
       nativeQuery = true)
-  List<ShopOrder> findPreOrderContainsGoodid(@Param("good_id") String goodid);
+  List<ShopOrder> findPreOrderContainsGoodid(@Param("good_id") String goodId);
 }

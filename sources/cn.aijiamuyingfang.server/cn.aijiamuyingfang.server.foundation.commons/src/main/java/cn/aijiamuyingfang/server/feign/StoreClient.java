@@ -21,9 +21,21 @@ import cn.aijiamuyingfang.server.feign.domain.store.StoreAddress;
  */
 @FeignClient(name = "goods-service")
 public interface StoreClient {
-  @GetMapping(value = "/store/{storeid}")
-  ResponseBean<Store> getStore(@PathVariable("storeid") String storeid);
+  /**
+   * 获取门店
+   * 
+   * @param storeId
+   * @return
+   */
+  @GetMapping(value = "/store/{store_id}")
+  ResponseBean<Store> getStore(@PathVariable("store_id") String storeId);
 
-  @GetMapping(value = "/storeaddress/{addressid}")
-  ResponseBean<StoreAddress> getStoreAddressByAddressId(@PathVariable("addressid") String addressid);
+  /**
+   * 获取门店地址
+   * 
+   * @param addressId
+   * @return
+   */
+  @GetMapping(value = "/storeaddress/{address_id}")
+  ResponseBean<StoreAddress> getStoreAddressByAddressId(@PathVariable("address_id") String addressId);
 }

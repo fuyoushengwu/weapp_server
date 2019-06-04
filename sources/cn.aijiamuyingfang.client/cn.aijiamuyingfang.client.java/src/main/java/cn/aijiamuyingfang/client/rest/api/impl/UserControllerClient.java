@@ -57,26 +57,26 @@ public class UserControllerClient {
   /**
    * 获取用户
    * 
-   * @param userid
+   * @param userId
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public User getUser(String userid, String accessToken) throws IOException {
-    Response<ResponseBean> response = userControllerApi.getUser(userid, accessToken).execute();
+  public User getUser(String userId, String accessToken) throws IOException {
+    Response<ResponseBean> response = userControllerApi.getUser(userId, accessToken).execute();
     return getUserFromResponse(response, "get user  return code is '200',but return data is null");
   }
 
   /**
    * 获取用户
    * 
-   * @param userid
+   * @param userId
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public GetUserPhoneResponse getUserPhone(String userid, String accessToken) throws IOException {
-    Response<ResponseBean> response = userControllerApi.getUserPhone(userid, accessToken).execute();
+  public GetUserPhoneResponse getUserPhone(String userId, String accessToken) throws IOException {
+    Response<ResponseBean> response = userControllerApi.getUserPhone(userId, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -142,14 +142,14 @@ public class UserControllerClient {
   /**
    * 更新用户信息
    * 
-   * @param userid
+   * @param userId
    * @param user
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public User updateUser(String userid, User user, String accessToken) throws IOException {
-    Response<ResponseBean> response = userControllerApi.updateUser(userid, user, accessToken).execute();
+  public User updateUser(String userId, User user, String accessToken) throws IOException {
+    Response<ResponseBean> response = userControllerApi.updateUser(userId, user, accessToken).execute();
     return getUserFromResponse(response, "update user  return code is '200',but return data is null");
   }
 
@@ -185,25 +185,25 @@ public class UserControllerClient {
   /**
    * 异步更新用户信息
    * 
-   * @param userid
+   * @param userId
    * @param user
    * @param accessToken
    * @param callback
    */
-  public void updateUserAsync(String userid, User user, String accessToken, Callback<ResponseBean> callback) {
-    userControllerApi.updateUser(userid, user, accessToken).enqueue(callback);
+  public void updateUserAsync(String userId, User user, String accessToken, Callback<ResponseBean> callback) {
+    userControllerApi.updateUser(userId, user, accessToken).enqueue(callback);
   }
 
   /**
    * 获取用户收件地址
    * 
-   * @param userid
+   * @param userId
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public List<RecieveAddress> getUserRecieveAddressList(String userid, String accessToken) throws IOException {
-    Response<ResponseBean> response = userControllerApi.getUserRecieveAddressList(userid, accessToken).execute();
+  public List<RecieveAddress> getUserRecieveAddressList(String userId, String accessToken) throws IOException {
+    Response<ResponseBean> response = userControllerApi.getUserRecieveAddressList(userId, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -228,15 +228,15 @@ public class UserControllerClient {
   /**
    * 给用户添加收件地址
    * 
-   * @param userid
+   * @param userId
    * @param request
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public RecieveAddress addUserRecieveAddress(String userid, RecieveAddress request, String accessToken)
+  public RecieveAddress addUserRecieveAddress(String userId, RecieveAddress request, String accessToken)
       throws IOException {
-    Response<ResponseBean> response = userControllerApi.addUserRecieveAddress(userid, request, accessToken).execute();
+    Response<ResponseBean> response = userControllerApi.addUserRecieveAddress(userId, request, accessToken).execute();
     return getRecieveAddressFromResponse(response,
         "add user recieve address  return code is '200',but return data is null");
   }
@@ -244,43 +244,43 @@ public class UserControllerClient {
   /**
    * 异步给用户添加收件地址
    * 
-   * @param userid
+   * @param userId
    * @param request
    * @param accessToken
    * @param callback
    */
-  public void addUserRecieveAddressAsync(String userid, RecieveAddress request, String accessToken,
+  public void addUserRecieveAddressAsync(String userId, RecieveAddress request, String accessToken,
       Callback<ResponseBean> callback) {
-    userControllerApi.addUserRecieveAddress(userid, request, accessToken).enqueue(callback);
+    userControllerApi.addUserRecieveAddress(userId, request, accessToken).enqueue(callback);
   }
 
   /**
    * 获取收件地址
    * 
-   * @param userid
-   * @param addressid
+   * @param userId
+   * @param addressId
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public RecieveAddress getRecieveAddress(String userid, String addressid, String accessToken) throws IOException {
-    Response<ResponseBean> response = userControllerApi.getRecieveAddress(userid, addressid, accessToken).execute();
+  public RecieveAddress getRecieveAddress(String userId, String addressId, String accessToken) throws IOException {
+    Response<ResponseBean> response = userControllerApi.getRecieveAddress(userId, addressId, accessToken).execute();
     return getRecieveAddressFromResponse(response, "get recieve address  return code is '200',but return data is null");
   }
 
   /**
    * 更新收件地址信息
    * 
-   * @param userid
-   * @param addressid
+   * @param userId
+   * @param addressId
    * @param request
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public RecieveAddress updateRecieveAddress(String userid, String addressid, RecieveAddress request,
+  public RecieveAddress updateRecieveAddress(String userId, String addressId, RecieveAddress request,
       String accessToken) throws IOException {
-    Response<ResponseBean> response = userControllerApi.updateRecieveAddress(userid, addressid, request, accessToken)
+    Response<ResponseBean> response = userControllerApi.updateRecieveAddress(userId, addressId, request, accessToken)
         .execute();
     return getRecieveAddressFromResponse(response,
         "update recieve address  return code is '200',but return data is null");
@@ -321,34 +321,34 @@ public class UserControllerClient {
   /**
    * 异步更新收件地址信息
    * 
-   * @param userid
-   * @param addressid
+   * @param userId
+   * @param addressId
    * @param request
    * @param accessToken
    * @param callback
    */
-  public void updateRecieveAddressAsync(String userid, String addressid, RecieveAddress request, String accessToken,
+  public void updateRecieveAddressAsync(String userId, String addressId, RecieveAddress request, String accessToken,
       Callback<ResponseBean> callback) {
-    userControllerApi.updateRecieveAddress(userid, addressid, request, accessToken).enqueue(callback);
+    userControllerApi.updateRecieveAddress(userId, addressId, request, accessToken).enqueue(callback);
   }
 
   /**
    * 废弃收件地址
    * 
-   * @param userid
-   * @param addressid
+   * @param userId
+   * @param addressId
    * @param accessToken
    * @param async
    * @throws IOException
    */
-  public void deprecateRecieveAddress(String userid, String addressid, String accessToken, boolean async)
+  public void deprecateRecieveAddress(String userId, String addressId, String accessToken, boolean async)
       throws IOException {
     if (async) {
-      userControllerApi.deprecateRecieveAddress(userid, addressid, accessToken).enqueue(Empty_Callback);
+      userControllerApi.deprecateRecieveAddress(userId, addressId, accessToken).enqueue(Empty_Callback);
       return;
     }
     Response<
-        ResponseBean> response = userControllerApi.deprecateRecieveAddress(userid, addressid, accessToken).execute();
+        ResponseBean> response = userControllerApi.deprecateRecieveAddress(userId, addressId, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {

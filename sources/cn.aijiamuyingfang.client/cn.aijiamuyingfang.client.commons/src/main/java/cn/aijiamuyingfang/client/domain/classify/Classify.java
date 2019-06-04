@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.client.domain.classify;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import cn.aijiamuyingfang.client.domain.ImageSource;
 import lombok.Data;
 
@@ -15,7 +17,7 @@ import lombok.Data;
  * @date 2018-06-27 00:12:32
  */
 @Data
-public class Classify {
+public class Classify implements Parcelable {
   /**
    * 条目Id
    */
@@ -35,4 +37,39 @@ public class Classify {
    * 条目封面
    */
   private ImageSource coverImg;
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(id);
+    dest.writeString(name);
+    dest.writeInt(level);
+    dest.writeParcelable(coverImg, flags);
+  }
+
+  public Classify() {
+  }
+
+  private Classify(Parcel in) {
+    id = in.readString();
+    name = in.readString();
+    level = in.readInt();
+    coverImg = in.readParcelable(Classify.class.getClassLoader());
+  }
+
+  public static final Parcelable.Creator<Classify> CREATOR = new Parcelable.Creator<Classify>() {
+    @Override
+    public Classify createFromParcel(Parcel in) {
+      return new Classify(in);
+    }
+
+    @Override
+    public Classify[] newArray(int size) {
+      return new Classify[size];
+    }
+  };
 }

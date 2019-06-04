@@ -152,7 +152,7 @@ public abstract class AbstractTestAction {
   protected ImageSourceRepository imageSourceRepository;
 
   @Autowired
-  protected ShopCartRepository shopcartRepository;
+  protected ShopCartRepository shopCartRepository;
 
   @Autowired
   protected UserVoucherRepository userVoucherRepository;
@@ -161,7 +161,7 @@ public abstract class AbstractTestAction {
   protected GoodVoucherRepository goodvoucherRepository;
 
   @Autowired
-  protected VoucherItemRepository voucheritemRepository;
+  protected VoucherItemRepository voucherItemRepository;
 
   @Autowired
   protected FileControllerClient fileControllerClient;
@@ -176,7 +176,7 @@ public abstract class AbstractTestAction {
   protected PreviewOrderRepository previeworderRepository;
 
   @Autowired
-  protected ShopCartControllerClient shopcartControllerClient;
+  protected ShopCartControllerClient shopCartControllerClient;
 
   @Autowired
   protected ShopOrderRepository shoporderRepository;
@@ -303,66 +303,66 @@ public abstract class AbstractTestAction {
 
   public ShopCart addGoodOne10() throws IOException {
     CreateShopCartRequest request = new CreateShopCartRequest();
-    request.setGoodid(getGoodOne().getId());
+    request.setGoodId(getGoodOne().getId());
     request.setGoodNum(10);
-    return shopcartControllerClient.addShopCart(ADMIN_USER_ID, request, getAdminAccessToken());
+    return shopCartControllerClient.addShopCart(ADMIN_USER_ID, request, getAdminAccessToken());
   }
 
   public ShopCart addGoodTwo10() throws IOException {
     CreateShopCartRequest request = new CreateShopCartRequest();
-    request.setGoodid(getGoodTwo().getId());
+    request.setGoodId(getGoodTwo().getId());
     request.setGoodNum(10);
-    return shopcartControllerClient.addShopCart(ADMIN_USER_ID, request, getAdminAccessToken());
+    return shopCartControllerClient.addShopCart(ADMIN_USER_ID, request, getAdminAccessToken());
   }
 
-  public void deleteShopCart(ShopCart shopcart) throws IOException {
-    shopcartControllerClient.deleteShopCart(ADMIN_USER_ID, shopcart.getId(), getAdminAccessToken(), false);
+  public void deleteShopCart(ShopCart shopCart) throws IOException {
+    shopCartControllerClient.deleteShopCart(ADMIN_USER_ID, shopCart.getId(), getAdminAccessToken(), false);
   }
 
-  public void deleteSenderOneShopCart(ShopCart shopcart) throws IOException {
-    shopcartControllerClient.deleteShopCart(getSenderOne().getId(), shopcart.getId(), getSenderOneAccessToken(), false);
+  public void deleteSenderOneShopCart(ShopCart shopCart) throws IOException {
+    shopCartControllerClient.deleteShopCart(getSenderOne().getId(), shopCart.getId(), getSenderOneAccessToken(), false);
   }
 
-  public void deleteSenderTwoShopCart(ShopCart shopcart) throws IOException {
-    shopcartControllerClient.deleteShopCart(getSenderTwo().getId(), shopcart.getId(), getSenderTwoAccessToken(), false);
+  public void deleteSenderTwoShopCart(ShopCart shopCart) throws IOException {
+    shopCartControllerClient.deleteShopCart(getSenderTwo().getId(), shopCart.getId(), getSenderTwoAccessToken(), false);
   }
 
   public ShopCart senderOneAdd5GoodOne() throws IOException {
     CreateShopCartRequest addShopcartItemRequest = new CreateShopCartRequest();
-    addShopcartItemRequest.setGoodid(getGoodOne().getId());
+    addShopcartItemRequest.setGoodId(getGoodOne().getId());
     addShopcartItemRequest.setGoodNum(5);
-    return shopcartControllerClient.addShopCart(getSenderOne().getId(), addShopcartItemRequest,
+    return shopCartControllerClient.addShopCart(getSenderOne().getId(), addShopcartItemRequest,
         getSenderOneAccessToken());
   }
 
   public ShopCart senderOneAdd5GoodTwo() throws IOException {
     CreateShopCartRequest addShopcartItemRequest = new CreateShopCartRequest();
-    addShopcartItemRequest.setGoodid(getGoodTwo().getId());
+    addShopcartItemRequest.setGoodId(getGoodTwo().getId());
     addShopcartItemRequest.setGoodNum(5);
-    return shopcartControllerClient.addShopCart(getSenderOne().getId(), addShopcartItemRequest,
+    return shopCartControllerClient.addShopCart(getSenderOne().getId(), addShopcartItemRequest,
         getSenderOneAccessToken());
   }
 
   public ShopCart senderOneAdd10GoodOne() throws IOException {
     CreateShopCartRequest createShopCartRequest = new CreateShopCartRequest();
-    createShopCartRequest.setGoodid(getGoodOne().getId());
+    createShopCartRequest.setGoodId(getGoodOne().getId());
     createShopCartRequest.setGoodNum(10);
-    return shopcartControllerClient.addShopCart(getSenderOne().getId(), createShopCartRequest,
+    return shopCartControllerClient.addShopCart(getSenderOne().getId(), createShopCartRequest,
         getSenderOneAccessToken());
   }
 
   public ShopCart senderOneAdd10GoodTwo() throws IOException {
     CreateShopCartRequest addShopcartItemRequest = new CreateShopCartRequest();
-    addShopcartItemRequest.setGoodid(getGoodTwo().getId());
+    addShopcartItemRequest.setGoodId(getGoodTwo().getId());
     addShopcartItemRequest.setGoodNum(10);
-    return shopcartControllerClient.addShopCart(getSenderOne().getId(), addShopcartItemRequest,
+    return shopCartControllerClient.addShopCart(getSenderOne().getId(), addShopcartItemRequest,
         getSenderOneAccessToken());
   }
 
   public ShopOrder senderOneBuy() throws IOException {
     CreateShopOrderRequest shoporderRequest = new CreateShopOrderRequest();
-    shoporderRequest.setSendtype(SendType.THIRDSEND);
-    shoporderRequest.setAddressid(getSenderOneRecieveOne().getId());
+    shoporderRequest.setSendType(SendType.THIRDSEND);
+    shoporderRequest.setAddressId(getSenderOneRecieveOne().getId());
     return shoporderControllerClient.createUserShopOrder(getSenderOne().getId(), shoporderRequest,
         getSenderOneAccessToken());
   }
@@ -384,48 +384,48 @@ public abstract class AbstractTestAction {
 
   public ShopOrder senderTwoBuy() throws IOException {
     CreateShopOrderRequest shoporderRequest = new CreateShopOrderRequest();
-    shoporderRequest.setSendtype(SendType.THIRDSEND);
-    shoporderRequest.setAddressid(getSenderTwoRecieveOne().getId());
+    shoporderRequest.setSendType(SendType.THIRDSEND);
+    shoporderRequest.setAddressId(getSenderTwoRecieveOne().getId());
     return shoporderControllerClient.createUserShopOrder(getSenderTwo().getId(), shoporderRequest,
         getSenderTwoAccessToken());
   }
 
   public PreviewOrder senderOnePreviewGoodOne() throws IOException {
-    List<String> goodids = new ArrayList<>();
-    goodids.add(getGoodOne().getId());
-    return previeworderControllerClient.generatePreviewOrder(getSenderOne().getId(), goodids,
+    List<String> goodIdList = new ArrayList<>();
+    goodIdList.add(getGoodOne().getId());
+    return previeworderControllerClient.generatePreviewOrder(getSenderOne().getId(), goodIdList,
         getSenderOneAccessToken());
   }
 
   public PreviewOrder senderOnePreviewAllGood() throws IOException {
-    List<String> goodids = new ArrayList<>();
-    goodids.add(getGoodOne().getId());
-    goodids.add(getGoodTwo().getId());
-    return previeworderControllerClient.generatePreviewOrder(getSenderOne().getId(), goodids,
+    List<String> goodIdList = new ArrayList<>();
+    goodIdList.add(getGoodOne().getId());
+    goodIdList.add(getGoodTwo().getId());
+    return previeworderControllerClient.generatePreviewOrder(getSenderOne().getId(), goodIdList,
         getSenderOneAccessToken());
   }
 
   public PreviewOrder senderTwoPreviewAllGood() throws IOException {
-    List<String> goodids = new ArrayList<>();
-    goodids.add(getGoodOne().getId());
-    goodids.add(getGoodTwo().getId());
-    return previeworderControllerClient.generatePreviewOrder(getSenderTwo().getId(), goodids,
+    List<String> goodIdList = new ArrayList<>();
+    goodIdList.add(getGoodOne().getId());
+    goodIdList.add(getGoodTwo().getId());
+    return previeworderControllerClient.generatePreviewOrder(getSenderTwo().getId(), goodIdList,
         getSenderTwoAccessToken());
   }
 
   public ShopCart senderTwoAdd10GoodOne() throws IOException {
     CreateShopCartRequest addShopcartItemRequest = new CreateShopCartRequest();
-    addShopcartItemRequest.setGoodid(getGoodOne().getId());
+    addShopcartItemRequest.setGoodId(getGoodOne().getId());
     addShopcartItemRequest.setGoodNum(10);
-    return shopcartControllerClient.addShopCart(getSenderTwo().getId(), addShopcartItemRequest,
+    return shopCartControllerClient.addShopCart(getSenderTwo().getId(), addShopcartItemRequest,
         getSenderTwoAccessToken());
   }
 
   public ShopCart senderTwoAdd10GoodTwo() throws IOException {
     CreateShopCartRequest addShopcartItemRequest = new CreateShopCartRequest();
-    addShopcartItemRequest.setGoodid(getGoodTwo().getId());
+    addShopcartItemRequest.setGoodId(getGoodTwo().getId());
     addShopcartItemRequest.setGoodNum(10);
-    return shopcartControllerClient.addShopCart(getSenderTwo().getId(), addShopcartItemRequest,
+    return shopCartControllerClient.addShopCart(getSenderTwo().getId(), addShopcartItemRequest,
         getSenderTwoAccessToken());
   }
 
@@ -563,7 +563,7 @@ public abstract class AbstractTestAction {
 
   @TargetDataSource(name = "weapp-shoporder")
   public void clearShopCart() {
-    shopcartRepository.deleteAll();
+    shopCartRepository.deleteAll();
   }
 
   @TargetDataSource(name = "weapp-shoporder")
@@ -585,7 +585,7 @@ public abstract class AbstractTestAction {
 
   @TargetDataSource(name = "weapp-coupon")
   public void clearVoucherItem() {
-    voucheritemRepository.deleteAll();
+    voucherItemRepository.deleteAll();
     voucherItemOne = null;
     voucherItemTwo = null;
   }

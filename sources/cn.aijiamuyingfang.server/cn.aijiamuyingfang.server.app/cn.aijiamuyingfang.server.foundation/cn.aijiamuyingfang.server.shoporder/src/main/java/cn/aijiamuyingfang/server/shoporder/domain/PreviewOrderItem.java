@@ -38,7 +38,7 @@ public class PreviewOrderItem {
   /**
    * 关联的购物车项Id
    */
-  private String shopcartId;
+  private String shopCartId;
 
   /**
    * 商品Id
@@ -48,18 +48,18 @@ public class PreviewOrderItem {
   /**
    * 通过ShopCart生成PreviewOrderItem
    * 
-   * @param shopcart
+   * @param shopCart
    *          购物车项
    * @return 预览项
    */
-  public static PreviewOrderItem fromShopCart(ShopCart shopcart) {
-    if (null == shopcart) {
+  public static PreviewOrderItem fromShopCart(ShopCart shopCart) {
+    if (null == shopCart) {
       return null;
     }
     PreviewOrderItem previeworderItem = new PreviewOrderItem();
-    previeworderItem.setCount(shopcart.getCount());
-    previeworderItem.setGoodId(shopcart.getGoodId());
-    previeworderItem.setShopcartId(shopcart.getId());
+    previeworderItem.setCount(shopCart.getCount());
+    previeworderItem.setGoodId(shopCart.getGoodId());
+    previeworderItem.setShopCartId(shopCart.getId());
     return previeworderItem;
   }
 

@@ -35,45 +35,45 @@ public class PreviewOrderController {
   /**
    * 更新预览的商品项
    * 
-   * @param userid
-   * @param previewitemId
+   * @param userId
+   * @param previewItemId
    * @param request
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated() and #userid.equals(getAuthentication().getName())")
-  @PutMapping(value = "/user/{userid}/previeworder/item/{previewitemId}")
-  public PreviewOrderItem updatePreviewOrderItem(@PathVariable("userid") String userid,
-      @PathVariable("previewitemId") String previewitemId, @RequestBody PreviewOrderItem request) {
+  @PreAuthorize(value = "isAuthenticated() and #userId.equals(getAuthentication().getName())")
+  @PutMapping(value = "/user/{user_id}/previeworder/item/{preview_item_id}")
+  public PreviewOrderItem updatePreviewOrderItem(@PathVariable("user_id") String userId,
+      @PathVariable("preview_item_id") String previewItemId, @RequestBody PreviewOrderItem request) {
     if (null == request) {
       throw new IllegalArgumentException("update previeworderitem request is null");
     }
-    return previeworderService.updatePreviewOrderItem(userid, previewitemId, request);
+    return previeworderService.updatePreviewOrderItem(userId, previewItemId, request);
   }
 
   /**
    * 删除预览的商品项
    * 
-   * @param userid
+   * @param userId
    * @param previewItemId
    */
-  @PreAuthorize(value = "isAuthenticated() and #userid.equals(getAuthentication().getName())")
-  @DeleteMapping(value = "/user/{userid}/previeworder/item/{previewItemId}")
-  public void deletePreviewOrderItem(@PathVariable("userid") String userid,
+  @PreAuthorize(value = "isAuthenticated() and #userId.equals(getAuthentication().getName())")
+  @DeleteMapping(value = "/user/{user_id}/previeworder/item/{previewItemId}")
+  public void deletePreviewOrderItem(@PathVariable("user_id") String userId,
       @PathVariable("previewItemId") String previewItemId) {
-    previeworderService.deletePreviewOrderItem(userid, previewItemId);
+    previeworderService.deletePreviewOrderItem(userId, previewItemId);
   }
 
   /**
    * 生成用户的预览订单
    * 
-   * @param userid
-   * @param goodids
+   * @param userId
+   * @param goodIdList
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated() and #userid.equals(getAuthentication().getName())")
-  @GetMapping(value = "/user/{userid}/previeworder")
-  public PreviewOrder generatePreviewOrder(@PathVariable("userid") String userid,
-      @RequestParam(name = "goodids", required = false) List<String> goodids) {
-    return previeworderService.generatePreviewOrder(userid, goodids);
+  @PreAuthorize(value = "isAuthenticated() and #userId.equals(getAuthentication().getName())")
+  @GetMapping(value = "/user/{user_id}/previeworder")
+  public PreviewOrder generatePreviewOrder(@PathVariable("user_id") String userId,
+      @RequestParam(name = "good_id", required = false) List<String> goodIdList) {
+    return previeworderService.generatePreviewOrder(userId, goodIdList);
   }
 }

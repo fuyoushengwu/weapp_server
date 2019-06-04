@@ -104,7 +104,7 @@ public class PreviewOrderControllerTest {
 
     PreviewOrderItem updatePreviewOrderItemRequest = new PreviewOrderItem();
     updatePreviewOrderItemRequest.setCount(1);
-    updatePreviewOrderItemRequest.setShopcartId(previeworderItem.getId());
+    updatePreviewOrderItemRequest.setShopCartId(previeworderItem.getId());
     updatePreviewOrderItemRequest.setGoodId(previeworderItem.getGoodId());
     PreviewOrderItem updatedItem = previeworderControllerClient.updatePreviewOrderItem(
         testActions.getSenderOne().getId(), previeworderItem.getId(), updatePreviewOrderItemRequest,
@@ -113,7 +113,7 @@ public class PreviewOrderControllerTest {
 
     updatePreviewOrderItemRequest = new PreviewOrderItem();
     updatePreviewOrderItemRequest.setCount(0);
-    updatePreviewOrderItemRequest.setShopcartId(previeworderItem.getId());
+    updatePreviewOrderItemRequest.setShopCartId(previeworderItem.getId());
     updatePreviewOrderItemRequest.setGoodId(previeworderItem.getGoodId());
     updatedItem = previeworderControllerClient.updatePreviewOrderItem(testActions.getSenderOne().getId(),
         previeworderItem.getId(), updatePreviewOrderItemRequest, testActions.getSenderOneAccessToken());
@@ -132,7 +132,7 @@ public class PreviewOrderControllerTest {
 
     PreviewOrderItem updatePreviewItemRequest = new PreviewOrderItem();
     updatePreviewItemRequest.setCount(1);
-    updatePreviewItemRequest.setShopcartId(previeworderItem.getId());
+    updatePreviewItemRequest.setShopCartId(previeworderItem.getId());
     updatePreviewItemRequest.setGoodId(previeworderItem.getGoodId());
     previeworderControllerClient.updatePreviewOrderItem(testActions.getSenderOne().getId(), previeworderItem.getId(),
         updatePreviewItemRequest, testActions.getSenderOneAccessToken());

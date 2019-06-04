@@ -42,29 +42,29 @@ public class CouponController {
   /**
    * 分页获取用户兑换券
    * 
-   * @param userid
-   * @param currentpage
-   * @param pagesize
+   * @param userId
+   * @param currentPage
+   * @param pageSize
    * @return
    */
   @PreAuthorize(
-      value = "isAuthenticated() and (#userid.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
-  @GetMapping(value = "/user/{userid}/coupon/uservoucher")
-  public GetUserVoucherListResponse getUserVoucherList(@PathVariable("userid") String userid,
-      @RequestParam("currentpage") int currentpage, @RequestParam("pagesize") int pagesize) {
-    return couponService.getUserVoucherList(userid, currentpage, pagesize);
+      value = "isAuthenticated() and (#userId.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
+  @GetMapping(value = "/user/{user_id}/coupon/uservoucher")
+  public GetUserVoucherListResponse getUserVoucherList(@PathVariable("user_id") String userId,
+      @RequestParam("current_page") int currentPage, @RequestParam("page_size") int pageSize) {
+    return couponService.getUserVoucherList(userId, currentPage, pageSize);
   }
 
   /**
    * 更新用户兑换券
    * 
-   * @param userid
+   * @param userId
    * @param userVoucherList
    */
   @PreAuthorize(
-      value = "isAuthenticated() and (#userid.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
-  @PutMapping(value = "/user/{userid}/coupon/uservoucher")
-  public void updateUserVoucherList(@PathVariable("userid") String userid,
+      value = "isAuthenticated() and (#userId.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
+  @PutMapping(value = "/user/{user_id}/coupon/uservoucher")
+  public void updateUserVoucherList(@PathVariable("user_id") String userId,
       @RequestBody List<UserVoucher> userVoucherList) {
     couponService.updateUserVoucher(userVoucherList);
   }
@@ -72,44 +72,44 @@ public class CouponController {
   /**
    * 获得用户的兑换券
    * 
-   * @param userid
-   * @param voucherid
+   * @param userId
+   * @param voucherId
    * @return
    */
   @PreAuthorize(
-      value = "isAuthenticated() and (#userid.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
-  @GetMapping(value = "/user/{userid}/coupon/uservoucher/{voucherid}")
-  public UserVoucher getUserVoucher(@PathVariable("userid") String userid,
-      @PathVariable("voucherid") String voucherid) {
-    return couponService.getUserVoucher(voucherid);
+      value = "isAuthenticated() and (#userId.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
+  @GetMapping(value = "/user/{user_id}/coupon/uservoucher/{voucher_id}")
+  public UserVoucher getUserVoucher(@PathVariable("user_id") String userId,
+      @PathVariable("voucher_id") String voucherId) {
+    return couponService.getUserVoucher(voucherId);
   }
 
   /**
    * 获得用户用户GoodVoucher的兑换券
    * 
-   * @param userid
-   * @param voucherid
+   * @param userId
+   * @param voucherId
    * @return
    */
   @PreAuthorize(
-      value = "isAuthenticated() and (#userid.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
-  @GetMapping(value = "/user/{userid}/coupon/uservoucher/goodvoucher/{voucherid}")
-  public UserVoucher getUserVoucherForGoodVoucher(@PathVariable("userid") String userid,
-      @PathVariable("voucherid") String voucherid) {
-    return couponService.getUserVoucherForGoodVoucher(userid, voucherid);
+      value = "isAuthenticated() and (#userId.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
+  @GetMapping(value = "/user/{user_id}/coupon/uservoucher/goodvoucher/{voucher_id}")
+  public UserVoucher getUserVoucherForGoodVoucher(@PathVariable("user_id") String userId,
+      @PathVariable("voucher_id") String voucherId) {
+    return couponService.getUserVoucherForGoodVoucher(userId, voucherId);
   }
 
   /**
    * 更新用户兑换券
    * 
-   * @param userid
-   * @param voucherid
+   * @param userId
+   * @param voucherId
    * @param uservoucher
    */
   @PreAuthorize(
-      value = "isAuthenticated() and (#userid.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
-  @PutMapping(value = "/user/{userid}/coupon/uservoucher/{voucherid}")
-  public void updateUserVoucher(@PathVariable("userid") String userid, @PathVariable("voucherid") String voucherid,
+      value = "isAuthenticated() and (#userId.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
+  @PutMapping(value = "/user/{user_id}/coupon/uservoucher/{voucher_id}")
+  public void updateUserVoucher(@PathVariable("user_id") String userId, @PathVariable("voucher_id") String voucherId,
       @RequestBody UserVoucher uservoucher) {
     couponService.updateUserVoucher(uservoucher);
   }
@@ -117,15 +117,15 @@ public class CouponController {
   /**
    * 分页获取商品兑换项
    * 
-   * @param currentpage
-   * @param pagesize
+   * @param currentPage
+   * @param pageSize
    * @return
    */
   @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/coupon/goodvoucher")
-  public GetGoodVoucherListResponse getGoodVoucherList(@RequestParam(value = "currentpage") int currentpage,
-      @RequestParam("pagesize") int pagesize) {
-    return couponService.getGoodVoucherList(currentpage, pagesize);
+  public GetGoodVoucherListResponse getGoodVoucherList(@RequestParam(value = "current_page") int currentPage,
+      @RequestParam("page_size") int pageSize) {
+    return couponService.getGoodVoucherList(currentPage, pageSize);
   }
 
   /**
@@ -146,7 +146,7 @@ public class CouponController {
     if (request.getScore() == 0) {
       throw new IllegalArgumentException("good voucher score is 0");
     }
-    if (CollectionUtils.isEmpty(request.getVoucheritemIdList())) {
+    if (CollectionUtils.isEmpty(request.getVoucherItemIdList())) {
       throw new IllegalArgumentException("good voucher items is empyt");
     }
     return couponService.createORUpdateGoodVoucher(request);
@@ -155,38 +155,38 @@ public class CouponController {
   /**
    * 获取商品兑换项
    * 
-   * @param voucherid
+   * @param voucherId
    * @return
    */
   @PreAuthorize(value = "permitAll()")
-  @GetMapping(value = "/coupon/goodvoucher/{voucherid}")
-  public GoodVoucher getGoodVoucher(@PathVariable("voucherid") String voucherid) {
-    return couponService.getGoodVoucher(voucherid);
+  @GetMapping(value = "/coupon/goodvoucher/{voucher_id}")
+  public GoodVoucher getGoodVoucher(@PathVariable("voucher_id") String voucherId) {
+    return couponService.getGoodVoucher(voucherId);
   }
 
   /**
    * 废弃商品兑换券
    * 
-   * @param voucherid
+   * @param voucherId
    */
   @PreAuthorize("hasAuthority('permission:manager:*')")
-  @DeleteMapping(value = "/coupon/goodvoucher/{voucherid}")
-  public void deprecateGoodVoucher(@PathVariable("voucherid") String voucherid) {
-    couponService.deprecateGoodVoucher(voucherid);
+  @DeleteMapping(value = "/coupon/goodvoucher/{voucher_id}")
+  public void deprecateGoodVoucher(@PathVariable("voucher_id") String voucherId) {
+    couponService.deprecateGoodVoucher(voucherId);
   }
 
   /**
    * 分页获取可选的兑换方式
    * 
-   * @param currentpage
-   * @param pagesize
+   * @param currentPage
+   * @param pageSize
    * @return
    */
   @PreAuthorize(value = "permitAll()")
-  @GetMapping(value = "/coupon/voucheritem")
-  public GetVoucherItemListResponse getVoucherItemList(@RequestParam("currentpage") int currentpage,
-      @RequestParam("pagesize") int pagesize) {
-    return couponService.getVoucherItemList(currentpage, pagesize);
+  @GetMapping(value = "/coupon/voucher_item")
+  public GetVoucherItemListResponse getVoucherItemList(@RequestParam("current_page") int currentPage,
+      @RequestParam("page_size") int pageSize) {
+    return couponService.getVoucherItemList(currentPage, pageSize);
   }
 
   /**
@@ -196,15 +196,15 @@ public class CouponController {
    * @return
    */
   @PreAuthorize("hasAuthority('permission:manager:*')")
-  @PostMapping(value = "/coupon/voucheritem")
+  @PostMapping(value = "/coupon/voucher_item")
   public VoucherItem createVoucherItem(@RequestBody VoucherItem request) {
     if (null == request) {
-      throw new IllegalArgumentException("voucheritem request body is null");
+      throw new IllegalArgumentException("VoucherItem request body is null");
     }
     if (StringUtils.isEmpty(request.getName())) {
-      throw new IllegalArgumentException("voucher item name is empty");
+      throw new IllegalArgumentException("VoucherItem name is empty");
     }
-    if (StringUtils.isEmpty(request.getGoodid())) {
+    if (StringUtils.isEmpty(request.getGoodId())) {
       throw new IllegalArgumentException("voucher item good is null");
     }
     if (request.getScore() == 0) {
@@ -217,24 +217,24 @@ public class CouponController {
   /**
    * 获取兑换方式
    * 
-   * @param voucheritemId
+   * @param voucherItemId
    * @return
    */
   @PreAuthorize(value = "permitAll()")
-  @GetMapping(value = "/coupon/voucheritem/{voucheritemId}")
-  public VoucherItem getVoucherItem(@PathVariable("voucheritemId") String voucheritemId) {
-    return couponService.getVoucherItem(voucheritemId);
+  @GetMapping(value = "/coupon/voucher_item/{voucher_item_id}")
+  public VoucherItem getVoucherItem(@PathVariable("voucher_item_id") String voucherItemId) {
+    return couponService.getVoucherItem(voucherItemId);
   }
 
   /**
    * 废弃兑换项
    * 
-   * @param voucheritemId
+   * @param voucherItemId
    */
   @PreAuthorize("hasAuthority('permission:manager:*')")
-  @DeleteMapping(value = "/coupon/voucheritem/{voucheritemId}")
-  public void deprecateVoucherItem(@PathVariable("voucheritemId") String voucheritemId) {
-    couponService.deprecateVoucherItem(voucheritemId);
+  @DeleteMapping(value = "/coupon/voucher_item/{voucher_item_id}")
+  public void deprecateVoucherItem(@PathVariable("voucher_item_id") String voucherItemId) {
+    couponService.deprecateVoucherItem(voucherItemId);
   }
 
 }

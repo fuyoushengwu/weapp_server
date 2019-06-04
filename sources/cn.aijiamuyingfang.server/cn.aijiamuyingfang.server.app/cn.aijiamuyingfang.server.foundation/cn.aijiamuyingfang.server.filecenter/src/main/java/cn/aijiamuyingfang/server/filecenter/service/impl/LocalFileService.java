@@ -133,13 +133,13 @@ public class LocalFileService implements FileService, InitializingBean {
 
   @Override
   public GetFileInfoListResponse getFileInfoList(Map<String, String> params) {
-    int currentpage = NumberUtils.toInt(params.remove("currentpage"), 1);
-    int pagesize = NumberUtils.toInt(params.remove("pagesize"), 10);
-    PageRequest pageRequest = new PageRequest(currentpage - 1, pagesize);
+    int currentPage = NumberUtils.toInt(params.remove("current_page"), 1);
+    int pageSize = NumberUtils.toInt(params.remove("page_size"), 10);
+    PageRequest pageRequest = new PageRequest(currentPage - 1, pageSize);
     FileInfo fileInfo = JsonUtils.fromJson(JsonUtils.toJson(params), FileInfo.class);
     Page<FileInfo> fileInfoPage = fileInfoRepository.findAll(Example.of(fileInfo), pageRequest);
     GetFileInfoListResponse response = new GetFileInfoListResponse();
-    response.setCurrentpage(fileInfoPage.getNumber() + 1);
+    response.setCurrentPage(fileInfoPage.getNumber() + 1);
     response.setDataList(fileInfoPage.getContent());
     response.setTotalpage(fileInfoPage.getTotalPages());
     return response;
