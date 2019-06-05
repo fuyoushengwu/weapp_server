@@ -60,7 +60,7 @@ public class UserMessageControllerTest {
   @UseCaseDescription(description = "用户没有消息")
   public void test_GetUserUnReadMessageCount_001() throws IOException {
     User senderOne = testActions.getSenderOne();
-    int count = client.getUserUnReadMessageCount(senderOne.getId(), testActions.getSenderOneAccessToken());
+    int count = client.getUserUnReadMessageCount(senderOne.getUsername(), testActions.getSenderOneAccessToken());
     Assert.assertEquals(0, count);
   }
 
@@ -68,14 +68,14 @@ public class UserMessageControllerTest {
   @UseCaseDescription(description = "用户有消息")
   public void test_GetUserUnReadMessageCount_002() throws IOException {
     User senderOne = testActions.getSenderOne();
-    int count = client.getUserUnReadMessageCount(senderOne.getId(), testActions.getSenderOneAccessToken());
+    int count = client.getUserUnReadMessageCount(senderOne.getUsername(), testActions.getSenderOneAccessToken());
     Assert.assertEquals(0, count);
 
     UserMessage userMessage = testActions.getSenderOneMessage();
-    count = client.getUserUnReadMessageCount(senderOne.getId(), testActions.getSenderOneAccessToken());
+    count = client.getUserUnReadMessageCount(senderOne.getUsername(), testActions.getSenderOneAccessToken());
     Assert.assertEquals(1, count);
 
-    GetMessagesListResponse userMessageList = client.getUserMessageList(senderOne.getId(), 1, 10,
+    GetMessagesListResponse userMessageList = client.getUserMessageList(senderOne.getUsername(), 1, 10,
         testActions.getSenderOneAccessToken());
     Assert.assertNotNull(userMessageList);
     Assert.assertEquals(1, userMessageList.getDataList().size());
@@ -83,10 +83,10 @@ public class UserMessageControllerTest {
 
     testActions.deleteSenderOneMessage();
 
-    count = client.getUserUnReadMessageCount(senderOne.getId(), testActions.getSenderOneAccessToken());
+    count = client.getUserUnReadMessageCount(senderOne.getUsername(), testActions.getSenderOneAccessToken());
     Assert.assertEquals(0, count);
 
-    userMessageList = client.getUserMessageList(senderOne.getId(), 1, 10, testActions.getSenderOneAccessToken());
+    userMessageList = client.getUserMessageList(senderOne.getUsername(), 1, 10, testActions.getSenderOneAccessToken());
     Assert.assertNotNull(userMessageList);
     Assert.assertEquals(0, userMessageList.getDataList().size());
   }
@@ -95,7 +95,7 @@ public class UserMessageControllerTest {
   @UseCaseDescription(description = "用户没有消息,系统有消息")
   public void test_GetUserUnReadMessageCount_003() throws IOException {
     User senderOne = testActions.getSenderOne();
-    int count = client.getUserUnReadMessageCount(senderOne.getId(), testActions.getSenderOneAccessToken());
+    int count = client.getUserUnReadMessageCount(senderOne.getUsername(), testActions.getSenderOneAccessToken());
     Assert.assertEquals(0, count);
 
     UserMessage systemMessage = new UserMessage();
@@ -104,17 +104,17 @@ public class UserMessageControllerTest {
     systemMessage.setRoundup("系统消息");
     systemMessage.setTitle("系统消息");
     systemMessage.setType(UserMessageType.NOTICE);
-    systemMessage.setUserId(UserTestActions.ADMIN_USER_ID);
-    client.createMessage(senderOne.getId(), systemMessage, testActions.getSenderOneAccessToken());
+    systemMessage.setUsername(UserTestActions.ADMIN_USER_NAME);
+    client.createMessage(senderOne.getUsername(), systemMessage, testActions.getSenderOneAccessToken());
 
-    count = client.getUserUnReadMessageCount(senderOne.getId(), testActions.getSenderOneAccessToken());
+    count = client.getUserUnReadMessageCount(senderOne.getUsername(), testActions.getSenderOneAccessToken());
     Assert.assertEquals(1, count);
 
     UserMessage userMessage = testActions.getSenderOneMessage();
-    count = client.getUserUnReadMessageCount(senderOne.getId(), testActions.getSenderOneAccessToken());
+    count = client.getUserUnReadMessageCount(senderOne.getUsername(), testActions.getSenderOneAccessToken());
     Assert.assertEquals(2, count);
 
-    GetMessagesListResponse response = client.getUserMessageList(senderOne.getId(), 1, 10,
+    GetMessagesListResponse response = client.getUserMessageList(senderOne.getUsername(), 1, 10,
         testActions.getSenderOneAccessToken());
     Assert.assertEquals(userMessage.getId(), response.getDataList().get(1).getId());
   }

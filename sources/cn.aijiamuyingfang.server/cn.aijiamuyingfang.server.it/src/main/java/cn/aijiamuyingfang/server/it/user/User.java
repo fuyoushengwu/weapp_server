@@ -11,10 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -45,18 +43,12 @@ import lombok.Data;
 @Entity
 @Data
 public class User {
-  /**
-   * 用户的Id
-   */
-  @Id
-  @GeneratedValue(generator = "strategy_uuid")
-  @GenericGenerator(name = "strategy_uuid", strategy = "uuid")
-  private String id;
 
   /**
-   * 该小程序中用户的唯一Id
+   * 小程序用戶沒有username,使用openid作爲username,
    */
-  private String openid;
+  @Id
+  private String username;
 
   /**
    * 密码
@@ -208,9 +200,12 @@ public class User {
     return authorityList;
   }
 
-  @JsonIgnore
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
   public String getUsername() {
-    return this.id;
+    return this.username;
   }
 
   public boolean isAccountNonExpired() {

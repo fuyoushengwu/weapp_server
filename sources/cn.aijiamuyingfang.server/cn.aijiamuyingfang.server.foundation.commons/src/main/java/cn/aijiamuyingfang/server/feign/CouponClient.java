@@ -24,45 +24,45 @@ public interface CouponClient {
   /**
    * 分页获取用户兑换券
    * 
-   * @param userId
+   * @param username
    * @param currentPage
    * @param pageSize
    * @return
    */
-  @GetMapping(value = "/user/{user_id}/coupon/uservoucher")
-  ResponseBean<GetUserVoucherListResponse> getUserVoucherList(@PathVariable("user_id") String userId,
+  @GetMapping(value = "/user/{username}/coupon/uservoucher")
+  ResponseBean<GetUserVoucherListResponse> getUserVoucherList(@PathVariable("username") String username,
       @RequestParam("current_page") int currentPage, @RequestParam("page_size") int pageSize);
 
   /**
    * 更新用户兑换券
    * 
-   * @param userId
+   * @param username
    * @param userVoucherList
    */
-  @PutMapping(value = "/user/{user_id}/coupon/uservoucher")
-  ResponseBean<Void> updateUserVoucherList(@PathVariable("user_id") String userId,
+  @PutMapping(value = "/user/{username}/coupon/uservoucher")
+  ResponseBean<Void> updateUserVoucherList(@PathVariable("username") String username,
       @RequestBody List<UserVoucher> userVoucherList);
 
   /**
    * 获得用户的兑换券
    * 
-   * @param userId
+   * @param username
    * @param voucherId
    * @return
    */
-  @GetMapping(value = "/user/{user_id}/coupon/uservoucher/{voucher_id}")
-  ResponseBean<UserVoucher> getUserVoucher(@PathVariable("user_id") String userId,
+  @GetMapping(value = "/user/{username}/coupon/uservoucher/{voucher_id}")
+  ResponseBean<UserVoucher> getUserVoucher(@PathVariable("username") String username,
       @PathVariable("voucher_id") String voucherId);
 
   /**
    * 获得用户用户GoodVoucher的兑换券
    * 
-   * @param userId
+   * @param username
    * @param voucherId
    * @return
    */
-  @GetMapping(value = "/user/{user_id}/coupon/uservoucher/goodvoucher/{voucher_id}")
-  ResponseBean<UserVoucher> getUserVoucherForGoodVoucher(@PathVariable("user_id") String userId,
+  @GetMapping(value = "/user/{username}/coupon/uservoucher/goodvoucher/{voucher_id}")
+  ResponseBean<UserVoucher> getUserVoucherForGoodVoucher(@PathVariable("username") String username,
       @PathVariable("voucher_id") String voucherId);
 
   /**

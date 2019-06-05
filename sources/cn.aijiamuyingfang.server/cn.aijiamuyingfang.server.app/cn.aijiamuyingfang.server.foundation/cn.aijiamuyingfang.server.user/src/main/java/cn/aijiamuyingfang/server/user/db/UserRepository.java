@@ -24,20 +24,12 @@ import cn.aijiamuyingfang.server.user.domain.User;
 public interface UserRepository extends JpaRepository<User, String> {
 
   /**
-   * 据openid获取用户(因为逻辑上User和openid是一一对应的)
-   * 
-   * @param openid
-   * @return
-   */
-  User findByOpenid(String openid);
-
-  /**
    * 获取不同权限用户的Id
    * 
    * @param authority
    * @return
    */
-  @Query(value = "select user_id from user_authority_list where authority_list=:type", nativeQuery = true)
+  @Query(value = "select user_username from user_authority_list where authority_list=:type", nativeQuery = true)
   List<String> findUsersByAuthority(@Param("type") int authority);
 
 }

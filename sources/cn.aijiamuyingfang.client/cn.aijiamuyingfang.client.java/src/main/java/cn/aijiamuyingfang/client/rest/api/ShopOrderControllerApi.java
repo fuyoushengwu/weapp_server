@@ -34,7 +34,7 @@ public interface ShopOrderControllerApi {
   /**
    * 分页获取用户的订单信息
    * 
-   * @param userId
+   * @param username
    * @param status
    * @param sendType
    * @param currentPage
@@ -42,8 +42,8 @@ public interface ShopOrderControllerApi {
    * @param accessToken
    * @return
    */
-  @GET(value = "/shoporder-service/user/{user_id}/shoporder")
-  public Call<ResponseBean> getUserShopOrderList(@Path("user_id") String userId,
+  @GET(value = "/shoporder-service/user/{username}/shoporder")
+  public Call<ResponseBean> getUserShopOrderList(@Path("username") String username,
       @Query(value = "status") List<ShopOrderStatus> status, @Query(value = "send_type") List<SendType> sendType,
       @Query(value = "current_page") int currentPage, @Query(value = "page_size") int pageSize,
       @Query("access_token") String accessToken);
@@ -51,13 +51,13 @@ public interface ShopOrderControllerApi {
   /**
    * 获取用户购买商品时可以使用的兑换券
    * 
-   * @param userId
+   * @param username
    * @param goodIdList
    * @param accessToken
    * @return
    */
-  @GET(value = "/shoporder-service/user/{user_id}/coupon/shoporder")
-  public Call<ResponseBean> getUserShopOrderVoucherList(@Path("user_id") String userId,
+  @GET(value = "/shoporder-service/user/{username}/coupon/shoporder")
+  public Call<ResponseBean> getUserShopOrderVoucherList(@Path("username") String username,
       @Query("good_id") List<String> goodIdList, @Query("access_token") String accessToken);
 
   /**
@@ -101,38 +101,38 @@ public interface ShopOrderControllerApi {
   /**
    * 删除用户下的订单,该操作需要先判断该订单是否属于用户
    * 
-   * @param userId
+   * @param username
    * @param shopOrderId
    * @param accessToken
    * @return
    */
-  @DELETE(value = "/shoporder-service/user/{user_id}/shoporder/{shop_order_id}")
-  public Call<ResponseBean> deleteUserShopOrder(@Path("user_id") String userId,
+  @DELETE(value = "/shoporder-service/user/{username}/shoporder/{shop_order_id}")
+  public Call<ResponseBean> deleteUserShopOrder(@Path("username") String username,
       @Path("shop_order_id") String shopOrderId, @Query("access_token") String accessToken);
 
   /**
    * 确认订单结束,先要判断该订单是否属于用户
    * 
-   * @param userId
+   * @param username
    * @param shopOrderId
    * @param accessToken
    * @return
    */
-  @PUT(value = "/shoporder-service/user/{user_id}/shoporder/{shop_order_id}/finisheorder")
-  public Call<ResponseBean> confirmUserShopOrderFinished(@Path("user_id") String userId,
+  @PUT(value = "/shoporder-service/user/{username}/shoporder/{shop_order_id}/finisheorder")
+  public Call<ResponseBean> confirmUserShopOrderFinished(@Path("username") String username,
       @Path("shop_order_id") String shopOrderId, @Query("access_token") String accessToken);
 
   /**
    * 更新订单的收货地址,先要判断该订单是否属于用户
    * 
-   * @param userId
+   * @param username
    * @param shopOrderId
    * @param addressId
    * @param accessToken
    * @return
    */
-  @PUT(value = "/shoporder-service/user/{user_id}/shoporder/{shop_order_id}/recieveaddress/{address_id}")
-  public Call<ResponseBean> updateUserShopOrderRecieveAddress(@Path("user_id") String userId,
+  @PUT(value = "/shoporder-service/user/{username}/shoporder/{shop_order_id}/recieveaddress/{address_id}")
+  public Call<ResponseBean> updateUserShopOrderRecieveAddress(@Path("username") String username,
       @Path("shop_order_id") String shopOrderId, @Path("address_id") String addressId,
       @Query("access_token") String accessToken);
 
@@ -151,36 +151,36 @@ public interface ShopOrderControllerApi {
   /**
    * 获取用户订单,先要判断订单是否属于用户
    * 
-   * @param userId
+   * @param username
    * @param shopOrderId
    * @param accessToken
    * @return
    */
-  @GET(value = "/shoporder-service/user/{user_id}/shoporder/{shop_order_id}")
-  public Call<ResponseBean> getUserShopOrder(@Path("user_id") String userId,
+  @GET(value = "/shoporder-service/user/{username}/shoporder/{shop_order_id}")
+  public Call<ResponseBean> getUserShopOrder(@Path("username") String username,
       @Path(value = "shop_order_id") String shopOrderId, @Query("access_token") String accessToken);
 
   /**
    * 创建用户订单
    * 
-   * @param userId
+   * @param username
    * @param requestBean
    * @param accessToken
    * @return
    */
-  @POST(value = "/shoporder-service/user/{user_id}/shoporder")
-  public Call<ResponseBean> createUserShopOrder(@Path("user_id") String userId,
+  @POST(value = "/shoporder-service/user/{username}/shoporder")
+  public Call<ResponseBean> createUserShopOrder(@Path("username") String username,
       @Body CreateShopOrderRequest requestBean, @Query("access_token") String accessToken);
 
   /**
    * 得到用户订单根据状态分类的数目
    * 
-   * @param userId
+   * @param username
    * @param accessToken
    * @return
    */
-  @GET(value = "/shoporder-service/user/{user_id}/shoporder/statuscount")
-  public Call<ResponseBean> getUserShopOrderStatusCount(@Path("user_id") String userId,
+  @GET(value = "/shoporder-service/user/{username}/shoporder/statuscount")
+  public Call<ResponseBean> getUserShopOrderStatusCount(@Path("username") String username,
       @Query("access_token") String accessToken);
 
   /**

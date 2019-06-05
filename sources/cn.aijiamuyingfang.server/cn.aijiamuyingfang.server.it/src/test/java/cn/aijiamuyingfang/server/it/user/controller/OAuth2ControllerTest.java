@@ -68,7 +68,8 @@ public class OAuth2ControllerTest {
   private UserControllerClient userControllerClient;
 
   private void checkSenderOneAccessToken(User senderOne, String accessToken) throws IOException {
-    List<RecieveAddress> addressList = userControllerClient.getUserRecieveAddressList(senderOne.getId(), accessToken);
+    List<RecieveAddress> addressList = userControllerClient.getUserRecieveAddressList(senderOne.getUsername(),
+        accessToken);
     Assert.assertNotNull(addressList);
     Assert.assertEquals(0, addressList.size());
   }

@@ -41,33 +41,33 @@ public class UserMessageService {
   /**
    * 获得用户未读消息数量
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @return
    */
-  public int getUserUnReadMessageCount(String userId) {
-    List<String> adminUserIdList = userRepository.findUsersByAuthority(UserAuthority.MANAGER_PERMISSION.getValue());
-    if (adminUserIdList.isEmpty()) {
-      adminUserIdList.add(userId);
+  public int getUserUnReadMessageCount(String username) {
+    List<String> adminUsernameList = userRepository.findUsersByAuthority(UserAuthority.MANAGER_PERMISSION.getValue());
+    if (adminUsernameList.isEmpty()) {
+      adminUsernameList.add(username);
     }
-    return userMessageRepository.getUNReadMessageCount(userId, adminUserIdList);
+    return userMessageRepository.getUNReadMessageCount(username, adminUsernameList);
   }
 
   /**
    * 分页获取用户消息
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @param currentPage
    * @param pageSize
    * @return
    */
-  public GetMessagesListResponse getUserMessageList(String userId, int currentPage, int pageSize) {
-    List<String> userIdList = new ArrayList<>();
-    userIdList.add(userId);
-    userIdList.addAll(userRepository.findUsersByAuthority(UserAuthority.MANAGER_PERMISSION.getValue()));
-    GetMessagesListResponse response = getMessageList(userIdList, currentPage, pageSize);
-    User user = userRepository.findOne(userId);
+  public GetMessagesListResponse getUserMessageList(String username, int currentPage, int pageSize) {
+    List<String> usernameList = new ArrayList<>();
+    usernameList.add(username);
+    usernameList.addAll(userRepository.findUsersByAuthority(UserAuthority.MANAGER_PERMISSION.getValue()));
+    GetMessagesListResponse response = getMessageList(usernameList, currentPage, pageSize);
+    User user = userRepository.findOne(username);
     if (user != null) {
       user.setLastReadMsgTime(new Date());
       userRepository.saveAndFlush(user);
@@ -78,18 +78,18 @@ public class UserMessageService {
   /**
    * 分页获取消息
    * 
-   * @param userIdList
+   * @param usernameList
    *          用户idList
    * @param currentPage
    * @param pageSize
    * @return
    */
-  private GetMessagesListResponse getMessageList(List<String> userIdList, int currentPage, int pageSize) {
+  private GetMessagesListResponse getMessageList(List<String> usernameList, int currentPage, int pageSize) {
     // 在查询之前先把所有过期的消息清除
     cleanOvertimeMessage();
     // PageRequest的Page参数是基于0的,但是currentPage是基于1的,所有将currentPage作为参数传递给PgeRequest时需要'-1'
     PageRequest pageRequest = new PageRequest(currentPage - 1, pageSize, Sort.Direction.DESC, "createTime");
-    Page<UserMessage> page = userMessageRepository.findByUserIdIn(userIdList, pageRequest);
+    Page<UserMessage> page = userMessageRepository.findByUsernameIn(usernameList, pageRequest);
     GetMessagesListResponse response = new GetMessagesListResponse();
     response.setCurrentPage(page.getNumber() + 1);
     response.setDataList(page.getContent());
@@ -107,14 +107,14 @@ public class UserMessageService {
   /**
    * 为用户创建消息
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @param message
    * @return
    */
-  public UserMessage createMessage(String userId, UserMessage message) {
+  public UserMessage createMessage(String username, UserMessage message) {
     if (message != null) {
-      message.setUserId(userId);
+      message.setUsername(username);
       userMessageRepository.saveAndFlush(message);
     }
     return message;
@@ -123,16 +123,16 @@ public class UserMessageService {
   /**
    * 删除用户消息消息
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @param messageId
    */
-  public void deleteMessage(String userId, String messageId) {
+  public void deleteMessage(String username, String messageId) {
     UserMessage message = userMessageRepository.findOne(messageId);
     if (null == message) {
       return;
     }
-    if (userId.equals(message.getUserId())) {
+    if (username.equals(message.getUsername())) {
       userMessageRepository.delete(message);
     } else {
       throw new AccessDeniedException("no permission delete other user's message");

@@ -56,12 +56,7 @@ public class ShopOrder {
   /**
    * 订单所属用户ID
    */
-  private String userId;
-
-  /**
-   * 该小程序中用户的唯一Id
-   */
-  private String userOpenId;
+  private String username;
 
   /**
    * 订单号

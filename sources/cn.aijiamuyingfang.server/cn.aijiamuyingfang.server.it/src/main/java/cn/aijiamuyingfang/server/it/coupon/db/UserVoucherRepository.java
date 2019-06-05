@@ -27,38 +27,38 @@ public interface UserVoucherRepository extends JpaRepository<UserVoucher, String
   /**
    * 分页查询用户的兑换券
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @param pageable
    *          分页信息
    * @return
    */
-  @Query(value = "select * from user_voucher where user_id=:user_id and deprecated=false order by ?#{#pageable}",
-      countQuery = "select count(*) from user_voucher where user_id=:user_id and deprecated=false order by ?#{#pageable}",
+  @Query(value = "select * from user_voucher where username=:username and deprecated=false order by ?#{#pageable}",
+      countQuery = "select count(*) from user_voucher where username=:username and deprecated=false order by ?#{#pageable}",
       nativeQuery = true)
-  Page<UserVoucher> findByUserId(@Param("user_id") String userId, Pageable pageable);
+  Page<UserVoucher> findByUsername(@Param("username") String username, Pageable pageable);
 
   /**
    * 查询用户的兑换券
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @return
    */
-  @Query(value = "select * from user_voucher where user_id=:user_id and deprecated=false", nativeQuery = true)
-  List<UserVoucher> findByUserId(@Param("user_id") String userId);
+  @Query(value = "select * from user_voucher where username=:username and deprecated=false", nativeQuery = true)
+  List<UserVoucher> findByUsername(@Param("username") String username);
 
   /**
    * 查找用户领取过的某类兑换券信息
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @param goodvoucherId
    * @return
    */
-  @Query(value = "select * from user_voucher where user_id=:user_id and good_voucher_id="
+  @Query(value = "select * from user_voucher where username=:username and good_voucher_id="
       + ":good_vourcher_id and deprecated=false", nativeQuery = true)
-  UserVoucher findByUserIdAndGoodVoucher(@Param("user_id") String userId,
+  UserVoucher findByUsernameAndGoodVoucher(@Param("username") String username,
       @Param("good_vourcher_id") String goodvoucherId);
 
   /**

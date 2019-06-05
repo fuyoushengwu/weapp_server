@@ -30,13 +30,13 @@ public interface UserMessageRepository extends JpaRepository<UserMessage, String
   /**
    * 分页查找用户消息
    * 
-   * @param userIdList
+   * @param usernameList
    *          用户idList
    * @param pageable
    *          分页信息
    * @return
    */
-  Page<UserMessage> findByUserIdIn(List<String> userIdList, Pageable pageable);
+  Page<UserMessage> findByUsernameIn(List<String> usernameList, Pageable pageable);
 
   /**
    * 清除过期的消息
@@ -49,11 +49,13 @@ public interface UserMessageRepository extends JpaRepository<UserMessage, String
   /**
    * 获取未读消息数目
    * 
-   * @param userId
-   * @param adminidList
+   * @param username
+   * @param adminUsernameList
    * @return
    */
-  @Query(value = "select count(*) from user_message where user_id in (select id from user where id=:user_id or id in :adminid) and "
-      + "create_time>(select last_read_msg_time from user where id=:user_id)", nativeQuery = true)
-  int getUNReadMessageCount(@Param("user_id") String userId, @Param("adminid") List<String> adminidList);
+  @Query(
+      value = "select count(*) from user_message where username in (select username from user where username=:username or username in :adminUser) and "
+          + "create_time>(select last_read_msg_time from user where username=:username)",
+      nativeQuery = true)
+  int getUNReadMessageCount(@Param("username") String username, @Param("adminUser") List<String> adminUsernameList);
 }

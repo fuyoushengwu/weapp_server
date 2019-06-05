@@ -34,41 +34,41 @@ public class UserMessageController {
   /**
    * 获得用户未读消息数量
    * 
-   * @param userId
+   * @param username
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated() and #userId.equals(getAuthentication().getName())")
-  @GetMapping(value = "/user/{user_id}/message/unread/count")
-  public int getUserUnReadMessageCount(@PathVariable("user_id") String userId) {
-    return userMessageService.getUserUnReadMessageCount(userId);
+  @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
+  @GetMapping(value = "/user/{username}/message/unread/count")
+  public int getUserUnReadMessageCount(@PathVariable("username") String username) {
+    return userMessageService.getUserUnReadMessageCount(username);
   }
 
   /**
    * 分页获取用户消息
    * 
-   * @param userId
+   * @param username
    * @param currentPage
    * @param pageSize
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated() and #userId.equals(getAuthentication().getName())")
-  @GetMapping(value = "/user/{user_id}/message")
-  public GetMessagesListResponse getUserMessageList(@PathVariable("user_id") String userId,
+  @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
+  @GetMapping(value = "/user/{username}/message")
+  public GetMessagesListResponse getUserMessageList(@PathVariable("username") String username,
       @RequestParam("current_page") int currentPage, @RequestParam("page_size") int pageSize) {
-    return userMessageService.getUserMessageList(userId, currentPage, pageSize);
+    return userMessageService.getUserMessageList(username, currentPage, pageSize);
   }
 
   /**
    * 为用户创建消息
    * 
-   * @param userId
+   * @param username
    * @param userMessage
    * @return
    */
   @PreAuthorize(
-      value = "isAuthenticated() and (#userId.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
-  @PostMapping(value = "/user/{user_id}/message")
-  public UserMessage createMessage(@PathVariable("user_id") String userId, @RequestBody UserMessage userMessage) {
+      value = "isAuthenticated() and (#username.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
+  @PostMapping(value = "/user/{username}/message")
+  public UserMessage createMessage(@PathVariable("username") String username, @RequestBody UserMessage userMessage) {
     if (null == userMessage) {
       throw new IllegalArgumentException("usermessage request body is null");
     }
@@ -78,18 +78,18 @@ public class UserMessageController {
     if (null == userMessage.getType()) {
       throw new IllegalArgumentException("usermessage type is null");
     }
-    return userMessageService.createMessage(userId, userMessage);
+    return userMessageService.createMessage(username, userMessage);
   }
 
   /**
    * 删除消息
    * 
-   * @param userId
+   * @param username
    * @param messageId
    */
-  @PreAuthorize(value = "isAuthenticated() and #userId.equals(getAuthentication().getName())")
-  @DeleteMapping(value = "/user/{user_id}/message/{message_id}")
-  public void deleteMessage(@PathVariable("user_id") String userId, @PathVariable("message_id") String messageId) {
-    userMessageService.deleteMessage(userId, messageId);
+  @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
+  @DeleteMapping(value = "/user/{username}/message/{message_id}")
+  public void deleteMessage(@PathVariable("username") String username, @PathVariable("message_id") String messageId) {
+    userMessageService.deleteMessage(username, messageId);
   }
 }

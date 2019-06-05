@@ -95,8 +95,8 @@ public class ShopOrderControllerTest {
   @Test
   @UseCaseDescription(description = "用户没有订单")
   public void test_GetUserShopOrderList_001() throws IOException {
-    GetShopOrderListResponse response = shoporderControllerClient.getUserShopOrderList(AbstractTestAction.ADMIN_USER_ID,
-        null, null, 1, 10, testActions.getAdminAccessToken());
+    GetShopOrderListResponse response = shoporderControllerClient
+        .getUserShopOrderList(AbstractTestAction.ADMIN_USER_NAME, null, null, 1, 10, testActions.getAdminAccessToken());
     Assert.assertEquals(0, response.getDataList().size());
   }
 
@@ -108,56 +108,56 @@ public class ShopOrderControllerTest {
     ShopOrder shoporder = testActions.senderOneBuy();
 
     GetShopOrderListResponse response = shoporderControllerClient.getUserShopOrderList(
-        testActions.getSenderOne().getId(), null, null, 1, 10, testActions.getSenderOneAccessToken());
+        testActions.getSenderOne().getUsername(), null, null, 1, 10, testActions.getSenderOneAccessToken());
     Assert.assertEquals(1, response.getDataList().size());
 
     List<ShopOrderStatus> statusList = new ArrayList<>();
     statusList.add(ShopOrderStatus.UNSTART);
-    response = shoporderControllerClient.getUserShopOrderList(testActions.getSenderOne().getId(), statusList, null, 1,
-        10, testActions.getSenderOneAccessToken());
+    response = shoporderControllerClient.getUserShopOrderList(testActions.getSenderOne().getUsername(), statusList,
+        null, 1, 10, testActions.getSenderOneAccessToken());
     Assert.assertEquals(1, response.getDataList().size());
 
     statusList.clear();
     statusList.add(ShopOrderStatus.DOING);
-    response = shoporderControllerClient.getUserShopOrderList(testActions.getSenderOne().getId(), statusList, null, 1,
-        10, testActions.getSenderOneAccessToken());
+    response = shoporderControllerClient.getUserShopOrderList(testActions.getSenderOne().getUsername(), statusList,
+        null, 1, 10, testActions.getSenderOneAccessToken());
     Assert.assertEquals(0, response.getDataList().size());
 
     statusList.clear();
     statusList.add(ShopOrderStatus.FINISHED);
-    response = shoporderControllerClient.getUserShopOrderList(testActions.getSenderOne().getId(), statusList, null, 1,
-        10, testActions.getSenderOneAccessToken());
+    response = shoporderControllerClient.getUserShopOrderList(testActions.getSenderOne().getUsername(), statusList,
+        null, 1, 10, testActions.getSenderOneAccessToken());
     Assert.assertEquals(0, response.getDataList().size());
 
     testActions.sendSenderOneShopOrder(shoporder);
     statusList.clear();
     statusList.add(ShopOrderStatus.UNSTART);
-    response = shoporderControllerClient.getUserShopOrderList(testActions.getSenderOne().getId(), statusList, null, 1,
-        10, testActions.getSenderOneAccessToken());
+    response = shoporderControllerClient.getUserShopOrderList(testActions.getSenderOne().getUsername(), statusList,
+        null, 1, 10, testActions.getSenderOneAccessToken());
     Assert.assertEquals(0, response.getDataList().size());
 
     statusList.clear();
     statusList.add(ShopOrderStatus.DOING);
-    response = shoporderControllerClient.getUserShopOrderList(testActions.getSenderOne().getId(), statusList, null, 1,
-        10, testActions.getSenderOneAccessToken());
+    response = shoporderControllerClient.getUserShopOrderList(testActions.getSenderOne().getUsername(), statusList,
+        null, 1, 10, testActions.getSenderOneAccessToken());
     Assert.assertEquals(1, response.getDataList().size());
 
     testActions.senderOneConfirmOrder(shoporder);
     statusList.add(ShopOrderStatus.UNSTART);
-    response = shoporderControllerClient.getUserShopOrderList(testActions.getSenderOne().getId(), statusList, null, 1,
-        10, testActions.getSenderOneAccessToken());
+    response = shoporderControllerClient.getUserShopOrderList(testActions.getSenderOne().getUsername(), statusList,
+        null, 1, 10, testActions.getSenderOneAccessToken());
     Assert.assertEquals(0, response.getDataList().size());
 
     statusList.clear();
     statusList.add(ShopOrderStatus.DOING);
-    response = shoporderControllerClient.getUserShopOrderList(testActions.getSenderOne().getId(), statusList, null, 1,
-        10, testActions.getSenderOneAccessToken());
+    response = shoporderControllerClient.getUserShopOrderList(testActions.getSenderOne().getUsername(), statusList,
+        null, 1, 10, testActions.getSenderOneAccessToken());
     Assert.assertEquals(0, response.getDataList().size());
 
     statusList.clear();
     statusList.add(ShopOrderStatus.FINISHED);
-    response = shoporderControllerClient.getUserShopOrderList(testActions.getSenderOne().getId(), statusList, null, 1,
-        10, testActions.getSenderOneAccessToken());
+    response = shoporderControllerClient.getUserShopOrderList(testActions.getSenderOne().getUsername(), statusList,
+        null, 1, 10, testActions.getSenderOneAccessToken());
     Assert.assertEquals(1, response.getDataList().size());
   }
 
@@ -253,7 +253,7 @@ public class ShopOrderControllerTest {
     response = shoporderControllerClient.getShopOrderList(null, null, 1, 10, testActions.getAdminAccessToken());
     Assert.assertEquals(1, response.getDataList().size());
 
-    shoporderControllerClient.deleteUserShopOrder(testActions.getSenderTwo().getId(), shoporderTwo.getId(),
+    shoporderControllerClient.deleteUserShopOrder(testActions.getSenderTwo().getUsername(), shoporderTwo.getId(),
         testActions.getSenderTwoAccessToken(), false);
     response = shoporderControllerClient.getShopOrderList(null, null, 1, 10, testActions.getAdminAccessToken());
     Assert.assertEquals(0, response.getDataList().size());
@@ -269,10 +269,10 @@ public class ShopOrderControllerTest {
 
     RecieveAddress address = testActions.getSenderTwoRecieveOne();
 
-    shoporderControllerClient.updateUserShopOrderRecieveAddress(testActions.getSenderOne().getId(),
+    shoporderControllerClient.updateUserShopOrderRecieveAddress(testActions.getSenderOne().getUsername(),
         senderOneShopOrder.getId(), address.getId(), testActions.getSenderOneAccessToken(), false);
 
-    ShopOrder shoporder = shoporderControllerClient.getUserShopOrder(testActions.getSenderOne().getId(),
+    ShopOrder shoporder = shoporderControllerClient.getUserShopOrder(testActions.getSenderOne().getUsername(),
         senderOneShopOrder.getId(), testActions.getSenderOneAccessToken());
     Assert.assertEquals(address.getId(), shoporder.getRecieveAddressId());
   }
@@ -303,7 +303,7 @@ public class ShopOrderControllerTest {
     testActions.senderOneBuy();
 
     GetShopOrderListResponse response = shoporderControllerClient.getUserShopOrderList(
-        testActions.getSenderOne().getId(), null, null, 1, 10, testActions.getSenderOneAccessToken());
+        testActions.getSenderOne().getUsername(), null, null, 1, 10, testActions.getSenderOneAccessToken());
     Assert.assertEquals(2, response.getDataList().size());
     Assert.assertEquals(ShopOrderStatus.PREORDER, response.getDataList().get(0).getStatus());
     Assert.assertEquals(ShopOrderStatus.DOING, response.getDataList().get(1).getStatus());
@@ -315,7 +315,7 @@ public class ShopOrderControllerTest {
     Assert.assertEquals(testActions.getGoodOne().getId(), getPreOrderGoodListResponse.getDataList().get(0).getGoodId());
 
     Map<String, Double> statusCount = shoporderControllerClient
-        .getUserShopOrderStatusCount(testActions.getSenderOne().getId(), testActions.getSenderOneAccessToken());
+        .getUserShopOrderStatusCount(testActions.getSenderOne().getUsername(), testActions.getSenderOneAccessToken());
     Assert.assertEquals(1, statusCount.get("inOrderingCount").intValue());
 
     Good updateGoodRequest = new Good();
@@ -324,13 +324,13 @@ public class ShopOrderControllerTest {
         testActions.getAdminAccessToken());
 
     Thread.sleep(10 * 1000);
-    response = shoporderControllerClient.getUserShopOrderList(testActions.getSenderOne().getId(), null, null, 1, 10,
-        testActions.getSenderOneAccessToken());
+    response = shoporderControllerClient.getUserShopOrderList(testActions.getSenderOne().getUsername(), null, null, 1,
+        10, testActions.getSenderOneAccessToken());
     Assert.assertEquals(2, response.getDataList().size());
     Assert.assertEquals(ShopOrderStatus.UNSTART, response.getDataList().get(0).getStatus());
     Assert.assertEquals(ShopOrderStatus.DOING, response.getDataList().get(1).getStatus());
 
-    statusCount = shoporderControllerClient.getUserShopOrderStatusCount(testActions.getSenderOne().getId(),
+    statusCount = shoporderControllerClient.getUserShopOrderStatusCount(testActions.getSenderOne().getUsername(),
         testActions.getSenderOneAccessToken());
     Assert.assertEquals(2, statusCount.get("tobeReceiveCount").intValue());
   }

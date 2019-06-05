@@ -47,7 +47,7 @@ public class UserMessage {
   /**
    * 用户消息:用户Id;系统消息:-1
    */
-  private String userId;
+  private String username;
 
   /**
    * 用户消息类型

@@ -85,8 +85,8 @@ public class JSCodeTokenGranter implements TokenGranter {
     try {
       WeChatSession wechatSession = oauth2Service.jscode2Session(jscode);
       // 小程序用户没有密码的概念,使用openid代替
-      password = wechatSession.getOpenid();
-      user = oauth2Service.getOrCreateUserIfAbsent(wechatSession.getOpenid(), password, nickname, avatar, gender);
+      password = wechatSession.getUsername();
+      user = oauth2Service.getOrCreateUserIfAbsent(wechatSession.getUsername(), password, nickname, avatar, gender);
     } catch (WeChatServiceException e) {
       if ("40029".equals(e.getCode())) {
         log.error("JSCode[" + jscode + "] not a wechat user", e);

@@ -20,14 +20,9 @@ import lombok.Data;
 public class User {
 
   /**
-   * 用户的Id
+   * 小程序用戶沒有username,使用openid作爲username,
    */
-  private String id;
-
-  /**
-   * 该小程序中用户的唯一Id
-   */
-  private String openid;
+  private String username;
 
   /**
    * 密码
@@ -64,8 +59,12 @@ public class User {
    */
   private int genericScore = 0;
 
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
   public String getUsername() {
-    return this.id;
+    return this.username;
   }
 
   public void addAuthority(UserAuthority authority) {

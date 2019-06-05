@@ -54,22 +54,23 @@ public class UserControllerTest {
   @Test
   @UseCaseDescription(description = "获取存在的用户")
   public void test_GetUser_002() throws IOException {
-    User user = userControllerClient.getUser(UserTestActions.ADMIN_USER_ID, testActions.getAdminAccessToken());
+    User user = userControllerClient.getUser(UserTestActions.ADMIN_USER_NAME, testActions.getAdminAccessToken());
     Assert.assertNotNull(user);
-    Assert.assertEquals(UserTestActions.ADMIN_USER_ID, user.getId());
+    Assert.assertEquals(UserTestActions.ADMIN_USER_NAME, user.getUsername());
   }
 
   @Test
   @UseCaseDescription(description = "更新用户")
   public void test_UpdateUser_001() throws IOException {
     User senderOne = testActions.getSenderOne();
-    User user = userControllerClient.getUser(senderOne.getId(), testActions.getSenderOneAccessToken());
+    User user = userControllerClient.getUser(senderOne.getUsername(), testActions.getSenderOneAccessToken());
     Assert.assertNotNull(user);
     Assert.assertEquals("11111111111", user.getPhone());
 
     User updateUserRequest = new User();
     updateUserRequest.setPhone("88888888");
-    user = userControllerClient.updateUser(senderOne.getId(), updateUserRequest, testActions.getSenderOneAccessToken());
+    user = userControllerClient.updateUser(senderOne.getUsername(), updateUserRequest,
+        testActions.getSenderOneAccessToken());
     Assert.assertEquals("88888888", user.getPhone());
 
   }
@@ -78,7 +79,7 @@ public class UserControllerTest {
   @UseCaseDescription(description = "用户没有收件地址")
   public void test_GetUserRecieveAddressList_001() throws IOException {
     User senderOne = testActions.getSenderOne();
-    List<RecieveAddress> addressList = userControllerClient.getUserRecieveAddressList(senderOne.getId(),
+    List<RecieveAddress> addressList = userControllerClient.getUserRecieveAddressList(senderOne.getUsername(),
         testActions.getSenderOneAccessToken());
     Assert.assertNotNull(addressList);
     Assert.assertEquals(0, addressList.size());
@@ -91,31 +92,51 @@ public class UserControllerTest {
     RecieveAddress recieveAddressOne = testActions.getSenderOneRecieveOne();
     Assert.assertNotNull(recieveAddressOne);
 
-    List<RecieveAddress> addressList = userControllerClient.getUserRecieveAddressList(senderOne.getId(),
+    List<RecieveAddress> addressList = userControllerClient.getUserRecieveAddressList(senderOne.getUsername(),
         testActions.getSenderOneAccessToken());
     Assert.assertNotNull(addressList);
     Assert.assertEquals(1, addressList.size());
     Assert.assertEquals(recieveAddressOne.getId(), addressList.get(0).getId());
 
-    RecieveAddress recieveaddress = userControllerClient.getRecieveAddress(senderOne.getId(), recieveAddressOne.getId(),
-        testActions.getSenderOneAccessToken());
+    RecieveAddress recieveaddress = userControllerClient.getRecieveAddress(senderOne.getUsername(),
+        recieveAddressOne.getId(), testActions.getSenderOneAccessToken());
     Assert.assertNotNull(recieveaddress);
     Assert.assertEquals(recieveAddressOne.getId(), recieveaddress.getId());
 
     RecieveAddress updateRecieveAddressRequest = new RecieveAddress();
     updateRecieveAddressRequest.setReciever("SSSSSSSS");
-    userControllerClient.updateRecieveAddress(senderOne.getId(), recieveAddressOne.getId(), updateRecieveAddressRequest,
-        testActions.getSenderOneAccessToken());
+    userControllerClient.updateRecieveAddress(senderOne.getUsername(), recieveAddressOne.getId(),
+        updateRecieveAddressRequest, testActions.getSenderOneAccessToken());
 
-    recieveaddress = userControllerClient.getRecieveAddress(senderOne.getId(), recieveAddressOne.getId(),
+    recieveaddress = userControllerClient.getRecieveAddress(senderOne.getUsername(), recieveAddressOne.getId(),
         testActions.getSenderOneAccessToken());
     Assert.assertEquals("SSSSSSSS", recieveaddress.getReciever());
 
-    userControllerClient.deprecateRecieveAddress(senderOne.getId(), recieveAddressOne.getId(),
+    userControllerClient.deprecateRecieveAddress(senderOne.getUsername(), recieveAddressOne.getId(),
         testActions.getSenderOneAccessToken(), false);
 
-    addressList = userControllerClient.getUserRecieveAddressList(senderOne.getId(),
+    addressList = userControllerClient.getUserRecieveAddressList(senderOne.getUsername(),
         testActions.getSenderOneAccessToken());
     Assert.assertEquals(0, addressList.size());
+  }
+
+  // @Test
+  // @UseCaseDescription(description = "注册普通用户")
+  // public void test_Register_User_001() {
+  // User user = new User();
+  // user.set
+  // userControllerClient.registerUser(user, testActions.getAdminAccessToken());
+  // }
+
+  @Test
+  @UseCaseDescription(description = "注冊管理員")
+  public void test_Register_User_002() {
+
+  }
+
+  @Test
+  @UseCaseDescription(description = "注冊送貨員")
+  public void test_Register_User_003() {
+
   }
 }

@@ -11,10 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -49,17 +47,10 @@ public class User implements UserDetails {
   private static final long serialVersionUID = 443722768236688870L;
 
   /**
-   * 用户的Id
+   * 小程序用戶沒有username,使用openid作爲username,
    */
   @Id
-  @GeneratedValue(generator = "strategy_uuid")
-  @GenericGenerator(name = "strategy_uuid", strategy = "uuid")
-  private String id;
-
-  /**
-   * 该小程序中用户的唯一Id
-   */
-  private String openid;
+  private String username;
 
   /**
    * 密码
@@ -211,10 +202,13 @@ public class User implements UserDetails {
     return authorityList;
   }
 
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
   @Override
-  @JsonIgnore
   public String getUsername() {
-    return this.id;
+    return this.username;
   }
 
   @Override

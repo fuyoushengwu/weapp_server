@@ -40,34 +40,21 @@ public class UserService {
   private RecieveAddressRepository recieveaddressRepository;
 
   /**
-   * 根据openid获取用户(因为逻辑上User和openid是一一对应的)
-   * 
-   * @param openid
-   * @return
-   */
-  public User getUserByOpenid(String openid) {
-    if (StringUtils.isEmpty(openid)) {
-      return null;
-    }
-    return userRepository.findByOpenid(openid);
-  }
-
-  /**
    * 注册用户(该方法只能ADMIN调用,用来注册SENDER)
    * 
    * @param request
    */
   public User registerUser(User request) {
-    String openid = request.getOpenid();
-    if (StringUtils.isEmpty(openid)) {
-      throw new IllegalArgumentException("register failed,because not provide  openid");
+    String username = request.getUsername();
+    if (StringUtils.isEmpty(username)) {
+      throw new IllegalArgumentException("register failed,because not provide  username");
     }
     String password = request.getPassword();
     if (StringUtils.isEmpty(password)) {
       throw new IllegalArgumentException("register failed,because not provide  password");
     }
 
-    User user = userRepository.findByOpenid(openid);
+    User user = userRepository.findOne(username);
     if (user != null) {
       return user;
     }
@@ -91,14 +78,14 @@ public class UserService {
   /**
    * 获取用户
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @return
    */
-  public User getUser(String userId) {
-    User user = userRepository.findOne(userId);
+  public User getUser(String username) {
+    User user = userRepository.findOne(username);
     if (null == user) {
-      throw new UserException(ResponseCode.USER_NOT_EXIST, userId);
+      throw new UserException(ResponseCode.USER_NOT_EXIST, username);
     }
     return user;
   }
@@ -106,12 +93,12 @@ public class UserService {
   /**
    * 获取用户手机号
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @return
    */
-  public GetUserPhoneResponse getUserPhone(String userId) {
-    User user = getUser(userId);
+  public GetUserPhoneResponse getUserPhone(String username) {
+    User user = getUser(username);
     GetUserPhoneResponse response = new GetUserPhoneResponse();
     response.setPhone(user.getPhone());
     return response;
@@ -120,15 +107,15 @@ public class UserService {
   /**
    * 更新用户信息
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @param updateUser
    * @return
    */
-  public User updateUser(String userId, User updateUser) {
-    User user = userRepository.findOne(userId);
+  public User updateUser(String username, User updateUser) {
+    User user = userRepository.findOne(username);
     if (null == user) {
-      throw new UserException(ResponseCode.USER_NOT_EXIST, userId);
+      throw new UserException(ResponseCode.USER_NOT_EXIST, username);
     }
     if (null == updateUser) {
       return user;
@@ -141,35 +128,35 @@ public class UserService {
   /**
    * 获取用户收件地址
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @return
    */
-  public List<RecieveAddress> getUserRecieveAddressList(String userId) {
-    User user = userRepository.findOne(userId);
+  public List<RecieveAddress> getUserRecieveAddressList(String username) {
+    User user = userRepository.findOne(username);
     if (null == user) {
-      throw new UserException(ResponseCode.USER_NOT_EXIST, userId);
+      throw new UserException(ResponseCode.USER_NOT_EXIST, username);
     }
-    return recieveaddressRepository.findByUserId(userId);
+    return recieveaddressRepository.findByUsername(username);
   }
 
   /**
    * 给用户添加收件地址
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @param recieveAddress
    * @return
    */
-  public RecieveAddress addUserRecieveAddress(String userId, RecieveAddress recieveAddress) {
-    User user = userRepository.findOne(userId);
+  public RecieveAddress addUserRecieveAddress(String username, RecieveAddress recieveAddress) {
+    User user = userRepository.findOne(username);
     if (null == user) {
-      throw new UserException(ResponseCode.USER_NOT_EXIST, userId);
+      throw new UserException(ResponseCode.USER_NOT_EXIST, username);
     }
     if (null == recieveAddress) {
       return null;
     }
-    recieveAddress.setUserId(userId);
+    recieveAddress.setUsername(username);
     if (recieveAddress.isDef()) {
       recieveaddressRepository.setAllRecieveAddressNotDef();
     }
@@ -180,17 +167,17 @@ public class UserService {
   /**
    * 获取收件地址
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @param addressId
    * @return
    */
-  public RecieveAddress getRecieveAddress(String userId, String addressId) {
+  public RecieveAddress getRecieveAddress(String username, String addressId) {
     RecieveAddress recieveAddress = recieveaddressRepository.findOne(addressId);
     if (null == recieveAddress) {
       throw new UserException(ResponseCode.RECIEVEADDRESS_NOT_EXIST, addressId);
     }
-    if (userId.equals(recieveAddress.getUserId())) {
+    if (username.equals(recieveAddress.getUsername())) {
       return recieveAddress;
     } else {
       throw new AccessDeniedException("no permission get other user's recieve address");
@@ -202,18 +189,18 @@ public class UserService {
    * 更新收件地址信息
    * 
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @param addressId
    * @param updateRecieveAddress
    * @return
    */
-  public RecieveAddress updateRecieveAddress(String userId, String addressId, RecieveAddress updateRecieveAddress) {
+  public RecieveAddress updateRecieveAddress(String username, String addressId, RecieveAddress updateRecieveAddress) {
     RecieveAddress recieveAddress = recieveaddressRepository.findOne(addressId);
     if (null == recieveAddress) {
       throw new UserException(ResponseCode.RECIEVEADDRESS_NOT_EXIST, addressId);
     }
-    if (!userId.equals(recieveAddress.getUserId())) {
+    if (!username.equals(recieveAddress.getUsername())) {
       throw new AccessDeniedException("no permission change other user's recieve address");
     }
 
@@ -228,17 +215,17 @@ public class UserService {
   /**
    * 废弃收件地址
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @param addressId
    */
-  public void deprecateRecieveAddress(String userId, String addressId) {
+  public void deprecateRecieveAddress(String username, String addressId) {
     RecieveAddress recieveAddress = recieveaddressRepository.findOne(addressId);
     if (null == recieveAddress) {
       throw new UserException(ResponseCode.RECIEVEADDRESS_NOT_EXIST, addressId);
     }
 
-    if (!userId.equals(recieveAddress.getUserId())) {
+    if (!username.equals(recieveAddress.getUsername())) {
       throw new AccessDeniedException("no permission deprecate other user's recieve address");
     }
 

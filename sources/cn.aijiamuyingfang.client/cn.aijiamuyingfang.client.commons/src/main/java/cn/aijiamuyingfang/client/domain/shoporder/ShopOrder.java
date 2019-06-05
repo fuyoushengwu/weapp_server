@@ -32,7 +32,7 @@ public class ShopOrder implements Parcelable {
   /**
    * 订单所属用户ID
    */
-  private String userId;
+  private String username;
 
   /**
    * 订单号
@@ -163,7 +163,7 @@ public class ShopOrder implements Parcelable {
   @Override
   public void writeToParcel(Parcel dest, int flags) {
     dest.writeString(id);
-    dest.writeString(userId);
+    dest.writeString(username);
     dest.writeString(orderNo);
     dest.writeParcelable(status, flags);
     dest.writeByte((byte) (fromPreOrder ? 1 : 0));
@@ -189,7 +189,7 @@ public class ShopOrder implements Parcelable {
 
   private ShopOrder(Parcel in) {
     id = in.readString();
-    userId = in.readString();
+    username = in.readString();
     orderNo = in.readString();
     status = in.readParcelable(ShopOrderStatus.class.getClassLoader());
     fromPreOrder = in.readByte() != 0;

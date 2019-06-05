@@ -83,7 +83,7 @@ public class ShopOrderService {
   /**
    * 分页获取订单
    *
-   * @param userId
+   * @param username
    *          用户id
    * @param statusList
    * @param sendTypeList
@@ -91,9 +91,9 @@ public class ShopOrderService {
    * @param pageSize
    * @return
    */
-  public GetShopOrderListResponse getUserShopOrderList(String userId, List<ShopOrderStatus> statusList,
+  public GetShopOrderListResponse getUserShopOrderList(String username, List<ShopOrderStatus> statusList,
       List<SendType> sendTypeList, int currentPage, int pageSize) {
-    Page<ShopOrder> shoporderPage = getUserShopOrderPage(userId, statusList, sendTypeList, currentPage, pageSize);
+    Page<ShopOrder> shoporderPage = getUserShopOrderPage(username, statusList, sendTypeList, currentPage, pageSize);
     GetShopOrderListResponse response = new GetShopOrderListResponse();
     response.setCurrentPage(shoporderPage.getNumber() + 1);
     response.setDataList(shoporderPage.getContent());
@@ -124,7 +124,7 @@ public class ShopOrderService {
   /**
    * 分页获取订单
    *
-   * @param userId
+   * @param username
    *          用户id
    * @param statusList
    * @param sendTypeList
@@ -132,7 +132,7 @@ public class ShopOrderService {
    * @param pageSize
    * @return
    */
-  private Page<ShopOrder> getUserShopOrderPage(String userId, List<ShopOrderStatus> statusList,
+  private Page<ShopOrder> getUserShopOrderPage(String username, List<ShopOrderStatus> statusList,
       List<SendType> sendTypeList, int currentPage, int pageSize) {
     if (null == statusList || statusList.isEmpty()) {
       statusList = new ArrayList<>();
@@ -153,10 +153,11 @@ public class ShopOrderService {
     } else {
       pageRequest = new PageRequest(currentPage - 1, pageSize, Sort.Direction.DESC, "orderNo");
     }
-    if (StringUtils.hasContent(userId)) {
-      return shopOrderRepository.findByUserIdAndStatusInAndSendtypeIn(userId, statusList, sendTypeList, pageRequest);
+    if (StringUtils.hasContent(username)) {
+      return shopOrderRepository.findByUsernameAndStatusInAndSendTypeIn(username, statusList, sendTypeList,
+          pageRequest);
     }
-    return shopOrderRepository.findByStatusInAndSendtypeIn(statusList, sendTypeList, pageRequest);
+    return shopOrderRepository.findByStatusInAndSendTypeIn(statusList, sendTypeList, pageRequest);
 
   }
 
@@ -176,9 +177,9 @@ public class ShopOrderService {
       throw new ShopOrderException("500", "shoporder has get target status");
     }
 
-    User user = userClient.getUserInternal(shoporder.getUserId(), null).getData();
+    User user = userClient.getUserInternal(shoporder.getUsername()).getData();
     if (null == user) {
-      throw new ShopOrderException(ResponseCode.USER_NOT_EXIST, shoporder.getUserId());
+      throw new ShopOrderException(ResponseCode.USER_NOT_EXIST, shoporder.getUsername());
     }
 
     if (updateStatus != null) {
@@ -198,13 +199,13 @@ public class ShopOrderService {
 
       switch (shoporder.getSendType()) {
       case OWNSEND:
-        templateMsgService.sendOwnSendMsg(user.getOpenid(), shoporder);
+        templateMsgService.sendOwnSendMsg(user.getUsername(), shoporder);
         break;
       case THIRDSEND:
-        templateMsgService.sendThirdSendMsg(user.getOpenid(), shoporder);
+        templateMsgService.sendThirdSendMsg(user.getUsername(), shoporder);
         break;
       case PICKUP:
-        templateMsgService.sendPickupMsg(user.getOpenid(), shoporder);
+        templateMsgService.sendPickupMsg(user.getUsername(), shoporder);
         break;
       default:
         break;
@@ -229,17 +230,17 @@ public class ShopOrderService {
   /**
    * 删除用户下的订单,该操作需要先判断该订单是否属于用户
    *
-   * @param userId
+   * @param username
    *          用户id
    * @param shopOrderId
    */
-  public void deleteUserShopOrder(String userId, String shopOrderId) {
+  public void deleteUserShopOrder(String username, String shopOrderId) {
     ShopOrder shopOrder = shopOrderRepository.findOne(shopOrderId);
     if (null == shopOrder) {
       throw new ShopOrderException(ResponseCode.SHOPORDER_NOT_EXIST, shopOrderId);
     }
 
-    User user = userClient.getUserInternal(userId, null).getData();
+    User user = userClient.getUserInternal(username).getData();
     if (null == user) {
       throw new ShopOrderException("404", "shoporder owner not exist");
     }
@@ -247,7 +248,7 @@ public class ShopOrderService {
     if (ShopOrderStatus.DOING.equals(shopOrder.getStatus())) {
       throw new ShopOrderException("500", "shoporder is doing,cannot be deleted");
     }
-    if (!userId.equals(shopOrder.getUserId())) {
+    if (!username.equals(shopOrder.getUsername())) {
       throw new AccessDeniedException("no permission delete other user's shoporder");
     }
 
@@ -255,15 +256,15 @@ public class ShopOrderService {
       List<ShopOrderVoucher> shoporderVoucherList = shopOrder.getOrderVoucher();
       List<UserVoucher> updateUserVoucherList = new ArrayList<>();
       for (ShopOrderVoucher shoporderVoucher : shoporderVoucherList) {
-        UserVoucher userVoucher = couponClient.getUserVoucher(userId, shoporderVoucher.getUservoucherId()).getData();
+        UserVoucher userVoucher = couponClient.getUserVoucher(username, shoporderVoucher.getUservoucherId()).getData();
         VoucherItem voucherItem = couponClient.getVoucherItem(shoporderVoucher.getVoucherItemId()).getData();
         userVoucher.increaseScore(voucherItem.getScore());
         updateUserVoucherList.add(userVoucher);
       }
-      couponClient.updateUserVoucherList(userId, updateUserVoucherList);
+      couponClient.updateUserVoucherList(username, updateUserVoucherList);
 
       user.increaseGenericScore(shopOrder.getScore());
-      userClient.updateUser(userId, user);
+      userClient.updateUser(username, user);
     }
 
     if (shopOrder.getStatus() != ShopOrderStatus.DOING) {
@@ -274,12 +275,12 @@ public class ShopOrderService {
   /**
    * 确认订单结束,先要判断该订单是否属于用户
    *
-   * @param userId
+   * @param username
    *          用户id
    * @param shopOrderId
    * @return
    */
-  public ConfirmShopOrderFinishedResponse confirmUserShopOrderFinished(String userId, String shopOrderId) {
+  public ConfirmShopOrderFinishedResponse confirmUserShopOrderFinished(String username, String shopOrderId) {
     ShopOrder shoporder = shopOrderRepository.findOne(shopOrderId);
     if (null == shoporder) {
       throw new ShopOrderException(ResponseCode.SHOPORDER_NOT_EXIST, shopOrderId);
@@ -287,7 +288,7 @@ public class ShopOrderService {
     if (shoporder.getStatus() != ShopOrderStatus.DOING) {
       throw new ShopOrderException("500", "only doing shoporder can be confirmed");
     }
-    if (!userId.equals(shoporder.getUserId())) {
+    if (!username.equals(shoporder.getUsername())) {
       throw new AccessDeniedException("no permission confirm other user's shoporder");
     }
 
@@ -296,7 +297,7 @@ public class ShopOrderService {
     shoporder.setFinishTime(new Date());
     shopOrderRepository.saveAndFlush(shoporder);
 
-    User user = userClient.getUserInternal(userId, null).getData();
+    User user = userClient.getUserInternal(username).getData();
     if (null == user) {
       return response;
     }
@@ -312,11 +313,11 @@ public class ShopOrderService {
 
       GoodVoucher goodvoucher = couponClient.getGoodVoucher(good.getVoucherId()).getData();
       if (goodvoucher != null) {
-        UserVoucher uservoucher = couponClient.getUserVoucherForGoodVoucher(userId, goodvoucher.getId()).getData();
+        UserVoucher uservoucher = couponClient.getUserVoucherForGoodVoucher(username, goodvoucher.getId()).getData();
         if (null == uservoucher) {
           uservoucher = new UserVoucher();
           uservoucher.setGoodVoucher(goodvoucher);
-          uservoucher.setUserId(userId);
+          uservoucher.setUsername(username);
         }
         int voucherScore = goodvoucher.getScore() * shoporderItem.getCount();
         uservoucher.increaseScore(voucherScore);
@@ -324,25 +325,25 @@ public class ShopOrderService {
         updateUserVoucherList.add(uservoucher);
       }
     }
-    couponClient.updateUserVoucherList(userId, updateUserVoucherList);
-    userClient.updateUser(userId, user);
+    couponClient.updateUserVoucherList(username, updateUserVoucherList);
+    userClient.updateUser(username, user);
     return response;
   }
 
   /**
    * 更新订单的收货地址,先要判断该订单是否属于用户
    *
-   * @param userId
+   * @param username
    *          用户id
    * @param shopOrderId
    * @param addressId
    */
-  public void updateUserShopOrderRecieveAddress(String userId, String shopOrderId, String addressId) {
+  public void updateUserShopOrderRecieveAddress(String username, String shopOrderId, String addressId) {
     ShopOrder shoporder = shopOrderRepository.findOne(shopOrderId);
     if (null == shoporder) {
       throw new ShopOrderException(ResponseCode.SHOPORDER_NOT_EXIST, shopOrderId);
     }
-    if (!userId.equals(shoporder.getUserId())) {
+    if (!username.equals(shoporder.getUsername())) {
       throw new AccessDeniedException("no permission update other user's shoporder recieve address");
     }
 
@@ -375,15 +376,15 @@ public class ShopOrderService {
   /**
    * 获得购买商品时可用的兑换券
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @param goodIdList
    * @return
    */
-  public GetShopOrderVoucherListResponse getUserShopOrderVoucherList(String userId, List<String> goodIdList) {
+  public GetShopOrderVoucherListResponse getUserShopOrderVoucherList(String username, List<String> goodIdList) {
     GetShopOrderVoucherListResponse result = new GetShopOrderVoucherListResponse();
 
-    GetUserVoucherListResponse response = couponClient.getUserVoucherList(userId, 1, Integer.MAX_VALUE).getData();
+    GetUserVoucherListResponse response = couponClient.getUserVoucherList(username, 1, Integer.MAX_VALUE).getData();
     for (UserVoucher uservoucher : response.getDataList()) {
       List<String> itemidList = uservoucher.getGoodVoucher().getVoucherItemIdList();
       for (String itemid : itemidList) {
@@ -404,17 +405,17 @@ public class ShopOrderService {
   /**
    * 获取用户订单,先要判断订单是否属于用户
    *
-   * @param userId
+   * @param username
    *          用户id
    * @param shopOrderId
    * @return
    */
-  public ShopOrder getUserShopOrder(String userId, String shopOrderId) {
+  public ShopOrder getUserShopOrder(String username, String shopOrderId) {
     ShopOrder shoporder = shopOrderRepository.findOne(shopOrderId);
     if (null == shoporder) {
       throw new ShopOrderException(ResponseCode.SHOPORDER_NOT_EXIST, shopOrderId);
     }
-    if (!userId.equals(shoporder.getUserId())) {
+    if (!username.equals(shoporder.getUsername())) {
       throw new AccessDeniedException("no permission get other user's shoporder");
     }
     return shoporder;
@@ -423,12 +424,12 @@ public class ShopOrderService {
   /**
    * 创建用户订单
    * 
-   * @param userId
+   * @param username
    * @param request
    * @return
    */
-  public ShopOrder createUserShopOrder(String userId, CreateShopOrderRequest request) {
-    PreviewOrder previeworder = previeworderRepository.findByUserId(userId);
+  public ShopOrder createUserShopOrder(String username, CreateShopOrderRequest request) {
+    PreviewOrder previeworder = previeworderRepository.findByUsername(username);
     if (null == previeworder) {
       throw new ShopOrderException("500", "user should first preview order and then create shoporder");
     }
@@ -468,32 +469,31 @@ public class ShopOrderService {
     shoporder.setSendPrice(sendPrice);
     shoporder.setScore(request.getJfNum());
 
-    List<ShopOrderVoucher> shoporderVoucherList = getUserShopOrderVoucherList(userId, goodIdList).getVoucherList();
+    List<ShopOrderVoucher> shoporderVoucherList = getUserShopOrderVoucherList(username, goodIdList).getVoucherList();
     shoporder.setOrderVoucher(shoporderVoucherList);
     double totalPrice = totalGoodsPrice + sendPrice - request.getJfNum() / 100.0;
     if (!CollectionUtils.isEmpty(shoporderVoucherList)) {
       List<UserVoucher> updateUserVoucherList = new ArrayList<>();
       for (ShopOrderVoucher shoporderVoucher : shoporderVoucherList) {
         Good good = goodClient.getGood(shoporderVoucher.getGoodId()).getData();
-        UserVoucher userVoucher = couponClient.getUserVoucher(userId, shoporderVoucher.getUservoucherId()).getData();
+        UserVoucher userVoucher = couponClient.getUserVoucher(username, shoporderVoucher.getUservoucherId()).getData();
         VoucherItem voucherItem = couponClient.getVoucherItem(shoporderVoucher.getVoucherItemId()).getData();
 
         totalPrice -= good.getPrice();
         userVoucher.decreaseScore(voucherItem.getScore());
         updateUserVoucherList.add(userVoucher);
       }
-      couponClient.updateUserVoucherList(userId, updateUserVoucherList);
+      couponClient.updateUserVoucherList(username, updateUserVoucherList);
     }
 
     shoporder.setTotalPrice(totalPrice);
 
-    User user = userClient.getUserInternal(userId, null).getData();
+    User user = userClient.getUserInternal(username).getData();
     if (user != null) {
-      shoporder.setUserOpenId(user.getOpenid());
-      shoporder.setUserId(userId);
+      shoporder.setUsername(user.getUsername());
 
       user.decreaseGenericScore(shoporder.getScore());
-      userClient.updateUser(userId, user);
+      userClient.updateUser(username, user);
     }
 
     shopOrderRepository.saveAndFlush(shoporder);
@@ -517,102 +517,102 @@ public class ShopOrderService {
   /**
    * 得到用户订单根据状态分类的数目
    *
-   * @param userId
+   * @param username
    *          用户id
    * @return
    */
-  public Map<String, Integer> getUserShopOrderStatusCount(String userId) {
+  public Map<String, Integer> getUserShopOrderStatusCount(String username) {
     Map<String, Integer> result = new HashMap<>();
-    result.put("tobeReceiveCount", getTobeRecievedCount(userId));
-    result.put("tobePickUpCount", getTobePickupCount(userId));
-    result.put("inOrderingCount", getPreOrderCount(userId));
-    result.put("finishedCount", getFinishedCount(userId));
-    result.put("overPickUpCount", getOverTimeCount(userId));
+    result.put("tobeReceiveCount", getTobeRecievedCount(username));
+    result.put("tobePickUpCount", getTobePickupCount(username));
+    result.put("inOrderingCount", getPreOrderCount(username));
+    result.put("finishedCount", getFinishedCount(username));
+    result.put("overPickUpCount", getOverTimeCount(username));
     return result;
   }
 
   /**
    * 获得待接收订单的数量
    *
-   * @param userId
+   * @param username
    *          用户id
    * @return
    */
-  private int getTobeRecievedCount(String userId) {
+  private int getTobeRecievedCount(String username) {
     List<ShopOrderStatus> statusList = new ArrayList<>();
     statusList.add(ShopOrderStatus.UNSTART);
     statusList.add(ShopOrderStatus.DOING);
     List<SendType> sendTypeList = new ArrayList<>();
     sendTypeList.add(SendType.OWNSEND);
     sendTypeList.add(SendType.THIRDSEND);
-    return shopOrderRepository.countByUserIdAndStatusInAndSendtypeIn(userId, statusList, sendTypeList);
+    return shopOrderRepository.countByUsernameAndStatusInAndSendTypeIn(username, statusList, sendTypeList);
   }
 
   /**
    * 获得待自取订单的数量
    *
-   * @param userId
+   * @param username
    *          用户id
    * @return
    */
-  private int getTobePickupCount(String userId) {
+  private int getTobePickupCount(String username) {
     List<ShopOrderStatus> statusList = new ArrayList<>();
     statusList.add(ShopOrderStatus.UNSTART);
     statusList.add(ShopOrderStatus.DOING);
     List<SendType> sendTypeList = new ArrayList<>();
     sendTypeList.add(SendType.PICKUP);
-    return shopOrderRepository.countByUserIdAndStatusInAndSendtypeIn(userId, statusList, sendTypeList);
+    return shopOrderRepository.countByUsernameAndStatusInAndSendTypeIn(username, statusList, sendTypeList);
   }
 
   /**
    * 获得预约单的数量
    *
-   * @param userId
+   * @param username
    *          用户id
    * @return
    */
-  private int getPreOrderCount(String userId) {
+  private int getPreOrderCount(String username) {
     List<ShopOrderStatus> statusList = new ArrayList<>();
     statusList.add(ShopOrderStatus.PREORDER);
     List<SendType> sendTypeList = new ArrayList<>();
     for (SendType type : SendType.values()) {
       sendTypeList.add(type);
     }
-    return shopOrderRepository.countByUserIdAndStatusInAndSendtypeIn(userId, statusList, sendTypeList);
+    return shopOrderRepository.countByUsernameAndStatusInAndSendTypeIn(username, statusList, sendTypeList);
   }
 
   /**
    * 获得已完成订单的数量
    *
-   * @param userId
+   * @param username
    *          用户id
    * @return
    */
-  private int getFinishedCount(String userId) {
+  private int getFinishedCount(String username) {
     List<ShopOrderStatus> statusList = new ArrayList<>();
     statusList.add(ShopOrderStatus.FINISHED);
     List<SendType> sendTypeList = new ArrayList<>();
     for (SendType type : SendType.values()) {
       sendTypeList.add(type);
     }
-    return shopOrderRepository.countByUserIdAndStatusInAndSendtypeIn(userId, statusList, sendTypeList);
+    return shopOrderRepository.countByUsernameAndStatusInAndSendTypeIn(username, statusList, sendTypeList);
   }
 
   /**
    * 获得超时订单的数量
    *
-   * @param userId
+   * @param username
    *          用户id
    * @return
    */
-  private int getOverTimeCount(String userId) {
+  private int getOverTimeCount(String username) {
     List<ShopOrderStatus> statusList = new ArrayList<>();
     statusList.add(ShopOrderStatus.OVERTIME);
     List<SendType> sendTypeList = new ArrayList<>();
     for (SendType type : SendType.values()) {
       sendTypeList.add(type);
     }
-    return shopOrderRepository.countByUserIdAndStatusInAndSendtypeIn(userId, statusList, sendTypeList);
+    return shopOrderRepository.countByUsernameAndStatusInAndSendTypeIn(username, statusList, sendTypeList);
   }
 
   /**
@@ -696,7 +696,7 @@ public class ShopOrderService {
         goodClient.saleGoodList(saleGoodList);
         shoporder.setStatus(ShopOrderStatus.UNSTART);
         shopOrderRepository.saveAndFlush(shoporder);
-        templateMsgService.sendPreOrderMsg(shoporder.getUserOpenId(), shoporder, updateGood);
+        templateMsgService.sendPreOrderMsg(shoporder.getUsername(), shoporder, updateGood);
       }
     }
   }

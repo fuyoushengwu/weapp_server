@@ -20,13 +20,11 @@ public interface UserClient {
   /**
    * 查询用户信息( 供系统内部其它服务使用的,不需要鉴权)
    * 
-   * @param userId
-   * @param openid
+   * @param username
    * @return
    */
   @GetMapping("/users-anon/internal/user")
-  ResponseBean<User> getUserInternal(@RequestParam(value = "user_id", required = false) String userId,
-      @RequestParam(value = "openid", required = false) String openid);
+  ResponseBean<User> getUserInternal(@RequestParam(value = "username") String username);
 
   /**
    * 注册用户(供系统内部其它服务使用的,不需要鉴权)
@@ -40,30 +38,30 @@ public interface UserClient {
   /**
    * 更新用户信息
    * 
-   * @param userId
+   * @param username
    * @param user
    * @return
    */
-  @PutMapping(value = "/user/{user_id}")
-  ResponseBean<User> updateUser(@PathVariable("user_id") String userId, @RequestBody User user);
+  @PutMapping(value = "/user/{username}")
+  ResponseBean<User> updateUser(@PathVariable("username") String username, @RequestBody User user);
 
   /**
    * 获取用户收件地址
    * 
-   * @param userId
+   * @param username
    * @return
    */
-  @GetMapping(value = "/user/{user_id}/recieveaddress")
-  ResponseBean<List<RecieveAddress>> getUserRecieveAddressList(@PathVariable("user_id") String userId);
+  @GetMapping(value = "/user/{username}/recieveaddress")
+  ResponseBean<List<RecieveAddress>> getUserRecieveAddressList(@PathVariable("username") String username);
 
   /**
    * 获取收件地址
    * 
-   * @param userId
+   * @param username
    * @param addressId
    * @return
    */
-  @GetMapping(value = "/user/{user_id}/recieveaddress/{address_id}")
-  ResponseBean<RecieveAddress> getRecieveAddress(@PathVariable("user_id") String userId,
+  @GetMapping(value = "/user/{username}/recieveaddress/{address_id}")
+  ResponseBean<RecieveAddress> getRecieveAddress(@PathVariable("username") String username,
       @PathVariable("address_id") String addressId);
 }

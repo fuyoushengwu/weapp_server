@@ -59,80 +59,80 @@ public class TemplateMsgService {
   /**
    * 发送预约到货消息
    * 
-   * @param openid
+   * @param username
    * @param msgData
    * @throws WxErrorException
    */
-  public void sendPreOrderMsg(String openid, TemplateMsg msgData) throws WxErrorException {
-    sendTemplateMsg(openid, PREORDER_TEMPLATE_ID, msgData);
+  public void sendPreOrderMsg(String username, TemplateMsg msgData) throws WxErrorException {
+    sendTemplateMsg(username, PREORDER_TEMPLATE_ID, msgData);
   }
 
   /**
    * 发送订单自提通知
    * 
-   * @param openid
+   * @param username
    * @param msgData
    * @throws WxErrorException
    */
-  public void sendPickupMsg(String openid, TemplateMsg msgData) throws WxErrorException {
-    sendTemplateMsg(openid, PICKUP_TEMPLATE_ID, msgData);
+  public void sendPickupMsg(String username, TemplateMsg msgData) throws WxErrorException {
+    sendTemplateMsg(username, PICKUP_TEMPLATE_ID, msgData);
   }
 
   /**
    * 发送快递发货通知
    * 
-   * @param openid
+   * @param username
    * @param msgData
    * @throws WxErrorException
    */
-  public void sendThirdSendMsg(String openid, TemplateMsg msgData) throws WxErrorException {
-    sendTemplateMsg(openid, THIRDSEND_TEMPLATE_ID, msgData);
+  public void sendThirdSendMsg(String username, TemplateMsg msgData) throws WxErrorException {
+    sendTemplateMsg(username, THIRDSEND_TEMPLATE_ID, msgData);
   }
 
   /**
    * 发送订单配送通知
    * 
-   * @param openid
+   * @param username
    * @param msgData
    * @throws WxErrorException
    */
-  public void sendOwnSendMsg(String openid, TemplateMsg msgData) throws WxErrorException {
-    sendTemplateMsg(openid, OWNSEND_TEMPLATE_ID, msgData);
+  public void sendOwnSendMsg(String username, TemplateMsg msgData) throws WxErrorException {
+    sendTemplateMsg(username, OWNSEND_TEMPLATE_ID, msgData);
   }
 
   /**
    * 发送订单超时提醒
    * 
-   * @param openid
+   * @param username
    * @param msgData
    * @throws WxErrorException
    */
-  public void sendOrderOverTimeMsg(String openid, TemplateMsg msgData) throws WxErrorException {
-    sendTemplateMsg(openid, OVERTIME_TEMPLATE_ID, msgData);
+  public void sendOrderOverTimeMsg(String username, TemplateMsg msgData) throws WxErrorException {
+    sendTemplateMsg(username, OVERTIME_TEMPLATE_ID, msgData);
   }
 
   /**
    * 发送 订单确认通知
    * 
-   * @param openid
+   * @param username
    * @param msgData
    * @throws WxErrorException
    */
-  public void sendOrderConfirmMsg(String openid, TemplateMsg msgData) throws WxErrorException {
-    sendTemplateMsg(openid, ORDERCONFIRM_TEMPLATE_ID, msgData);
+  public void sendOrderConfirmMsg(String username, TemplateMsg msgData) throws WxErrorException {
+    sendTemplateMsg(username, ORDERCONFIRM_TEMPLATE_ID, msgData);
   }
 
   /**
    * 发送模板消息
    * 
-   * @param openid
+   * @param username
    * @param templateid
    * @param msgData
    * @throws WxErrorException
    */
-  private void sendTemplateMsg(String openid, String templateid, TemplateMsg msgData) throws WxErrorException {
+  private void sendTemplateMsg(String username, String templateid, TemplateMsg msgData) throws WxErrorException {
     WxMaTemplateMessage message = new WxMaTemplateMessage();
-    message.setToUser(openid);
+    message.setToUser(username);
     message.setTemplateId(templateid);
     message.setPage(msgData.getPage());
     message.setFormId(msgData.getFormid());

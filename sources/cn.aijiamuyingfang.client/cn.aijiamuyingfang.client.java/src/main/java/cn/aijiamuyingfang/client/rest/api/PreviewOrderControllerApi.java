@@ -30,38 +30,38 @@ public interface PreviewOrderControllerApi {
   /**
    * 更新预览的商品项
    * 
-   * @param userId
+   * @param username
    * @param previewItemId
    * @param request
    * @param accessToken
    * @return
    */
-  @PUT(value = "/shoporder-service/user/{user_id}/previeworder/item/{preview_item_id}")
-  public Call<ResponseBean> updatePreviewOrderItem(@Path("user_id") String userId,
+  @PUT(value = "/shoporder-service/user/{username}/previeworder/item/{preview_item_id}")
+  public Call<ResponseBean> updatePreviewOrderItem(@Path("username") String username,
       @Path("preview_item_id") String previewItemId, @Body PreviewOrderItem request,
       @Query("access_token") String accessToken);
 
   /**
    * 删除预览的商品项
    * 
-   * @param userId
+   * @param username
    * @param previewItemId
    * @param accessToken
    * @return
    */
-  @DELETE(value = "/shoporder-service/user/{user_id}/previeworder/item/{previewItemId}")
-  public Call<ResponseBean> deletePreviewOrderItem(@Path("user_id") String userId,
+  @DELETE(value = "/shoporder-service/user/{username}/previeworder/item/{previewItemId}")
+  public Call<ResponseBean> deletePreviewOrderItem(@Path("username") String username,
       @Path("previewItemId") String previewItemId, @Query("access_token") String accessToken);
 
   /**
    * 生成用户的预览订单
    * 
-   * @param userId
+   * @param username
    * @param goodIdList
    * @param accessToken
    * @return
    */
-  @GET(value = "/shoporder-service/user/{user_id}/previeworder")
-  public Call<ResponseBean> generatePreviewOrder(@Path("user_id") String userId,
+  @GET(value = "/shoporder-service/user/{username}/previeworder")
+  public Call<ResponseBean> generatePreviewOrder(@Path("username") String username,
       @Query("good_id") List<String> goodIdList, @Query("access_token") String accessToken);
 }

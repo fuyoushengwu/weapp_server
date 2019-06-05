@@ -39,14 +39,14 @@ public class UserController {
   /**
    * 获取用户
    * 
-   * @param userId
+   * @param username
    * @return
    */
   @PreAuthorize(
-      value = "isAuthenticated() and (#userId.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
-  @GetMapping(value = "/user/{user_id}")
-  public User getUser(@PathVariable("user_id") String userId) {
-    return getUserInternal(userId, null);
+      value = "isAuthenticated() and (#username.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
+  @GetMapping(value = "/user/{username}")
+  public User getUser(@PathVariable("username") String username) {
+    return getUserInternal(username);
   }
 
   @PreAuthorize("hasAuthority('permission:manager:*')")
@@ -58,19 +58,12 @@ public class UserController {
   /**
    * 获取用户( 供系统内部其它服务使用的,不需要鉴权)
    * 
-   * @param userId
+   * @param username
    * @return
    */
   @GetMapping(value = "/users-anon/internal/user")
-  public User getUserInternal(@RequestParam(value = "user_id", required = false) String userId,
-      @RequestParam(value = "openid", required = false) String openid) {
-    if (StringUtils.hasContent(userId)) {
-      return userService.getUser(userId);
-    }
-    if (StringUtils.hasContent(openid)) {
-      return userService.getUserByOpenid(openid);
-    }
-    throw new IllegalArgumentException("userId or openid must provided one");
+  public User getUserInternal(@RequestParam(value = "username") String username) {
+    return userService.getUser(username);
   }
 
   /**
@@ -87,53 +80,53 @@ public class UserController {
   /**
    * 获取用户手机号
    * 
-   * @param userId
+   * @param username
    * @return
    */
   @PreAuthorize(value = "hasAnyAuthority('permission:manager:*','permission:sender:*')")
-  @GetMapping(value = "/user/{user_id}/phone")
-  public GetUserPhoneResponse getUserPhone(@PathVariable("user_id") String userId) {
-    return userService.getUserPhone(userId);
+  @GetMapping(value = "/user/{username}/phone")
+  public GetUserPhoneResponse getUserPhone(@PathVariable("username") String username) {
+    return userService.getUserPhone(username);
   }
 
   /**
    * 更新用户信息
    * 
-   * @param userId
+   * @param username
    * @param user
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated() and #userId.equals(getAuthentication().getName())")
-  @PutMapping(value = "/user/{user_id}")
-  public User updateUser(@PathVariable("user_id") String userId, @RequestBody User user) {
+  @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
+  @PutMapping(value = "/user/{username}")
+  public User updateUser(@PathVariable("username") String username, @RequestBody User user) {
     if (null == user) {
       throw new IllegalArgumentException("update user request body is null");
     }
-    return userService.updateUser(userId, user);
+    return userService.updateUser(username, user);
   }
 
   /**
    * 获取用户收件地址
    * 
-   * @param userId
+   * @param username
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated() and #userId.equals(getAuthentication().getName())")
-  @GetMapping(value = "/user/{user_id}/recieveaddress")
-  public List<RecieveAddress> getUserRecieveAddressList(@PathVariable("user_id") String userId) {
-    return userService.getUserRecieveAddressList(userId);
+  @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
+  @GetMapping(value = "/user/{username}/recieveaddress")
+  public List<RecieveAddress> getUserRecieveAddressList(@PathVariable("username") String username) {
+    return userService.getUserRecieveAddressList(username);
   }
 
   /**
    * 给用户添加收件地址
    * 
-   * @param userId
+   * @param username
    * @param request
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated() and #userId.equals(getAuthentication().getName())")
-  @PostMapping(value = "/user/{user_id}/recieveaddress")
-  public RecieveAddress addUserRecieveAddress(@PathVariable("user_id") String userId,
+  @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
+  @PostMapping(value = "/user/{username}/recieveaddress")
+  public RecieveAddress addUserRecieveAddress(@PathVariable("username") String username,
       @RequestBody RecieveAddress request) {
     if (null == request) {
       throw new IllegalArgumentException("add user recieveaddress request body is null");
@@ -141,51 +134,51 @@ public class UserController {
     if (StringUtils.isEmpty(request.getPhone())) {
       throw new IllegalArgumentException("recieveaddress phone is empty");
     }
-    return userService.addUserRecieveAddress(userId, request);
+    return userService.addUserRecieveAddress(username, request);
   }
 
   /**
    * 获取收件地址
    * 
-   * @param userId
+   * @param username
    * @param addressId
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated() and #userId.equals(getAuthentication().getName())")
-  @GetMapping(value = "/user/{user_id}/recieveaddress/{address_id}")
-  public RecieveAddress getRecieveAddress(@PathVariable("user_id") String userId,
+  @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
+  @GetMapping(value = "/user/{username}/recieveaddress/{address_id}")
+  public RecieveAddress getRecieveAddress(@PathVariable("username") String username,
       @PathVariable("address_id") String addressId) {
-    return userService.getRecieveAddress(userId, addressId);
+    return userService.getRecieveAddress(username, addressId);
   }
 
   /**
    * 更新收件地址信息
    * 
-   * @param userId
+   * @param username
    * @param addressId
    * @param request
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated() and #userId.equals(getAuthentication().getName())")
-  @PutMapping(value = "/user/{user_id}/recieveaddress/{address_id}")
-  public RecieveAddress updateRecieveAddress(@PathVariable("user_id") String userId,
+  @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
+  @PutMapping(value = "/user/{username}/recieveaddress/{address_id}")
+  public RecieveAddress updateRecieveAddress(@PathVariable("username") String username,
       @PathVariable("address_id") String addressId, @RequestBody RecieveAddress request) {
     if (null == request) {
       throw new IllegalArgumentException("update recieveaddress request body is null");
     }
-    return userService.updateRecieveAddress(userId, addressId, request);
+    return userService.updateRecieveAddress(username, addressId, request);
   }
 
   /**
    * 废弃收件地址
    * 
-   * @param userId
+   * @param username
    * @param addressId
    */
-  @PreAuthorize(value = "isAuthenticated() and #userId.equals(getAuthentication().getName())")
-  @DeleteMapping(value = "/user/{user_id}/recieveaddress/{address_id}")
-  public void deprecateRecieveAddress(@PathVariable("user_id") String userId,
+  @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
+  @DeleteMapping(value = "/user/{username}/recieveaddress/{address_id}")
+  public void deprecateRecieveAddress(@PathVariable("username") String username,
       @PathVariable("address_id") String addressId) {
-    userService.deprecateRecieveAddress(userId, addressId);
+    userService.deprecateRecieveAddress(username, addressId);
   }
 }

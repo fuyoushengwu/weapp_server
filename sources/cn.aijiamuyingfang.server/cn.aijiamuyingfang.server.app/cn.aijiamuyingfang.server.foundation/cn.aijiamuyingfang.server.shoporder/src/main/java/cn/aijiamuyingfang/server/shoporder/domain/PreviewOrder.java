@@ -35,7 +35,7 @@ public class PreviewOrder {
   /**
    * 订单所属用户
    */
-  private String userId;
+  private String username;
 
   /**
    * 收货地址

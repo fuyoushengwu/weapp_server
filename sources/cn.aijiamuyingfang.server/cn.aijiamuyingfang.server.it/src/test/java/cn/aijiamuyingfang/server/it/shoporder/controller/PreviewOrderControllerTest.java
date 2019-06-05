@@ -86,7 +86,7 @@ public class PreviewOrderControllerTest {
   public void test_UpdatePreviewOrderItem_001() throws IOException {
     PreviewOrderItem updatePrevieworderRequest = new PreviewOrderItem();
     updatePrevieworderRequest.setCount(10);
-    previeworderControllerClient.updatePreviewOrderItem(AbstractTestAction.ADMIN_USER_ID, "not_exist_id",
+    previeworderControllerClient.updatePreviewOrderItem(AbstractTestAction.ADMIN_USER_NAME, "not_exist_id",
         updatePrevieworderRequest, testActions.getAdminAccessToken());
     Assert.fail();
   }
@@ -107,7 +107,7 @@ public class PreviewOrderControllerTest {
     updatePreviewOrderItemRequest.setShopCartId(previeworderItem.getId());
     updatePreviewOrderItemRequest.setGoodId(previeworderItem.getGoodId());
     PreviewOrderItem updatedItem = previeworderControllerClient.updatePreviewOrderItem(
-        testActions.getSenderOne().getId(), previeworderItem.getId(), updatePreviewOrderItemRequest,
+        testActions.getSenderOne().getUsername(), previeworderItem.getId(), updatePreviewOrderItemRequest,
         testActions.getSenderOneAccessToken());
     Assert.assertEquals(1, updatedItem.getCount());
 
@@ -115,7 +115,7 @@ public class PreviewOrderControllerTest {
     updatePreviewOrderItemRequest.setCount(0);
     updatePreviewOrderItemRequest.setShopCartId(previeworderItem.getId());
     updatePreviewOrderItemRequest.setGoodId(previeworderItem.getGoodId());
-    updatedItem = previeworderControllerClient.updatePreviewOrderItem(testActions.getSenderOne().getId(),
+    updatedItem = previeworderControllerClient.updatePreviewOrderItem(testActions.getSenderOne().getUsername(),
         previeworderItem.getId(), updatePreviewOrderItemRequest, testActions.getSenderOneAccessToken());
     Assert.assertEquals(1, updatedItem.getCount());
   }
@@ -127,14 +127,14 @@ public class PreviewOrderControllerTest {
     testActions.senderOneAdd10GoodTwo();
     PreviewOrder previeworder = testActions.senderOnePreviewAllGood();
     PreviewOrderItem previeworderItem = previeworder.getOrderItemList().get(0);
-    previeworderControllerClient.deletePreviewOrderItem(testActions.getSenderOne().getId(), previeworderItem.getId(),
-        testActions.getSenderOneAccessToken(), false);
+    previeworderControllerClient.deletePreviewOrderItem(testActions.getSenderOne().getUsername(),
+        previeworderItem.getId(), testActions.getSenderOneAccessToken(), false);
 
     PreviewOrderItem updatePreviewItemRequest = new PreviewOrderItem();
     updatePreviewItemRequest.setCount(1);
     updatePreviewItemRequest.setShopCartId(previeworderItem.getId());
     updatePreviewItemRequest.setGoodId(previeworderItem.getGoodId());
-    previeworderControllerClient.updatePreviewOrderItem(testActions.getSenderOne().getId(), previeworderItem.getId(),
-        updatePreviewItemRequest, testActions.getSenderOneAccessToken());
+    previeworderControllerClient.updatePreviewOrderItem(testActions.getSenderOne().getUsername(),
+        previeworderItem.getId(), updatePreviewItemRequest, testActions.getSenderOneAccessToken());
   }
 }

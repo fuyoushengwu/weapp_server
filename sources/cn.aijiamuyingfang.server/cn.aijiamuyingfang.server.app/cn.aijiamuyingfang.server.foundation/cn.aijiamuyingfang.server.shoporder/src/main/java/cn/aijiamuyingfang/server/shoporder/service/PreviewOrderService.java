@@ -48,20 +48,20 @@ public class PreviewOrderService {
   /**
    * 更新预览的商品项
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @param previewItemId
    * @param updateOrderItem
    * @return
    */
-  public PreviewOrderItem updatePreviewOrderItem(String userId, String previewItemId,
+  public PreviewOrderItem updatePreviewOrderItem(String username, String previewItemId,
       PreviewOrderItem updateOrderItem) {
     if (null == updateOrderItem) {
       return null;
     }
-    PreviewOrder previewOrder = previeworderRepository.findByUserId(userId);
+    PreviewOrder previewOrder = previeworderRepository.findByUsername(username);
     if (null == previewOrder) {
-      throw new ShopOrderException(ResponseCode.PREVIEWORDER_NOT_EXIST, userId);
+      throw new ShopOrderException(ResponseCode.PREVIEWORDER_NOT_EXIST, username);
     }
     PreviewOrderItem orderItem = previeworderItemRepository.findOne(previewItemId);
     if (null == orderItem) {
@@ -78,12 +78,12 @@ public class PreviewOrderService {
   /**
    * 删除预览的商品项
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @param itemid
    */
-  public void deletePreviewOrderItem(String userId, String itemid) {
-    PreviewOrder previewOrder = previeworderRepository.findByUserId(userId);
+  public void deletePreviewOrderItem(String username, String itemid) {
+    PreviewOrder previewOrder = previeworderRepository.findByUsername(username);
     if (null == previewOrder) {
       return;
     }
@@ -96,21 +96,21 @@ public class PreviewOrderService {
   /**
    * 生成用户的预览订单
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @param goodIdList
    * @return
    */
   @Transactional
-  public PreviewOrder generatePreviewOrder(String userId, List<String> goodIdList) {
+  public PreviewOrder generatePreviewOrder(String username, List<String> goodIdList) {
     PreviewOrder previeworder = new PreviewOrder();
-    previeworder.setUserId(userId);
-    List<ShopCart> itemList = getShopCartListByGoodIds(userId, goodIdList);
+    previeworder.setUsername(username);
+    List<ShopCart> itemList = getShopCartListByGoodIds(username, goodIdList);
     for (ShopCart item : itemList) {
       previeworder.addOrderItem(PreviewOrderItem.fromShopCart(item));
     }
 
-    List<RecieveAddress> addressList = userClient.getUserRecieveAddressList(userId).getData();
+    List<RecieveAddress> addressList = userClient.getUserRecieveAddressList(username).getData();
     for (RecieveAddress address : addressList) {
       if (address.isDef()) {
         previeworder.setRecieveAddressId(address.getId());
@@ -118,23 +118,23 @@ public class PreviewOrderService {
       }
     }
 
-    previeworderRepository.deleteByUserId(userId);
+    previeworderRepository.deleteByUsername(username);
     previeworderRepository.saveAndFlush(previeworder);
     return previeworder;
   }
 
   /**
    *
-   * @param userId
+   * @param username
    *          用户id
    * @param goodIdList
    * @return
    */
-  private List<ShopCart> getShopCartListByGoodIds(String userId, List<String> goodIdList) {
+  private List<ShopCart> getShopCartListByGoodIds(String username, List<String> goodIdList) {
     if (goodIdList != null && !goodIdList.isEmpty()) {
-      return shopCartRepository.findByUserIdAndGoodIdIn(userId, goodIdList);
+      return shopCartRepository.findByUsernameAndGoodIdIn(username, goodIdList);
     } else {
-      return shopCartRepository.findByUserIdAndIschecked(userId, true);
+      return shopCartRepository.findByUsernameAndChecked(username, true);
     }
   }
 

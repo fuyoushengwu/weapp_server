@@ -30,14 +30,14 @@ public interface CouponControllerApi {
   /**
    * 分页获取用户兑换券
    * 
-   * @param userId
+   * @param username
    * @param currentPage
    * @param pageSize
    * @param accessToken
    * @return
    */
-  @GET(value = "/coupon-service/user/{user_id}/coupon/uservoucher")
-  public Call<ResponseBean> getUserVoucherList(@Path("user_id") String userId, @Query("current_page") int currentPage,
+  @GET(value = "/coupon-service/user/{username}/coupon/uservoucher")
+  public Call<ResponseBean> getUserVoucherList(@Path("username") String username, @Query("current_page") int currentPage,
       @Query("page_size") int pageSize, @Query("access_token") String accessToken);
 
   /**

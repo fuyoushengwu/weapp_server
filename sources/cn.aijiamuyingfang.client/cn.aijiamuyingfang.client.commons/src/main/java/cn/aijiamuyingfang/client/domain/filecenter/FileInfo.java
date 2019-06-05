@@ -19,7 +19,7 @@ public class FileInfo {
 
   private String name;
 
-  private Boolean isImg;
+  private Boolean image;
 
   private String contentType;
 

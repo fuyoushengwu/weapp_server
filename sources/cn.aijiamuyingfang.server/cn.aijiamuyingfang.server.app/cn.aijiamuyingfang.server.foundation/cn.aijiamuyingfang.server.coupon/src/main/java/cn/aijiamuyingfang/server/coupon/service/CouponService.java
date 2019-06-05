@@ -50,16 +50,16 @@ public class CouponService {
   /**
    * 分页获得用户的兑换券
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @param currentPage
    * @param pageSize
    * @return
    */
-  public GetUserVoucherListResponse getUserVoucherList(String userId, int currentPage, int pageSize) {
+  public GetUserVoucherListResponse getUserVoucherList(String username, int currentPage, int pageSize) {
     // PageRequest的Page参数是基于0的,但是currentPage是基于1的,所有将currentPage作为参数传递给PgeRequest时需要'-1'
     PageRequest pageRequest = new PageRequest(currentPage - 1, pageSize);
-    Page<UserVoucher> userVoucherPage = uservoucherRepository.findByUserId(userId, pageRequest);
+    Page<UserVoucher> userVoucherPage = uservoucherRepository.findByUsername(username, pageRequest);
     GetUserVoucherListResponse response = new GetUserVoucherListResponse();
     response.setCurrentPage(userVoucherPage.getNumber() + 1);
     response.setDataList(userVoucherPage.getContent());
@@ -80,12 +80,12 @@ public class CouponService {
   /**
    * 获得用户的兑换券
    * 
-   * @param userId
+   * @param username
    * @param goodvoucherId
    * @return
    */
-  public UserVoucher getUserVoucherForGoodVoucher(String userId, String goodvoucherId) {
-    return uservoucherRepository.findByUserIdAndGoodVoucher(userId, goodvoucherId);
+  public UserVoucher getUserVoucherForGoodVoucher(String username, String goodvoucherId) {
+    return uservoucherRepository.findByUsernameAndGoodVoucher(username, goodvoucherId);
   }
 
   /**

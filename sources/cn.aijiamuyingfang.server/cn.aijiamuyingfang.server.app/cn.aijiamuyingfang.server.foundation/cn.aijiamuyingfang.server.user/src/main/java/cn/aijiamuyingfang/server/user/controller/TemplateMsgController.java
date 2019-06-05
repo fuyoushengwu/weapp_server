@@ -29,78 +29,78 @@ public class TemplateMsgController {
   /**
    * 发送预定信息
    * 
-   * @param openid
+   * @param username
    * @param msgData
    * @throws WxErrorException
    */
-  @PostMapping(value = "/users-anon/internal/user/{openid}/wxservice/templatemsg/preorder")
-  public void sendPreOrderMsg(@PathVariable(name = "openid") String openid, @RequestBody TemplateMsg msgData)
+  @PostMapping(value = "/users-anon/internal/user/{username}/wxservice/templatemsg/preorder")
+  public void sendPreOrderMsg(@PathVariable(name = "username") String username, @RequestBody TemplateMsg msgData)
       throws WxErrorException {
-    service.sendPreOrderMsg(openid, msgData);
+    service.sendPreOrderMsg(username, msgData);
   }
 
   /**
    * 发送自提信息
    * 
-   * @param openid
+   * @param username
    * @param msgData
    * @throws WxErrorException
    */
-  @PostMapping(value = "/users-anon/internal/user/{openid}/wxservice/templatemsg/pickup")
-  public void sendPickupMsg(@PathVariable(name = "openid") String openid, @RequestBody TemplateMsg msgData)
+  @PostMapping(value = "/users-anon/internal/user/{username}/wxservice/templatemsg/pickup")
+  public void sendPickupMsg(@PathVariable(name = "username") String username, @RequestBody TemplateMsg msgData)
       throws WxErrorException {
-    service.sendPickupMsg(openid, msgData);
+    service.sendPickupMsg(username, msgData);
   }
 
   /**
    * 发送第三方配送信息
    * 
-   * @param openid
+   * @param username
    * @param msgData
    * @throws WxErrorException
    */
-  @PostMapping(value = "/users-anon/internal/user/{openid}/wxservice/templatemsg/thirdsend")
-  public void sendThirdSendMsg(@PathVariable(name = "openid") String openid, @RequestBody TemplateMsg msgData)
+  @PostMapping(value = "/users-anon/internal/user/{username}/wxservice/templatemsg/thirdsend")
+  public void sendThirdSendMsg(@PathVariable(name = "username") String username, @RequestBody TemplateMsg msgData)
       throws WxErrorException {
-    service.sendThirdSendMsg(openid, msgData);
+    service.sendThirdSendMsg(username, msgData);
   }
 
   /**
    * 发送自己配送信息
    * 
-   * @param openid
+   * @param username
    * @param msgData
    * @throws WxErrorException
    */
-  @PostMapping(value = "/users-anon/internal/user/{openid}/wxservice/templatemsg/ownsend")
-  public void sendOwnSendMsg(@PathVariable(name = "openid") String openid, @RequestBody TemplateMsg msgData)
+  @PostMapping(value = "/users-anon/internal/user/{username}/wxservice/templatemsg/ownsend")
+  public void sendOwnSendMsg(@PathVariable(name = "username") String username, @RequestBody TemplateMsg msgData)
       throws WxErrorException {
-    service.sendOwnSendMsg(openid, msgData);
+    service.sendOwnSendMsg(username, msgData);
   }
 
   /**
    * 发送订单超时信息
    * 
-   * @param openid
+   * @param username
    * @param msgData
    * @throws WxErrorException
    */
-  @PostMapping(value = "/users-anon/internal/user/{openid}/wxservice/templatemsg/overtime")
-  public void sendOrderOverTimeMsg(@PathVariable(name = "openid") String openid, @RequestBody TemplateMsg msgData)
+  @PostMapping(value = "/users-anon/internal/user/{username}/wxservice/templatemsg/overtime")
+  public void sendOrderOverTimeMsg(@PathVariable(name = "username") String username, @RequestBody TemplateMsg msgData)
       throws WxErrorException {
-    service.sendOrderOverTimeMsg(openid, msgData);
+    service.sendOrderOverTimeMsg(username, msgData);
   }
 
   /**
    * 发送订单确认信息
    * 
-   * @param openid
+   * @param username
    * @param msgData
    * @throws WxErrorException
    */
-  @PostMapping(value = "/users-anon/internal/user/{openid}/wxservice/templatemsg/orderconfirm")
-  public void sendOrderConfirmMsg(@PathVariable(name = "openid") String openid, @RequestBody TemplateMsg msgData)
+  @PostMapping(value = "/users-anon/internal/user/{username}/wxservice/templatemsg/orderconfirm")
+  public void sendOrderConfirmMsg(@PathVariable(name = "username") String username, @RequestBody TemplateMsg msgData)
       throws WxErrorException {
-    service.sendOrderConfirmMsg(openid, msgData);
+    service.sendOrderConfirmMsg(username, msgData);
   }
 }

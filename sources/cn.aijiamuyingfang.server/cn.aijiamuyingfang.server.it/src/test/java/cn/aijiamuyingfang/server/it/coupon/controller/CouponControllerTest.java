@@ -98,8 +98,8 @@ public class CouponControllerTest {
   @Test
   @UseCaseDescription(description = "当前用户没有兑换券时获得不到用户兑换券")
   public void testGetUserVoucherList_001() throws IOException {
-    GetUserVoucherListResponse response = couponControllerClient.getUserVoucherList(AbstractTestAction.ADMIN_USER_ID, 1,
-        10, testActions.getAdminAccessToken());
+    GetUserVoucherListResponse response = couponControllerClient.getUserVoucherList(AbstractTestAction.ADMIN_USER_NAME,
+        1, 10, testActions.getAdminAccessToken());
     Assert.assertNotNull(response);
     Assert.assertEquals(1, response.getCurrentPage());
     Assert.assertEquals(0, response.getTotalpage());
@@ -142,7 +142,7 @@ public class CouponControllerTest {
 
     // 9.确认用户(Sender)名下有兑换券
     GetUserVoucherListResponse getUserVoucherListResponse = couponControllerClient
-        .getUserVoucherList(testActions.getSenderOne().getId(), 1, 10, testActions.getSenderOneAccessToken());
+        .getUserVoucherList(testActions.getSenderOne().getUsername(), 1, 10, testActions.getSenderOneAccessToken());
     Assert.assertNotNull(getUserVoucherListResponse);
     Assert.assertEquals(1, getUserVoucherListResponse.getDataList().size());
     UserVoucher uservoucher = getUserVoucherListResponse.getDataList().get(0);
@@ -150,7 +150,7 @@ public class CouponControllerTest {
     Assert.assertEquals(goodVoucher.getId(), uservoucher.getGoodVoucher().getId());
 
     // 10.确认用户(Admin)名下没有兑换券
-    getUserVoucherListResponse = couponControllerClient.getUserVoucherList(AbstractTestAction.ADMIN_USER_ID, 1, 10,
+    getUserVoucherListResponse = couponControllerClient.getUserVoucherList(AbstractTestAction.ADMIN_USER_NAME, 1, 10,
         testActions.getAdminAccessToken());
     Assert.assertNotNull(getUserVoucherListResponse);
     Assert.assertEquals(0, getUserVoucherListResponse.getDataList().size());
@@ -193,7 +193,7 @@ public class CouponControllerTest {
     testActions.senderOneConfirmOrder(shoporder);
     // 8.确认用户(Sender)名下有兑换券
     GetUserVoucherListResponse getUserVoucherListResponse = couponControllerClient
-        .getUserVoucherList(testActions.getSenderOne().getId(), 1, 10, testActions.getSenderOneAccessToken());
+        .getUserVoucherList(testActions.getSenderOne().getUsername(), 1, 10, testActions.getSenderOneAccessToken());
     Assert.assertNotNull(getUserVoucherListResponse);
     Assert.assertEquals(1, getUserVoucherListResponse.getDataList().size());
     UserVoucher uservoucher = getUserVoucherListResponse.getDataList().get(0);
@@ -235,7 +235,7 @@ public class CouponControllerTest {
     testActions.senderOneConfirmOrder(shoporder);
     // 9.确认用户(Sender)名下有兑换券
     GetUserVoucherListResponse getUserVoucherListResponse = couponControllerClient
-        .getUserVoucherList(testActions.getSenderOne().getId(), 1, 10, testActions.getSenderOneAccessToken());
+        .getUserVoucherList(testActions.getSenderOne().getUsername(), 1, 10, testActions.getSenderOneAccessToken());
     Assert.assertNotNull(getUserVoucherListResponse);
     Assert.assertEquals(1, getUserVoucherListResponse.getDataList().size());
     UserVoucher uservoucher = getUserVoucherListResponse.getDataList().get(0);
@@ -257,8 +257,8 @@ public class CouponControllerTest {
     // 10.用户(Sender)确认订单
     testActions.senderOneConfirmOrder(shoporder);
 
-    getUserVoucherListResponse = couponControllerClient.getUserVoucherList(testActions.getSenderOne().getId(), 1, 10,
-        testActions.getSenderOneAccessToken());
+    getUserVoucherListResponse = couponControllerClient.getUserVoucherList(testActions.getSenderOne().getUsername(), 1,
+        10, testActions.getSenderOneAccessToken());
     Assert.assertNotNull(getUserVoucherListResponse);
     Assert.assertEquals(2, getUserVoucherListResponse.getDataList().size());
     Assert.assertEquals(testActions.getGoodVoucherOneWithVoucherItemOne().getId(),
@@ -281,7 +281,7 @@ public class CouponControllerTest {
     goodIdList.add(testActions.getGoodOne().getId());
     goodIdList.add(testActions.getGoodTwo().getId());
     GetShopOrderVoucherListResponse getShopOrderVoucherListResponse = shoporderControllerClient
-        .getUserShopOrderVoucherList(testActions.getSenderOne().getId(), goodIdList,
+        .getUserShopOrderVoucherList(testActions.getSenderOne().getUsername(), goodIdList,
             testActions.getSenderOneAccessToken());
     Assert.assertNotNull(getShopOrderVoucherListResponse);
     Assert.assertEquals(2, getShopOrderVoucherListResponse.getVoucherList().size());
@@ -293,7 +293,7 @@ public class CouponControllerTest {
     Assert.assertEquals(voucherItemTwo.getId(), getVoucherItemListResponse.getDataList().get(0).getId());
 
     getShopOrderVoucherListResponse = shoporderControllerClient.getUserShopOrderVoucherList(
-        testActions.getSenderOne().getId(), goodIdList, testActions.getSenderOneAccessToken());
+        testActions.getSenderOne().getUsername(), goodIdList, testActions.getSenderOneAccessToken());
     Assert.assertNotNull(getShopOrderVoucherListResponse);
     Assert.assertEquals(1, getShopOrderVoucherListResponse.getVoucherList().size());
     Assert.assertEquals(voucherItemTwo.getId(),

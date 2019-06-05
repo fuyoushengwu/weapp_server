@@ -72,8 +72,8 @@ public class ShopCartControllerTest {
   @Test
   @UseCaseDescription(description = "购物车中没有商品时获取购物车信息")
   public void test_GetShopCart_001() throws IOException {
-    GetShopCartListResponse response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_ID, 1, 10,
-        testActions.getAdminAccessToken());
+    GetShopCartListResponse response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1,
+        10, testActions.getAdminAccessToken());
     Assert.assertEquals(0, response.getDataList().size());
   }
 
@@ -81,8 +81,8 @@ public class ShopCartControllerTest {
   @UseCaseDescription(description = "购物车中有商品时获取购物车信息")
   public void test_GetShopCart_002() throws IOException {
     testActions.addGoodOne10();
-    GetShopCartListResponse response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_ID, 1, 10,
-        testActions.getAdminAccessToken());
+    GetShopCartListResponse response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1,
+        10, testActions.getAdminAccessToken());
     Assert.assertEquals(1, response.getDataList().size());
     Assert.assertEquals(10, response.getDataList().get(0).getCount());
   }
@@ -91,12 +91,12 @@ public class ShopCartControllerTest {
   @UseCaseDescription(description = "别人购物车中有商品,自己购物车中没有商品")
   public void test_GetShopCart_003() throws IOException {
     testActions.addGoodOne10();
-    GetShopCartListResponse response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_ID, 1, 10,
-        testActions.getAdminAccessToken());
+    GetShopCartListResponse response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1,
+        10, testActions.getAdminAccessToken());
     Assert.assertEquals(1, response.getDataList().size());
     Assert.assertEquals(10, response.getDataList().get(0).getCount());
 
-    response = shopCartControllerClient.getShopCartList(testActions.getSenderOne().getId(), 1, 10,
+    response = shopCartControllerClient.getShopCartList(testActions.getSenderOne().getUsername(), 1, 10,
         testActions.getSenderOneAccessToken());
     Assert.assertEquals(0, response.getDataList().size());
   }
@@ -106,14 +106,14 @@ public class ShopCartControllerTest {
   public void test_GetShopCart_004() throws IOException {
     ShopCart shopCartOne = testActions.addGoodOne10();
     ShopCart shopCartTwo = testActions.addGoodTwo10();
-    GetShopCartListResponse response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_ID, 1, 10,
-        testActions.getAdminAccessToken());
+    GetShopCartListResponse response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1,
+        10, testActions.getAdminAccessToken());
     Assert.assertEquals(2, response.getDataList().size());
     Assert.assertEquals(shopCartTwo.getId(), response.getDataList().get(0).getId());
     Assert.assertEquals(shopCartOne.getId(), response.getDataList().get(1).getId());
 
     testActions.deleteShopCart(shopCartOne);
-    response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_ID, 1, 10,
+    response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1, 10,
         testActions.getAdminAccessToken());
     Assert.assertEquals(1, response.getDataList().size());
     Assert.assertEquals(shopCartTwo.getId(), response.getDataList().get(0).getId());
@@ -122,8 +122,8 @@ public class ShopCartControllerTest {
   @Test
   @UseCaseDescription(description = "测试购物车中没有商品时,选中所有项")
   public void test_CheckAllShopCart_001() throws IOException {
-    shopCartControllerClient.checkAllShopCart(AbstractTestAction.ADMIN_USER_ID, true, testActions.getAdminAccessToken(),
-        false);
+    shopCartControllerClient.checkAllShopCart(AbstractTestAction.ADMIN_USER_NAME, true,
+        testActions.getAdminAccessToken(), false);
   }
 
   @Test
@@ -131,15 +131,15 @@ public class ShopCartControllerTest {
   public void test_CheckAllShopCart_002() throws IOException {
     testActions.addGoodOne10();
     testActions.addGoodTwo10();
-    GetShopCartListResponse response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_ID, 1, 10,
-        testActions.getAdminAccessToken());
+    GetShopCartListResponse response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1,
+        10, testActions.getAdminAccessToken());
     Assert.assertEquals(2, response.getDataList().size());
     Assert.assertTrue(response.getDataList().get(0).isChecked());
     Assert.assertTrue(response.getDataList().get(1).isChecked());
 
-    shopCartControllerClient.checkAllShopCart(AbstractTestAction.ADMIN_USER_ID, false,
+    shopCartControllerClient.checkAllShopCart(AbstractTestAction.ADMIN_USER_NAME, false,
         testActions.getAdminAccessToken(), false);
-    response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_ID, 1, 10,
+    response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1, 10,
         testActions.getAdminAccessToken());
     Assert.assertEquals(2, response.getDataList().size());
     Assert.assertFalse(response.getDataList().get(0).isChecked());
@@ -152,41 +152,41 @@ public class ShopCartControllerTest {
   public void test_CheckAllShopCart_003() throws IOException {
     ShopCart shopCartOne = testActions.addGoodOne10();
     testActions.addGoodTwo10();
-    GetShopCartListResponse response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_ID, 1, 10,
-        testActions.getAdminAccessToken());
+    GetShopCartListResponse response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1,
+        10, testActions.getAdminAccessToken());
     Assert.assertEquals(2, response.getDataList().size());
     Assert.assertTrue(response.getDataList().get(0).isChecked());
     Assert.assertTrue(response.getDataList().get(1).isChecked());
 
-    shopCartControllerClient.checkAllShopCart(AbstractTestAction.ADMIN_USER_ID, false,
+    shopCartControllerClient.checkAllShopCart(AbstractTestAction.ADMIN_USER_NAME, false,
         testActions.getAdminAccessToken(), false);
-    shopCartControllerClient.checkAllShopCart(AbstractTestAction.ADMIN_USER_ID, false,
+    shopCartControllerClient.checkAllShopCart(AbstractTestAction.ADMIN_USER_NAME, false,
         testActions.getAdminAccessToken(), false);
-    shopCartControllerClient.checkAllShopCart(AbstractTestAction.ADMIN_USER_ID, false,
+    shopCartControllerClient.checkAllShopCart(AbstractTestAction.ADMIN_USER_NAME, false,
         testActions.getAdminAccessToken(), false);
-    response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_ID, 1, 10,
+    response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1, 10,
         testActions.getAdminAccessToken());
     Assert.assertEquals(2, response.getDataList().size());
     Assert.assertFalse(response.getDataList().get(0).isChecked());
     Assert.assertFalse(response.getDataList().get(1).isChecked());
 
-    shopCartControllerClient.checkAllShopCart(AbstractTestAction.ADMIN_USER_ID, true, testActions.getAdminAccessToken(),
-        false);
-    response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_ID, 1, 10,
+    shopCartControllerClient.checkAllShopCart(AbstractTestAction.ADMIN_USER_NAME, true,
+        testActions.getAdminAccessToken(), false);
+    response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1, 10,
         testActions.getAdminAccessToken());
     Assert.assertTrue(response.getDataList().get(0).isChecked());
     Assert.assertTrue(response.getDataList().get(1).isChecked());
 
-    shopCartControllerClient.checkShopCart(AbstractTestAction.ADMIN_USER_ID, shopCartOne.getId(), false,
+    shopCartControllerClient.checkShopCart(AbstractTestAction.ADMIN_USER_NAME, shopCartOne.getId(), false,
         testActions.getAdminAccessToken(), false);
-    response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_ID, 1, 10,
+    response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1, 10,
         testActions.getAdminAccessToken());
     Assert.assertTrue(response.getDataList().get(0).isChecked());
     Assert.assertFalse(response.getDataList().get(1).isChecked());
 
-    shopCartControllerClient.checkShopCart(AbstractTestAction.ADMIN_USER_ID, shopCartOne.getId(), true,
+    shopCartControllerClient.checkShopCart(AbstractTestAction.ADMIN_USER_NAME, shopCartOne.getId(), true,
         testActions.getAdminAccessToken(), false);
-    response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_ID, 1, 10,
+    response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1, 10,
         testActions.getAdminAccessToken());
     Assert.assertTrue(response.getDataList().get(0).isChecked());
   }
@@ -194,7 +194,7 @@ public class ShopCartControllerTest {
   @Test(expected = ShopCartException.class)
   @UseCaseDescription(description = "更新不存在的购物车数量")
   public void test_UpdateShopCartCount_001() throws IOException {
-    shopCartControllerClient.updateShopCartCount(AbstractTestAction.ADMIN_USER_ID, "not_exitst", 1,
+    shopCartControllerClient.updateShopCartCount(AbstractTestAction.ADMIN_USER_NAME, "not_exitst", 1,
         testActions.getAdminAccessToken());
     Assert.fail();
   }
@@ -204,11 +204,11 @@ public class ShopCartControllerTest {
   public void test_UpdateShopCartCount_002() throws IOException {
     ShopCart shopCart = testActions.addGoodOne10();
     testActions.addGoodTwo10();
-    shopCartControllerClient.updateShopCartCount(AbstractTestAction.ADMIN_USER_ID, shopCart.getId(), 20,
+    shopCartControllerClient.updateShopCartCount(AbstractTestAction.ADMIN_USER_NAME, shopCart.getId(), 20,
         testActions.getAdminAccessToken());
 
-    GetShopCartListResponse response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_ID, 1, 10,
-        testActions.getAdminAccessToken());
+    GetShopCartListResponse response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1,
+        10, testActions.getAdminAccessToken());
     Assert.assertEquals(2, response.getDataList().size());
     Assert.assertEquals(10, response.getDataList().get(0).getCount());
     Assert.assertEquals(20, response.getDataList().get(1).getCount());

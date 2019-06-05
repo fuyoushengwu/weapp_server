@@ -55,17 +55,17 @@ public class PreviewOrderControllerClient {
   /**
    * 更新预览的商品项
    * 
-   * @param userId
+   * @param username
    * @param previewItemId
    * @param request
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public PreviewOrderItem updatePreviewOrderItem(String userId, String previewItemId, PreviewOrderItem request,
+  public PreviewOrderItem updatePreviewOrderItem(String username, String previewItemId, PreviewOrderItem request,
       String accessToken) throws IOException {
     Response<ResponseBean> response = previeworderControllerApi
-        .updatePreviewOrderItem(userId, previewItemId, request, accessToken).execute();
+        .updatePreviewOrderItem(username, previewItemId, request, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -90,34 +90,34 @@ public class PreviewOrderControllerClient {
   /**
    * 异步更新预览的商品项
    * 
-   * @param userId
+   * @param username
    * @param previewItemId
    * @param request
    * @param accessToken
    * @param callback
    */
-  public void updatePreviewOrderItem(String userId, String previewItemId, PreviewOrderItem request, String accessToken,
-      Callback<ResponseBean> callback) {
-    previeworderControllerApi.updatePreviewOrderItem(userId, previewItemId, request, accessToken).enqueue(callback);
+  public void updatePreviewOrderItem(String username, String previewItemId, PreviewOrderItem request,
+      String accessToken, Callback<ResponseBean> callback) {
+    previeworderControllerApi.updatePreviewOrderItem(username, previewItemId, request, accessToken).enqueue(callback);
   }
 
   /**
    * 删除预览的商品项
    * 
-   * @param userId
+   * @param username
    * @param previewItemId
    * @param accessToken
    * @param async
    * @throws IOException
    */
-  public void deletePreviewOrderItem(String userId, String previewItemId, String accessToken, boolean async)
+  public void deletePreviewOrderItem(String username, String previewItemId, String accessToken, boolean async)
       throws IOException {
     if (async) {
-      previeworderControllerApi.deletePreviewOrderItem(userId, previewItemId, accessToken).enqueue(Empty_Callback);
+      previeworderControllerApi.deletePreviewOrderItem(username, previewItemId, accessToken).enqueue(Empty_Callback);
       return;
     }
     Response<ResponseBean> response = previeworderControllerApi
-        .deletePreviewOrderItem(userId, previewItemId, accessToken).execute();
+        .deletePreviewOrderItem(username, previewItemId, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -136,15 +136,16 @@ public class PreviewOrderControllerClient {
   /**
    * 生成用户的预览订单
    * 
-   * @param userId
+   * @param username
    * @param goodIdList
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public PreviewOrder generatePreviewOrder(String userId, List<String> goodIdList, String accessToken) throws IOException {
-    Response<
-        ResponseBean> response = previeworderControllerApi.generatePreviewOrder(userId, goodIdList, accessToken).execute();
+  public PreviewOrder generatePreviewOrder(String username, List<String> goodIdList, String accessToken)
+      throws IOException {
+    Response<ResponseBean> response = previeworderControllerApi.generatePreviewOrder(username, goodIdList, accessToken)
+        .execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {

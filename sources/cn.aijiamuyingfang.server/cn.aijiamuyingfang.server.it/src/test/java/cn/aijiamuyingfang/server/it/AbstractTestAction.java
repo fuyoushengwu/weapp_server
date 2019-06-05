@@ -70,7 +70,7 @@ public abstract class AbstractTestAction {
   /**
    * Admin用户的Id
    */
-  public static final String ADMIN_USER_ID = "5c6a132a829f11e896fc00cfe0430e2a";
+  public static final String ADMIN_USER_NAME = "administrator";
 
   /**
    * Admin用户的ACCESS_TOKEN
@@ -189,7 +189,7 @@ public abstract class AbstractTestAction {
 
   public String getAdminAccessToken() throws IOException {
     if (null == accessTokenResponse) {
-      this.accessTokenResponse = TestUtils.getAccessToken(hostname, "weapp-manager", "weapp-manager", ADMIN_USER_ID,
+      this.accessTokenResponse = TestUtils.getAccessToken(hostname, "weapp-manager", "weapp-manager", ADMIN_USER_NAME,
           "admin");
     }
     return accessTokenResponse.getAccessToken();
@@ -197,7 +197,7 @@ public abstract class AbstractTestAction {
 
   public String getAdminRefreshToken() throws IOException {
     if (null == accessTokenResponse) {
-      this.accessTokenResponse = TestUtils.getAccessToken(hostname, "weapp-manager", "weapp-manager", ADMIN_USER_ID,
+      this.accessTokenResponse = TestUtils.getAccessToken(hostname, "weapp-manager", "weapp-manager", ADMIN_USER_NAME,
           "admin");
     }
     return accessTokenResponse.getRefreshToken();
@@ -206,14 +206,14 @@ public abstract class AbstractTestAction {
   public User getSenderOne() throws IOException {
     if (null == senderOne) {
       User createSenderRequest = new User();
-      createSenderRequest.setOpenid("senderoneopenid");
-      createSenderRequest.setPassword("senderoneopenid");
+      createSenderRequest.setUsername("senderone");
+      createSenderRequest.setPassword("senderone");
       createSenderRequest.setPhone("11111111111");
       createSenderRequest.setNickname("SenderOne User NickName");
       createSenderRequest.setGender(Gender.MALE);
       createSenderRequest.addAuthority(UserAuthority.SENDER_PERMISSION);
       this.senderOne = userControllerClient.registerUser(createSenderRequest, getAdminAccessToken());
-      this.senderOne.setPassword("senderoneopenid");
+      this.senderOne.setPassword("senderone");
     }
     return this.senderOne;
   }
@@ -247,7 +247,7 @@ public abstract class AbstractTestAction {
       recieveaddressRequest.setTown(new Town("tiexinqiao", "000001"));
       recieveaddressRequest.setDef(true);
       recieveaddressRequest.setPhone("11111111111");
-      this.senderOneRecieveAddressOne = userControllerClient.addUserRecieveAddress(getSenderOne().getId(),
+      this.senderOneRecieveAddressOne = userControllerClient.addUserRecieveAddress(getSenderOne().getUsername(),
           recieveaddressRequest, getSenderOneAccessToken());
     }
     return this.senderOneRecieveAddressOne;
@@ -256,12 +256,12 @@ public abstract class AbstractTestAction {
   public User getSenderTwo() throws IOException {
     if (null == senderTwo) {
       User createSenderRequest = new User();
-      createSenderRequest.setOpenid("sendertwoopenid");
-      createSenderRequest.setPassword("sendertwoopenid");
+      createSenderRequest.setUsername("sendertwo");
+      createSenderRequest.setPassword("sendertwo");
       createSenderRequest.setPhone("22222222");
       createSenderRequest.setNickname("SenderTwo User NickName");
       this.senderTwo = userControllerClient.registerUser(createSenderRequest, getAdminAccessToken());
-      this.senderTwo.setPassword("sendertwoopenid");
+      this.senderTwo.setPassword("sendertwo");
     }
     return senderTwo;
   }
@@ -284,7 +284,7 @@ public abstract class AbstractTestAction {
       recieveaddressRequest.setTown(new Town("tiexinqiao", "000001"));
       recieveaddressRequest.setDef(true);
       recieveaddressRequest.setPhone("11111111111");
-      this.senderTwoRecieveAddressOne = userControllerClient.addUserRecieveAddress(getSenderTwo().getId(),
+      this.senderTwoRecieveAddressOne = userControllerClient.addUserRecieveAddress(getSenderTwo().getUsername(),
           recieveaddressRequest, getSenderTwoAccessToken());
     }
     return senderTwoRecieveAddressOne;
@@ -305,33 +305,35 @@ public abstract class AbstractTestAction {
     CreateShopCartRequest request = new CreateShopCartRequest();
     request.setGoodId(getGoodOne().getId());
     request.setGoodNum(10);
-    return shopCartControllerClient.addShopCart(ADMIN_USER_ID, request, getAdminAccessToken());
+    return shopCartControllerClient.addShopCart(ADMIN_USER_NAME, request, getAdminAccessToken());
   }
 
   public ShopCart addGoodTwo10() throws IOException {
     CreateShopCartRequest request = new CreateShopCartRequest();
     request.setGoodId(getGoodTwo().getId());
     request.setGoodNum(10);
-    return shopCartControllerClient.addShopCart(ADMIN_USER_ID, request, getAdminAccessToken());
+    return shopCartControllerClient.addShopCart(ADMIN_USER_NAME, request, getAdminAccessToken());
   }
 
   public void deleteShopCart(ShopCart shopCart) throws IOException {
-    shopCartControllerClient.deleteShopCart(ADMIN_USER_ID, shopCart.getId(), getAdminAccessToken(), false);
+    shopCartControllerClient.deleteShopCart(ADMIN_USER_NAME, shopCart.getId(), getAdminAccessToken(), false);
   }
 
   public void deleteSenderOneShopCart(ShopCart shopCart) throws IOException {
-    shopCartControllerClient.deleteShopCart(getSenderOne().getId(), shopCart.getId(), getSenderOneAccessToken(), false);
+    shopCartControllerClient.deleteShopCart(getSenderOne().getUsername(), shopCart.getId(), getSenderOneAccessToken(),
+        false);
   }
 
   public void deleteSenderTwoShopCart(ShopCart shopCart) throws IOException {
-    shopCartControllerClient.deleteShopCart(getSenderTwo().getId(), shopCart.getId(), getSenderTwoAccessToken(), false);
+    shopCartControllerClient.deleteShopCart(getSenderTwo().getUsername(), shopCart.getId(), getSenderTwoAccessToken(),
+        false);
   }
 
   public ShopCart senderOneAdd5GoodOne() throws IOException {
     CreateShopCartRequest addShopcartItemRequest = new CreateShopCartRequest();
     addShopcartItemRequest.setGoodId(getGoodOne().getId());
     addShopcartItemRequest.setGoodNum(5);
-    return shopCartControllerClient.addShopCart(getSenderOne().getId(), addShopcartItemRequest,
+    return shopCartControllerClient.addShopCart(getSenderOne().getUsername(), addShopcartItemRequest,
         getSenderOneAccessToken());
   }
 
@@ -339,7 +341,7 @@ public abstract class AbstractTestAction {
     CreateShopCartRequest addShopcartItemRequest = new CreateShopCartRequest();
     addShopcartItemRequest.setGoodId(getGoodTwo().getId());
     addShopcartItemRequest.setGoodNum(5);
-    return shopCartControllerClient.addShopCart(getSenderOne().getId(), addShopcartItemRequest,
+    return shopCartControllerClient.addShopCart(getSenderOne().getUsername(), addShopcartItemRequest,
         getSenderOneAccessToken());
   }
 
@@ -347,7 +349,7 @@ public abstract class AbstractTestAction {
     CreateShopCartRequest createShopCartRequest = new CreateShopCartRequest();
     createShopCartRequest.setGoodId(getGoodOne().getId());
     createShopCartRequest.setGoodNum(10);
-    return shopCartControllerClient.addShopCart(getSenderOne().getId(), createShopCartRequest,
+    return shopCartControllerClient.addShopCart(getSenderOne().getUsername(), createShopCartRequest,
         getSenderOneAccessToken());
   }
 
@@ -355,7 +357,7 @@ public abstract class AbstractTestAction {
     CreateShopCartRequest addShopcartItemRequest = new CreateShopCartRequest();
     addShopcartItemRequest.setGoodId(getGoodTwo().getId());
     addShopcartItemRequest.setGoodNum(10);
-    return shopCartControllerClient.addShopCart(getSenderOne().getId(), addShopcartItemRequest,
+    return shopCartControllerClient.addShopCart(getSenderOne().getUsername(), addShopcartItemRequest,
         getSenderOneAccessToken());
   }
 
@@ -363,7 +365,7 @@ public abstract class AbstractTestAction {
     CreateShopOrderRequest shoporderRequest = new CreateShopOrderRequest();
     shoporderRequest.setSendType(SendType.THIRDSEND);
     shoporderRequest.setAddressId(getSenderOneRecieveOne().getId());
-    return shoporderControllerClient.createUserShopOrder(getSenderOne().getId(), shoporderRequest,
+    return shoporderControllerClient.createUserShopOrder(getSenderOne().getUsername(), shoporderRequest,
         getSenderOneAccessToken());
   }
 
@@ -378,7 +380,7 @@ public abstract class AbstractTestAction {
   }
 
   public ConfirmShopOrderFinishedResponse senderOneConfirmOrder(ShopOrder shoporder) throws IOException {
-    return shoporderControllerClient.confirmUserShopOrderFinished(getSenderOne().getId(), shoporder.getId(),
+    return shoporderControllerClient.confirmUserShopOrderFinished(getSenderOne().getUsername(), shoporder.getId(),
         getSenderOneAccessToken());
   }
 
@@ -386,14 +388,14 @@ public abstract class AbstractTestAction {
     CreateShopOrderRequest shoporderRequest = new CreateShopOrderRequest();
     shoporderRequest.setSendType(SendType.THIRDSEND);
     shoporderRequest.setAddressId(getSenderTwoRecieveOne().getId());
-    return shoporderControllerClient.createUserShopOrder(getSenderTwo().getId(), shoporderRequest,
+    return shoporderControllerClient.createUserShopOrder(getSenderTwo().getUsername(), shoporderRequest,
         getSenderTwoAccessToken());
   }
 
   public PreviewOrder senderOnePreviewGoodOne() throws IOException {
     List<String> goodIdList = new ArrayList<>();
     goodIdList.add(getGoodOne().getId());
-    return previeworderControllerClient.generatePreviewOrder(getSenderOne().getId(), goodIdList,
+    return previeworderControllerClient.generatePreviewOrder(getSenderOne().getUsername(), goodIdList,
         getSenderOneAccessToken());
   }
 
@@ -401,7 +403,7 @@ public abstract class AbstractTestAction {
     List<String> goodIdList = new ArrayList<>();
     goodIdList.add(getGoodOne().getId());
     goodIdList.add(getGoodTwo().getId());
-    return previeworderControllerClient.generatePreviewOrder(getSenderOne().getId(), goodIdList,
+    return previeworderControllerClient.generatePreviewOrder(getSenderOne().getUsername(), goodIdList,
         getSenderOneAccessToken());
   }
 
@@ -409,7 +411,7 @@ public abstract class AbstractTestAction {
     List<String> goodIdList = new ArrayList<>();
     goodIdList.add(getGoodOne().getId());
     goodIdList.add(getGoodTwo().getId());
-    return previeworderControllerClient.generatePreviewOrder(getSenderTwo().getId(), goodIdList,
+    return previeworderControllerClient.generatePreviewOrder(getSenderTwo().getUsername(), goodIdList,
         getSenderTwoAccessToken());
   }
 
@@ -417,7 +419,7 @@ public abstract class AbstractTestAction {
     CreateShopCartRequest addShopcartItemRequest = new CreateShopCartRequest();
     addShopcartItemRequest.setGoodId(getGoodOne().getId());
     addShopcartItemRequest.setGoodNum(10);
-    return shopCartControllerClient.addShopCart(getSenderTwo().getId(), addShopcartItemRequest,
+    return shopCartControllerClient.addShopCart(getSenderTwo().getUsername(), addShopcartItemRequest,
         getSenderTwoAccessToken());
   }
 
@@ -425,7 +427,7 @@ public abstract class AbstractTestAction {
     CreateShopCartRequest addShopcartItemRequest = new CreateShopCartRequest();
     addShopcartItemRequest.setGoodId(getGoodTwo().getId());
     addShopcartItemRequest.setGoodNum(10);
-    return shopCartControllerClient.addShopCart(getSenderTwo().getId(), addShopcartItemRequest,
+    return shopCartControllerClient.addShopCart(getSenderTwo().getUsername(), addShopcartItemRequest,
         getSenderTwoAccessToken());
   }
 
@@ -456,7 +458,7 @@ public abstract class AbstractTestAction {
   @TargetDataSource(name = "weapp-user")
   public void clearUser() {
     userRepository.findAll().forEach(user -> {
-      if (!ADMIN_USER_ID.equals(user.getId())) {
+      if (!ADMIN_USER_NAME.equals(user.getUsername())) {
         userRepository.delete(user);
       }
     });

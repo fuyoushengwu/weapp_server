@@ -27,7 +27,7 @@ public class UserVoucher implements Parcelable {
   /**
    * 用户ID
    */
-  private String userId;
+  private String username;
 
   /**
    * 兑换券
@@ -48,7 +48,7 @@ public class UserVoucher implements Parcelable {
   public void writeToParcel(Parcel dest, int flags) {
     dest.writeString(id);
     dest.writeByte((byte) (deprecated ? 1 : 0));
-    dest.writeString(userId);
+    dest.writeString(username);
     dest.writeParcelable(goodVoucher, flags);
     dest.writeInt(score);
   }
@@ -59,7 +59,7 @@ public class UserVoucher implements Parcelable {
   private UserVoucher(Parcel in) {
     this.id = in.readString();
     this.deprecated = in.readByte() != 0;
-    this.userId = in.readString();
+    this.username = in.readString();
     this.goodVoucher = in.readParcelable(GoodVoucher.class.getClassLoader());
     this.score = in.readInt();
   }

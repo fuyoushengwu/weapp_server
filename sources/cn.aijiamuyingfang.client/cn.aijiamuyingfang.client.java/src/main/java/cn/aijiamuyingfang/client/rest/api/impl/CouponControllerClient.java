@@ -57,16 +57,16 @@ public class CouponControllerClient {
   /**
    * 分页获取用户兑换券
    * 
-   * @param userId
+   * @param username
    * @param currentPage
    * @param pageSize
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public GetUserVoucherListResponse getUserVoucherList(String userId, int currentPage, int pageSize, String accessToken)
+  public GetUserVoucherListResponse getUserVoucherList(String username, int currentPage, int pageSize, String accessToken)
       throws IOException {
-    Response<ResponseBean> response = couponControllerApi.getUserVoucherList(userId, currentPage, pageSize, accessToken)
+    Response<ResponseBean> response = couponControllerApi.getUserVoucherList(username, currentPage, pageSize, accessToken)
         .execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {

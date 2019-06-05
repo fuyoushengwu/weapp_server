@@ -65,7 +65,7 @@ public class RecieveAddress implements Parcelable {
   /**
    * 收货地址-关联用户
    */
-  private String userId;
+  private String username;
 
   /**
    * 收货地址-联系电话
@@ -97,7 +97,7 @@ public class RecieveAddress implements Parcelable {
     dest.writeParcelable(town, flags);
     dest.writeString(detail);
     dest.writeParcelable(coordinate, flags);
-    dest.writeString(userId);
+    dest.writeString(username);
     dest.writeString(phone);
     dest.writeString(reciever);
     dest.writeByte((byte) (def ? 1 : 0));
@@ -115,7 +115,7 @@ public class RecieveAddress implements Parcelable {
     town = in.readParcelable(Town.class.getClassLoader());
     detail = in.readString();
     coordinate = in.readParcelable(Coordinate.class.getClassLoader());
-    userId = in.readString();
+    username = in.readString();
     phone = in.readString();
     reciever = in.readString();
     def = in.readByte() != 0;

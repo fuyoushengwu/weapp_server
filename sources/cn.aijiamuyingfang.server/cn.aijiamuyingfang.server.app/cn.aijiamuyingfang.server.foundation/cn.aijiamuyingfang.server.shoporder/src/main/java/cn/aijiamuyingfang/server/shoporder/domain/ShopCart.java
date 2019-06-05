@@ -33,7 +33,7 @@ public class ShopCart {
   /**
    * 购物车关联用户Id
    */
-  private String userId;
+  private String username;
 
   /**
    * 关联商品Id
@@ -43,7 +43,7 @@ public class ShopCart {
   /**
    * 该项是否被选中
    */
-  private boolean isChecked = true;
+  private boolean checked = true;
 
   /**
    * 商品数量

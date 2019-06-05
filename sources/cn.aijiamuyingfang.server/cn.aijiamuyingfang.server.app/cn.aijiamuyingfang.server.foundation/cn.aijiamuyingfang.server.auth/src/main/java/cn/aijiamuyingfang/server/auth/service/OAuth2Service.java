@@ -46,7 +46,7 @@ public class OAuth2Service {
     try {
       WxMaJscode2SessionResult result = wxmaxUserService.getSessionInfo(jscode);
       WeChatSession userSession = new WeChatSession();
-      userSession.setOpenid(result.getOpenid());
+      userSession.setUsername(result.getOpenid());
       userSession.setSessionKey(result.getSessionKey());
       userSession.setUnionid(result.getUnionid());
       return userSession;
@@ -62,18 +62,18 @@ public class OAuth2Service {
   /**
    * 獲取用戶(儅系統中沒有時則創建)
    * 
-   * @param openid
+   * @param username
    * @param password
    * @param nickname
    * @param avatar
    * @param gender
    * @return
    */
-  public User getOrCreateUserIfAbsent(String openid, String password,String nickname, String avatar, Gender gender) {
-    User user = userClient.getUserInternal(null, openid).getData();
+  public User getOrCreateUserIfAbsent(String username, String password, String nickname, String avatar, Gender gender) {
+    User user = userClient.getUserInternal(username).getData();
     if (null == user) {
       user = new User();
-      user.setOpenid(openid);
+      user.setUsername(username);
       user.setPassword(password);
       user.setAppid(appid);
       user.setNickname(nickname);

@@ -9,7 +9,7 @@ public class UserVoucher {
   /**
    * 用户ID
    */
-  private String userId;
+  private String username;
 
   /**
    * 用户拥有的该兑换券分值

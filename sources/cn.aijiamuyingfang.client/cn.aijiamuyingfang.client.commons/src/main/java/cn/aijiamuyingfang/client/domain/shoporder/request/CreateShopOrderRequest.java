@@ -9,7 +9,7 @@ import lombok.Data;
 /**
  * [描述]:
  * <p>
- * <code>POST '/user/{user_id}/shoporder'</code>方法的请求体
+ * <code>POST '/user/{username}/shoporder'</code>方法的请求体
  * </p>
  * 
  * @version 1.0.0

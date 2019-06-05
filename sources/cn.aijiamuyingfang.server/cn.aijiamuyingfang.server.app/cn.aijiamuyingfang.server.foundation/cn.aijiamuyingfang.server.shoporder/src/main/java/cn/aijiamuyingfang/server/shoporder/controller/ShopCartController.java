@@ -35,82 +35,85 @@ public class ShopCartController {
   /**
    * 往用户购物车添加商品
    * 
-   * @param userId
+   * @param username
    * @param requestBean
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated() and #userId.equals(getAuthentication().getName())")
-  @PostMapping(value = "/user/{user_id}/shop_cart")
-  public ShopCart addShopCart(@PathVariable("user_id") String userId, @RequestBody CreateShopCartRequest requestBean) {
-    return shopCartService.addShopCart(userId, requestBean.getGoodId(), requestBean.getGoodNum());
+  @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
+  @PostMapping(value = "/user/{username}/shop_cart")
+  public ShopCart addShopCart(@PathVariable("username") String username,
+      @RequestBody CreateShopCartRequest requestBean) {
+    return shopCartService.addShopCart(username, requestBean.getGoodId(), requestBean.getGoodNum());
   }
 
   /**
    * 分页获取用户购物车中的项目
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @param currentPage
    * @param pageSize
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated() and #userId.equals(getAuthentication().getName())")
-  @GetMapping(value = "/user/{user_id}/shop_cart")
-  public GetShopCartListResponse getShopCartList(@PathVariable("user_id") String userId,
+  @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
+  @GetMapping(value = "/user/{username}/shop_cart")
+  public GetShopCartListResponse getShopCartList(@PathVariable("username") String username,
       @RequestParam(value = "current_page") int currentPage, @RequestParam(value = "page_size") int pageSize) {
-    return shopCartService.getShopCartList(userId, currentPage, pageSize);
+    return shopCartService.getShopCartList(username, currentPage, pageSize);
   }
 
   /**
    * 全选/全不选用户购物车中的商品
    * 
-   * @param userId
-   * @param isChecked
+   * @param username
+   * @param checked
    */
-  @PreAuthorize(value = "isAuthenticated() and #userId.equals(getAuthentication().getName())")
-  @PutMapping(value = "/user/{user_id}/shop_cart/allcheck/{is_checked}")
-  public void checkAllShopCart(@PathVariable("user_id") String userId, @PathVariable("is_checked") boolean isChecked) {
-    shopCartService.checkAllShopCart(userId, isChecked);
+  @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
+  @PutMapping(value = "/user/{username}/shop_cart/allcheck/{checked}")
+  public void checkAllShopCart(@PathVariable("username") String username, @PathVariable("checked") boolean checked) {
+    shopCartService.checkAllShopCart(username, checked);
   }
 
   /**
    * 选中用户购物车下的某一项
    * 
-   * @param userId
+   * @param username
    * @param shopCartId
-   * @param isChecked
+   * @param checked
    */
-  @PreAuthorize(value = "isAuthenticated() and #userId.equals(getAuthentication().getName())")
-  @PutMapping(value = "/user/{user_id}/shop_cart/{shop_cart_id}/check/{is_checked}")
-  public void checkShopCart(@PathVariable("user_id") String userId, @PathVariable("shop_cart_id") String shopCartId,
-      @PathVariable("is_checked") boolean isChecked) {
-    shopCartService.checkShopCart(userId, shopCartId, isChecked);
+  @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
+  @PutMapping(value = "/user/{username}/shop_cart/{shop_cart_id}/check/{checked}")
+  public void checkShopCart(@PathVariable("username") String username, @PathVariable("shop_cart_id") String shopCartId,
+      @PathVariable("checked") boolean checked) {
+    shopCartService.checkShopCart(username, shopCartId, checked);
   }
 
   /**
    * 删除购物项
    * 
+   * @param username
    * @param shopCartId
    */
-  @PreAuthorize(value = "isAuthenticated() and #userId.equals(getAuthentication().getName())")
-  @DeleteMapping(value = "/user/{user_id}/shop_cart/{shop_cart_id}")
-  public void deleteShopCart(@PathVariable("user_id") String userId, @PathVariable("shop_cart_id") String shopCartId) {
-    shopCartService.deleteShopCart(userId, shopCartId);
+  @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
+  @DeleteMapping(value = "/user/{username}/shop_cart/{shop_cart_id}")
+  public void deleteShopCart(@PathVariable("username") String username,
+      @PathVariable("shop_cart_id") String shopCartId) {
+    shopCartService.deleteShopCart(username, shopCartId);
   }
 
   /**
    * 修改用户购物车中商品数量
    * 
-   * @param userId
+   * @param username
    * @param shopCartId
    * @param count
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated() and #userId.equals(getAuthentication().getName())")
-  @PutMapping(value = "/user/{user_id}/shop_cart/{shop_cart_id}/count/{count}")
-  public ShopCart updateShopCartCount(@PathVariable("user_id") String userId,
+  @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
+  @PutMapping(value = "/user/{username}/shop_cart/{shop_cart_id}/count/{count}")
+  public ShopCart updateShopCartCount(@PathVariable("username") String username,
       @PathVariable("shop_cart_id") String shopCartId, @PathVariable("count") int count) {
-    return shopCartService.updateShopCartCount(userId, shopCartId, count);
+    return shopCartService.updateShopCartCount(username, shopCartId, count);
   }
 
   /**

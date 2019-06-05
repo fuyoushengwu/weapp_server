@@ -18,7 +18,7 @@ public class CustomUserService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) {
-    ResponseBean<User> response = userclient.getUserInternal(username, null);
+    ResponseBean<User> response = userclient.getUserInternal(username);
     if (ResponseCode.OK.getCode().equals(response.getCode())) {
       return response.getData();
     }

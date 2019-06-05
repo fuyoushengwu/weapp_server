@@ -50,15 +50,15 @@ public class TemplateMsgService {
   /**
    * 发送预定单所有商品已到货的消息(需要用户确认预订单是否发货)
    * 
-   * @param openid
+   * @param username
    * @param order
    * @param updatedGood
    */
-  public void sendPreOrderMsg(String openid, ShopOrder order, Good updatedGood) {
+  public void sendPreOrderMsg(String username, ShopOrder order, Good updatedGood) {
     if (null == order || null == updatedGood) {
       return;
     }
-    if (StringUtils.isEmpty(openid)) {
+    if (StringUtils.isEmpty(username)) {
       return;
     }
 
@@ -69,20 +69,20 @@ public class TemplateMsgService {
     String keyword4Value = dateFormat.format(order.getCreateTime());
 
     TemplateMsg message = createTemplateMsg(order, keyword1Value, keyword2Value, keyword3Value, keyword4Value);
-    templateMsgClient.sendPreOrderMsg(openid, message);
+    templateMsgClient.sendPreOrderMsg(username, message);
   }
 
   /**
    * 发送用户自取订单消息(订单已经准备好,可以自取)
    * 
-   * @param openid
+   * @param username
    * @param order
    */
-  public void sendPickupMsg(String openid, ShopOrder order) {
+  public void sendPickupMsg(String username, ShopOrder order) {
     if (null == order) {
       return;
     }
-    if (StringUtils.isEmpty(openid)) {
+    if (StringUtils.isEmpty(username)) {
       return;
     }
 
@@ -110,21 +110,21 @@ public class TemplateMsgService {
 
     TemplateMsg message = createTemplateMsg(order, keyword1Value, keyword2Value, keyword3Value, keyword4Value,
         keyword5Value, keyword6Value);
-    templateMsgClient.sendPickupMsg(openid, message);
+    templateMsgClient.sendPickupMsg(username, message);
 
   }
 
   /**
    * 发送快递订单消息(订单已发货)
    * 
-   * @param openid
+   * @param username
    * @param order
    */
-  public void sendThirdSendMsg(String openid, ShopOrder order) {
+  public void sendThirdSendMsg(String username, ShopOrder order) {
     if (null == order) {
       return;
     }
-    if (StringUtils.isEmpty(openid)) {
+    if (StringUtils.isEmpty(username)) {
       return;
     }
     String keyword1Value = order.getOrderNo();
@@ -143,7 +143,7 @@ public class TemplateMsgService {
     String keyword3Value = order.getThirdsendCompany();
     String keyword4Value = order.getThirdsendNo();
 
-    RecieveAddress recieveAddress = userClient.getRecieveAddress(order.getUserId(), order.getRecieveAddressId())
+    RecieveAddress recieveAddress = userClient.getRecieveAddress(order.getUsername(), order.getRecieveAddressId())
         .getData();
     String keyword5Value = recieveAddress.getDetail();
 
@@ -153,27 +153,27 @@ public class TemplateMsgService {
 
     TemplateMsg message = createTemplateMsg(order, keyword1Value, keyword2Value, keyword3Value, keyword4Value,
         keyword5Value, keyword6Value, keyword7Value);
-    templateMsgClient.sendThirdSendMsg(openid, message);
+    templateMsgClient.sendThirdSendMsg(username, message);
   }
 
   /**
    * 发送送货上门订单消息(订单已发货)
    * 
-   * @param openid
+   * @param username
    * @param order
    */
-  public void sendOwnSendMsg(String openid, ShopOrder order) {
+  public void sendOwnSendMsg(String username, ShopOrder order) {
     if (null == order) {
       return;
     }
-    if (StringUtils.isEmpty(openid)) {
+    if (StringUtils.isEmpty(username)) {
       return;
     }
 
     String keyword1Value = order.getOrderNo();
     SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_PATTERN);
     String keyword2Value = dateFormat.format(order.getCreateTime());
-    RecieveAddress recieveAddress = userClient.getRecieveAddress(order.getUserId(), order.getRecieveAddressId())
+    RecieveAddress recieveAddress = userClient.getRecieveAddress(order.getUsername(), order.getRecieveAddressId())
         .getData();
     String keyword3Value = recieveAddress.getDetail();
     String keyword4Value = order.getThirdsendNo();
@@ -194,27 +194,27 @@ public class TemplateMsgService {
 
     TemplateMsg message = createTemplateMsg(order, keyword1Value, keyword2Value, keyword3Value, keyword4Value,
         keyword5Value, keyword6Value, keyword7Value);
-    templateMsgClient.sendOwnSendMsg(openid, message);
+    templateMsgClient.sendOwnSendMsg(username, message);
   }
 
   /**
    * 发送订单超时消息
    * 
-   * @param openid
+   * @param username
    * @param msgData
    */
-  public void sendOrderOverTimeMsg(String openid, TemplateMsg msgData) {
-    templateMsgClient.sendOrderOverTimeMsg(openid, msgData);
+  public void sendOrderOverTimeMsg(String username, TemplateMsg msgData) {
+    templateMsgClient.sendOrderOverTimeMsg(username, msgData);
   }
 
   /**
    * 发送订单确认消息
    * 
-   * @param openid
+   * @param username
    * @param msgData
    */
-  public void sendOrderConfirmMsg(String openid, TemplateMsg msgData) {
-    templateMsgClient.sendOrderConfirmMsg(openid, msgData);
+  public void sendOrderConfirmMsg(String username, TemplateMsg msgData) {
+    templateMsgClient.sendOrderConfirmMsg(username, msgData);
   }
 
   /**

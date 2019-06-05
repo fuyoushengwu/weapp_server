@@ -25,7 +25,7 @@ public class UserMessage implements Parcelable {
   /**
    * 用户消息:用户Id;系统消息:-1
    */
-  private String userId;
+  private String username;
 
   /**
    * 用户消息类型
@@ -70,7 +70,7 @@ public class UserMessage implements Parcelable {
   @Override
   public void writeToParcel(Parcel dest, int flags) {
     dest.writeString(id);
-    dest.writeString(userId);
+    dest.writeString(username);
     dest.writeParcelable(type, flags);
     dest.writeString(title);
     dest.writeString(roundup);
@@ -85,7 +85,7 @@ public class UserMessage implements Parcelable {
 
   private UserMessage(Parcel in) {
     id = in.readString();
-    userId = in.readString();
+    username = in.readString();
     type = in.readParcelable(UserMessageType.class.getClassLoader());
     title = in.readString();
     roundup = in.readString();

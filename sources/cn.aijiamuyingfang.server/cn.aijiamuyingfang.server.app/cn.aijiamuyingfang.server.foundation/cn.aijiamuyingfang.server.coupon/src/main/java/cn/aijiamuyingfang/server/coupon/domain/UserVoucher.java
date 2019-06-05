@@ -40,7 +40,7 @@ public class UserVoucher {
   /**
    * 用户ID
    */
-  private String userId;
+  private String username;
 
   /**
    * 兑换券

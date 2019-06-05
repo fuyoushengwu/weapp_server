@@ -27,19 +27,19 @@ public class UserTestActions extends AbstractTestAction {
       this.userMessage.setContent("content");
       this.userMessage.setCreateTime(new Date());
       this.userMessage.setFinishTime(new Date(System.currentTimeMillis() + 30 * 24 * 60 * 60 * 1000L));
-      this.userMessage.setUserId(this.getSenderOne().getId());
+      this.userMessage.setUsername(this.getSenderOne().getUsername());
       this.userMessage.setTitle("title");
       this.userMessage.setType(UserMessageType.NOTICE);
-      this.userMessage = this.userMessageControllerClient.createMessage(this.getSenderOne().getId(), this.userMessage,
-          this.getSenderOneAccessToken());
+      this.userMessage = this.userMessageControllerClient.createMessage(this.getSenderOne().getUsername(),
+          this.userMessage, this.getSenderOneAccessToken());
     }
     return userMessage;
   }
 
   public void deleteSenderOneMessage() throws IOException {
     if (userMessage != null) {
-      userMessageControllerClient.deleteMessage(userMessage.getUserId(), userMessage.getId(), getSenderOneAccessToken(),
-          false);
+      userMessageControllerClient.deleteMessage(userMessage.getUsername(), userMessage.getId(),
+          getSenderOneAccessToken(), false);
       this.userMessage = null;
     }
   }

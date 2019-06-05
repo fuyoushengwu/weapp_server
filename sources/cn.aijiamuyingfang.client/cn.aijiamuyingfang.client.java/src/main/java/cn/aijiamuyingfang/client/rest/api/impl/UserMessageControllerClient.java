@@ -55,13 +55,14 @@ public class UserMessageControllerClient {
   /**
    * 获得用户未读消息数量
    * 
-   * @param userId
+   * @param username
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public int getUserUnReadMessageCount(String userId, String accessToken) throws IOException {
-    Response<ResponseBean> response = userMessageControllerApi.getUserUnReadMessageCount(userId, accessToken).execute();
+  public int getUserUnReadMessageCount(String username, String accessToken) throws IOException {
+    Response<
+        ResponseBean> response = userMessageControllerApi.getUserUnReadMessageCount(username, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -81,17 +82,17 @@ public class UserMessageControllerClient {
   /**
    * 分页获取用户消息
    * 
-   * @param userId
+   * @param username
    * @param currentPage
    * @param pageSize
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public GetMessagesListResponse getUserMessageList(String userId, int currentPage, int pageSize, String accessToken)
+  public GetMessagesListResponse getUserMessageList(String username, int currentPage, int pageSize, String accessToken)
       throws IOException {
     Response<ResponseBean> response = userMessageControllerApi
-        .getUserMessageList(userId, currentPage, pageSize, accessToken).execute();
+        .getUserMessageList(username, currentPage, pageSize, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -116,14 +117,14 @@ public class UserMessageControllerClient {
   /**
    * 为用户创建消息
    * 
-   * @param userId
+   * @param username
    * @param message
    * @param accessToken
    * @return
    * @throws IOException
    */
-  public UserMessage createMessage(String userId, UserMessage message, String accessToken) throws IOException {
-    Response<ResponseBean> response = userMessageControllerApi.createMessage(userId, message, accessToken).execute();
+  public UserMessage createMessage(String username, UserMessage message, String accessToken) throws IOException {
+    Response<ResponseBean> response = userMessageControllerApi.createMessage(username, message, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -147,31 +148,32 @@ public class UserMessageControllerClient {
   /**
    * 异步为用户创建消息
    * 
-   * @param userId
+   * @param username
    * @param message
    * @param accessToken
    * @param callback
    */
-  public void createMessageAsync(String userId, UserMessage message, String accessToken,
+  public void createMessageAsync(String username, UserMessage message, String accessToken,
       Callback<ResponseBean> callback) {
-    userMessageControllerApi.createMessage(userId, message, accessToken).enqueue(callback);
+    userMessageControllerApi.createMessage(username, message, accessToken).enqueue(callback);
   }
 
   /**
    * 删除消息
    * 
-   * @param userId
+   * @param username
    * @param messageId
    * @param accessToken
    * @param async
    * @throws IOException
    */
-  public void deleteMessage(String userId, String messageId, String accessToken, boolean async) throws IOException {
+  public void deleteMessage(String username, String messageId, String accessToken, boolean async) throws IOException {
     if (async) {
-      userMessageControllerApi.deleteMessage(userId, messageId, accessToken).enqueue(Empty_Callback);
+      userMessageControllerApi.deleteMessage(username, messageId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = userMessageControllerApi.deleteMessage(userId, messageId, accessToken).execute();
+    Response<
+        ResponseBean> response = userMessageControllerApi.deleteMessage(username, messageId, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {

@@ -45,7 +45,7 @@ public class ShopOrderController {
   /**
    * 分页获取用户的订单信息
    * 
-   * @param userId
+   * @param username
    * @param status
    * @param sendType
    * @param currentPage
@@ -53,28 +53,28 @@ public class ShopOrderController {
    * @return
    */
   @PreAuthorize(
-      value = "isAuthenticated() and (#userId.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
-  @GetMapping(value = "/user/{user_id}/shoporder")
-  public GetShopOrderListResponse getUserShopOrderList(@PathVariable(name = "user_id") String userId,
+      value = "isAuthenticated() and (#username.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
+  @GetMapping(value = "/user/{username}/shoporder")
+  public GetShopOrderListResponse getUserShopOrderList(@PathVariable(name = "username") String username,
       @RequestParam(value = "status", required = false) List<ShopOrderStatus> status,
       @RequestParam(value = "send_type", required = false) List<SendType> sendType,
       @RequestParam(value = "current_page") int currentPage, @RequestParam(value = "page_size") int pageSize) {
-    return shoporderSerivce.getUserShopOrderList(userId, status, sendType, currentPage, pageSize);
+    return shoporderSerivce.getUserShopOrderList(username, status, sendType, currentPage, pageSize);
   }
 
   /**
    * 获取用户购买商品时可以使用的兑换券
    * 
-   * @param userId
+   * @param username
    * @param goodIdList
    * @return
    */
   @PreAuthorize(
-      value = "isAuthenticated() and (#userId.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
-  @GetMapping(value = "/user/{user_id}/coupon/shoporder")
-  public GetShopOrderVoucherListResponse getUserShopOrderVoucherList(@PathVariable("user_id") String userId,
+      value = "isAuthenticated() and (#username.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
+  @GetMapping(value = "/user/{username}/coupon/shoporder")
+  public GetShopOrderVoucherListResponse getUserShopOrderVoucherList(@PathVariable("username") String username,
       @RequestParam(name = "good_id", required = false) List<String> goodIdList) {
-    return shoporderSerivce.getUserShopOrderVoucherList(userId, goodIdList);
+    return shoporderSerivce.getUserShopOrderVoucherList(username, goodIdList);
   }
 
   /**
@@ -122,42 +122,42 @@ public class ShopOrderController {
   /**
    * 删除用户下的订单,该操作需要先判断该订单是否属于用户
    * 
-   * @param userId
+   * @param username
    * @param shopOrderId
    */
-  @PreAuthorize(value = "isAuthenticated() and #userId.equals(getAuthentication().getName())")
-  @DeleteMapping(value = "/user/{user_id}/shoporder/{shop_order_id}")
-  public void deleteUserShopOrder(@PathVariable("user_id") String userId,
+  @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
+  @DeleteMapping(value = "/user/{username}/shoporder/{shop_order_id}")
+  public void deleteUserShopOrder(@PathVariable("username") String username,
       @PathVariable("shop_order_id") String shopOrderId) {
-    shoporderSerivce.deleteUserShopOrder(userId, shopOrderId);
+    shoporderSerivce.deleteUserShopOrder(username, shopOrderId);
   }
 
   /**
    * 确认订单结束,先要判断该订单是否属于用户
    * 
-   * @param userId
+   * @param username
    * @param shopOrderId
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated() and #userId.equals(getAuthentication().getName())")
-  @PutMapping(value = "/user/{user_id}/shoporder/{shop_order_id}/finisheorder")
-  public ConfirmShopOrderFinishedResponse confirmUserShopOrderFinished(@PathVariable("user_id") String userId,
+  @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
+  @PutMapping(value = "/user/{username}/shoporder/{shop_order_id}/finisheorder")
+  public ConfirmShopOrderFinishedResponse confirmUserShopOrderFinished(@PathVariable("username") String username,
       @PathVariable("shop_order_id") String shopOrderId) {
-    return shoporderSerivce.confirmUserShopOrderFinished(userId, shopOrderId);
+    return shoporderSerivce.confirmUserShopOrderFinished(username, shopOrderId);
   }
 
   /**
    * 更新订单的收货地址,先要判断该订单是否属于用户
    * 
-   * @param userId
+   * @param username
    * @param shopOrderId
    * @param addressId
    */
-  @PreAuthorize(value = "isAuthenticated() and #userId.equals(getAuthentication().getName())")
-  @PutMapping(value = "/user/{user_id}/shoporder/{shop_order_id}/recieveaddress/{address_id}")
-  public void updateUserShopOrderRecieveAddress(@PathVariable("user_id") String userId,
+  @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
+  @PutMapping(value = "/user/{username}/shoporder/{shop_order_id}/recieveaddress/{address_id}")
+  public void updateUserShopOrderRecieveAddress(@PathVariable("username") String username,
       @PathVariable("shop_order_id") String shopOrderId, @PathVariable("address_id") String addressId) {
-    shoporderSerivce.updateUserShopOrderRecieveAddress(userId, shopOrderId, addressId);
+    shoporderSerivce.updateUserShopOrderRecieveAddress(username, shopOrderId, addressId);
   }
 
   /**
@@ -177,42 +177,42 @@ public class ShopOrderController {
   /**
    * 获取用户订单,先要判断订单是否属于用户
    * 
-   * @param userId
+   * @param username
    * @param shopOrderId
    * @return
    */
   @PreAuthorize(
-      value = "isAuthenticated() and (#userId.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
-  @GetMapping(value = "/user/{user_id}/shoporder/{shop_order_id}")
-  public ShopOrder getUserShopOrder(@PathVariable("user_id") String userId,
+      value = "isAuthenticated() and (#username.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
+  @GetMapping(value = "/user/{username}/shoporder/{shop_order_id}")
+  public ShopOrder getUserShopOrder(@PathVariable("username") String username,
       @PathVariable(name = "shop_order_id") String shopOrderId) {
-    return shoporderSerivce.getUserShopOrder(userId, shopOrderId);
+    return shoporderSerivce.getUserShopOrder(username, shopOrderId);
   }
 
   /**
    * 创建用户订单
    * 
-   * @param userId
+   * @param username
    * @param requestBean
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated() and #userId.equals(getAuthentication().getName())")
-  @PostMapping(value = "/user/{user_id}/shoporder")
-  public ShopOrder createUserShopOrder(@PathVariable("user_id") String userId,
+  @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
+  @PostMapping(value = "/user/{username}/shoporder")
+  public ShopOrder createUserShopOrder(@PathVariable("username") String username,
       @RequestBody CreateShopOrderRequest requestBean) {
-    return shoporderSerivce.createUserShopOrder(userId, requestBean);
+    return shoporderSerivce.createUserShopOrder(username, requestBean);
   }
 
   /**
    * 得到用户订单根据状态分类的数目
    * 
-   * @param userId
+   * @param username
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated() and #userId.equals(getAuthentication().getName())")
-  @GetMapping(value = "/user/{user_id}/shoporder/statuscount")
-  public Map<String, Integer> getUserShopOrderStatusCount(@PathVariable("user_id") String userId) {
-    return shoporderSerivce.getUserShopOrderStatusCount(userId);
+  @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
+  @GetMapping(value = "/user/{username}/shoporder/statuscount")
+  public Map<String, Integer> getUserShopOrderStatusCount(@PathVariable("username") String username) {
+    return shoporderSerivce.getUserShopOrderStatusCount(username);
   }
 
   /**

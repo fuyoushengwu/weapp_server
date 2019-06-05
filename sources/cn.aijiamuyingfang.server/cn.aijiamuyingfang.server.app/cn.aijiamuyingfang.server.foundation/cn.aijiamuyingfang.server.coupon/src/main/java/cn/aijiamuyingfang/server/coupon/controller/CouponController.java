@@ -42,29 +42,29 @@ public class CouponController {
   /**
    * 分页获取用户兑换券
    * 
-   * @param userId
+   * @param username
    * @param currentPage
    * @param pageSize
    * @return
    */
   @PreAuthorize(
-      value = "isAuthenticated() and (#userId.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
-  @GetMapping(value = "/user/{user_id}/coupon/uservoucher")
-  public GetUserVoucherListResponse getUserVoucherList(@PathVariable("user_id") String userId,
+      value = "isAuthenticated() and (#username.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
+  @GetMapping(value = "/user/{username}/coupon/uservoucher")
+  public GetUserVoucherListResponse getUserVoucherList(@PathVariable("username") String username,
       @RequestParam("current_page") int currentPage, @RequestParam("page_size") int pageSize) {
-    return couponService.getUserVoucherList(userId, currentPage, pageSize);
+    return couponService.getUserVoucherList(username, currentPage, pageSize);
   }
 
   /**
    * 更新用户兑换券
    * 
-   * @param userId
+   * @param username
    * @param userVoucherList
    */
   @PreAuthorize(
-      value = "isAuthenticated() and (#userId.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
-  @PutMapping(value = "/user/{user_id}/coupon/uservoucher")
-  public void updateUserVoucherList(@PathVariable("user_id") String userId,
+      value = "isAuthenticated() and (#username.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
+  @PutMapping(value = "/user/{username}/coupon/uservoucher")
+  public void updateUserVoucherList(@PathVariable("username") String username,
       @RequestBody List<UserVoucher> userVoucherList) {
     couponService.updateUserVoucher(userVoucherList);
   }
@@ -72,14 +72,14 @@ public class CouponController {
   /**
    * 获得用户的兑换券
    * 
-   * @param userId
+   * @param username
    * @param voucherId
    * @return
    */
   @PreAuthorize(
-      value = "isAuthenticated() and (#userId.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
-  @GetMapping(value = "/user/{user_id}/coupon/uservoucher/{voucher_id}")
-  public UserVoucher getUserVoucher(@PathVariable("user_id") String userId,
+      value = "isAuthenticated() and (#username.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
+  @GetMapping(value = "/user/{username}/coupon/uservoucher/{voucher_id}")
+  public UserVoucher getUserVoucher(@PathVariable("username") String username,
       @PathVariable("voucher_id") String voucherId) {
     return couponService.getUserVoucher(voucherId);
   }
@@ -87,29 +87,29 @@ public class CouponController {
   /**
    * 获得用户用户GoodVoucher的兑换券
    * 
-   * @param userId
+   * @param username
    * @param voucherId
    * @return
    */
   @PreAuthorize(
-      value = "isAuthenticated() and (#userId.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
-  @GetMapping(value = "/user/{user_id}/coupon/uservoucher/goodvoucher/{voucher_id}")
-  public UserVoucher getUserVoucherForGoodVoucher(@PathVariable("user_id") String userId,
+      value = "isAuthenticated() and (#username.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
+  @GetMapping(value = "/user/{username}/coupon/uservoucher/goodvoucher/{voucher_id}")
+  public UserVoucher getUserVoucherForGoodVoucher(@PathVariable("username") String username,
       @PathVariable("voucher_id") String voucherId) {
-    return couponService.getUserVoucherForGoodVoucher(userId, voucherId);
+    return couponService.getUserVoucherForGoodVoucher(username, voucherId);
   }
 
   /**
    * 更新用户兑换券
    * 
-   * @param userId
+   * @param username
    * @param voucherId
    * @param uservoucher
    */
   @PreAuthorize(
-      value = "isAuthenticated() and (#userId.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
-  @PutMapping(value = "/user/{user_id}/coupon/uservoucher/{voucher_id}")
-  public void updateUserVoucher(@PathVariable("user_id") String userId, @PathVariable("voucher_id") String voucherId,
+      value = "isAuthenticated() and (#username.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
+  @PutMapping(value = "/user/{username}/coupon/uservoucher/{voucher_id}")
+  public void updateUserVoucher(@PathVariable("username") String username, @PathVariable("voucher_id") String voucherId,
       @RequestBody UserVoucher uservoucher) {
     couponService.updateUserVoucher(uservoucher);
   }

@@ -30,19 +30,19 @@ public interface ShopOrderRepository extends JpaRepository<ShopOrder, String> {
   /**
    * 计算不同状态和送货方式下订单总数
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @param statusList
    * @param sendTypeList
    * @return
    */
-  int countByUserIdAndStatusInAndSendtypeIn(String userId, List<ShopOrderStatus> statusList,
+  int countByUsernameAndStatusInAndSendTypeIn(String username, List<ShopOrderStatus> statusList,
       List<SendType> sendTypeList);
 
   /**
    * 根据订单状态、配送方式分页查找用户的订单
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @param statusList
    * @param sendTypeList
@@ -50,7 +50,7 @@ public interface ShopOrderRepository extends JpaRepository<ShopOrder, String> {
    *          分页信息
    * @return
    */
-  Page<ShopOrder> findByUserIdAndStatusInAndSendtypeIn(String userId, List<ShopOrderStatus> statusList,
+  Page<ShopOrder> findByUsernameAndStatusInAndSendTypeIn(String username, List<ShopOrderStatus> statusList,
       List<SendType> sendTypeList, Pageable pageable);
 
   /**
@@ -62,7 +62,7 @@ public interface ShopOrderRepository extends JpaRepository<ShopOrder, String> {
    *          分页信息
    * @return
    */
-  Page<ShopOrder> findByStatusInAndSendtypeIn(List<ShopOrderStatus> statusList, List<SendType> sendTypeList,
+  Page<ShopOrder> findByStatusInAndSendTypeIn(List<ShopOrderStatus> statusList, List<SendType> sendTypeList,
       Pageable pageable);
 
   /**

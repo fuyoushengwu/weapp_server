@@ -23,20 +23,15 @@ public class User implements UserDetails {
   private static final long serialVersionUID = -9072277778135596157L;
 
   /**
-   * 用户的Id
+   * 小程序用戶沒有username,使用openid作爲username,
    */
-  private String id;
-
-  /**
-   * 该小程序中用户的唯一Id
-   */
-  private String openid;
+  private String username;
 
   /**
    * 密码
    */
   private String password;
-  
+
   /**
    * 头像
    */
@@ -46,14 +41,17 @@ public class User implements UserDetails {
    * 性别
    */
   private Gender gender;
+
   /**
    * 昵称
    */
   private String nickname;
+
   /**
    * 用户所在的APP ID
    */
   private String appid;
+
   /**
    * 用户角色
    */
@@ -83,9 +81,13 @@ public class User implements UserDetails {
     return authorityList;
   }
 
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
   @Override
   public String getUsername() {
-    return this.id;
+    return this.username;
   }
 
   @Override

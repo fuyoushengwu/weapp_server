@@ -31,57 +31,57 @@ public interface ShopCartRepository extends JpaRepository<ShopCart, String> {
   /**
    * 查找用户在购物车中某一项商品
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @param goodId
    *          商品id
    */
-  ShopCart findByUserIdAndGoodId(String userId, String goodId);
+  ShopCart findByUsernameAndGoodId(String username, String goodId);
 
   /**
    * 查找用户在购物车中的某几项商品
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @param goodIdList
    *          商品id列表
    * @return
    */
-  List<ShopCart> findByUserIdAndGoodIdIn(String userId, List<String> goodIdList);
+  List<ShopCart> findByUsernameAndGoodIdIn(String username, List<String> goodIdList);
 
   /**
    * 分页查找用户购物车中的所有商品
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @param pageable
    *          分页信息
    * @return
    */
-  Page<ShopCart> findByUserId(String userId, Pageable pageable);
+  Page<ShopCart> findByUsername(String username, Pageable pageable);
 
   /**
    * 查找用户所有选中的购车项
    * 
-   * @param userId
+   * @param username
    *          用户id
-   * @param isChecked
+   * @param checked
    *          是否选中
    * @return
    */
-  List<ShopCart> findByUserIdAndIschecked(String userId, boolean isChecked);
+  List<ShopCart> findByUsernameAndChecked(String username, boolean checked);
 
   /**
    * 全选/全不选用户下的购物车
    * 
-   * @param userId
+   * @param username
    *          用户id
-   * @param isChecked
+   * @param checked
    */
   @Modifying
   @Transactional
-  @Query(value = "update shop_cart set is_checked=:is_checked where user_id=:user_id", nativeQuery = true)
-  void checkAllShopCart(@Param("user_id") String userId, @Param("is_checked") boolean isChecked);
+  @Query(value = "update shop_cart set checked=:checked where username=:username", nativeQuery = true)
+  void checkAllShopCart(@Param("username") String username, @Param("checked") boolean checked);
 
   /**
    * 删除购物车中的商品

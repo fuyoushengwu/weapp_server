@@ -42,17 +42,17 @@ public class ShopCartService {
   /**
    * 往购物车添加商品
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @param goodId
    *          商品id
    * @param goodNum
    * @return
    */
-  public ShopCart addShopCart(String userId, String goodId, int goodNum) {
-    User user = userClient.getUserInternal(userId, null).getData();
+  public ShopCart addShopCart(String username, String goodId, int goodNum) {
+    User user = userClient.getUserInternal(username).getData();
     if (null == user) {
-      throw new ShopCartException(ResponseCode.USER_NOT_EXIST, userId);
+      throw new ShopCartException(ResponseCode.USER_NOT_EXIST, username);
     }
     if (goodNum <= 0) {
       return null;
@@ -62,10 +62,10 @@ public class ShopCartService {
     if (null == good) {
       throw new ShopCartException(ResponseCode.GOOD_NOT_EXIST, goodId);
     }
-    ShopCart shopCart = shopCartRepository.findByUserIdAndGoodId(userId, goodId);
+    ShopCart shopCart = shopCartRepository.findByUsernameAndGoodId(username, goodId);
     if (null == shopCart) {
       shopCart = new ShopCart();
-      shopCart.setUserId(userId);
+      shopCart.setUsername(username);
       shopCart.setGoodId(good.getId());
       shopCart.setCount(0);
     }
@@ -77,16 +77,16 @@ public class ShopCartService {
   /**
    * 分页获取购物车中的项目
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @param currentPage
    * @param pageSize
    * @return
    */
-  public GetShopCartListResponse getShopCartList(String userId, int currentPage, int pageSize) {
+  public GetShopCartListResponse getShopCartList(String username, int currentPage, int pageSize) {
     // PageRequest的Page参数是基于0的,但是currentPage是基于1的,所有将currentPage作为参数传递给PgeRequest时需要'-1'
     PageRequest pageRequest = new PageRequest(currentPage - 1, pageSize, Sort.Direction.DESC, "id");
-    Page<ShopCart> shopCartPage = shopCartRepository.findByUserId(userId, pageRequest);
+    Page<ShopCart> shopCartPage = shopCartRepository.findByUsername(username, pageRequest);
     GetShopCartListResponse response = new GetShopCartListResponse();
     response.setCurrentPage(shopCartPage.getNumber() + 1);
     response.setDataList(shopCartPage.getContent());
@@ -97,47 +97,47 @@ public class ShopCartService {
   /**
    * 全选/全不选用户下的购物车
    * 
-   * @param userId
+   * @param username
    *          用户id
-   * @param isChecked
+   * @param checked
    */
-  public void checkAllShopCart(String userId, boolean isChecked) {
-    shopCartRepository.checkAllShopCart(userId, isChecked);
+  public void checkAllShopCart(String username, boolean checked) {
+    shopCartRepository.checkAllShopCart(username, checked);
   }
 
   /**
    * 选中用户购物车下的某一项
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @param shopCartId
-   * @param isChecked
+   * @param checked
    */
-  public void checkShopCart(String userId, String shopCartId, boolean isChecked) {
+  public void checkShopCart(String username, String shopCartId, boolean checked) {
     ShopCart shopCart = shopCartRepository.findOne(shopCartId);
     if (null == shopCart) {
       return;
     }
-    if (!userId.equals(shopCart.getUserId())) {
+    if (!username.equals(shopCart.getUsername())) {
       throw new AccessDeniedException("no permission check other user's ShopCart");
     }
-    shopCart.setChecked(isChecked);
+    shopCart.setChecked(checked);
     shopCartRepository.saveAndFlush(shopCart);
   }
 
   /**
    * 删除购物项
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @param shopCartId
    */
-  public void deleteShopCart(String userId, String shopCartId) {
+  public void deleteShopCart(String username, String shopCartId) {
     ShopCart shopCart = shopCartRepository.findOne(shopCartId);
     if (null == shopCart) {
       return;
     }
-    if (!userId.equals(shopCart.getUserId())) {
+    if (!username.equals(shopCart.getUsername())) {
       throw new AccessDeniedException("no permission delete other user's ShopCart");
     }
     shopCartRepository.delete(shopCartId);
@@ -146,13 +146,13 @@ public class ShopCartService {
   /**
    * 修改购物项商品数量
    * 
-   * @param userId
+   * @param username
    *          用户id
    * @param shopCartId
    * @param count
    * @return
    */
-  public ShopCart updateShopCartCount(String userId, String shopCartId, int count) {
+  public ShopCart updateShopCartCount(String username, String shopCartId, int count) {
     ShopCart shopCart = shopCartRepository.findOne(shopCartId);
     if (null == shopCart) {
       throw new IllegalArgumentException("ShopCart item not exist");
@@ -161,7 +161,7 @@ public class ShopCartService {
       return shopCart;
     }
 
-    if (!userId.equals(shopCart.getUserId())) {
+    if (!username.equals(shopCart.getUsername())) {
       throw new AccessDeniedException("no permission chage other user's ShopCart");
     }
     shopCart.setCount(count);

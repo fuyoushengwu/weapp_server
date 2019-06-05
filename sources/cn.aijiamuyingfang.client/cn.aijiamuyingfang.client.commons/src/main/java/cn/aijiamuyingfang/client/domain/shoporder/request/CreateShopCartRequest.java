@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * [描述]:
  * <p>
- * <code>POST '/user/{user_id}/shop_cart'</code>请求的参数
+ * <code>POST '/user/{username}/shop_cart'</code>请求的参数
  * </p>
  * 
  * @version 1.0.0

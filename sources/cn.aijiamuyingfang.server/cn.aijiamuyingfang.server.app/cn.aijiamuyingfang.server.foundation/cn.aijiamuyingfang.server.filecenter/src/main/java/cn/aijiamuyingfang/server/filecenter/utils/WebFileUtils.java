@@ -45,7 +45,7 @@ public class WebFileUtils {
     }
     fileInfo.setName(file.getOriginalFilename());
     fileInfo.setContentType(file.getContentType());
-    fileInfo.setIsImg(fileInfo.getContentType().startsWith("image/"));
+    fileInfo.setImage(fileInfo.getContentType().startsWith("image/"));
     fileInfo.setSize(file.getSize());
     fileInfo.setCreateTime(new Date());
     return fileInfo;

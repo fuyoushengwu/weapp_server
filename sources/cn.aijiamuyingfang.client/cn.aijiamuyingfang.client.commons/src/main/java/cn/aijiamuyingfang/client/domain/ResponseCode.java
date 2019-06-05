@@ -69,11 +69,6 @@ public enum ResponseCode {
   SHOPORDER_NOT_BELONGTO_USER("500", "shoporder[%s] not belong to user[%]"),
 
   /**
-   * 返回的openid为空(null或者空字符串)
-   */
-  GET_OPENID_NULL("500", "openid is empty"),
-
-  /**
    * 上传文件失败
    */
   FILECENTER_UPLOAD_FAILED("500", "upload file[%s] failed"),

@@ -22,9 +22,9 @@ public class WeChatSession {
   private String sessionKey;
 
   /**
-   * 用户在微信中的唯一Id
+   * 小程序用戶沒有username,使用openid作爲username
    */
-  private String openid;
+  private String username;
 
   /**
    * 用户在小程序中的唯一Id

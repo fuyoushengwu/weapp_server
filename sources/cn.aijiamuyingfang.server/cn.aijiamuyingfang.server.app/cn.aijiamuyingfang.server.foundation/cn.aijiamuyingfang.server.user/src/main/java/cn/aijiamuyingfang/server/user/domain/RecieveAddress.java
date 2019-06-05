@@ -27,7 +27,7 @@ public class RecieveAddress extends Address {
   /**
    * 收货地址-关联用户
    */
-  private String userId;
+  private String username;
 
   /**
    * 收货地址-联系电话
@@ -55,8 +55,8 @@ public class RecieveAddress extends Address {
       return;
     }
     super.update(updateRecieveAddress);
-    if (StringUtils.hasContent(updateRecieveAddress.userId)) {
-      this.userId = updateRecieveAddress.userId;
+    if (StringUtils.hasContent(updateRecieveAddress.username)) {
+      this.username = updateRecieveAddress.username;
     }
     if (StringUtils.hasContent(updateRecieveAddress.phone)) {
       this.phone = updateRecieveAddress.phone;
