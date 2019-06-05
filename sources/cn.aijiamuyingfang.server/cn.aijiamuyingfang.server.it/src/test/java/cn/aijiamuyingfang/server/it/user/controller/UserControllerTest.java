@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import cn.aijiamuyingfang.client.domain.exception.UserException;
 import cn.aijiamuyingfang.client.domain.user.RecieveAddress;
 import cn.aijiamuyingfang.client.domain.user.User;
+import cn.aijiamuyingfang.client.domain.user.UserAuthority;
 import cn.aijiamuyingfang.client.rest.api.impl.UserControllerClient;
 import cn.aijiamuyingfang.commons.annotation.UseCaseDescription;
 import cn.aijiamuyingfang.server.it.ITApplication;
@@ -120,23 +121,45 @@ public class UserControllerTest {
     Assert.assertEquals(0, addressList.size());
   }
 
-  // @Test
-  // @UseCaseDescription(description = "注册普通用户")
-  // public void test_Register_User_001() {
-  // User user = new User();
-  // user.set
-  // userControllerClient.registerUser(user, testActions.getAdminAccessToken());
-  // }
+  @Test
+  @UseCaseDescription(description = "注册普通用户")
+  public void test_Register_User_001() throws IOException {
+    User user = new User();
+    user.setUsername("userone");
+    user.setPassword("passwordone");
+    user.addAuthority(UserAuthority.BUYER_PERMISSION);
+    User userone = userControllerClient.registerUser(user, testActions.getAdminAccessToken());
+    User actualUser = userControllerClient.getUser(userone.getUsername(), testActions.getAdminAccessToken());
+    Assert.assertEquals(userone.getUsername(), actualUser.getUsername());
+    Assert.assertEquals(userone.getPassword(), actualUser.getPassword());
+    Assert.assertEquals(UserAuthority.BUYER_PERMISSION, actualUser.getAuthorityList().get(0));
+  }
 
   @Test
   @UseCaseDescription(description = "注冊管理員")
-  public void test_Register_User_002() {
-
+  public void test_Register_User_002() throws IOException {
+    User user = new User();
+    user.setUsername("managerone");
+    user.setPassword("passwordone");
+    user.addAuthority(UserAuthority.MANAGER_PERMISSION);
+    User managerone = userControllerClient.registerUser(user, testActions.getAdminAccessToken());
+    User actualUser = userControllerClient.getUser(managerone.getUsername(), testActions.getAdminAccessToken());
+    Assert.assertEquals(managerone.getUsername(), actualUser.getUsername());
+    Assert.assertEquals(managerone.getPassword(), actualUser.getPassword());
+    Assert.assertEquals(UserAuthority.MANAGER_PERMISSION, actualUser.getAuthorityList().get(0));
   }
 
   @Test
   @UseCaseDescription(description = "注冊送貨員")
-  public void test_Register_User_003() {
-
+  public void test_Register_User_003() throws IOException {
+    User user = new User();
+    user.setUsername("senderone");
+    user.setPassword("passwordone");
+    user.addAuthority(UserAuthority.SENDER_PERMISSION);
+    User senderone = userControllerClient.registerUser(user, testActions.getAdminAccessToken());
+    User actualUser = userControllerClient.getUser(senderone.getUsername(), testActions.getAdminAccessToken());
+    Assert.assertEquals(senderone.getUsername(), actualUser.getUsername());
+    Assert.assertEquals(senderone.getPassword(), actualUser.getPassword());
+    Assert.assertEquals(UserAuthority.SENDER_PERMISSION, actualUser.getAuthorityList().get(0));
   }
 }
