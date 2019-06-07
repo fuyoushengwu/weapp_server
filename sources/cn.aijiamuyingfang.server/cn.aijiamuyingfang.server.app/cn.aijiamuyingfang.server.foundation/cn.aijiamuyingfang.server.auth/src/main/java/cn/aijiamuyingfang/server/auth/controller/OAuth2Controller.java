@@ -15,7 +15,7 @@ public class OAuth2Controller {
    * @return
    */
   @PreAuthorize(value = "permitAll()")
-  @GetMapping("/user-me")
+  @GetMapping("/me")
   public Principal principal(Principal principal) {
     return principal;
   }
