@@ -1,4 +1,4 @@
-package cn.aijiamuyingfang.client.rest;
+package cn.aijiamuyingfang.client.commons.constant;
 
 /**
  * [描述]:

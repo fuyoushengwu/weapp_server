@@ -1,10 +1,10 @@
 package cn.aijiamuyingfang.client.rest.utils;
 
-import static cn.aijiamuyingfang.client.rest.ClientRestConstants.DEFAULT_BASE_URL;
-import static cn.aijiamuyingfang.client.rest.ClientRestConstants.DEFAULT_CONNECT_TIMEOUT;
-import static cn.aijiamuyingfang.client.rest.ClientRestConstants.DEFAULT_HOST_NAME;
-import static cn.aijiamuyingfang.client.rest.ClientRestConstants.DEFAULT_READ_TIMEOUT;
-import static cn.aijiamuyingfang.client.rest.ClientRestConstants.DEFAULT_WRITE_TIMEOUT;
+import static cn.aijiamuyingfang.client.commons.constant.ClientRestConstants.DEFAULT_BASE_URL;
+import static cn.aijiamuyingfang.client.commons.constant.ClientRestConstants.DEFAULT_CONNECT_TIMEOUT;
+import static cn.aijiamuyingfang.client.commons.constant.ClientRestConstants.DEFAULT_HOST_NAME;
+import static cn.aijiamuyingfang.client.commons.constant.ClientRestConstants.DEFAULT_READ_TIMEOUT;
+import static cn.aijiamuyingfang.client.commons.constant.ClientRestConstants.DEFAULT_WRITE_TIMEOUT;
 
 import java.io.IOException;
 import java.text.ParseException;
