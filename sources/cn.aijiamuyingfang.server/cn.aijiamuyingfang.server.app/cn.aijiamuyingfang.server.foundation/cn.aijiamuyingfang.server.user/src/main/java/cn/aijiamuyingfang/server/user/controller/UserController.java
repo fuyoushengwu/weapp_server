@@ -54,8 +54,6 @@ public class UserController {
 
   /**
    * 获取用户
-   * 
-   * @param username
    * @return
    */
   @PreAuthorize(value = "isAuthenticated()")
