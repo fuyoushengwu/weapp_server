@@ -1,50 +1,106 @@
-本文用于指导,使用可执行文件,在VBOX虚拟机上搭建4个节点的Kubernetes环境
+本文用于指导腾讯云上搭建Kubernets环境
 #### 目标
-|Hostname|IP Address|Role|MAC|CPU|Memory|Component|
-|:---|:---|:---|:---|:---|:---|:---|:---|
-|centos-1|192.168.0.102|master,work|080027D50C2C|4|4G|etcd,kube-api,kube-scheduler,kube-controller,kubectl,kubelet,kube-proxy,flannel|
-|centos-2|192.168.0.103|worker|080027119D05|4|4G|kubelet,kube-proxy,flannel|
-|centos-3|192.168.0.104|worker|080027015A2E|4|4G|kubelet,kube-proxy,flannel|
-|centos-4|192.168.0.105|worker|080027B368B8|4|4G|kubelet,kube-proxy,flannel|
+|Hostname|IP Address|Internal Address|Role|CPU|Memory|
+|:---|:---|:---|:---|:---|:---|:---|
+|centos-1|49.234.14.235|172.17.0.16|master,work|2|4G|
+|centos-2|49.234.11.229|172.17.0.14|worker|2|4G|
 
-#### 一. 准备
-+ 虚拟软件: [VirtualBox-5.2.18-124319-Win.exe](https://download.virtualbox.org/virtualbox/5.2.18/VirtualBox-5.2.18-124319-Win.exe)
-+ 系统镜像: [CentOS-7-x86_64-DVD-1708.iso](https://mirrors.oit.uci.edu/centos/7.4.1708/isos/x86_64/CentOS-7-x86_64-DVD-1708.iso)
-
-#### 二. 安装CentOS虚拟机
-+ 1. 设置路由器IP-MAC绑定规则
-
-|主机|MAC地址|IP地址|
-|:---|:---|:---|
-|centos-1|08-00-27-D5-0C-2C|192.168.0.102|
-|centos-2|08-00-27-11-9D-05|192.168.0.103|
-|centos-3|08-00-27-01-5A-2E|192.168.0.104|
-|centos-4|08-00-27-B3-68-B8|192.168.0.105|
-
-+ 2. 准备虚拟机
-
-|名称|类型|版本|内存|硬盘|处理器|系统|网络|MAC|
-|:---|:---|:---|:---|:---|:---|:---|:---|:---|
-|centos-1|Linux|Red Hat(64-bit)|4096 MB|50G|4|CentOS-7|桥接网卡|080027D50C2C|
-|centos-2|Linux|Red Hat(64-bit)|4096 MB|50G|4|CentOS-7|桥接网卡|080027119D05|
-|centos-3|Linux|Red Hat(64-bit)|4096 MB|50G|4|CentOS-7|桥接网卡|080027015A2E|
-|centos-4|Linux|Red Hat(64-bit)|4096 MB|50G|4|CentOS-7|桥接网卡|080027B368B8|
-+ + 2.1 配置/etc/hosts和上网代理
-
+#### 一. 安装 Docker 
 ```
+yum update -y 
+yum install docker -y 
+systemctl enable docker & systemctl start docker
+systemctl status docker 
+
+# 测试 Docker安装完成
+docker pull nginx
+docker container run -d -p 127.0.0.1:8080:80 --rm --name mynginx nginx
+curl localhost:8080
+```
+
+#### 二.配置网络
+
++ 2.1 配置/etc/hosts
+```
+hostname centos-1
+hostname centos-2
 # 配置'/etc/hosts'
 cat  << EOF >>/etc/hosts
-192.168.0.102 centos-1
-192.168.0.103 centos-2
-192.168.0.104 centos-3
-192.168.0.105 centos-4
+172.17.0.16 centos-1
+172.17.0.14 centos-2
+EOF
+```
+
++ 2.2 配置上网代理
++ + 安装Shadowsocks Client(centos-1)
+```
+# 安装 pip
+curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
+python get-pip.py
+
+# 安装 Shadowsocks Client
+pip install --upgrade pip
+pip install shadowsocks
+
+# 配置shadowsocks.json
+cat << EOF >/etc/shadowsocks.json
+{
+  "server":"68.168.136.64",
+  "server_port":8888,
+  "local_address": "127.0.0.1",
+  "local_port":1080,
+  "password":"g0Ekw&1BAJw&tHQy",
+  "timeout":300,
+  "method":"aes-256-cfb",
+  "workers": 1
+}
 EOF
 
-# 配置上网代理
+# 启动
+nohup sslocal -c /etc/shadowsocks.json /dev/null 2>&1 &
+echo " nohup sslocal -c /etc/shadowsocks.json /dev/null 2>&1 &" /etc/rc.local   #设置自启动
+# 验证
+curl --socks5 127.0.0.1:1080 http://httpbin.org/ip
+```
+
++ + 安装Privoxy(centos-1)
+```
+# 下载 Privoxy
+wget https://ayera.dl.sourceforge.net/project/ijbswa/Sources/3.0.26%20%28stable%29/privoxy-3.0.26-stable-src.tar.gz
+tar -zxvf privoxy-3.0.26-stable-src.tar.gz
+# 编译 Privoxy
+cd privoxy-3.0.26-stable
+yum groupinstall "Development Tools" -y
+autoheader && autoconf
+./configure
+make
+# 建立账户
+sudo useradd privoxy -r -s /usr/sbin/nologin
+# 安装
+sudo make install
+# 更改侦听地址
+sed -i 's/^listen-address  127.0.0.1:8118$/listen-address  172.17.0.16:8118/' /usr/local/etc/privoxy/config
+cat << EOF >>/usr/local/etc/privoxy/config
+forward-socks5 / 127.0.0.1:1080 .
+forward 10.*.*.*/ .
+forward 192.168.*.*/ .
+forward 127.*.*.*/ .
+forward 172.17.*.*/ .
+forward 172.10.*.*/ .
+forward localhost/ .
+EOF
+
+# 启动Privoxy
+privoxy --user privoxy /usr/local/etc/privoxy/config
+```
+
++ + 配置上网代理
+
+```
 cat << EOF >>/etc/profile
-http_proxy="http://192.168.0.201:1080"
-https_proxy="http://192.168.0.201:1080"
-no_proxy="127.0.0.1,192.168.0.102,192.168.0.103,192.168.0.104,192.168.0.105,192.168.0.106,192.168.0.201,192.168.0.202,192.168.0.203,192.168.0.1,192.168.1.1,centos-1,centos-2,centos-3,centos-4,localhost,github.com,mirrors.aliyun.com,.mirror.aliyuncs.com,registry.cn-hangzhou.aliyuncs.com"
+http_proxy="http://172.17.0.16:8118"
+https_proxy="http://172.17.0.16:8118"
+no_proxy="127.0.0.1,172.17.0.16,172.17.0.14,centos-1,centos-2,centos-3,centos-4,localhost,github.com,mirrors.aliyun.com,.mirror.aliyuncs.com,registry.cn-hangzhou.aliyuncs.com,.tencentyun.com"
 
 export http_proxy
 export https_proxy
@@ -52,62 +108,49 @@ export no_proxy
 EOF
 source /etc/profile
 ```
-+ + 2.2 开启命令行界面
+
+#### 三.配置Kubernetes执行环境
+
++ 3.1 开启命令行界面
 ```
 systemctl set-default multi-user.target
 ```
-+ + 2.3 关闭防火墙
++ 3.2 关闭防火墙
 ```
 systemctl stop firewalld & systemctl disable firewalld
 cat <<EOF >  /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
 EOF
+echo 1 > /proc/sys/net/bridge/bridge-nf-call-iptables
+echo 1 > /proc/sys/net/bridge/bridge-nf-call-ip6tables
 ```
-+ + 2.4 关闭SELinux
++ 3.3 关闭SELinux
 ```
 sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
 sed -i 's/SELINUXTYPE=targeted/#&/' /etc/selinux/config
 setenforce 0
 ```
-+ + 2.5 关闭Swap
++ 3.4 关闭Swap
 ```
 swapoff -a&& sysctl -w vm.swappiness=0
 sed -i '/ swap / s/^/#/' /etc/fstab
 ```
-+ + 2.6 配置yum源
++ 3.5 配置Docker
 ```
-wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo 
-yum makecache
-```
-+ + 2.7 安装Docker
-```
-yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
-yum makecache
-yum install docker-ce -y
-
-# 为docker添加私有仓库
-mkdir -p /etc/docker
-cat << EOF >/etc/docker/daemon.json
-{
-    "registry-mirrors": ["https://sws6h8pa.mirror.aliyuncs.com"]
-}
-EOF
 mkdir -p /etc/systemd/system/docker.service.d/
 cat << EOF > /etc/systemd/system/docker.service.d/http-proxy.conf
 [Service]
-Environment="HTTP_PROXY=http://192.168.0.201:1080" "HTTPS_PROXY=http://192.168.0.201:1080" "NO_PROXY=127.0.0.1,192.168.0.102,192.168.0.103,192.168.0.104,192.168.0.105,192.168.0.106,192.168.0.201,192.168.0.202,192.168.0.203,192.168.0.1,192.168.1.1,centos-1,centos-2,centos-3,centos-4,localhost,mirrors.aliyun.com,.mirror.aliyuncs.com,registry.cn-hangzhou.aliyuncs.com"
+Environment="HTTP_PROXY=http://172.17.0.16:8118" "HTTPS_PROXY=http://172.17.0.16:8118" "NO_PROXY=127.0.0.1,172.17.0.16,172.17.0.14,centos-1,centos-2,centos-3,centos-4,localhost,mirrors.aliyun.com,.mirror.aliyuncs.com,registry.cn-hangzhou.aliyuncs.com,.tencentyun.com"
 EOF
 
 systemctl daemon-reload
-systemctl start docker & systemctl enable docker
+systemctl restart docker
 systemctl status docker
 
-# 验证docker安装完成
-docker run hello-world
 ```
 
-#### 三.准备Kubernetes
+#### 二.准备Kubernetes
 + 1. 安装Kubernetes组件
 ```
 # 安装Kubernetes的yum源
@@ -136,7 +179,7 @@ printf "\n# Kubeadm shell completion\nsource '$HOME/.kube/kubeadm_completion.bas
 source $HOME/.bash_profile
 
 # Master初始化(centos-1)
-kubeadm init --pod-network-cidr=172.10.0.0/16  --apiserver-advertise-address=192.168.0.102
+kubeadm init --pod-network-cidr=172.10.0.0/16  --apiserver-advertise-address=172.17.0.16
 
 # 配置kube(centos-1)
 cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
@@ -144,18 +187,19 @@ chown $(id -u):$(id -g) $HOME/.kube/config
 
 # 安装etcd工具(centos-1)
 rm -rf /root/{etcd-v3.3.10-linux-amd64.tar.gz,etcd-v3.3.10-linux-amd64}
-cp etcd/etcd-v3.3.10-linux-amd64.tar.gz /root/etcd-v3.3.10-linux-amd64.tar.gz 
+cd /root/
+wget https://github.com/etcd-io/etcd/releases/download/v3.3.10/etcd-v3.3.10-linux-amd64.tar.gz
 tar zxvf /root/etcd-v3.3.10-linux-amd64.tar.gz -C /root
 rm -rf /usr/bin/etcdctl
 cp -p /root/etcd-v3.3.10-linux-amd64/etcdctl /usr/bin/
 
 # 查看etcd 集群情况(centos-1)
-etcdctl --key-file /etc/kubernetes/pki/etcd/server.key --cert-file /etc/kubernetes/pki/etcd/server.crt --ca-file /etc/kubernetes/pki/etcd/ca.crt --endpoints https://192.168.0.102:2379  member list
-etcdctl --key-file /etc/kubernetes/pki/etcd/server.key --cert-file /etc/kubernetes/pki/etcd/server.crt --ca-file /etc/kubernetes/pki/etcd/ca.crt --endpoints https://192.168.0.102:2379  cluster-health
+etcdctl --key-file /etc/kubernetes/pki/etcd/server.key --cert-file /etc/kubernetes/pki/etcd/server.crt --ca-file /etc/kubernetes/pki/etcd/ca.crt --endpoints https://172.17.0.16:2379  member list
+etcdctl --key-file /etc/kubernetes/pki/etcd/server.key --cert-file /etc/kubernetes/pki/etcd/server.crt --ca-file /etc/kubernetes/pki/etcd/ca.crt --endpoints https://172.17.0.16:2379  cluster-health
 
 
 # Worker初始化(centos-2,centos-2,centos-3),根据kubeadm init执行结果,执行
-kubeadm join 192.168.0.102:6443 --token [token] --discovery-token-ca-cert-hash [hash]
+kubeadm join 172.17.0.16:6443 --token [token] --discovery-token-ca-cert-hash [hash]
 
 # 安装Flannel网络(centos-1)
 kubectl apply -f kube-flannel/kube-flannel.yml
@@ -166,12 +210,12 @@ kubectl apply -f kube-flannel/kube-flannel.yml
 kubectl taint nodes --all node-role.kubernetes.io/master-
 ```
 
-#### 四. 测试Kubernete环境(kubectl命令在centos-1上执行)
+#### 三. 测试Kubernete环境(kubectl命令在centos-1上执行)
 + 1.测试CoreDNS
 ```
 kubectl apply -f demo/busybox.yaml
 # 在生成的container中执行
-nslookup kubernetes
+kubectl exec -it busybox nslookup kubernetes
 ```
 
 + 2. 部署 NFS Storage Class
@@ -179,7 +223,7 @@ nslookup kubernetes
 ```
 mkdir -p /var/nfs
 cat << EOF >/etc/exports
-/var/nfs     192.168.0.0/24(rw,sync,no_root_squash,no_all_squash)
+/var/nfs     172.17.0.0/24(rw,sync,no_root_squash,no_all_squash)
 EOF
 
 yum -y install nfs-utils
@@ -189,9 +233,8 @@ systemctl enable nfs &&systemctl start nfs
 
 + + 2.2 在kubernetes上部署StorageClass
 ```
-# 因为镜像下载很慢,所用手动导入kube_nfs.yaml中使用到的镜像(在所有worker上执行)
 # 安装StorageClass(centos-1)
-kubectl apply -f kube_nfs/kube_nfs.yaml
+kubectl apply -f kube_nfs/kube_nfs_tencent.yaml
 ```
 
 + + 2.3 测试NFS Storage Class
@@ -205,7 +248,7 @@ kubectl apply -f demo/nfs_test.yaml
 kubectl apply -f kube_redis/redis.yaml
 ```
 
-# 五.部署WeAPP依赖的应用
+# 四.部署WeAPP依赖的应用
 + 1. 部署MySQL5.5数据库(centos-1)
 + + 1.1 检查并卸载centos-1上已安装的Mariadb,MySQL
 ```
@@ -227,7 +270,7 @@ yum install -y mysql-community-server
 + + 1.4 配置MySQL
 ```
 systemctl enable mysqld && systemctl start mysqld
-mysqladmin -u root password 'PASSWORD'
+mysqladmin -u root password 'huawei123'
 
 # 登录mysql
 mysql -u root -p
@@ -277,7 +320,7 @@ ssh-keygen -t rsa
 ```
 + + 3.2 centos-2,centos-3,centos-4信任公钥
 ```
-scp root@192.168.0.102:/root/.ssh/id_rsa.pub /root/id_rsa.pub
+scp root@172.17.0.16:/root/.ssh/id_rsa.pub /root/id_rsa.pub
 cat /root/id_rsa.pub >>/root/.ssh/authorized_keys
 ```
 
