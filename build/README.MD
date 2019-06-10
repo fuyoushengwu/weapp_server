@@ -226,7 +226,7 @@ yum install -y mysql-community-server
 + + 1.4 配置MySQL
 ```
 systemctl enable mysqld && systemctl start mysqld
-mysqladmin -u root password 'huawei123'
+mysqladmin -u root password 'PASSWORD'
 
 # 登录mysql
 mysql -u root -p

@@ -5,7 +5,6 @@ import java.util.List;
 import cn.aijiamuyingfang.client.domain.ResponseBean;
 import cn.aijiamuyingfang.client.domain.previeworder.PreviewOrder;
 import cn.aijiamuyingfang.client.domain.previeworder.PreviewOrderItem;
-import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -25,7 +24,6 @@ import retrofit2.http.Query;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-07-10 00:00:47
  */
-@HttpApi(baseurl = "weapp.host_name")
 public interface PreviewOrderControllerApi {
   /**
    * 更新预览的商品项

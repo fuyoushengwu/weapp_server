@@ -14,7 +14,6 @@ import cn.aijiamuyingfang.client.domain.shoporder.request.UpdateShopOrderStatusR
 import cn.aijiamuyingfang.client.domain.shoporder.response.ConfirmShopOrderFinishedResponse;
 import cn.aijiamuyingfang.client.domain.shoporder.response.GetShopOrderListResponse;
 import cn.aijiamuyingfang.client.domain.shoporder.response.GetShopOrderVoucherListResponse;
-import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -35,7 +34,6 @@ import retrofit2.http.Query;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-07-09 23:59:40
  */
-@HttpApi(baseurl = "weapp.host_name")
 public interface ShopOrderControllerApi {
   /**
    * 分页获取用户的订单信息

@@ -14,6 +14,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
+import cn.aijiamuyingfang.client.commons.utils.StringUtils;
 import cn.aijiamuyingfang.client.domain.message.UserMessageType;
 import cn.aijiamuyingfang.client.domain.shoporder.SendType;
 import cn.aijiamuyingfang.client.domain.shoporder.ShopOrderStatus;

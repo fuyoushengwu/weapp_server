@@ -25,6 +25,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class DynamicDataSourceRegister implements ImportBeanDefinitionRegistrar, EnvironmentAware {
+  // 如配置文件中未指定数据源类型，使用该默认值
+  private static final Object DATASOURCE_TYPE_DEFAULT = "org.apache.tomcat.jdbc.pool.DataSource";
 
   private ConversionService conversionService = new DefaultConversionService();
 
@@ -35,8 +37,7 @@ public class DynamicDataSourceRegister implements ImportBeanDefinitionRegistrar,
 
   private PropertyValues dataSourcePropertyValues;
 
-  // 如配置文件中未指定数据源类型，使用该默认值
-  private static final Object DATASOURCE_TYPE_DEFAULT = "org.apache.tomcat.jdbc.pool.DataSource";
+  private Environment env;
 
   @Override
   public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
@@ -89,7 +90,13 @@ public class DynamicDataSourceRegister implements ImportBeanDefinitionRegistrar,
       String driverClassName = dsMap.get("driver-class-name").toString();
       String url = dsMap.get("url").toString();
       String username = dsMap.get("username").toString();
+      if (username.startsWith("$") && username.endsWith("}")) {
+        username = env.resolvePlaceholders(username);
+      }
       String password = dsMap.get("password").toString();
+      if (password.startsWith("$") && password.endsWith("}")) {
+        password = env.resolvePlaceholders(password);
+      }
 
       DataSourceBuilder factory = DataSourceBuilder.create().driverClassName(driverClassName).url(url)
           .username(username).password(password).type(dataSourceType);
@@ -105,6 +112,7 @@ public class DynamicDataSourceRegister implements ImportBeanDefinitionRegistrar,
    */
   @Override
   public void setEnvironment(Environment env) {
+    this.env = env;
     initDefaultDataSource(env);
     initCustomDataSources(env);
   }

@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import cn.aijiamuyingfang.client.commons.utils.StringUtils;
 import cn.aijiamuyingfang.client.domain.ResponseBean;
 import cn.aijiamuyingfang.client.domain.ResponseCode;
 import cn.aijiamuyingfang.client.domain.address.City;
@@ -26,7 +27,6 @@ import cn.aijiamuyingfang.client.domain.store.response.GetInUseStoreListResponse
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.StoreControllerApi;
 import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
-import cn.aijiamuyingfang.client.rest.utils.StringUtils;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.MultipartBody.Builder;

@@ -4,7 +4,6 @@ import cn.aijiamuyingfang.client.domain.ResponseBean;
 import cn.aijiamuyingfang.client.domain.shopcart.ShopCart;
 import cn.aijiamuyingfang.client.domain.shopcart.response.GetShopCartListResponse;
 import cn.aijiamuyingfang.client.domain.shoporder.request.CreateShopCartRequest;
-import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -25,7 +24,6 @@ import retrofit2.http.Query;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-07-10 00:00:47
  */
-@HttpApi(baseurl = "weapp.host_name")
 public interface ShopCartControllerApi {
   /**
    * 往用户购物车添加商品

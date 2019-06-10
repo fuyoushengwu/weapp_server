@@ -6,7 +6,6 @@ import cn.aijiamuyingfang.client.domain.coupon.VoucherItem;
 import cn.aijiamuyingfang.client.domain.coupon.response.GetGoodVoucherListResponse;
 import cn.aijiamuyingfang.client.domain.coupon.response.GetUserVoucherListResponse;
 import cn.aijiamuyingfang.client.domain.coupon.response.GetVoucherItemListResponse;
-import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -26,7 +25,6 @@ import retrofit2.http.Query;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-07-09 13:15:07
  */
-@HttpApi(baseurl = "weapp.host_name")
 public interface CouponControllerApi {
 
   /**

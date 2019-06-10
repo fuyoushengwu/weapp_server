@@ -7,7 +7,6 @@ import cn.aijiamuyingfang.client.domain.store.Store;
 import cn.aijiamuyingfang.client.domain.store.StoreAddress;
 import cn.aijiamuyingfang.client.domain.store.response.GetDefaultStoreIdResponse;
 import cn.aijiamuyingfang.client.domain.store.response.GetInUseStoreListResponse;
-import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import retrofit2.http.Body;
@@ -29,7 +28,6 @@ import retrofit2.http.Query;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-07-12 16:13:34
  */
-@HttpApi(baseurl = "weapp.host_name")
 public interface StoreControllerApi {
 
   /**

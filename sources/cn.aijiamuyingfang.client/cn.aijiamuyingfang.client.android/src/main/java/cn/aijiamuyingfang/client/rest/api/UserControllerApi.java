@@ -6,7 +6,6 @@ import cn.aijiamuyingfang.client.domain.ResponseBean;
 import cn.aijiamuyingfang.client.domain.user.RecieveAddress;
 import cn.aijiamuyingfang.client.domain.user.User;
 import cn.aijiamuyingfang.client.domain.user.response.GetUserPhoneResponse;
-import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -27,7 +26,6 @@ import retrofit2.http.Query;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-07-10 23:01:18
  */
-@HttpApi(baseurl = "weapp.host_name")
 public interface UserControllerApi {
 
   /**

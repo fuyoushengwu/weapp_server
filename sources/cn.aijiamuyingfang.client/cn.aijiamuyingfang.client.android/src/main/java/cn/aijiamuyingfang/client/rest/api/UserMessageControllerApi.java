@@ -3,7 +3,6 @@ package cn.aijiamuyingfang.client.rest.api;
 import cn.aijiamuyingfang.client.domain.ResponseBean;
 import cn.aijiamuyingfang.client.domain.message.UserMessage;
 import cn.aijiamuyingfang.client.domain.message.response.GetMessagesListResponse;
-import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -23,7 +22,6 @@ import retrofit2.http.Query;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-07-12 16:13:34
  */
-@HttpApi(baseurl = "weapp.host_name")
 public interface UserMessageControllerApi {
   /**
    * 获得用户未读消息数量

@@ -4,7 +4,6 @@ import java.util.List;
 
 import cn.aijiamuyingfang.client.domain.ResponseBean;
 import cn.aijiamuyingfang.client.domain.classify.Classify;
-import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import retrofit2.http.Body;
@@ -26,7 +25,6 @@ import retrofit2.http.Query;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-07-12 05:59:07
  */
-@HttpApi(baseurl = "weapp.host_name")
 public interface ClassifyControllerApi {
 
   /**

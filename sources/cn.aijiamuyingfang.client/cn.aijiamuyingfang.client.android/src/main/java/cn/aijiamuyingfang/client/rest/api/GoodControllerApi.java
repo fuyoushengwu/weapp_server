@@ -6,7 +6,6 @@ import cn.aijiamuyingfang.client.domain.ResponseBean;
 import cn.aijiamuyingfang.client.domain.classify.response.GetClassifyGoodListResponse;
 import cn.aijiamuyingfang.client.domain.goods.Good;
 import cn.aijiamuyingfang.client.domain.goods.GoodDetail;
-import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import retrofit2.http.Body;
@@ -28,7 +27,6 @@ import retrofit2.http.Query;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-07-09 23:09:59
  */
-@HttpApi(baseurl = "weapp.host_name")
 public interface GoodControllerApi {
   /**
    * 分页查询条目下的商品

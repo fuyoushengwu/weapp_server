@@ -14,6 +14,8 @@
 
 	<modules>
 		<module>cn.aijiamuyingfang.client.commons</module>
+		<module>cn.aijiamuyingfang.client.rest</module>
+		<module>cn.aijiamuyingfang.client.domain</module>
 		<module>cn.aijiamuyingfang.client.oauth2</module>
 		<module>cn.aijiamuyingfang.client.android</module>
 		<module>cn.aijiamuyingfang.client.java</module>
