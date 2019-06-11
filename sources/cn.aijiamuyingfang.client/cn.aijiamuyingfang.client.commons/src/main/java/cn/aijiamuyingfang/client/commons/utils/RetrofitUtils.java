@@ -1,4 +1,4 @@
-package cn.aijiamuyingfang.client.rest.utils;
+package cn.aijiamuyingfang.client.commons.utils;
 
 import static cn.aijiamuyingfang.client.commons.constant.ClientRestConstants.DEFAULT_BASE_URL;
 import static cn.aijiamuyingfang.client.commons.constant.ClientRestConstants.DEFAULT_CONNECT_TIMEOUT;
@@ -18,25 +18,15 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
-import cn.aijiamuyingfang.client.commons.utils.StringUtils;
-import cn.aijiamuyingfang.client.rest.converter.EnumRetrofitConverterFactory;
+import cn.aijiamuyingfang.client.commons.domain.EnumRetrofitConverterFactory;
 import okhttp3.CertificatePinner;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-/**
- * [描述]:
- * <p>
- * 工具类
- * </p>
- * 
- * @version 1.0.0
- * @author shiweideyouxiang@sina.cn
- * @date 2018-07-25 05:29:26
- */
-public class ClientRestUtils {
+public class RetrofitUtils {
+
   /**
    * 创建OkHttpClient.Builder实例(支持HTTPS(使用默认的证书))
    * 

@@ -1,10 +1,9 @@
-package cn.aijiamuyingfang.client.rest.converter;
+package cn.aijiamuyingfang.client.commons.domain;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
-import cn.aijiamuyingfang.client.commons.domain.BaseEnum;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 

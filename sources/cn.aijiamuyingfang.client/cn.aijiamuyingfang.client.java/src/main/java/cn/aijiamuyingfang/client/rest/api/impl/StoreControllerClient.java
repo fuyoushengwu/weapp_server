@@ -10,9 +10,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import cn.aijiamuyingfang.client.commons.domain.ResponseBean;
+import cn.aijiamuyingfang.client.commons.domain.ResponseCode;
 import cn.aijiamuyingfang.client.commons.utils.StringUtils;
-import cn.aijiamuyingfang.client.domain.ResponseBean;
-import cn.aijiamuyingfang.client.domain.ResponseCode;
 import cn.aijiamuyingfang.client.domain.address.City;
 import cn.aijiamuyingfang.client.domain.address.Coordinate;
 import cn.aijiamuyingfang.client.domain.address.County;

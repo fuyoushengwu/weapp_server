@@ -1,6 +1,6 @@
 package cn.aijiamuyingfang.client.rest.api;
 
-import cn.aijiamuyingfang.client.domain.ResponseBean;
+import cn.aijiamuyingfang.client.commons.domain.ResponseBean;
 import cn.aijiamuyingfang.client.domain.coupon.GoodVoucher;
 import cn.aijiamuyingfang.client.domain.coupon.VoucherItem;
 import cn.aijiamuyingfang.client.rest.annotation.HttpApi;

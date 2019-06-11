@@ -10,13 +10,13 @@ import okhttp3.OkHttpClient;
 
 @Data
 public class OAuth2Client {
-  private final String clientId;
+  private String clientId;
 
-  private final String clientSecret;
+  private String clientSecret;
 
-  private final String site;
+  private String site;
 
-  private final OkHttpClient okHttpClient;
+  private OkHttpClient okHttpClient;
 
   private String scope;
 

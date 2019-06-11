@@ -7,8 +7,8 @@ import static cn.aijiamuyingfang.client.commons.constant.ClientRestConstants.DEF
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.aijiamuyingfang.client.commons.utils.RetrofitUtils;
 import cn.aijiamuyingfang.client.commons.utils.StringUtils;
-import cn.aijiamuyingfang.client.rest.utils.ClientRestUtils;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;;
@@ -47,7 +47,7 @@ public class HttpServiceBeanFactory {
     HttpServiceBean httpServiceBean = serviceBeans.get(baseurl);
     if (null == httpServiceBean) {
       httpServiceBean = new HttpServiceBean();
-      Retrofit retrofit = ClientRestUtils.getRetrofitBuilder(baseurl)
+      Retrofit retrofit = RetrofitUtils.getRetrofitBuilder(baseurl)
           .client(getOkHttpClient(baseurl, interceptorClasses)).build();
       httpServiceBean.setRetrofit(retrofit);
       serviceBeans.put(baseurl, httpServiceBean);
@@ -69,7 +69,7 @@ public class HttpServiceBeanFactory {
    */
   private static OkHttpClient getOkHttpClient(String baseurl, Class<?>... interceptorClasses) {
     String hostname = baseurl.replace("https://", "").replace("/", "").split(":")[0];
-    OkHttpClient.Builder clientBuilder = ClientRestUtils.getOkHttpClientBuilder(hostname, DEFAULT_CONNECT_TIMEOUT,
+    OkHttpClient.Builder clientBuilder = RetrofitUtils.getOkHttpClientBuilder(hostname, DEFAULT_CONNECT_TIMEOUT,
         DEFAULT_READ_TIMEOUT, DEFAULT_WRITE_TIMEOUT);
 
     // 添加服务拦截器实例

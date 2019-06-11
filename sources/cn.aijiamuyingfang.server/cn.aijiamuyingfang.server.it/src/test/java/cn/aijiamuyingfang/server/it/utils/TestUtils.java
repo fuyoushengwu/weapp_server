@@ -2,8 +2,8 @@ package cn.aijiamuyingfang.server.it.utils;
 
 import java.io.IOException;
 
-import cn.aijiamuyingfang.client.domain.ResponseCode;
-import cn.aijiamuyingfang.client.domain.exception.OAuthException;
+import cn.aijiamuyingfang.client.commons.domain.ResponseCode;
+import cn.aijiamuyingfang.client.commons.exception.OAuthException;
 import cn.aijiamuyingfang.client.oauth2.Constants;
 import cn.aijiamuyingfang.client.oauth2.OAuth2Client;
 import cn.aijiamuyingfang.client.oauth2.OAuthResponse;

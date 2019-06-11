@@ -2,7 +2,7 @@ package cn.aijiamuyingfang.client.rest.api;
 
 import java.util.Map;
 
-import cn.aijiamuyingfang.client.domain.ResponseBean;
+import cn.aijiamuyingfang.client.commons.domain.ResponseBean;
 import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
 import okhttp3.MultipartBody;
 import retrofit2.Call;

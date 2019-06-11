@@ -1,4 +1,4 @@
-package cn.aijiamuyingfang.client.domain;
+package cn.aijiamuyingfang.client.commons.domain;
 
 /**
  * [描述]:

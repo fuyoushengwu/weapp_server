@@ -58,6 +58,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
   @Override
   public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+    endpoints.reuseRefreshTokens(false);
     endpoints.authenticationManager(authenticationManager);
     endpoints.accessTokenConverter(accessTokenConverter());
     JSCodeTokenGranter jscodeTokenGranter = new JSCodeTokenGranter(oauth2Service, authenticationManager,

@@ -1,6 +1,6 @@
 package cn.aijiamuyingfang.client.domain.classify.response;
 
-import cn.aijiamuyingfang.client.domain.PageResponse;
+import cn.aijiamuyingfang.client.commons.domain.PageResponse;
 import cn.aijiamuyingfang.client.domain.goods.Good;
 
 /**

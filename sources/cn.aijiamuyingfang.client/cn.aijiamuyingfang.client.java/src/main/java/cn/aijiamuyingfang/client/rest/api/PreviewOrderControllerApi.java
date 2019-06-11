@@ -2,7 +2,7 @@ package cn.aijiamuyingfang.client.rest.api;
 
 import java.util.List;
 
-import cn.aijiamuyingfang.client.domain.ResponseBean;
+import cn.aijiamuyingfang.client.commons.domain.ResponseBean;
 import cn.aijiamuyingfang.client.domain.previeworder.PreviewOrderItem;
 import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
 import retrofit2.Call;
