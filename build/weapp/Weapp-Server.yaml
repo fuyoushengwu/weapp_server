@@ -1,52 +1,4 @@
 apiVersion: v1
-kind: Namespace
-metadata:
-  name: weapp-namespace
----
-apiVersion: v1
-kind: LimitRange
-metadata:
-  name: weapp-default-limitrange
-  namespace: weapp-namespace
-spec:
-  limits:
-    - type: Container
-      default:
-        cpu: 800m
-        memory: 1024Mi
-      defaultRequest:
-        cpu: 100m
-        memory: 512Mi
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: database
-  namespace: weapp-namespace
-data:
-  WEAPP_DATASOURCE_HOST: '192.168.0.102'
-  WEAPP_DATASOURCE_PORT: '3306'
-  WEAPP_DATASOURCE_USERNAME: root
-  WEAPP_DATASOURCE_PASSWORD: huawei123
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: weapp
-  namespace: weapp-namespace
-data:
-  WEAPP_APPID: wxbe3725e2fe517faa
-  WEAPP_SECRET: 02bc75f7860d5bd54e5302942a09b639
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: hwt
-  namespace: weapp-namespace
-data:
-  MAIN_ARGS: --spring.profiles.active=prod
----
-apiVersion: v1
 kind: Service
 metadata:
   name: register-service
@@ -56,12 +8,9 @@ metadata:
 spec:
   selector:
     app: register-service
-  type: NodePort
   ports:
-    - protocol: TCP
+    - name: prod-port
       port: 8761
-      targetPort: 8761
-      nodePort: 8761
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -186,6 +135,11 @@ spec:
           envFrom:
             - configMapRef:
                 name: hwt
+            - configMapRef:
+                name: config-repo
+          env:
+            - name: WEAPP_JWT_SECRET_KEY
+              value: WEAPP_JWT_SECRET_KEY
           ports:
             - containerPort: 8080
               name: prod-port
@@ -200,12 +154,9 @@ metadata:
 spec:
   selector:
     app: gateway-service
-  type: NodePort
   ports:
-    - protocol: TCP
+    - name: prod-port
       port: 8080
-      targetPort: 8080
-      nodePort: 8080
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -248,6 +199,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: hwt
+            - configMapRef:
+                name: dnspod-token
           ports:
             - containerPort: 8080
 ---

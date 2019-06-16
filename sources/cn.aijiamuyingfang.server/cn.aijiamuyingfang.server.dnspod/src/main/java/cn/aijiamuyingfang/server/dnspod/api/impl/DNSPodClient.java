@@ -10,14 +10,13 @@ import java.net.URL;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
+import cn.aijiamuyingfang.client.commons.utils.StringUtils;
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.server.dnspod.api.DNSPodApi;
 import cn.aijiamuyingfang.server.dnspod.domain.CreateRecordRequest;
 import cn.aijiamuyingfang.server.dnspod.domain.DomainRequest;
-import cn.aijiamuyingfang.server.dnspod.domain.RecordResponse;
 import cn.aijiamuyingfang.server.dnspod.domain.SubDomainRecordListResponse;
 import cn.aijiamuyingfang.server.dnspod.domain.UpdateRecordRequest;
-import retrofit2.Response;
 
 /**
  * [描述]:
@@ -79,8 +78,8 @@ public class DNSPodClient {
       recordLine = wildRecord.getArea();
     } else {
       CreateRecordRequest createRecordRequest = new CreateRecordRequest(tokenId, tokenValue, rootDomain, actualIp);
-      Response<RecordResponse> response=dnspodApi.createRecord(createRecordRequest.toPartMap()).execute();
-      System.out.println(response.isSuccessful());
+      createRecordRequest.setSubDomain(StringUtils.hasContent(prefixDomain) ? prefixDomain : "@");
+      dnspodApi.createRecord(createRecordRequest.toPartMap()).execute();
       return;
     }
     if (!actualIp.equals(recordIp)) {

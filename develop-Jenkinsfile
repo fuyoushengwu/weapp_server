@@ -1,36 +1,32 @@
-pipeline {
-    agent any
-    options {
-        buildDiscarder(logRotator(numToKeepStr: '25'))
-        disableConcurrentBuilds()
-        timestamps()
-        skipDefaultCheckout()
-    }
-
-    stages {
-        
+def label = "weapp-${UUID.randomUUID().toString()}"
+podTemplate(
+    name:'weapp-develop',
+    namespace:'jenkins-namespace',
+    serviceAccount:'jenkins',
+    label:label,
+    containers:[
+        containerTemplate(name: 'git', image: 'alpine/git', ttyEnabled: true, command: 'cat'),
+        containerTemplate(name:'maven',image:'maven:3.3.9-jdk-8-alpine',command:'cat',ttyEnabled: true)
+    ],
+    volumes:[
+        nfsVolume(mountPath: '/root/.m2/', readOnly: false, serverAddress: '192.168.0.102', serverPath: '/var/nfs/jenkins_slave/.m2/')
+    ]
+){
+    node(label){
         stage('get code') {
-            steps {
-                git 'https://github.com/fuyoushengwu/weapp_server.git'
+            git branch: 'spring-cloud', url: 'https://github.com/fuyoushengwu/weapp_server.git'
+            container('git'){
+                stage('Extract Git ID'){
+                    sh "git rev-parse --short HEAD > .git/commit-id"
+                    IMAGETAG = readFile('.git/commit-id').trim()
+                }
             }
         }
 
         stage('code analysis') {
-            steps {
-                dir("sources") {
-                    sh 'mvn clean install sonar:sonar -Dsonar.organization=fuyoushengwu-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=1a1a48e2f6cd3453ae98de53fc46ef27b53732f7'
-                }
-            }
+            sh """
+                echo IMAGETAG:${IMAGETAG}
+            """
         }
     }
-
-    post {
-
-        success {
-            dir("sources/distribute") {
-                archiveArtifacts 'weapp/**'
-            }
-        }
-    }
-
 }

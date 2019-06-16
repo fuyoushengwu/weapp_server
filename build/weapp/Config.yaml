@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: database
+  namespace: weapp-namespace
+data:
+  WEAPP_DATASOURCE_HOST: '192.168.0.102'
+  WEAPP_DATASOURCE_PORT: '3306'
+  WEAPP_DATASOURCE_USERNAME: root
+  WEAPP_DATASOURCE_PASSWORD: huawei123
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-repo
+  namespace: weapp-namespace
+data:
+  WEAPP_CONFIG_REPO: https://github.com/fuyoushengwu/weapp_config.git
+  WEAPP_CONFIG_SEARCHPATH: weapp_server
+  WEAPP_CONFIG_REPO_USERNAME: shiweideyouxiang@sina.cn
+  WEAPP_CONFIG_REPO_PASSWORD: Shiwei123
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: weapp
+  namespace: weapp-namespace
+data:
+  WEAPP_APPID: wxbe3725e2fe517faa
+  WEAPP_SECRET: 02bc75f7860d5bd54e5302942a09b639
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dnspod-token
+  namespace: weapp-namespace
+data:
+  WEAPP_DNSPOD_TOKEN_ID: '102188'
+  WEAPP_DNSPOD_TOKEN_VALUE: 4330daf0985fc9a2e5fa24a8d771095b
+  WEAPP_DNSPOD_DOMAIN: www.aijiamuyingfang.cn,jenkins.aijiamuyingfang.cn
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hwt
+  namespace: weapp-namespace
+data:
+  MAIN_ARGS: --spring.profiles.active=prod

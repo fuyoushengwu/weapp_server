@@ -5,14 +5,15 @@
 |centos-1|192.168.0.102|master,work|080027D50C2C|4|4G|etcd,kube-api,kube-scheduler,kube-controller,kubectl,kubelet,kube-proxy,flannel|
 |centos-2|192.168.0.103|worker|080027119D05|4|4G|kubelet,kube-proxy,flannel|
 |centos-3|192.168.0.104|worker|080027015A2E|4|4G|kubelet,kube-proxy,flannel|
-|centos-4|192.168.0.105|worker|080027B368B8|4|4G|kubelet,kube-proxy,flannel|
+|centos-4|192.168.0.105|worker|080027B368B8|2|4G|kubelet,kube-proxy,flannel|
+|centos-5|192.168.0.106|worker|0800274ECEE1|2|4G|kubelet,kube-proxy,flannel|
 
-#### 一. 准备
+#### 一.准备
 + 虚拟软件: [VirtualBox-5.2.18-124319-Win.exe](https://download.virtualbox.org/virtualbox/5.2.18/VirtualBox-5.2.18-124319-Win.exe)
 + 系统镜像: [CentOS-7-x86_64-DVD-1708.iso](https://mirrors.oit.uci.edu/centos/7.4.1708/isos/x86_64/CentOS-7-x86_64-DVD-1708.iso)
 
-#### 二. 安装CentOS虚拟机
-+ 1. 设置路由器IP-MAC绑定规则
+#### 二.安装配置CentOS虚拟机
++ 1.设置路由器IP-MAC绑定规则
 
 |主机|MAC地址|IP地址|
 |:---|:---|:---|
@@ -20,16 +21,18 @@
 |centos-2|08-00-27-11-9D-05|192.168.0.103|
 |centos-3|08-00-27-01-5A-2E|192.168.0.104|
 |centos-4|08-00-27-B3-68-B8|192.168.0.105|
+|centos-5|08-00-27-4E-CE-E1|192.168.0.106|
 
-+ 2. 准备虚拟机
++ 2.准备虚拟机
 
 |名称|类型|版本|内存|硬盘|处理器|系统|网络|MAC|
 |:---|:---|:---|:---|:---|:---|:---|:---|:---|
 |centos-1|Linux|Red Hat(64-bit)|4096 MB|50G|4|CentOS-7|桥接网卡|080027D50C2C|
 |centos-2|Linux|Red Hat(64-bit)|4096 MB|50G|4|CentOS-7|桥接网卡|080027119D05|
 |centos-3|Linux|Red Hat(64-bit)|4096 MB|50G|4|CentOS-7|桥接网卡|080027015A2E|
-|centos-4|Linux|Red Hat(64-bit)|4096 MB|50G|4|CentOS-7|桥接网卡|080027B368B8|
-+ + 2.1 配置/etc/hosts和上网代理
+|centos-4|Linux|Red Hat(64-bit)|4096 MB|50G|2|CentOS-7|桥接网卡|080027B368B8|
+|centos-5|Linux|Red Hat(64-bit)|4096 MB|50G|2|CentOS-7|桥接网卡|0800274ECEE1|
++ + 2.1.配置/etc/hosts和上网代理
 
 ```
 # 配置'/etc/hosts'
@@ -38,13 +41,14 @@ cat  << EOF >>/etc/hosts
 192.168.0.103 centos-2
 192.168.0.104 centos-3
 192.168.0.105 centos-4
+192.168.0.106 centos-5
 EOF
 
 # 配置上网代理
 cat << EOF >>/etc/profile
 http_proxy="http://192.168.0.201:1080"
 https_proxy="http://192.168.0.201:1080"
-no_proxy="127.0.0.1,192.168.0.102,192.168.0.103,192.168.0.104,192.168.0.105,192.168.0.106,192.168.0.201,192.168.0.202,192.168.0.203,192.168.0.1,192.168.1.1,centos-1,centos-2,centos-3,centos-4,localhost,github.com,mirrors.aliyun.com,.mirror.aliyuncs.com,registry.cn-hangzhou.aliyuncs.com"
+no_proxy="127.0.0.1,192.168.0.102,192.168.0.103,192.168.0.104,192.168.0.105,192.168.0.106,192.168.0.201,192.168.0.202,192.168.0.203,192.168.0.1,192.168.1.1,centos-1,centos-2,centos-3,centos-4,centos-5,localhost,github.com,.aliyun.com,.aliyuncs.com"
 
 export http_proxy
 export https_proxy
@@ -52,11 +56,12 @@ export no_proxy
 EOF
 source /etc/profile
 ```
-+ + 2.2 开启命令行界面
++ + 2.2.开启命令行界面
 ```
 systemctl set-default multi-user.target
 ```
-+ + 2.3 关闭防火墙
+
++ + 2.3.关闭防火墙
 ```
 systemctl stop firewalld & systemctl disable firewalld
 cat <<EOF >  /etc/sysctl.d/k8s.conf
@@ -64,23 +69,29 @@ net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
 EOF
 ```
-+ + 2.4 关闭SELinux
+
++ + 2.4.关闭SELinux
 ```
 sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
 sed -i 's/SELINUXTYPE=targeted/#&/' /etc/selinux/config
 setenforce 0
 ```
-+ + 2.5 关闭Swap
+
++ + 2.5.关闭Swap
 ```
 swapoff -a&& sysctl -w vm.swappiness=0
 sed -i '/ swap / s/^/#/' /etc/fstab
 ```
-+ + 2.6 配置yum源
+
+#### 三.准备Docker+Kubernetes
+
++ 1.配置yum源
 ```
 wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo 
 yum makecache
 ```
-+ + 2.7 安装Docker
+
++ 2.安装Docker
 ```
 yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 yum makecache
@@ -96,7 +107,7 @@ EOF
 mkdir -p /etc/systemd/system/docker.service.d/
 cat << EOF > /etc/systemd/system/docker.service.d/http-proxy.conf
 [Service]
-Environment="HTTP_PROXY=http://192.168.0.201:1080" "HTTPS_PROXY=http://192.168.0.201:1080" "NO_PROXY=127.0.0.1,192.168.0.102,192.168.0.103,192.168.0.104,192.168.0.105,192.168.0.106,192.168.0.201,192.168.0.202,192.168.0.203,192.168.0.1,192.168.1.1,centos-1,centos-2,centos-3,centos-4,localhost,mirrors.aliyun.com,.mirror.aliyuncs.com,registry.cn-hangzhou.aliyuncs.com"
+Environment="HTTP_PROXY=http://192.168.0.201:1080" "HTTPS_PROXY=http://192.168.0.201:1080" "NO_PROXY=127.0.0.1,192.168.0.102,192.168.0.103,192.168.0.104,192.168.0.105,192.168.0.106,192.168.0.201,192.168.0.202,192.168.0.203,192.168.0.1,192.168.1.1,centos-1,centos-2,centos-3,centos-4,centos-5,localhost,.aliyun.com,.aliyuncs.com"
 EOF
 
 systemctl daemon-reload
@@ -107,8 +118,7 @@ systemctl status docker
 docker run hello-world
 ```
 
-#### 三.准备Kubernetes
-+ 1. 安装Kubernetes组件
++ 3.安装Kubernetes组件
 ```
 # 安装Kubernetes的yum源
 cat <<EOF > /etc/yum.repos.d/kubernetes.repo
@@ -142,7 +152,25 @@ kubeadm init --pod-network-cidr=172.10.0.0/16  --apiserver-advertise-address=192
 cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 chown $(id -u):$(id -g) $HOME/.kube/config
 
-# 安装etcd工具(centos-1)
+# Worker初始化(centos-2,centos-3,centos-4,centos-5),根据kubeadm init执行结果,执行
+kubeadm join 192.168.0.102:6443 --token [token] --discovery-token-ca-cert-hash [hash]
+# # 注意:token 24小時过期后查看token和cert-hash
+# token
+kubeadm token create
+# cert-hash
+openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt  | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* /sha256:/'
+
+# 安装Flannel网络(centos-1)
+kubectl apply -f kube-flannel/kube-flannel.yml
+```
+
++ 4.将Master作为工作节点(centos-1)
+```
+kubectl taint nodes --all node-role.kubernetes.io/master-
+```
+
++ 5.安装etcd工具(centos-1)
+```
 rm -rf /root/{etcd-v3.3.10-linux-amd64.tar.gz,etcd-v3.3.10-linux-amd64}
 cp etcd/etcd-v3.3.10-linux-amd64.tar.gz /root/etcd-v3.3.10-linux-amd64.tar.gz 
 tar zxvf /root/etcd-v3.3.10-linux-amd64.tar.gz -C /root
@@ -152,21 +180,16 @@ cp -p /root/etcd-v3.3.10-linux-amd64/etcdctl /usr/bin/
 # 查看etcd 集群情况(centos-1)
 etcdctl --key-file /etc/kubernetes/pki/etcd/server.key --cert-file /etc/kubernetes/pki/etcd/server.crt --ca-file /etc/kubernetes/pki/etcd/ca.crt --endpoints https://192.168.0.102:2379  member list
 etcdctl --key-file /etc/kubernetes/pki/etcd/server.key --cert-file /etc/kubernetes/pki/etcd/server.crt --ca-file /etc/kubernetes/pki/etcd/ca.crt --endpoints https://192.168.0.102:2379  cluster-health
-
-
-# Worker初始化(centos-2,centos-2,centos-3),根据kubeadm init执行结果,执行
-kubeadm join 192.168.0.102:6443 --token [token] --discovery-token-ca-cert-hash [hash]
-
-# 安装Flannel网络(centos-1)
-kubectl apply -f kube-flannel/kube-flannel.yml
 ```
 
-# 2.将Master作为工作节点
+
+
+#### 四. 准备WeApp运行环境(kubectl命令在centos-1上执行)
++ 0.解决service-node-port-range只能是30000-32767的情况
 ```
-kubectl taint nodes --all node-role.kubernetes.io/master-
+在“command字段对应的值中添加”–-service-node-port-range=80-32767″
 ```
 
-#### 四. 测试Kubernete环境(kubectl命令在centos-1上执行)
 + 1.测试CoreDNS
 ```
 kubectl apply -f demo/busybox.yaml
@@ -174,8 +197,8 @@ kubectl apply -f demo/busybox.yaml
 nslookup kubernetes
 ```
 
-+ 2. 部署 NFS Storage Class
-+ + 2.1 在centos-1上提供NFS Service
++ 2.部署 NFS Storage Class
++ + 2.1.在centos-1上提供NFS Service
 ```
 mkdir -p /var/nfs
 cat << EOF >/etc/exports
@@ -187,7 +210,7 @@ systemctl enable rpcbind &&systemctl start rpcbind
 systemctl enable nfs &&systemctl start nfs
 ```
 
-+ + 2.2 在kubernetes上部署StorageClass
++ + 2.2.在kubernetes上部署StorageClass
 ```
 # 因为镜像下载很慢,所用手动导入kube_nfs.yaml中使用到的镜像(在所有worker上执行)
 # 安装StorageClass(centos-1)
@@ -199,32 +222,37 @@ kubectl apply -f kube_nfs/kube_nfs.yaml
 kubectl apply -f demo/nfs_test.yaml
 ```
 
-+ 3. 部署Redis
-+ + 3.1 部署Redis
++ 3.部署Redis(centos-1)
 ```
 kubectl apply -f kube_redis/redis.yaml
 ```
 
-# 五.部署WeAPP依赖的应用
-+ 1. 部署MySQL5.5数据库(centos-1)
-+ + 1.1 检查并卸载centos-1上已安装的Mariadb,MySQL
++ 4.部署rabbitmq(centos-1)
+```
+kubectl apply -f rabbitmq/rabbitmq.yml
+```
+
++ 5.部署MySQL5.5数据库(centos-1)
++ + 5.1.检查并卸载centos-1上已安装的Mariadb,MySQL
 ```
 rpm -e --nodeps `rpm -qa | grep mariadb`
 rpm -e --nodeps `rpm -qa | grep mysql`
 rm -rf `find / -name mysql`
 ```
-+ + 1.2 安装MySQL的YUM Repository
+
++ + 5.2.安装MySQL的YUM Repository
 ```
 rpm -ivh mysql/mysql-community-release-el7-5.noarch.rpm
 # 修改　/etc/yum.repos.d/mysql-community.repo 里把　5.5或5.7开启　把　5.6禁用
 rm -rf /etc/yum.repos.d/mysql-community.repo && cp -p mysql/mysql-community.repo /etc/yum.repos.d/
 ```
-+ + 1.3 安装MySQL
+
++ + 5.3.安装MySQL
 ```
 yum install -y mysql-community-server
-``
+```
 
-+ + 1.4 配置MySQL
++ + 5.4.配置MySQL
 ```
 systemctl enable mysqld && systemctl start mysqld
 mysqladmin -u root password 'PASSWORD'
@@ -238,8 +266,9 @@ GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
 flush privileges;
 ```
 
-+ 2. 部署Java-Maven编译环境
-+ + 2.1 安装Java
+# 五.准备WeApp编译环境
++ 1.部署Java-Maven编译环境
++ + 1.1.安装Java
 ```
 rpm -e --nodeps `rpm -qa | grep java`
 
@@ -256,7 +285,7 @@ EOF
 source /etc/profile
 ```
 
-+ + 2.2 安装Maven
++ + 1.2.安装Maven
 ```
 rpm -e --nodeps `rpm -qa | grep maven`
 
@@ -270,22 +299,70 @@ EOF
 
 source /etc/profile
 ```
-+ 3. SCP 免密码传输
-+ + 3.1 centos-1生成公钥
+
++ 2.SCP 免密码传输
++ + 2.1.centos-1生成公钥
 ```
 ssh-keygen -t rsa
 ```
-+ + 3.2 centos-2,centos-3,centos-4信任公钥
+
++ + 2.2.centos-2,centos-3,centos-4,centos-5信任公钥
 ```
 scp root@192.168.0.102:/root/.ssh/id_rsa.pub /root/id_rsa.pub
 cat /root/id_rsa.pub >>/root/.ssh/authorized_keys
 ```
 
-+ 4. 部署rabbitmq
-+ + 4.1 部署rabbitmq(centos-1)
++ 3.安装Jenkins
++ + 3.1.部署Jenkins
 ```
-kubectl apply -f rabbitmq/rabbitmq.yml
-```
+# 部署Ingress
+kubectl apply -f ingress/
 
-+ 5.解决service-node-port-range只能是30000-32767的情况
-在“command字段对应的值中添加”–-service-node-port-range=80-32767″
+# 创建Ingress-Secret
+kubectl create namespace jenkins-namespace
+kubectl create secret tls jenkins-secret --key cert/jenkins/ingress.key --cert cert/jenkins/ingress.crt -n jenkins-namespace
+# 部署Jenkins
+kubectl apply -f jenkins/
+```
++ +  3.2.配置Jenkinss
++ + + 1.安装插件Jenkins
++ + + 2.系统配置
+
+Kubernetes
+|key|value|
+|:---|:---|
+|名称|kubernetes|
+|Kubernetes地址|https://kubernetes.default.svc.cluster.local|
+|Kubernetes命名空间|jenkins-namespace|
+|Jenkins地址|http://jenkins.jenkins-namespace.svc.cluster.local:8080|
+
+Pod
+|key|value|
+|:---|:---|
+|名称|jnlp|
+|命名空间|jenkins-namespace|
+|标签列表|haimaxy-jnlp|
+|用法|尽可能的使用这个节点|
+|Service Account|jenkins|
+
+容器:
+|key|value|
+|:---|:---|
+|名称|jnlp|
+|Docker镜像|cnych/jenkins:jnlp|
+|工作目录|/home/jenkins|
+
+卷(Host Path Volume)
+|key|value|
+|:---|:---|
+|主机路径|/var/run/docker.sock|
+|挂载路径|/var/run/docker.sock|
+
++ 4.部署Weapp
+```
+# 创建Weapp-Secret
+kubectl create namespace weapp-namespace
+kubectl create secret tls weapp-secret --key cert/www/ingress.key --cert cert/www/ingress.crt -n weapp-namespace
+# 部署Weapp
+kubectl apply -f weapp/
+```

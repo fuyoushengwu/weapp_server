@@ -11,7 +11,7 @@ pipeline {
         
         stage('get code') {
             steps {
-                git 'https://github.com/fuyoushengwu/weapp_server.git'
+                git branch: 'spring-cloud', url: 'https://github.com/fuyoushengwu/weapp_server.git'
             }
         }
 

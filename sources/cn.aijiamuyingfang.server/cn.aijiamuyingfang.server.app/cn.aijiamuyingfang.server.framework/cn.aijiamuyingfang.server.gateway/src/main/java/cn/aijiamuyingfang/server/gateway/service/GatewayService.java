@@ -31,9 +31,11 @@ public class GatewayService {
   @Scheduled(fixedDelay = 1000 * 60 * 30)
   public void updateDNSPod() {
     try {
-      dnspodClient.updateDNSPod(domain, tokenId, tokenValue);
+      for (String str : domain.split(",")) {
+        dnspodClient.updateDNSPod(str, tokenId, tokenValue);
+      }
     } catch (Exception e) {
-      		log.error("update dnspod failed",e);
+      log.error("update dnspod failed", e);
     }
   }
 }

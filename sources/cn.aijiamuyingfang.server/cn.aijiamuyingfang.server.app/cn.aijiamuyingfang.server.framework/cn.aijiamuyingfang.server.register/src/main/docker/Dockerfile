@@ -1,4 +1,4 @@
-FROM java:openjdk-8
+FROM openjdk:8-jdk-alpine
 LABEL maintainer="shiweideyouxiang@sina.cn"
 
 WORKDIR /app

@@ -12,7 +12,7 @@ LATEST_WEAPP_IMAGES=`docker images --filter=reference='registry.cn-hangzhou.aliy
 docker save $LATEST_WEAPP_IMAGES -o $WEAPP_DATA
 
 
-nodes="192.168.0.103 192.168.0.104 192.168.0.105"
+nodes="192.168.0.103 192.168.0.104 192.168.0.105 192.168.0.106"
 for node in $nodes
 do
     ssh root@$node "rm -rf $WEAPP_DATA"
