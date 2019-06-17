@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: register-service
-  namespace: weapp-namespace
+  namespace: weapptest-namespace
   labels:
     app: register-service
 spec:
@@ -16,7 +16,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: register-service
-  namespace: weapp-namespace
+  namespace: weapptest-namespace
 spec:
   replicas: 1
   strategy:
@@ -52,7 +52,7 @@ spec:
 # kind: Service
 # metadata:
 #   name: monitor-service
-#   namespace: weapp-namespace
+#   namespace: weapptest-namespace
 #   labels:
 #     app: monitor-service
 # spec:
@@ -66,7 +66,7 @@ spec:
 # kind: Deployment
 # metadata:
 #   name:  monitor-service
-#   namespace: weapp-namespace
+#   namespace: weapptest-namespace
 # spec:
 #   replicas: 1
 #   strategy:
@@ -81,7 +81,7 @@ spec:
 #       initContainers:
 #         - name: check-register
 #           image: busybox:1.28.3
-#           command: ['sh', '-c', 'until wget http://register-service.weapp-namespace:8761/; do echo waiting for register-service; sleep 2; done;']
+#           command: ['sh', '-c', 'until wget http://register-service.weapptest-namespace:8761/; do echo waiting for register-service; sleep 2; done;']
 #       containers:
 #         - name:  monitor-service
 #           image: registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/monitor-service:latest
@@ -96,7 +96,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: config-service
-  namespace: weapp-namespace
+  namespace: weapptest-namespace
   labels:
     app: config-service
 spec:
@@ -110,7 +110,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name:  config-service
-  namespace: weapp-namespace
+  namespace: weapptest-namespace
 spec:
   replicas: 1
   strategy:
@@ -125,7 +125,7 @@ spec:
       initContainers:
         - name: check-register
           image: busybox:1.28.3
-          command: ['sh', '-c', 'until wget http://register-service.weapp-namespace:8761/; do echo waiting for register-service; sleep 2; done;']
+          command: ['sh', '-c', 'until wget http://register-service.weapptest-namespace:8761/; do echo waiting for register-service; sleep 2; done;']
       containers:
         - name:  config-service
           image: registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/config-service:latest
@@ -145,7 +145,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: gateway-service
-  namespace: weapp-namespace
+  namespace: weapptest-namespace
   labels:
     app: gateway-service
 spec:
@@ -159,7 +159,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: gateway-service
-  namespace: weapp-namespace
+  namespace: weapptest-namespace
 spec:
   replicas: 1
   strategy:
@@ -185,10 +185,10 @@ spec:
       initContainers:
         - name: check-register
           image: busybox:1.28.3
-          command: ['sh', '-c', 'until wget http://register-service.weapp-namespace:8761/; do echo waiting for register-service; sleep 2; done;']  
+          command: ['sh', '-c', 'until wget http://register-service.weapptest-namespace:8761/; do echo waiting for register-service; sleep 2; done;']  
         - name: check-config
           image: busybox:1.28.3
-          command: ['sh', '-c', 'until wget http://config-service.weapp-namespace:8080/application/prod; do echo waiting for config-service; sleep 2; done;']                  
+          command: ['sh', '-c', 'until wget http://config-service.weapptest-namespace:8080/application/prod; do echo waiting for config-service; sleep 2; done;']                  
       containers:
         - name: gateway-service
           image: registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/gateway-service:latest
@@ -204,7 +204,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: logcenter-service
-  namespace: weapp-namespace
+  namespace: weapptest-namespace
   labels:
     app: logcenter-service
 spec:
@@ -218,7 +218,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name:  logcenter-service
-  namespace: weapp-namespace
+  namespace: weapptest-namespace
 spec:
   replicas: 1
   strategy:
@@ -233,10 +233,10 @@ spec:
       initContainers:
         - name: check-register
           image: busybox:1.28.3
-          command: ['sh', '-c', 'until wget http://register-service.weapp-namespace:8761/; do echo waiting for register-service; sleep 2; done;']  
+          command: ['sh', '-c', 'until wget http://register-service.weapptest-namespace:8761/; do echo waiting for register-service; sleep 2; done;']  
         - name: check-config
           image: busybox:1.28.3
-          command: ['sh', '-c', 'until wget http://config-service.weapp-namespace:8080/application/prod; do echo waiting for config-service; sleep 2; done;']       
+          command: ['sh', '-c', 'until wget http://config-service.weapptest-namespace:8080/application/prod; do echo waiting for config-service; sleep 2; done;']       
       containers:
         - name:  logcenter-service
           image: registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/logcenter-service:latest
@@ -247,7 +247,7 @@ spec:
                 name: database
           env:
             - name: WEAPP_DATASOURCE_DATABASE
-              value: weapp-logcenter
+              value: weapptest-logcenter
           ports:
             - containerPort: 8080
               name: prod-port
@@ -256,7 +256,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: user-service
-  namespace: weapp-namespace
+  namespace: weapptest-namespace
   labels:
     app: user-service
 spec:
@@ -270,7 +270,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name:  user-service
-  namespace: weapp-namespace
+  namespace: weapptest-namespace
 spec:
   replicas: 1
   strategy:
@@ -285,10 +285,10 @@ spec:
       initContainers:
         - name: check-register
           image: busybox:1.28.3
-          command: ['sh', '-c', 'until wget http://register-service.weapp-namespace:8761/; do echo waiting for register-service; sleep 2; done;']  
+          command: ['sh', '-c', 'until wget http://register-service.weapptest-namespace:8761/; do echo waiting for register-service; sleep 2; done;']  
         - name: check-config
           image: busybox:1.28.3
-          command: ['sh', '-c', 'until wget http://config-service.weapp-namespace:8080/application/prod; do echo waiting for config-service; sleep 2; done;']       
+          command: ['sh', '-c', 'until wget http://config-service.weapptest-namespace:8080/application/prod; do echo waiting for config-service; sleep 2; done;']       
       containers:
         - name:  user-service
           image: registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/user-service:latest
@@ -301,7 +301,7 @@ spec:
                 name: weapp
           env:
             - name: WEAPP_DATASOURCE_DATABASE
-              value: weapp-user
+              value: weapptest-user
           ports:
             - containerPort: 8080
               name: prod-port
@@ -310,7 +310,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: shoporder-service
-  namespace: weapp-namespace
+  namespace: weapptest-namespace
   labels:
     app: shoporder-service
 spec:
@@ -324,7 +324,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name:  shoporder-service
-  namespace: weapp-namespace
+  namespace: weapptest-namespace
 spec:
   replicas: 1
   strategy:
@@ -339,10 +339,10 @@ spec:
       initContainers:
         - name: check-register
           image: busybox:1.28.3
-          command: ['sh', '-c', 'until wget http://register-service.weapp-namespace:8761/; do echo waiting for register-service; sleep 2; done;']  
+          command: ['sh', '-c', 'until wget http://register-service.weapptest-namespace:8761/; do echo waiting for register-service; sleep 2; done;']  
         - name: check-config
           image: busybox:1.28.3
-          command: ['sh', '-c', 'until wget http://config-service.weapp-namespace:8080/application/prod; do echo waiting for config-service; sleep 2; done;']       
+          command: ['sh', '-c', 'until wget http://config-service.weapptest-namespace:8080/application/prod; do echo waiting for config-service; sleep 2; done;']       
       containers:
         - name:  shoporder-service
           image: registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/shoporder-service:latest
@@ -353,7 +353,7 @@ spec:
                 name: database
           env:
             - name: WEAPP_DATASOURCE_DATABASE
-              value: weapp-shoporder
+              value: weapptest-shoporder
           ports:
             - containerPort: 8080
               name: prod-port
@@ -362,7 +362,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: goods-service
-  namespace: weapp-namespace
+  namespace: weapptest-namespace
   labels:
     app: goods-service
 spec:
@@ -376,7 +376,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name:  goods-service
-  namespace: weapp-namespace
+  namespace: weapptest-namespace
 spec:
   replicas: 1
   strategy:
@@ -391,10 +391,10 @@ spec:
       initContainers:
         - name: check-register
           image: busybox:1.28.3
-          command: ['sh', '-c', 'until wget http://register-service.weapp-namespace:8761/; do echo waiting for register-service; sleep 2; done;']  
+          command: ['sh', '-c', 'until wget http://register-service.weapptest-namespace:8761/; do echo waiting for register-service; sleep 2; done;']  
         - name: check-config
           image: busybox:1.28.3
-          command: ['sh', '-c', 'until wget http://config-service.weapp-namespace:8080/application/prod; do echo waiting for config-service; sleep 2; done;']       
+          command: ['sh', '-c', 'until wget http://config-service.weapptest-namespace:8080/application/prod; do echo waiting for config-service; sleep 2; done;']       
       containers:
         - name:  goods-service
           image: registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/goods-service:latest
@@ -405,7 +405,7 @@ spec:
                 name: database
           env:
             - name: WEAPP_DATASOURCE_DATABASE
-              value: weapp-goods
+              value: weapptest-goods
           ports:
             - containerPort: 8080
               name: prod-port
@@ -414,7 +414,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: coupon-service
-  namespace: weapp-namespace
+  namespace: weapptest-namespace
   labels:
     app: coupon-service
 spec:
@@ -428,7 +428,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name:  coupon-service
-  namespace: weapp-namespace
+  namespace: weapptest-namespace
 spec:
   replicas: 1
   strategy:
@@ -443,10 +443,10 @@ spec:
       initContainers:
         - name: check-register
           image: busybox:1.28.3
-          command: ['sh', '-c', 'until wget http://register-service.weapp-namespace:8761/; do echo waiting for register-service; sleep 2; done;']  
+          command: ['sh', '-c', 'until wget http://register-service.weapptest-namespace:8761/; do echo waiting for register-service; sleep 2; done;']  
         - name: check-config
           image: busybox:1.28.3
-          command: ['sh', '-c', 'until wget http://config-service.weapp-namespace:8080/application/prod; do echo waiting for config-service; sleep 2; done;']       
+          command: ['sh', '-c', 'until wget http://config-service.weapptest-namespace:8080/application/prod; do echo waiting for config-service; sleep 2; done;']       
       containers:
         - name:  coupon-service
           image: registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/coupon-service:latest
@@ -457,7 +457,7 @@ spec:
                 name: database
           env:
             - name: WEAPP_DATASOURCE_DATABASE
-              value: weapp-coupon
+              value: weapptest-coupon
           ports:
             - containerPort: 8080
               name: prod-port
@@ -466,7 +466,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: filecenter-service
-  namespace: weapp-namespace
+  namespace: weapptest-namespace
   labels:
     app: filecenter-service
 spec:
@@ -480,7 +480,7 @@ apiVersion: apps/v1beta2
 kind: StatefulSet
 metadata:
   name:  filecenter-service
-  namespace: weapp-namespace
+  namespace: weapptest-namespace
 spec:
   selector:
     matchLabels:
@@ -497,10 +497,10 @@ spec:
       initContainers:
         - name: check-register
           image: busybox:1.28.3
-          command: ['sh', '-c', 'until wget http://register-service.weapp-namespace:8761/; do echo waiting for register-service; sleep 2; done;']  
+          command: ['sh', '-c', 'until wget http://register-service.weapptest-namespace:8761/; do echo waiting for register-service; sleep 2; done;']  
         - name: check-config
           image: busybox:1.28.3
-          command: ['sh', '-c', 'until wget http://config-service.weapp-namespace:8080/application/prod; do echo waiting for config-service; sleep 2; done;']       
+          command: ['sh', '-c', 'until wget http://config-service.weapptest-namespace:8080/application/prod; do echo waiting for config-service; sleep 2; done;']       
       containers:
         - name:  filecenter-service
           image: registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/filecenter-service:latest
@@ -511,7 +511,7 @@ spec:
                 name: database
           env:
             - name: WEAPP_DATASOURCE_DATABASE
-              value: weapp-filecenter
+              value: weapptest-filecenter
             - name: WEAPP_FILECENTER_STOREDIR
               value: /root/store
           ports:
@@ -534,7 +534,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: auth-service
-  namespace: weapp-namespace
+  namespace: weapptest-namespace
   labels:
     app: auth-service
 spec:
@@ -548,7 +548,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name:  auth-service
-  namespace: weapp-namespace
+  namespace: weapptest-namespace
 spec:
   replicas: 1
   strategy:
@@ -563,10 +563,10 @@ spec:
       initContainers:
         - name: check-register
           image: busybox:1.28.3
-          command: ['sh', '-c', 'until wget http://register-service.weapp-namespace:8761/; do echo waiting for register-service; sleep 2; done;']  
+          command: ['sh', '-c', 'until wget http://register-service.weapptest-namespace:8761/; do echo waiting for register-service; sleep 2; done;']  
         - name: check-config
           image: busybox:1.28.3
-          command: ['sh', '-c', 'until wget http://config-service.weapp-namespace:8080/application/prod; do echo waiting for config-service; sleep 2; done;']       
+          command: ['sh', '-c', 'until wget http://config-service.weapptest-namespace:8080/application/prod; do echo waiting for config-service; sleep 2; done;']       
       containers:
         - name:  auth-service
           image: registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/auth-service:latest
@@ -579,7 +579,7 @@ spec:
                 name: weapp
           env:
             - name: WEAPP_DATASOURCE_DATABASE
-              value: weapp-auth
+              value: weapptest-auth
           ports:
             - containerPort: 8080
               name: prod-port

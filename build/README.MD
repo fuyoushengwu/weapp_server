@@ -358,7 +358,11 @@ Pod
 |主机路径|/var/run/docker.sock|
 |挂载路径|/var/run/docker.sock|
 
-+ 4.部署Weapp
++ 4.制作podTemplate中使用的基础镜像
+```
+docker build -t registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/podtemplate-base-image:latest base_image/
+```
++ 5.部署Weapp
 ```
 # 创建Weapp-Secret
 kubectl create namespace weapp-namespace

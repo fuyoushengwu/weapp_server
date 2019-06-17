@@ -109,8 +109,6 @@
 						<artifactId>dockerfile-maven-plugin</artifactId>
 						<!-- <version>1.4.10</version> -->
 						<configuration>
-							<username>18061756483</username>
-							<password>5waYR1A2Oo*xxI7o</password>
 							<repository>${docker.repostory}/${docker.registry.name}/${project.name}</repository>
 							<contextDirectory>${project.build.directory}/docker</contextDirectory>
 							<skip>${dockerfile.skip}</skip>

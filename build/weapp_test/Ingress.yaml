@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: weapp-ingress
+  namespace: weapptest-namespace
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  tls:
+  - hosts:
+    - www.aijiamuyingfang.cn
+    secretName: weapp-secret
+  rules:
+  - host: www.aijiamuyingfang.cn
+    http:
+      paths:
+      - backend:
+          serviceName: gateway-service
+          servicePort: 8080
+  - http:
+      paths:
+      - path: /gateway-service
+        backend:
+          serviceName: gateway-service
+          servicePort: 8080

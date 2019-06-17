@@ -5,17 +5,17 @@ podTemplate(
     serviceAccount:'jenkins',
     label:label,
     containers:[
-        containerTemplate(name: 'git', image: 'alpine/git', ttyEnabled: true, command: 'cat'),
-        containerTemplate(name:'maven',image:'maven:3.3.9-jdk-8-alpine',command:'cat',ttyEnabled: true)
+        containerTemplate(name: 'tool', image:'registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/podtemplate-base-image:latest',command:'cat',ttyEnabled: true)
     ],
     volumes:[
+        hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
         nfsVolume(mountPath: '/root/.m2/', readOnly: false, serverAddress: '192.168.0.102', serverPath: '/var/nfs/jenkins_slave/.m2/')
     ]
 ){
     node(label){
         stage('get code') {
             git branch: 'spring-cloud', url: 'https://github.com/fuyoushengwu/weapp_server.git'
-            container('git'){
+            container('tool'){
                 stage('Extract Git ID'){
                     sh "git rev-parse --short HEAD > .git/commit-id"
                     IMAGETAG = readFile('.git/commit-id').trim()
@@ -24,9 +24,26 @@ podTemplate(
         }
 
         stage('code analysis') {
-            sh """
-                echo IMAGETAG:${IMAGETAG}
-            """
+            container('tool'){
+                sh """
+                    mvn sonar:sonar -Dsonar.projectKey=cn.aijiamuyingfang:cn.aijiamuyingfang -Dsonar.organization=fuyoushengwu-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=033ad430ca4c06abfa5fe9f078d3a8de2ebe62dd -f sources/pom.xml
+                """
+            }
+        }
+
+        stage('test'){
+            container('tool'){
+                sh """
+                    ALL_WEAPP_IMAGES=`docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}`
+                    docker rmi $ALL_WEAPP_IMAGES
+                    mvn clean install -Dmaven.test.skip=true
+                    docker login -u=${env.ALIYUNCS-DOCKER-USERNAME} -p ${env.ALIYUNCS-DOCKER-PASSWORD} registry.cn-hangzhou.aliyuncs.com
+                    for image in $ALL_WEAPP_IMAGES
+                    do
+                        docker push $image
+                    done 
+                """
+            }
         }
     }
 }
