@@ -17,13 +17,13 @@ podTemplate(
             git branch: 'spring-cloud', url: 'https://github.com/fuyoushengwu/weapp_server.git'
         }
 
-        stage('code analysis') {
-            container('tool'){
-                sh """
-                    mvn clean compile sonar:sonar -Dsonar.projectKey=cn.aijiamuyingfang:cn.aijiamuyingfang -Dsonar.organization=fuyoushengwu-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=033ad430ca4c06abfa5fe9f078d3a8de2ebe62dd -f sources/pom.xml
-                """
-            }
-        }
+        // stage('code analysis') {
+        //     container('tool'){
+        //         sh """
+        //             mvn clean compile sonar:sonar -Dsonar.projectKey=cn.aijiamuyingfang:cn.aijiamuyingfang -Dsonar.organization=fuyoushengwu-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=033ad430ca4c06abfa5fe9f078d3a8de2ebe62dd -f sources/pom.xml
+        //         """
+        //     }
+        // }
 
         stage('test'){
             container('tool'){
