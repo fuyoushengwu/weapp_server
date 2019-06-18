@@ -14,7 +14,13 @@ podTemplate(
 ){
     node(label){
         stage('get code') {
-            git branch: 'spring-cloud', url: 'https://github.com/fuyoushengwu/weapp_server.git'
+            container('tool') {
+                sh """
+                    echo 'username=${env.ALIYUNCS-DOCKER-USERNAME}'
+                    echo 'password=${env.ALIYUNCS-DOCKER-PASSWORD}'
+                """
+            }
+            // git branch: 'spring-cloud', url: 'https://github.com/fuyoushengwu/weapp_server.git'
         }
 
         // stage('code analysis') {
@@ -26,34 +32,36 @@ podTemplate(
         // }
 
         stage('test'){
-            container('tool'){
-                def ALL_WEAPP_IMAGES=sh(
-                    script:"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
-                    returnStdout: true
-                )
+            // container('tool') {
+            //     def imageArr = sh(
+            //         script:"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
+            //         returnStdout: true
+            //     ).split(" ")
                 
+            //     imageArr.each({
+            //         sh """
+            //             echo 'docker rmi $it'
+            //             docker rmi $it
+            //         """
+            //     })
 
-                sh """
-                    echo ALL_WEAPP_IMAGES:
-                    echo $ALL_WEAPP_IMAGES
+            //     sh """
+            //         mvn clean install -Dmaven.test.skip=true -f source/pom.xml
+            //     """
 
-                    docker rmi $ALL_WEAPP_IMAGES
-                    mvn clean install -Dmaven.test.skip=true -f source/pom.xml
-                """
+            //     def newImageArr = sh(
+            //         script:"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
+            //         returnStdout: true
+            //     ).split(" ")
 
-                ALL_WEAPP_IMAGES=sh(
-                    script:"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
-                    returnStdout: true
-                )
-
-                sh """
-                    docker login -u=${env.ALIYUNCS-DOCKER-USERNAME} -p ${env.ALIYUNCS-DOCKER-PASSWORD} registry.cn-hangzhou.aliyuncs.com
-                    for image in $ALL_WEAPP_IMAGES
-                    do
-                        docker push $image
-                    done 
-                """
-            }
+            //     sh """
+            //         docker login -u=${env.ALIYUNCS-DOCKER-USERNAME} -p ${env.ALIYUNCS-DOCKER-PASSWORD} registry.cn-hangzhou.aliyuncs.com
+            //         for image in $ALL_WEAPP_IMAGES
+            //         do
+            //             docker push $image
+            //         done 
+            //     """
+            // }
         }
     }
 }
