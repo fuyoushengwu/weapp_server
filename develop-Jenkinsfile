@@ -32,10 +32,10 @@ podTemplate(
                         docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD registry.cn-hangzhou.aliyuncs.com
                     """
                 }
-                def imageArr = sh(
+                def imageArr = sh (
                     script:"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
                     returnStdout: true
-                ).split(" ")
+                ).trim().split(" ")
                 
                 imageArr.each({
                     sh """
@@ -47,10 +47,10 @@ podTemplate(
                     mvn clean install -Dmaven.test.skip=true -f source/pom.xml
                 """
 
-                def newImageArr = sh(
+                def newImageArr = sh (
                     script:"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
                     returnStdout: true
-                ).split(" ")
+                ).trim().split(" ")
 
                 newImageArr.each({
                     sh """
