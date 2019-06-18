@@ -37,7 +37,7 @@ public class LogController {
    */
   @GetMapping("/logs-modules")
   public Map<String, String> logModule() {
-    return LogConstants.MODULES;
+    return LogConstants.getModules();
   }
 
   /**

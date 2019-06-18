@@ -24,7 +24,7 @@ public class LogConstants {
    */
   public static final String LOG_QUEUE = "system.log.queue";
 
-  public static final Map<String, String> MODULES = new HashMap<>();
+  private static final Map<String, String> MODULES = new HashMap<>();
 
   public static final String LOGIN = "LOGIN";
 
@@ -39,5 +39,14 @@ public class LogConstants {
 
     MODULES.put(FILE_UPLOAD, "文件上传");
     MODULES.put(FILE_DELETE, "文件删除");
+  }
+
+  /**
+   * 返回 Module信息
+   * 
+   * @return
+   */
+  public static Map<String, String> getModules() {
+    return MODULES;
   }
 }

@@ -360,7 +360,7 @@ Pod
 
 + 4.制作podTemplate中使用的基础镜像
 ```
-docker build -t registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/podtemplate-base-image:latest base_image/
+docker build -t registry.cn-hangzhou.aliyuncs.com/podtemplate/base-image:latest base_image/
 ```
 + 5.部署Weapp
 ```
