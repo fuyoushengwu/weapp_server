@@ -36,11 +36,13 @@ podTemplate(
                     script:"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
                     returnStdout: true
                 ).trim().split(" ")
-                
+
+                println imageArr.size()
                 for(int i=0;i<imageArr.size();i++){
                     def image = imageArr[i].trim()
                     if(!"".equals(image)) {
                         sh """
+                            echo 'docker rmi $image'
                             docker rmi $image
                         """
                     }
