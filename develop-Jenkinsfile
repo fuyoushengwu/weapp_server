@@ -10,7 +10,7 @@ podTemplate(
     volumes:[
         hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
         nfsVolume(mountPath: '/root/.m2/', readOnly: false, serverAddress: '192.168.0.102', serverPath: '/var/nfs/jenkins_slave/.m2/'),
-        nfsVolume(mountPath: '/root/.kube/', readOnly: true, serverAddress: '192.168.0.102', serverPath: '/var/nfs/jenkins_slave/.kube/')
+        nfsVolume(mountPath: '/root/.kube/', readOnly: false, serverAddress: '192.168.0.102', serverPath: '/var/nfs/jenkins_slave/.kube/')
     ]
 ){
     node(label){
