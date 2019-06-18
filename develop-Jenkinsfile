@@ -37,8 +37,12 @@ podTemplate(
                     returnStdout: true
                 ).trim().split(" ")
                 
+                println imageArr
+                println imageArr.size()
+                
                 imageArr.each({
                     sh """
+                        echo 'docker rmi $it'
                         docker rmi $it
                     """
                 })
