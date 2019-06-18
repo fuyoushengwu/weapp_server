@@ -15,12 +15,6 @@ podTemplate(
     node(label){
         stage('get code') {
             git branch: 'spring-cloud', url: 'https://github.com/fuyoushengwu/weapp_server.git'
-            container('tool'){
-                stage('Extract Git ID'){
-                    sh "git rev-parse --short HEAD > .git/commit-id"
-                    IMAGETAG = readFile('.git/commit-id').trim()
-                }
-            }
         }
 
         stage('code analysis') {
@@ -33,11 +27,26 @@ podTemplate(
 
         stage('test'){
             container('tool'){
+                def ALL_WEAPP_IMAGES=sh(
+                    script:"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
+                    returnStdout: true
+                )
+                
+
                 sh """
-                    ALL_WEAPP_IMAGES=`docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}`
+                    echo ALL_WEAPP_IMAGES:
+                    echo $ALL_WEAPP_IMAGES
+
                     docker rmi $ALL_WEAPP_IMAGES
                     mvn clean install -Dmaven.test.skip=true -f source/pom.xml
-                    ALL_WEAPP_IMAGES=`docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}`
+                """
+
+                ALL_WEAPP_IMAGES=sh(
+                    script:"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
+                    returnStdout: true
+                )
+                
+                sh """
                     docker login -u=${env.ALIYUNCS-DOCKER-USERNAME} -p ${env.ALIYUNCS-DOCKER-PASSWORD} registry.cn-hangzhou.aliyuncs.com
                     for image in $ALL_WEAPP_IMAGES
                     do
