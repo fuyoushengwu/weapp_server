@@ -25,7 +25,7 @@ podTemplate(
         //     }
         // }
 
-        stage('test'){
+        stage('package') {
             container('tool') {
                 withCredentials([usernamePassword(credentialsId: 'f23ceb70-244e-4a17-a8a4-a1c0c13c23de', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh """
@@ -55,15 +55,22 @@ podTemplate(
                     returnStdout: true
                 ).trim().split(" ")
 
+                println newImageArr.size()
+
                 for(int i=0;i<newImageArr.size();i++){
                     def image = newImageArr[i].trim()
                     if(!"".equals(image)) {
                         sh """
+                            echo 'docker push $image'
                             docker push $image
                         """
                     }
                 }
             }
+        }
+
+        stage('test'){
+            
         }
     }
 }
