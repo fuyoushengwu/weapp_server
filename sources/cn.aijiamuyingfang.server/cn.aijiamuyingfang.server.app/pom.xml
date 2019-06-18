@@ -83,7 +83,7 @@
 			<id>docker</id>
 			<activation>
 				<file>
-					<exists>/var/run/docker.pid</exists>
+					<exists>/var/run/docker.sock</exists>
 				</file>
 			</activation>
 			<build>

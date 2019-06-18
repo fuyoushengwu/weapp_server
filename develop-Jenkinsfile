@@ -26,7 +26,7 @@ podTemplate(
         stage('code analysis') {
             container('tool'){
                 sh """
-                    mvn sonar:sonar -Dsonar.projectKey=cn.aijiamuyingfang:cn.aijiamuyingfang -Dsonar.organization=fuyoushengwu-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=033ad430ca4c06abfa5fe9f078d3a8de2ebe62dd -f sources/pom.xml
+                    mvn clean compile sonar:sonar -Dsonar.projectKey=cn.aijiamuyingfang:cn.aijiamuyingfang -Dsonar.organization=fuyoushengwu-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=033ad430ca4c06abfa5fe9f078d3a8de2ebe62dd -f sources/pom.xml
                 """
             }
         }
@@ -36,7 +36,8 @@ podTemplate(
                 sh """
                     ALL_WEAPP_IMAGES=`docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}`
                     docker rmi $ALL_WEAPP_IMAGES
-                    mvn clean install -Dmaven.test.skip=true
+                    mvn clean install -Dmaven.test.skip=true -f source/pom.xml
+                    ALL_WEAPP_IMAGES=`docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}`
                     docker login -u=${env.ALIYUNCS-DOCKER-USERNAME} -p ${env.ALIYUNCS-DOCKER-PASSWORD} registry.cn-hangzhou.aliyuncs.com
                     for image in $ALL_WEAPP_IMAGES
                     do
