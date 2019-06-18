@@ -323,6 +323,8 @@ kubectl create namespace jenkins-namespace
 kubectl create secret tls jenkins-secret --key cert/jenkins/ingress.key --cert cert/jenkins/ingress.crt -n jenkins-namespace
 # 部署Jenkins
 kubectl apply -f jenkins/
+mkdir -p /var/nfs/jenkins_slave/
+ln -s /root/.kube /var/nfs/jenkins_slave/
 ```
 + +  3.2.配置Jenkinss
 + + + 1.安装插件Jenkins
