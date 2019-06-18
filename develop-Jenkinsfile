@@ -1,6 +1,4 @@
 def label = "weapp-${UUID.randomUUID().toString()}"
-def username = env.ALIYUNCS-DOCKER-USERNAME
-def password = env.ALIYUNCS-DOCKER-PASSWORD
 podTemplate(
     name:'weapp-develop',
     namespace:'jenkins-namespace',
