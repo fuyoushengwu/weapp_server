@@ -32,34 +32,32 @@ podTemplate(
                         docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD registry.cn-hangzhou.aliyuncs.com
                     """
                 }
-            //     def imageArr = sh(
-            //         script:"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
-            //         returnStdout: true
-            //     ).split(" ")
+                def imageArr = sh(
+                    script:"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
+                    returnStdout: true
+                ).split(" ")
                 
-            //     imageArr.each({
-            //         sh """
-            //             echo 'docker rmi $it'
-            //             docker rmi $it
-            //         """
-            //     })
+                imageArr.each({
+                    sh """
+                        docker rmi $it
+                    """
+                })
 
-            //     sh """
-            //         mvn clean install -Dmaven.test.skip=true -f source/pom.xml
-            //     """
+                sh """
+                    mvn clean install -Dmaven.test.skip=true -f source/pom.xml
+                """
 
-            //     def newImageArr = sh(
-            //         script:"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
-            //         returnStdout: true
-            //     ).split(" ")
+                def newImageArr = sh(
+                    script:"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
+                    returnStdout: true
+                ).split(" ")
 
-            //     sh """
-            //         docker login -u=${env.ALIYUNCS-DOCKER-USERNAME} -p ${env.ALIYUNCS-DOCKER-PASSWORD} registry.cn-hangzhou.aliyuncs.com
-            //         for image in $ALL_WEAPP_IMAGES
-            //         do
-            //             docker push $image
-            //         done 
-            //     """
+                newImageArr.each({
+                    sh """
+                        docker push $it
+                    """
+                })
+
             }
         }
     }
