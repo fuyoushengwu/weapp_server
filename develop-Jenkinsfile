@@ -14,10 +14,8 @@ podTemplate(
 ){
     node(label){
         stage('get code') {
-            steps{
-                echo username=env.ALIYUNCS-DOCKER-USERNAME
-                echo password=env.ALIYUNCS-DOCKER-PASSWORD
-            }
+            echo username=env.ALIYUNCS-DOCKER-USERNAME
+            echo password=env.ALIYUNCS-DOCKER-PASSWORD
             container('tool') {
             }
             // git branch: 'spring-cloud', url: 'https://github.com/fuyoushengwu/weapp_server.git'
