@@ -35,14 +35,11 @@ podTemplate(
                 def imageArr = sh (
                     script:"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
                     returnStdout: true
-                ).trim().split(" ")
-
-                println imageArr.size()
+                ).trim().split()
                 for(int i=0;i<imageArr.size();i++){
                     def image = imageArr[i].trim()
                     if(!"".equals(image)) {
                         sh """
-                            echo 'docker rmi $image'
                             docker rmi $image
                         """
                     }
@@ -55,15 +52,12 @@ podTemplate(
                 def newImageArr = sh (
                     script:"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
                     returnStdout: true
-                ).trim().split(" ")
-
-                println newImageArr.size()
+                ).trim().split()
 
                 for(int i=0;i<newImageArr.size();i++){
                     def image = newImageArr[i].trim()
                     if(!"".equals(image)) {
                         sh """
-                            echo 'docker push $image'
                             docker push $image
                         """
                     }
