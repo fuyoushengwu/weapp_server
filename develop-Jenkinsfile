@@ -1,4 +1,6 @@
 def label = "weapp-${UUID.randomUUID().toString()}"
+def username = env.ALIYUNCS-DOCKER-USERNAME
+def password = env.ALIYUNCS-DOCKER-PASSWORD
 podTemplate(
     name:'weapp-develop',
     namespace:'jenkins-namespace',
@@ -14,8 +16,8 @@ podTemplate(
 ){
     node(label){
         stage('get code') {
-            echo username=env.ALIYUNCS-DOCKER-USERNAME
-            echo password=env.ALIYUNCS-DOCKER-PASSWORD
+            echo username=${username}
+            echo password=${password}
             container('tool') {
             }
             // git branch: 'spring-cloud', url: 'https://github.com/fuyoushengwu/weapp_server.git'
