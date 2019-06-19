@@ -370,7 +370,9 @@ docker build -t registry.cn-hangzhou.aliyuncs.com/podtemplate/base-image:latest 
 ```
 # 创建Weapp-Secret
 kubectl create namespace weapp-namespace
+kubectl create namespace weapptest-namespace
 kubectl create secret tls weapp-secret --key cert/www/ingress.key --cert cert/www/ingress.crt -n weapp-namespace
+kubectl create secret tls weapp-secret --key cert/www/ingress.key --cert cert/www/ingress.crt -n weapptest-namespace
 # 部署Weapp
 kubectl apply -f weapp/
 ```

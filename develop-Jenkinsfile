@@ -75,6 +75,7 @@ podTemplate(
                 
                 sh """
                     mvn clean test -f sources/pom.xml
+                    kubectl delete -f build/weapp_test/
                 """
             }
         }

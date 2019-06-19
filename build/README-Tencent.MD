@@ -45,7 +45,7 @@ pip install shadowsocks
 # 配置shadowsocks.json
 cat << EOF >/etc/shadowsocks.json
 {
-  "server":"68.168.136.64",
+  "server":"104.225.239.142",
   "server_port":8888,
   "local_address": "127.0.0.1",
   "local_port":1080,
