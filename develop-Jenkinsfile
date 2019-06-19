@@ -26,45 +26,45 @@ podTemplate(
         //     }
         // }
 
-        stage('package') {
-            container('tool') {
-                withCredentials([usernamePassword(credentialsId: '961154c4-c9ca-4c27-a97f-97e2172f3ef8', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    sh """
-                        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD registry.cn-hangzhou.aliyuncs.com
-                    """
-                }
-                def imageArr = sh (
-                    script:"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
-                    returnStdout: true
-                ).trim().split()
-                for(int i=0;i<imageArr.size();i++){
-                    def image = imageArr[i].trim()
-                    if(!"".equals(image)) {
-                        sh """
-                            docker rmi $image
-                        """
-                    }
-                }
+        // stage('package') {
+        //     container('tool') {
+        //         withCredentials([usernamePassword(credentialsId: '961154c4-c9ca-4c27-a97f-97e2172f3ef8', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+        //             sh """
+        //                 docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD registry.cn-hangzhou.aliyuncs.com
+        //             """
+        //         }
+        //         def imageArr = sh (
+        //             script:"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
+        //             returnStdout: true
+        //         ).trim().split()
+        //         for(int i=0;i<imageArr.size();i++){
+        //             def image = imageArr[i].trim()
+        //             if(!"".equals(image)) {
+        //                 sh """
+        //                     docker rmi $image
+        //                 """
+        //             }
+        //         }
 
-                sh """
-                    mvn clean install -Dmaven.test.skip=true -f sources/pom.xml
-                """
+        //         sh """
+        //             mvn clean install -Dmaven.test.skip=true -f sources/pom.xml
+        //         """
 
-                def newImageArr = sh (
-                    script:"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
-                    returnStdout: true
-                ).trim().split()
+        //         def newImageArr = sh (
+        //             script:"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
+        //             returnStdout: true
+        //         ).trim().split()
 
-                for(int i=0;i<newImageArr.size();i++){
-                    def image = newImageArr[i].trim()
-                    if(!"".equals(image)) {
-                        sh """
-                            docker push $image
-                        """
-                    }
-                }
-            }
-        }
+        //         for(int i=0;i<newImageArr.size();i++){
+        //             def image = newImageArr[i].trim()
+        //             if(!"".equals(image)) {
+        //                 sh """
+        //                     docker push $image
+        //                 """
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('test'){
             container('tool') {
@@ -74,12 +74,17 @@ podTemplate(
                 sleep 180
                 
                 withCredentials([usernamePassword(credentialsId: 'c14e8739-7dc3-4e04-9c52-c218eeec15b8', usernameVariable: 'DATABASE_USERNAME', passwordVariable: 'DATABASE_PASSWORD')]) {
-                    sh """
-                        export WEAPP_DATASOURCE_USERNAME=$DATABASE_USERNAME
-                        export WEAPP_DATASOURCE_PASSWORD=$DATABASE_PASSWORD
-                        mvn clean test -f sources/pom.xml
-                        kubectl delete -f build/weapp_test/
-                    """
+                    try {
+                        sh """
+                            export WEAPP_DATASOURCE_USERNAME=$DATABASE_USERNAME
+                            export WEAPP_DATASOURCE_PASSWORD=$DATABASE_PASSWORD
+                            mvn clean test -f sources/pom.xml
+                        """
+                    } finally {
+                        sh """
+                            kubectl delete -f build/weapp_test/
+                        """
+                    }
                 }
                 
             }
