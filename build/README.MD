@@ -134,6 +134,8 @@ EOF
 
 # 安装 kubelet kubeadm kubectl
 yum install -y kubelet kubeadm kubectl
+rm -rf base_image/kubectl
+cp -rf /usr/bin/kubectl base_image/ 
 
 # 启动kubelet
 systemctl enable kubelet && systemctl start kubelet

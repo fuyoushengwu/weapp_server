@@ -68,11 +68,14 @@ podTemplate(
 
         stage('test'){
             container('tool') {
-                def info = sh (
-                    script:"kubectl get pods",
-                    returnStdout: true
-                ).trim()
-                println info
+                sh """
+                    kubectl apply -f build/weapp_test/
+                """
+                sleep 120
+                
+                sh """
+                    mvn clean test -f sources/pom.xml
+                """
             }
         }
     }
