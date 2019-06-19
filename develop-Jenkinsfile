@@ -28,7 +28,7 @@ podTemplate(
 
         stage('package') {
             container('tool') {
-                withCredentials([usernamePassword(credentialsId: 'f23ceb70-244e-4a17-a8a4-a1c0c13c23de', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: '961154c4-c9ca-4c27-a97f-97e2172f3ef8', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh """
                         docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD registry.cn-hangzhou.aliyuncs.com
                     """

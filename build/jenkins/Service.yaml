@@ -38,7 +38,7 @@ spec:
       serviceAccountName: jenkins
       containers:
       - name: jenkins
-        image: jenkins/jenkins:lts
+        image: jenkins/jenkins:2.178
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
@@ -58,16 +58,18 @@ spec:
           httpGet:
             path: /login
             port: 8080
-          initialDelaySeconds: 60
+          initialDelaySeconds: 10
+          periodSeconds: 10
           timeoutSeconds: 5
-          failureThreshold: 12
+          failureThreshold: 300
         readinessProbe:
           httpGet:
             path: /login
             port: 8080
-          initialDelaySeconds: 60
+          initialDelaySeconds: 10
+          periodSeconds: 10
           timeoutSeconds: 5
-          failureThreshold: 12
+          failureThreshold: 300
         volumeMounts:
         - name: jenkinshome
           subPath: jenkins
@@ -90,4 +92,4 @@ spec:
         storageClassName: "managed-nfs-storage"
         resources:
           requests:
-            storage: 10Gi            
+            storage: 10Gi
