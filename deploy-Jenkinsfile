@@ -1,76 +1,66 @@
-pipeline {
-    agent any
-    options {
-        buildDiscarder(logRotator(numToKeepStr: '25'))
-        disableConcurrentBuilds()
-        timestamps()
-        skipDefaultCheckout()
-    }
-
-    stages {
-        
+def label = "weapp-${UUID.randomUUID().toString()}"
+podTemplate(
+    name:'weapp-develop',
+    namespace:'jenkins-namespace',
+    serviceAccount:'jenkins',
+    label:label,
+    containers:[
+        containerTemplate(name: 'tool', image:'registry.cn-hangzhou.aliyuncs.com/podtemplate/base-image:latest',command:'cat',ttyEnabled: true)
+    ],
+    volumes:[
+        hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
+        nfsVolume(mountPath: '/home/jenkins/.kube', readOnly: false, serverAddress: '192.168.0.102', serverPath: '/var/nfs/jenkins_slave/.kube')
+    ]
+){
+    node(label){
         stage('get code') {
-            steps {
-                git branch: 'spring-cloud', url: 'https://github.com/fuyoushengwu/weapp_server.git'
-            }
+            git branch: 'spring-cloud', url: 'https://github.com/aijiamuyingfang/weapp_server.git'
         }
 
-        stage('package') {
-            steps {
-                dir("sources") {
-                    sh 'mvn clean package -Dmaven.test.skip=true'
-                }
+        stage('clean') {
+            try {
+                sh """
+                    kubectl delete -f build/weapp/
+                """
+            }catch(exc){
+                println exc
             }
+
+            def imageArr = sh (
+                script: "docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
+                 returnStdout: true
+            ).trim().split()    
+            for(int i=0;i<imageArr.size();i++){
+                def image = imageArr[i].trim()
+                if("".equals(image)) {
+                    continue
+                }
+                if(image.endsWith("<none>")) {
+                    image = image.replace(":<none>","")
+                    image = sh(
+                        script: "docker images --filter=reference='$image' --format={{.ID}}",
+                        returnStdout: true
+                    ).trim()
+                }
+                try {
+                    sh """
+                        docker rmi $image
+                    """
+                } catch (exc) {
+                    println exc
+                }
+            }                    
         }
 
         stage('deploy') {
-            steps {
-                retry(5) {
-                    sshPublisher(
-                        publishers: [
-                            sshPublisherDesc(
-                                configName: '172.16.0.4-SSH', 
-                                transfers: [
-                                    sshTransfer(
-                                        execCommand: 'rm -rf logs/;rm -rf weapp/;rm -rf weapp.tar.gz;'
-                                    ),
-                                    sshTransfer(
-                                        sourceFiles: 'sources/distribute/weapp.tar.gz',
-                                        removePrefix: 'sources/distribute/', 
-                                        execCommand: 'tar -zxvf weapp.tar.gz'
-                                    ),
-                                    sshTransfer(
-                                        execCommand: './weapp/bin/deploya.sh'
-                                    )
-                                ], 
-                                verbose: true
-                            ), 
-                            sshPublisherDesc(
-                                configName: '172.16.0.8-SSH', 
-                                transfers: [
-                                    sshTransfer(
-                                        execCommand: 'rm -rf *'
-                                    ),
-                                    sshTransfer(
-                                        sourceFiles: 'sources/distribute/weapp.tar.gz',
-                                        removePrefix: 'sources/distribute/', 
-                                        execCommand: 'tar -zxvf weapp.tar.gz'
-                                    ),
-                                    sshTransfer(
-                                        execCommand: './weapp/bin/deployb.sh'
-                                    )
-                                ], 
-                                verbose: true
-                            )
-                        ]
-                    )
-                }
-                
-
+            withCredentials([usernamePassword(credentialsId: '15e12bc7-0022-42f7-8d48-fb96d3660bb2', usernameVariable: 'DATABASE_USERNAME', passwordVariable: 'DATABASE_PASSWORD')]) {
+                sh """
+                    export WEAPP_DATASOURCE_USERNAME=$DATABASE_USERNAME
+                    export WEAPP_DATASOURCE_PASSWORD=$DATABASE_PASSWORD
+                    kubectl apply -f build/weapp/
+                """
             }
         }
 
-
     }
-
 }
