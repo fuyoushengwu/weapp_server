@@ -18,47 +18,51 @@ podTemplate(
         }
 
         stage('clean') {
-            try {
-                sh """
-                    kubectl delete -f build/weapp/
-                """
-            }catch(exc){
-                println exc
-            }
-
-            def imageArr = sh (
-                script: "docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
-                 returnStdout: true
-            ).trim().split()    
-            for(int i=0;i<imageArr.size();i++){
-                def image = imageArr[i].trim()
-                if("".equals(image)) {
-                    continue
-                }
-                if(image.endsWith("<none>")) {
-                    image = image.replace(":<none>","")
-                    image = sh(
-                        script: "docker images --filter=reference='$image' --format={{.ID}}",
-                        returnStdout: true
-                    ).trim()
-                }
+            container('tool') {
                 try {
                     sh """
-                        docker rmi $image
+                        kubectl delete -f build/weapp/
                     """
-                } catch (exc) {
+                }catch(exc){
                     println exc
                 }
-            }                    
+
+                def imageArr = sh (
+                    script: "docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
+                    returnStdout: true
+                ).trim().split()    
+                for(int i=0;i<imageArr.size();i++){
+                    def image = imageArr[i].trim()
+                    if("".equals(image)) {
+                        continue
+                    }
+                    if(image.endsWith("<none>")) {
+                        image = image.replace(":<none>","")
+                        image = sh(
+                            script: "docker images --filter=reference='$image' --format={{.ID}}",
+                            returnStdout: true
+                        ).trim()
+                    }
+                    try {
+                        sh """
+                            docker rmi $image
+                        """
+                    } catch (exc) {
+                        println exc
+                    }
+                }   
+            }                 
         }
 
         stage('deploy') {
-            withCredentials([usernamePassword(credentialsId: '15e12bc7-0022-42f7-8d48-fb96d3660bb2', usernameVariable: 'DATABASE_USERNAME', passwordVariable: 'DATABASE_PASSWORD')]) {
-                sh """
-                    export WEAPP_DATASOURCE_USERNAME=$DATABASE_USERNAME
-                    export WEAPP_DATASOURCE_PASSWORD=$DATABASE_PASSWORD
-                    kubectl apply -f build/weapp/
-                """
+            container('tool') {
+                withCredentials([usernamePassword(credentialsId: '15e12bc7-0022-42f7-8d48-fb96d3660bb2', usernameVariable: 'DATABASE_USERNAME', passwordVariable: 'DATABASE_PASSWORD')]) {
+                    sh """
+                        export WEAPP_DATASOURCE_USERNAME=$DATABASE_USERNAME
+                        export WEAPP_DATASOURCE_PASSWORD=$DATABASE_PASSWORD
+                        kubectl apply -f build/weapp/
+                    """
+                }
             }
         }
 
