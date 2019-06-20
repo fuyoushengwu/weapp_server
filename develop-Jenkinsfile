@@ -115,10 +115,41 @@ podTemplate(
                             export WEAPP_DATASOURCE_PASSWORD=$DATABASE_PASSWORD
                             mvn clean test -f sources/pom.xml
                         """
-                    } finally {
-                        sh """
-                            kubectl delete -f build/weapp_test/
-                        """
+                    }finally {
+                        
+                        try {
+                            sh """
+                                kubectl delete -f build/weapp_test/
+                            """
+                        }catch(exc){
+                            println exc
+                        }
+
+                        def imageArr = sh (
+                            script: "docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
+                            returnStdout: true
+                        ).trim().split()
+
+                        for(int i=0;i<imageArr.size();i++){
+                            def image = imageArr[i].trim()
+                            if("".equals(image)) {
+                                continue
+                            }
+                            if(image.endsWith("<none>")) {
+                                image = image.replace(":<none>","")
+                                image = sh(
+                                    script: "docker images --filter=reference='$image' --format={{.ID}}",
+                                    returnStdout: true
+                                ).trim()
+                            }
+                            try {
+                                sh """
+                                    docker rmi $image
+                                """
+                            } catch (exc) {
+                                println exc
+                            }
+                        }
                     }
                 }
             }
