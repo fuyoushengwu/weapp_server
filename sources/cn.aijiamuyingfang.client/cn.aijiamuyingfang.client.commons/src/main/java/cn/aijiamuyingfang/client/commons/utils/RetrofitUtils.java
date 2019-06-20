@@ -38,7 +38,6 @@ public class RetrofitUtils {
   /**
    * 创建OkHttpClient.Builder实例(支持HTTPS(使用默认的证书))
    * 
-   * @param hostname
    * @param connecttimeout
    * @param readtimeout
    * @param writetimeout
