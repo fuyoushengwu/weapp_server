@@ -16,7 +16,7 @@ metadata:
   namespace: weapptest-namespace
 data:
   WEAPP_CONFIG_REPO: https://github.com/fuyoushengwu/weapp_config.git
-  WEAPP_CONFIG_SEARCHPATH: weapptest_server
+  WEAPP_CONFIG_SEARCHPATH: weapp_server
   WEAPP_CONFIG_REPO_USERNAME: shiweideyouxiang@sina.cn
   WEAPP_CONFIG_REPO_PASSWORD: Shiwei123
 ---
