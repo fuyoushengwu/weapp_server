@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import cn.aijiamuyingfang.client.commons.domain.ResponseCode;
 import cn.aijiamuyingfang.client.commons.exception.OAuthException;
+import cn.aijiamuyingfang.client.commons.utils.RetrofitUtils;
 import cn.aijiamuyingfang.client.oauth2.Constants;
 import cn.aijiamuyingfang.client.oauth2.OAuth2Client;
 import cn.aijiamuyingfang.client.oauth2.OAuthResponse;
@@ -25,7 +26,10 @@ import okhttp3.OkHttpClient;
 @Slf4j
 @UtilityClass
 public class TestUtils {
-  private static final OkHttpClient okhttpClient = new OkHttpClient();
+  private final OkHttpClient okhttpClient;
+  static {
+    okhttpClient = RetrofitUtils.trustAllSSLClient().build();
+  }
 
   /**
    * 获取AccessToken

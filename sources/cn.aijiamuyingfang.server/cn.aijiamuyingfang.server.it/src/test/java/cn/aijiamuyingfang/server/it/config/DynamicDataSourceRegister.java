@@ -87,17 +87,11 @@ public class DynamicDataSourceRegister implements ImportBeanDefinitionRegistrar,
 
       Class<? extends DataSource> dataSourceType = (Class<? extends DataSource>) Class.forName((String) type);
 
-      String driverClassName = dsMap.get("driver-class-name").toString();
-      String url = dsMap.get("url").toString();
-      String username = dsMap.get("username").toString();
-      if (username.startsWith("$") && username.endsWith("}")) {
-        username = env.resolvePlaceholders(username);
-      }
-      String password = dsMap.get("password").toString();
-      if (password.startsWith("$") && password.endsWith("}")) {
-        password = env.resolvePlaceholders(password);
-      }
-
+      String driverClassName = env.resolvePlaceholders(dsMap.get("driver-class-name").toString());
+      String url = env.resolvePlaceholders(dsMap.get("url").toString());
+      String username = env.resolvePlaceholders(dsMap.get("username").toString());
+      String password = env.resolvePlaceholders(dsMap.get("password").toString());
+      
       DataSourceBuilder factory = DataSourceBuilder.create().driverClassName(driverClassName).url(url)
           .username(username).password(password).type(dataSourceType);
       return factory.build();

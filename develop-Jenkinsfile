@@ -18,62 +18,62 @@ podTemplate(
             git branch: 'spring-cloud', url: 'https://github.com/fuyoushengwu/weapp_server.git'
         }
 
-        // stage('code analysis') {
-        //     container('tool'){
-        //         sh """
-        //             mvn clean compile sonar:sonar -Dsonar.projectKey=cn.aijiamuyingfang:cn.aijiamuyingfang -Dsonar.organization=fuyoushengwu-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=033ad430ca4c06abfa5fe9f078d3a8de2ebe62dd -f sources/pom.xml
-        //         """
-        //     }
-        // }
+        stage('code analysis') {
+            container('tool'){
+                sh """
+                    mvn clean compile sonar:sonar -Dsonar.projectKey=cn.aijiamuyingfang:cn.aijiamuyingfang -Dsonar.organization=fuyoushengwu-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=033ad430ca4c06abfa5fe9f078d3a8de2ebe62dd -f sources/pom.xml
+                """
+            }
+        }
 
-        // stage('package') {
-        //     container('tool') {
-        //         withCredentials([usernamePassword(credentialsId: '961154c4-c9ca-4c27-a97f-97e2172f3ef8', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-        //             sh """
-        //                 docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD registry.cn-hangzhou.aliyuncs.com
-        //             """
-        //         }
+        stage('package') {
+            container('tool') {
+                withCredentials([usernamePassword(credentialsId: '961154c4-c9ca-4c27-a97f-97e2172f3ef8', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh """
+                        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD registry.cn-hangzhou.aliyuncs.com
+                    """
+                }
 
-        //         try {
-        //             sh """
-        //                 kubectl delete -f build/weapp_test/
-        //             """
-        //         } catch (exc) {
-        //             println exc
-        //         }
+                try {
+                    sh """
+                        kubectl delete -f build/weapp_test/
+                    """
+                } catch (exc) {
+                    println exc
+                }
 
-        //         def imageArr = sh (
-        //             script:"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
-        //             returnStdout: true
-        //         ).trim().split()
-        //         for(int i=0;i<imageArr.size();i++){
-        //             def image = imageArr[i].trim()
-        //             if(!"".equals(image)) {
-        //                 sh """
-        //                     docker rmi $image
-        //                 """
-        //             }
-        //         }
+                def imageArr = sh (
+                    script:"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
+                    returnStdout: true
+                ).trim().split()
+                for(int i=0;i<imageArr.size();i++){
+                    def image = imageArr[i].trim()
+                    if(!"".equals(image)) {
+                        sh """
+                            docker rmi $image
+                        """
+                    }
+                }
 
-        //         sh """
-        //             mvn clean install -Dmaven.test.skip=true -f sources/pom.xml
-        //         """
+                sh """
+                    mvn clean install -Dmaven.test.skip=true -f sources/pom.xml
+                """
 
-        //         def newImageArr = sh (
-        //             script:"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
-        //             returnStdout: true
-        //         ).trim().split()
+                def newImageArr = sh (
+                    script:"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
+                    returnStdout: true
+                ).trim().split()
 
-        //         for(int i=0;i<newImageArr.size();i++){
-        //             def image = newImageArr[i].trim()
-        //             if(!"".equals(image)) {
-        //                 sh """
-        //                     docker push $image
-        //                 """
-        //             }
-        //         }
-        //     }
-        // }
+                for(int i=0;i<newImageArr.size();i++){
+                    def image = newImageArr[i].trim()
+                    if(!"".equals(image)) {
+                        sh """
+                            docker push $image
+                        """
+                    }
+                }
+            }
+        }
 
         stage('test'){
             container('tool') {
@@ -104,7 +104,6 @@ podTemplate(
                         """
                     }
                 }
-                
             }
         }
     }

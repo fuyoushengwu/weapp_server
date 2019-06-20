@@ -2,15 +2,22 @@ package cn.aijiamuyingfang.client.commons.utils;
 
 import static cn.aijiamuyingfang.client.commons.constant.ClientRestConstants.DEFAULT_BASE_URL;
 import static cn.aijiamuyingfang.client.commons.constant.ClientRestConstants.DEFAULT_CONNECT_TIMEOUT;
-import static cn.aijiamuyingfang.client.commons.constant.ClientRestConstants.DEFAULT_HOST_NAME;
 import static cn.aijiamuyingfang.client.commons.constant.ClientRestConstants.DEFAULT_READ_TIMEOUT;
 import static cn.aijiamuyingfang.client.commons.constant.ClientRestConstants.DEFAULT_WRITE_TIMEOUT;
 
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
@@ -19,12 +26,13 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import cn.aijiamuyingfang.client.commons.domain.EnumRetrofitConverterFactory;
-import okhttp3.CertificatePinner;
+import lombok.experimental.UtilityClass;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
+@UtilityClass
 public class RetrofitUtils {
 
   /**
@@ -36,12 +44,8 @@ public class RetrofitUtils {
    * @param writetimeout
    * @return
    */
-  public static OkHttpClient.Builder getOkHttpClientBuilder(String hostname, int connecttimeout, int readtimeout,
+  public static OkHttpClient.Builder getOkHttpClientBuilder(int connecttimeout, int readtimeout,
       int writetimeout) {
-    if (StringUtils.isEmpty(hostname)) {
-      hostname = DEFAULT_HOST_NAME;
-    }
-    String localhostname = hostname;
     if (connecttimeout < 0) {
       connecttimeout = DEFAULT_CONNECT_TIMEOUT;
     }
@@ -51,16 +55,53 @@ public class RetrofitUtils {
     if (writetimeout < 0) {
       writetimeout = DEFAULT_WRITE_TIMEOUT;
     }
-    OkHttpClient.Builder httpclientBuilder = new OkHttpClient.Builder(); // 支持https,添加证书指纹,验证域名
-    httpclientBuilder.certificatePinner(
-        new CertificatePinner.Builder().add(hostname, "sha256/ws7jjHqFe0uRilFM2Rmby01kpiLy7LFiQLhQz4ntLWk=")
-            .add(hostname, "sha256/jzqM6/58ozsPRvxUzg0hzjM+GcfwhTbU/G0TCDvL7hU=")
-            .add(hostname, "sha256/r/mIkG3eEpVdm+u/ko/cwxzOMo1bk4TyHIlByibiA5E=").build());
-    httpclientBuilder.hostnameVerifier((str, session) -> localhostname.equals(str));
+    OkHttpClient.Builder httpclientBuilder =trustAllSSLClient();
     httpclientBuilder.connectTimeout(connecttimeout, TimeUnit.SECONDS);
     httpclientBuilder.readTimeout(readtimeout, TimeUnit.SECONDS);
     httpclientBuilder.writeTimeout(writetimeout, TimeUnit.SECONDS);
     return httpclientBuilder;
+  }
+
+  private static final SSLContext trustAllSslContext;
+
+  private static final SSLSocketFactory trustAllSslSocketFactory;
+
+  private static final TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+    @Override
+    public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType)
+        throws CertificateException {
+    }
+
+    @Override
+    public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType)
+        throws CertificateException {
+    }
+
+    @Override
+    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+      return new java.security.cert.X509Certificate[] {};
+    }
+  } };
+  
+  static {
+    try {
+      trustAllSslContext = SSLContext.getInstance("SSL");
+      trustAllSslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+      trustAllSslSocketFactory = trustAllSslContext.getSocketFactory();
+    } catch (NoSuchAlgorithmException | KeyManagementException e) {
+      throw new RuntimeException(e);
+    }
+
+  }
+
+  /**
+   * OkHttpClient信任所有的SSL证书
+   */
+  public static OkHttpClient.Builder trustAllSSLClient( ) {
+    OkHttpClient.Builder builder = new OkHttpClient.Builder();
+    builder.sslSocketFactory(trustAllSslSocketFactory, (X509TrustManager) trustAllCerts[0]);
+    builder.hostnameVerifier((str, session) -> true);
+    return builder;
   }
 
   /**

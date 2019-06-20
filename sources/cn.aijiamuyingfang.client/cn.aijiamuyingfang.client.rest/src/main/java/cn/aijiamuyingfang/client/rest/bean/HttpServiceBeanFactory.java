@@ -68,8 +68,7 @@ public class HttpServiceBeanFactory {
    * @return
    */
   private static OkHttpClient getOkHttpClient(String baseurl, Class<?>... interceptorClasses) {
-    String hostname = baseurl.replace("https://", "").replace("/", "").split(":")[0];
-    OkHttpClient.Builder clientBuilder = RetrofitUtils.getOkHttpClientBuilder(hostname, DEFAULT_CONNECT_TIMEOUT,
+    OkHttpClient.Builder clientBuilder = RetrofitUtils.getOkHttpClientBuilder(DEFAULT_CONNECT_TIMEOUT,
         DEFAULT_READ_TIMEOUT, DEFAULT_WRITE_TIMEOUT);
 
     // 添加服务拦截器实例
