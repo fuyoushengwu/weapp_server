@@ -49,12 +49,12 @@ podTemplate(
                         try {
                             withCredentials([usernamePassword(credentialsId: ip, usernameVariable: 'NODE_USERNAME', passwordVariable: 'NODE_PASSWORD')]) {
                                 sh """
-                                    sshpass -p $NODE_PASSWORD -o StrictHostKeyChecking=no $NODE_USERNAME@$ip "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD registry.cn-hangzhou.aliyuncs.com"
+                                    sshpass -p $NODE_PASSWORD -o StrictHostKeyChecking=no $NODE_USERNAME@$ip \"docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD registry.cn-hangzhou.aliyuncs.com\"
                                 """
 
                                 def imageArr = sh (
                                     script: """
-                                        sshpass -p $NODE_PASSWORD -o StrictHostKeyChecking=no $NODE_USERNAME@$ip "docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}"
+                                        sshpass -p $NODE_PASSWORD -o StrictHostKeyChecking=no $NODE_USERNAME@$ip \"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}\"
                                     """,
                                     returnStdout: true
                                 ).trim().split()
@@ -67,14 +67,14 @@ podTemplate(
                                         image = image.replace(":<none>","")
                                         image = sh(
                                             script: """
-                                                sshpass -p $NODE_PASSWORD -o StrictHostKeyChecking=no $NODE_USERNAME@$ip "docker images --filter=reference='$image' --format={{.ID}}"
+                                                sshpass -p $NODE_PASSWORD -o StrictHostKeyChecking=no $NODE_USERNAME@$ip \"docker images --filter=reference='$image' --format={{.ID}}\"
                                             """,
                                             returnStdout: true
                                         ).trim()
                                     }
                                     try {
                                         sh """
-                                            sshpass -p $NODE_PASSWORD -o StrictHostKeyChecking=no $NODE_USERNAME@$ip "docker rmi $image"
+                                            sshpass -p $NODE_PASSWORD -o StrictHostKeyChecking=no $NODE_USERNAME@$ip \"docker rmi $image\"
                                         """
                                     } catch (exc) {
                                         println exc
@@ -152,7 +152,7 @@ podTemplate(
                                 withCredentials([usernamePassword(credentialsId: ip, usernameVariable: 'NODE_USERNAME', passwordVariable: 'NODE_PASSWORD')]) {
                                     def imageArr = sh (
                                         script: """
-                                            sshpass -p $NODE_PASSWORD -o StrictHostKeyChecking=no $NODE_USERNAME@$ip "docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}"
+                                            sshpass -p $NODE_PASSWORD -o StrictHostKeyChecking=no $NODE_USERNAME@$ip \"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}\"
                                         """,
                                         returnStdout: true
                                     ).trim().split()
@@ -166,14 +166,14 @@ podTemplate(
                                             image = image.replace(":<none>","")
                                             image = sh(
                                                 script: """
-                                                    sshpass -p $NODE_PASSWORD -o StrictHostKeyChecking=no $NODE_USERNAME@$ip "docker images --filter=reference='$image' --format={{.ID}}"
+                                                    sshpass -p $NODE_PASSWORD -o StrictHostKeyChecking=no $NODE_USERNAME@$ip \"docker images --filter=reference='$image' --format={{.ID}}\"
                                                 """,
                                                 returnStdout: true
                                             ).trim()
                                         }
                                         try {
                                             sh """
-                                                sshpass -p $NODE_PASSWORD -o StrictHostKeyChecking=no $NODE_USERNAME@$ip "docker rmi $image"
+                                                sshpass -p $NODE_PASSWORD -o StrictHostKeyChecking=no $NODE_USERNAME@$ip \"docker rmi $image\"
                                             """
                                         } catch (exc) {
                                             println exc
