@@ -1,4 +1,4 @@
-package cn.aijiamuyingfang.server.dnspod.interceptor;
+package cn.aijiamuyingfang.client.dnspod.interceptor;
 
 import java.io.IOException;
 

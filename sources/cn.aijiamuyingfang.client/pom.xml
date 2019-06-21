@@ -19,5 +19,6 @@
 		<module>cn.aijiamuyingfang.client.oauth2</module>
 		<module>cn.aijiamuyingfang.client.android</module>
 		<module>cn.aijiamuyingfang.client.java</module>
+		<module>cn.aijiamuyingfang.client.dnspod</module>
 	</modules>
 </project>

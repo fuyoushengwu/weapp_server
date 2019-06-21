@@ -1,4 +1,4 @@
-		package cn.aijiamuyingfang.server.dnspod.config;
+		package cn.aijiamuyingfang.client.dnspod.config;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package cn.aijiamuyingfang.server.dnspod.domain;
+package cn.aijiamuyingfang.client.dnspod.domain;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

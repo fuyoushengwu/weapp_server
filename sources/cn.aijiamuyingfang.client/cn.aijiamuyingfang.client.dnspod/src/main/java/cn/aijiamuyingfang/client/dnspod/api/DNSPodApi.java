@@ -1,14 +1,14 @@
-package cn.aijiamuyingfang.server.dnspod.api;
+package cn.aijiamuyingfang.client.dnspod.api;
 
 import java.util.Map;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
-import cn.aijiamuyingfang.server.dnspod.domain.DomainResponse;
-import cn.aijiamuyingfang.server.dnspod.domain.RecordListResponse;
-import cn.aijiamuyingfang.server.dnspod.domain.RecordResponse;
-import cn.aijiamuyingfang.server.dnspod.domain.SubDomainListResponse;
-import cn.aijiamuyingfang.server.dnspod.domain.SubDomainRecordListResponse;
-import cn.aijiamuyingfang.server.dnspod.interceptor.HeaderInterceptor;
+import cn.aijiamuyingfang.client.dnspod.domain.DomainResponse;
+import cn.aijiamuyingfang.client.dnspod.domain.RecordListResponse;
+import cn.aijiamuyingfang.client.dnspod.domain.RecordResponse;
+import cn.aijiamuyingfang.client.dnspod.domain.SubDomainListResponse;
+import cn.aijiamuyingfang.client.dnspod.domain.SubDomainRecordListResponse;
+import cn.aijiamuyingfang.client.dnspod.interceptor.HeaderInterceptor;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Multipart;

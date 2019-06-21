@@ -1,4 +1,4 @@
-package cn.aijiamuyingfang.server.dnspod.api.impl;
+package cn.aijiamuyingfang.client.dnspod.api.impl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 
 import cn.aijiamuyingfang.client.commons.utils.StringUtils;
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
-import cn.aijiamuyingfang.server.dnspod.api.DNSPodApi;
-import cn.aijiamuyingfang.server.dnspod.domain.CreateRecordRequest;
-import cn.aijiamuyingfang.server.dnspod.domain.DomainRequest;
-import cn.aijiamuyingfang.server.dnspod.domain.SubDomainRecordListResponse;
-import cn.aijiamuyingfang.server.dnspod.domain.UpdateRecordRequest;
+import cn.aijiamuyingfang.client.dnspod.api.DNSPodApi;
+import cn.aijiamuyingfang.client.dnspod.domain.CreateRecordRequest;
+import cn.aijiamuyingfang.client.dnspod.domain.DomainRequest;
+import cn.aijiamuyingfang.client.dnspod.domain.SubDomainRecordListResponse;
+import cn.aijiamuyingfang.client.dnspod.domain.UpdateRecordRequest;
 
 /**
  * [描述]:

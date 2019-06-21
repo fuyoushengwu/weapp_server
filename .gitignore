@@ -6,3 +6,4 @@ logs
 *.jar
 .factorypath
 .vscode
+bin

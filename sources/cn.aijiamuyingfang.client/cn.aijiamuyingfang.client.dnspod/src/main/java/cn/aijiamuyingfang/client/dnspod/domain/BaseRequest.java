@@ -1,4 +1,4 @@
-package cn.aijiamuyingfang.server.dnspod.domain;
+package cn.aijiamuyingfang.client.dnspod.domain;
 
 import java.util.HashMap;
 import java.util.Map;
