@@ -6,7 +6,7 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@SpringBootApplication(scanBasePackages = { "cn.aijiamuyingfang.server" })
+@SpringBootApplication(scanBasePackages = { "cn.aijiamuyingfang.server", "cn.aijiamuyingfang.client.dnspod" })
 @EnableFeignClients
 @EnableZuulProxy
 @EnableScheduling
