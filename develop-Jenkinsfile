@@ -86,7 +86,6 @@ podTemplate(
                         docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD registry.cn-hangzhou.aliyuncs.com
                     """
                 }
-|
                 def newImageArr = sh (
                     script: """
                         docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}
