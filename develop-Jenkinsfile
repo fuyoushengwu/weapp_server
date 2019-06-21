@@ -54,8 +54,8 @@ podTemplate(
                                     script: "sshpass -p $NODE_PASSWORD -o StrictHostKeyChecking=no $NODE_USERNAME@$ip 'docker images --filter=reference=\'registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*\' --format={{.Repository}}:{{.Tag}}'",
                                     returnStdout: true
                                 ).trim().split()
-                                for(int i=0;i<imageArr.size();i++){
-                                    def image = imageArr[i].trim()
+                                for(int j=0;j<imageArr.size();j++){
+                                    def image = imageArr[j].trim()
                                     if("".equals(image)) {
                                         continue
                                     }
@@ -147,8 +147,8 @@ podTemplate(
                                         returnStdout: true
                                     ).trim().split()
 
-                                    for(int i=0;i<imageArr.size();i++){
-                                        def image = imageArr[i].trim()
+                                    for(int j=0;j<imageArr.size();j++){
+                                        def image = imageArr[j].trim()
                                         if("".equals(image)) {
                                             continue
                                         }
