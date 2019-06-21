@@ -8,7 +8,6 @@ import static cn.aijiamuyingfang.client.commons.constant.ClientRestConstants.DEF
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -43,8 +42,7 @@ public class RetrofitUtils {
    * @param writetimeout
    * @return
    */
-  public static OkHttpClient.Builder getOkHttpClientBuilder(int connecttimeout, int readtimeout,
-      int writetimeout) {
+  public static OkHttpClient.Builder getOkHttpClientBuilder(int connecttimeout, int readtimeout, int writetimeout) {
     if (connecttimeout < 0) {
       connecttimeout = DEFAULT_CONNECT_TIMEOUT;
     }
@@ -54,7 +52,7 @@ public class RetrofitUtils {
     if (writetimeout < 0) {
       writetimeout = DEFAULT_WRITE_TIMEOUT;
     }
-    OkHttpClient.Builder httpclientBuilder =trustAllSSLClient();
+    OkHttpClient.Builder httpclientBuilder = trustAllSSLClient();
     httpclientBuilder.connectTimeout(connecttimeout, TimeUnit.SECONDS);
     httpclientBuilder.readTimeout(readtimeout, TimeUnit.SECONDS);
     httpclientBuilder.writeTimeout(writetimeout, TimeUnit.SECONDS);
@@ -67,13 +65,11 @@ public class RetrofitUtils {
 
   private static final TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
     @Override
-    public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType)
-        throws CertificateException {
+    public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) {
     }
 
     @Override
-    public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType)
-        throws CertificateException {
+    public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) {
     }
 
     @Override
@@ -81,7 +77,7 @@ public class RetrofitUtils {
       return new java.security.cert.X509Certificate[] {};
     }
   } };
-  
+
   static {
     try {
       trustAllSslContext = SSLContext.getInstance("SSL");
@@ -96,7 +92,7 @@ public class RetrofitUtils {
   /**
    * OkHttpClient信任所有的SSL证书
    */
-  public static OkHttpClient.Builder trustAllSSLClient( ) {
+  public static OkHttpClient.Builder trustAllSSLClient() {
     OkHttpClient.Builder builder = new OkHttpClient.Builder();
     builder.sslSocketFactory(trustAllSslSocketFactory, (X509TrustManager) trustAllCerts[0]);
     builder.hostnameVerifier((str, session) -> true);
