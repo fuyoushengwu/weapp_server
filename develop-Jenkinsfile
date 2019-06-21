@@ -43,54 +43,50 @@ podTemplate(
                     """,
                     returnStdout: true
                 ).trim().split()
-                withCredentials([usernamePassword(credentialsId: '961154c4-c9ca-4c27-a97f-97e2172f3ef8', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    for(int i=0;i<nodeIPAddr.size();i++){
-                        def ip=nodeIPAddr[i].trim()
-                        try {
-                            withCredentials([usernamePassword(credentialsId: ip, usernameVariable: 'NODE_USERNAME', passwordVariable: 'NODE_PASSWORD')]) {
-                                sh """
-                                    sshpass -p $NODE_PASSWORD ssh -o StrictHostKeyChecking=no $NODE_USERNAME@$ip \"docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD registry.cn-hangzhou.aliyuncs.com\"
-                                """
-
-                                def imageArr = sh (
-                                    script: """
-                                        sshpass -p $NODE_PASSWORD ssh -o StrictHostKeyChecking=no $NODE_USERNAME@$ip \"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}\"
-                                    """,
-                                    returnStdout: true
-                                ).trim().split()
-                                for(int j=0;j<imageArr.size();j++){
-                                    def image = imageArr[j].trim()
-                                    if("".equals(image)) {
-                                        continue
-                                    }
-                                    if(image.endsWith("<none>")) {
-                                        image = image.replace(":<none>","")
-                                        image = sh(
-                                            script: """
-                                                sshpass -p $NODE_PASSWORD ssh -o StrictHostKeyChecking=no $NODE_USERNAME@$ip \"docker images --filter=reference='$image' --format={{.ID}}\"
-                                            """,
-                                            returnStdout: true
-                                        ).trim()
-                                    }
-                                    try {
-                                        sh """
-                                            sshpass -p $NODE_PASSWORD ssh -o StrictHostKeyChecking=no $NODE_USERNAME@$ip \"docker rmi $image\"
-                                        """
-                                    } catch (exc) {
-                                        println exc
-                                    }
+                for(int i=0;i<nodeIPAddr.size();i++){
+                    def ip=nodeIPAddr[i].trim()
+                    try {
+                        withCredentials([usernamePassword(credentialsId: ip, usernameVariable: 'NODE_USERNAME', passwordVariable: 'NODE_PASSWORD')]) {
+                            def imageArr = sh (
+                                script: """
+                                    sshpass -p $NODE_PASSWORD ssh -o StrictHostKeyChecking=no $NODE_USERNAME@$ip \"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}\"
+                                """,
+                                returnStdout: true
+                            ).trim().split()
+                            for(int j=0;j<imageArr.size();j++){
+                                def image = imageArr[j].trim()
+                                if("".equals(image)) {
+                                    continue
+                                }
+                                if(image.endsWith("<none>")) {
+                                    image = image.replace(":<none>","")
+                                    image = sh(
+                                        script: """
+                                            sshpass -p $NODE_PASSWORD ssh -o StrictHostKeyChecking=no $NODE_USERNAME@$ip \"docker images --filter=reference='$image' --format={{.ID}}\"
+                                        """,
+                                        returnStdout: true
+                                    ).trim()
+                                }
+                                try {
+                                    sh """
+                                        sshpass -p $NODE_PASSWORD ssh -o StrictHostKeyChecking=no $NODE_USERNAME@$ip \"docker rmi $image\"
+                                    """
+                                } catch (exc) {
+                                    println exc
                                 }
                             }
-                        } catch(exc) {
-                            println exc
                         }
+                    } catch(exc) {
+                        println exc
                     }
                 }
-
-                sh """
-                    mvn clean install -Dmaven.test.skip=true -f sources/pom.xml
-                """
-
+                withCredentials([usernamePassword(credentialsId: '961154c4-c9ca-4c27-a97f-97e2172f3ef8', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh """
+                        mvn clean install -Dmaven.test.skip=true -f sources/pom.xml
+                        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD registry.cn-hangzhou.aliyuncs.com
+                    """
+                }
+|
                 def newImageArr = sh (
                     script: """
                         docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}
@@ -127,7 +123,7 @@ podTemplate(
                     kubectl apply -f build/weapp_test/
                 """
                 
-                sleep 180
+                sleep 300
                 
                 withCredentials([usernamePassword(credentialsId: 'c14e8739-7dc3-4e04-9c52-c218eeec15b8', usernameVariable: 'DATABASE_USERNAME', passwordVariable: 'DATABASE_PASSWORD')]) {
                     try {
