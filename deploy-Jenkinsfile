@@ -5,7 +5,7 @@ podTemplate(
     serviceAccount:'jenkins',
     label:label,
     containers:[
-        containerTemplate(name: 'tool', image:'registry.cn-hangzhou.aliyuncs.com/podtemplate/base-image:latest',command:'cat',ttyEnabled: true)
+        containerTemplate(name: 'tool', image:'registry.cn-hangzhou.aliyuncs.com/podtemplate/base-image:latest',alwaysPullImage: true,command:'cat',ttyEnabled: true)
     ],
     volumes:[
         hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
