@@ -1,6 +1,10 @@
 FROM openjdk:8-jdk
 LABEL maintainer="shiweideyouxiang@sina.cn"
 
+#工具安裝
+RUN apt-get update
+RUN apt-get install sshpass
+
 # Install Docker client
 ARG DOCKER_VERSION=18.06.1-ce
 RUN curl -fsSL https://download.docker.com/linux/static/stable/`uname -m`/docker-$DOCKER_VERSION.tgz | tar --strip-components=1 -xz -C /usr/local/bin docker/docker

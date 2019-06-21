@@ -29,12 +29,6 @@ podTemplate(
 
         stage('package') {
             container('tool') {
-                withCredentials([usernamePassword(credentialsId: '961154c4-c9ca-4c27-a97f-97e2172f3ef8', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    sh """
-                        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD registry.cn-hangzhou.aliyuncs.com
-                    """
-                }
-
                 try {
                     sh """
                         kubectl delete -f build/weapp_test/
@@ -43,28 +37,47 @@ podTemplate(
                     println exc
                 }
 
-                def imageArr = sh (
-                    script: "docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
+                nodeIPAddr = sh (
+                    script: "kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type==\"InternalIP\")].address}'",
                     returnStdout: true
                 ).trim().split()
-                for(int i=0;i<imageArr.size();i++){
-                    def image = imageArr[i].trim()
-                    if("".equals(image)) {
-                       continue
-                    }
-                    if(image.endsWith("<none>")) {
-                        image = image.replace(":<none>","")
-                        image = sh(
-                            script: "docker images --filter=reference='$image' --format={{.ID}}",
-                            returnStdout: true
-                        ).trim()
-                    }
-                    try {
-                        sh """
-                            docker rmi $image
-                        """
-                    } catch (exc) {
-                        println exc
+                withCredentials([usernamePassword(credentialsId: '961154c4-c9ca-4c27-a97f-97e2172f3ef8', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    for(int i=0;i<nodeIPAddr.size();i++){
+                        def ip=nodeIPAddr[i].trim()
+                        try {
+                            withCredentials([usernamePassword(credentialsId: ip, usernameVariable: 'NODE_USERNAME', passwordVariable: 'NODE_PASSWORD')]) {
+                                sh """
+                                    sshpass -p $NODE_PASSWORD -o StrictHostKeyChecking=no $NODE_USERNAME@$ip 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD registry.cn-hangzhou.aliyuncs.com'
+                                """
+
+                                def imageArr = sh (
+                                    script: "sshpass -p $NODE_PASSWORD -o StrictHostKeyChecking=no $NODE_USERNAME@$ip 'docker images --filter=reference=\'registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*\' --format={{.Repository}}:{{.Tag}}'",
+                                    returnStdout: true
+                                ).trim().split()
+                                for(int i=0;i<imageArr.size();i++){
+                                    def image = imageArr[i].trim()
+                                    if("".equals(image)) {
+                                        continue
+                                    }
+                                    if(image.endsWith("<none>")) {
+                                        image = image.replace(":<none>","")
+                                        image = sh(
+                                            script: "sshpass -p $NODE_PASSWORD -o StrictHostKeyChecking=no $NODE_USERNAME@$ip 'docker images --filter=reference=\'$image\' --format={{.ID}}'",
+                                            returnStdout: true
+                                        ).trim()
+                                    }
+                                    try {
+                                        sh """
+                                            sshpass -p $NODE_PASSWORD -o StrictHostKeyChecking=no $NODE_USERNAME@$ip 'docker rmi $image'
+                                        """
+                                    } catch (exc) {
+                                        println exc
+                                    }
+                                }
+                            }
+                        } catch(exc) {
+                            println exc
+                        }
                     }
                 }
 
@@ -125,28 +138,37 @@ podTemplate(
                             println exc
                         }
 
-                        def imageArr = sh (
-                            script: "docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}",
-                            returnStdout: true
-                        ).trim().split()
-
-                        for(int i=0;i<imageArr.size();i++){
-                            def image = imageArr[i].trim()
-                            if("".equals(image)) {
-                                continue
-                            }
-                            if(image.endsWith("<none>")) {
-                                image = image.replace(":<none>","")
-                                image = sh(
-                                    script: "docker images --filter=reference='$image' --format={{.ID}}",
-                                    returnStdout: true
-                                ).trim()
-                            }
+                        for(int i=0;i<nodeIPAddr.size();i++){
+                            def ip=nodeIPAddr[i].trim()
                             try {
-                                sh """
-                                    docker rmi $image
-                                """
-                            } catch (exc) {
+                                withCredentials([usernamePassword(credentialsId: ip, usernameVariable: 'NODE_USERNAME', passwordVariable: 'NODE_PASSWORD')]) {
+                                    def imageArr = sh (
+                                        script: "sshpass -p $NODE_PASSWORD -o StrictHostKeyChecking=no $NODE_USERNAME@$ip 'docker images --filter=reference=\'registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*\' --format={{.Repository}}:{{.Tag}}'",
+                                        returnStdout: true
+                                    ).trim().split()
+
+                                    for(int i=0;i<imageArr.size();i++){
+                                        def image = imageArr[i].trim()
+                                        if("".equals(image)) {
+                                            continue
+                                        }
+                                        if(image.endsWith("<none>")) {
+                                            image = image.replace(":<none>","")
+                                            image = sh(
+                                                script: "sshpass -p $NODE_PASSWORD -o StrictHostKeyChecking=no $NODE_USERNAME@$ip 'docker images --filter=reference=\'$image\' --format={{.ID}}'",
+                                                returnStdout: true
+                                            ).trim()
+                                        }
+                                        try {
+                                            sh """
+                                                sshpass -p $NODE_PASSWORD -o StrictHostKeyChecking=no $NODE_USERNAME@$ip 'docker rmi $image'
+                                            """
+                                        } catch (exc) {
+                                            println exc
+                                        }
+                                    }
+                                }
+                            }catch(exc) {
                                 println exc
                             }
                         }
