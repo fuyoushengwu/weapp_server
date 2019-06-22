@@ -34,7 +34,7 @@ public final class ClientRestConstants {
   /**
    * 基础地质
    */
-  public static final String DEFAULT_BASE_URL = "https://www.aijiamuyingfang.cn";
+  public static final String DEFAULT_BASE_URL = "https://www.aijiamuyingfang.cn:8443";
 
   private ClientRestConstants() {
   }
