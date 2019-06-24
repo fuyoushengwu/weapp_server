@@ -5,8 +5,9 @@
 |centos-1|192.168.0.102|master,work|080027D50C2C|4|4G|etcd,kube-api,kube-scheduler,kube-controller,kubectl,kubelet,kube-proxy,flannel|
 |centos-2|192.168.0.103|worker|080027119D05|4|4G|kubelet,kube-proxy,flannel|
 |centos-3|192.168.0.104|worker|080027015A2E|4|4G|kubelet,kube-proxy,flannel|
-|centos-4|192.168.0.105|worker|080027B368B8|2|4G|kubelet,kube-proxy,flannel|
-|centos-5|192.168.0.106|worker|0800274ECEE1|2|4G|kubelet,kube-proxy,flannel|
+|centos-4|192.168.0.105|worker|080027BD3257|4|4G|kubelet,kube-proxy,flannel|
+|centos-5|192.168.0.106|worker|080027CBA7C5|4|4G|kubelet,kube-proxy,flannel|
+|centos-6|192.168.0.107|worker|0800272A9ABB|4|4G|kubelet,kube-proxy,flannel|
 
 #### 一.准备
 + 虚拟软件: [VirtualBox-5.2.18-124319-Win.exe](https://download.virtualbox.org/virtualbox/5.2.18/VirtualBox-5.2.18-124319-Win.exe)
@@ -20,8 +21,9 @@
 |centos-1|08-00-27-D5-0C-2C|192.168.0.102|
 |centos-2|08-00-27-11-9D-05|192.168.0.103|
 |centos-3|08-00-27-01-5A-2E|192.168.0.104|
-|centos-4|08-00-27-B3-68-B8|192.168.0.105|
-|centos-5|08-00-27-4E-CE-E1|192.168.0.106|
+|centos-4|08-00-27-BD-32-57|192.168.0.105|
+|centos-5|08-00-27-CB-A7-C5|192.168.0.106|
+|centos-6|08-00-27-2A-9A-BB|192.168.0.107|
 
 + 2.准备虚拟机
 
@@ -30,8 +32,9 @@
 |centos-1|Linux|Red Hat(64-bit)|4096 MB|50G|4|CentOS-7|桥接网卡|080027D50C2C|
 |centos-2|Linux|Red Hat(64-bit)|4096 MB|50G|4|CentOS-7|桥接网卡|080027119D05|
 |centos-3|Linux|Red Hat(64-bit)|4096 MB|50G|4|CentOS-7|桥接网卡|080027015A2E|
-|centos-4|Linux|Red Hat(64-bit)|4096 MB|50G|2|CentOS-7|桥接网卡|080027B368B8|
-|centos-5|Linux|Red Hat(64-bit)|4096 MB|50G|2|CentOS-7|桥接网卡|0800274ECEE1|
+|centos-4|Linux|Red Hat(64-bit)|4096 MB|50G|4|CentOS-7|桥接网卡|080027BD3257|
+|centos-5|Linux|Red Hat(64-bit)|4096 MB|50G|4|CentOS-7|桥接网卡|080027CBA7C5|
+|centos-6|Linux|Red Hat(64-bit)|4096 MB|50G|4|CentOS-7|桥接网卡|0800272A9ABB|
 + + 2.1.配置/etc/hosts和上网代理
 
 ```
@@ -42,13 +45,14 @@ cat  << EOF >>/etc/hosts
 192.168.0.104 centos-3
 192.168.0.105 centos-4
 192.168.0.106 centos-5
+192.168.0.107 centos-6
 EOF
 
 # 配置上网代理
 cat << EOF >>/etc/profile
-http_proxy="http://192.168.0.201:1080"
-https_proxy="http://192.168.0.201:1080"
-no_proxy="127.0.0.1,192.168.0.102,192.168.0.103,192.168.0.104,192.168.0.105,192.168.0.106,192.168.0.201,192.168.0.202,192.168.0.203,192.168.0.1,192.168.1.1,centos-1,centos-2,centos-3,centos-4,centos-5,localhost,github.com,.aliyun.com,.aliyuncs.com"
+http_proxy="http://192.168.0.203:1080"
+https_proxy="http://192.168.0.203:1080"
+no_proxy="127.0.0.1,192.168.0.102,192.168.0.103,192.168.0.104,192.168.0.105,192.168.0.106,192.168.0.107,192.168.0.201,192.168.0.202,192.168.0.203,192.168.0.204,192.168.0.1,192.168.1.1,centos-1,centos-2,centos-3,centos-4,centos-5,centos-6,localhost,github.com,.aliyun.com,.aliyuncs.com"
 
 export http_proxy
 export https_proxy
@@ -107,7 +111,7 @@ EOF
 mkdir -p /etc/systemd/system/docker.service.d/
 cat << EOF > /etc/systemd/system/docker.service.d/http-proxy.conf
 [Service]
-Environment="HTTP_PROXY=http://192.168.0.201:1080" "HTTPS_PROXY=http://192.168.0.201:1080" "NO_PROXY=127.0.0.1,192.168.0.102,192.168.0.103,192.168.0.104,192.168.0.105,192.168.0.106,192.168.0.201,192.168.0.202,192.168.0.203,192.168.0.1,192.168.1.1,centos-1,centos-2,centos-3,centos-4,centos-5,localhost,.aliyun.com,.aliyuncs.com"
+Environment="HTTP_PROXY=http://192.168.0.203:1080" "HTTPS_PROXY=http://192.168.0.203:1080" "NO_PROXY=127.0.0.1,192.168.0.102,192.168.0.103,192.168.0.104,192.168.0.105,192.168.0.106,192.168.0.107,192.168.0.201,192.168.0.202,192.168.0.203,192.168.0.204,192.168.0.1,192.168.1.1,centos-1,centos-2,centos-3,centos-4,centos-5,centos-6,localhost,.aliyun.com,.aliyuncs.com"
 EOF
 
 systemctl daemon-reload
@@ -133,8 +137,11 @@ gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg
 EOF
 
 # 安装 kubelet kubeadm kubectl
-yum install -y kubelet kubeadm kubectl
-rm -rf base_image/kubectl
+yum install -y kubelet kubeadm kubectl git
+git clone https://github.com/fuyoushengwu/weapp_server.git
+cd weapp_server
+git checkout -b spring-cloud origin/spring-cloud
+cd build && rm -rf base_image/kubectl
 cp -rf /usr/bin/kubectl base_image/ 
 
 # 启动kubelet
@@ -154,7 +161,7 @@ kubeadm init --pod-network-cidr=172.10.0.0/16  --apiserver-advertise-address=192
 cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 chown $(id -u):$(id -g) $HOME/.kube/config
 
-# Worker初始化(centos-2,centos-3,centos-4,centos-5),根据kubeadm init执行结果,执行
+# Worker初始化(centos-2,centos-3,centos-4,centos-5,centos-6),根据kubeadm init执行结果,执行
 kubeadm join 192.168.0.102:6443 --token [token] --discovery-token-ca-cert-hash [hash]
 # # 注意:token 24小時过期后查看token和cert-hash
 # token
@@ -189,14 +196,14 @@ etcdctl --key-file /etc/kubernetes/pki/etcd/server.key --cert-file /etc/kubernet
 #### 四. 准备WeApp运行环境(kubectl命令在centos-1上执行)
 + 0.解决service-node-port-range只能是30000-32767的情况
 ```
-在“command字段对应的值中添加”–-service-node-port-range=80-32767″
+在“/etc/kubernetes/manifests/kube-apiserver.yaml中添加启动参数”–-service-node-port-range=80-32767″
 ```
 
 + 1.测试CoreDNS
 ```
 kubectl apply -f demo/busybox.yaml
 # 在生成的container中执行
-nslookup kubernetes
+kubectl exec -it busybox nslookup kubernetes
 ```
 
 + 2.部署 NFS Storage Class
@@ -224,37 +231,34 @@ kubectl apply -f kube_nfs/kube_nfs.yaml
 kubectl apply -f demo/nfs_test.yaml
 ```
 
-+ 3.部署Redis(centos-1)
-```
-kubectl apply -f kube_redis/redis.yaml
-```
-
-+ 4.部署rabbitmq(centos-1)
++ 3.部署rabbitmq(centos-1)
 ```
 kubectl apply -f rabbitmq/rabbitmq.yml
 ```
 
-+ 5.部署MySQL5.5数据库(centos-1)
-+ + 5.1.检查并卸载centos-1上已安装的Mariadb,MySQL
++ 4.部署MySQL5.5数据库(centos-1)
++ + 4.1.检查并卸载centos-1上已安装的Mariadb,MySQL
 ```
 rpm -e --nodeps `rpm -qa | grep mariadb`
 rpm -e --nodeps `rpm -qa | grep mysql`
 rm -rf `find / -name mysql`
 ```
 
-+ + 5.2.安装MySQL的YUM Repository
++ + 4.2.安装MySQL的YUM Repository
 ```
-rpm -ivh mysql/mysql-community-release-el7-5.noarch.rpm
-# 修改　/etc/yum.repos.d/mysql-community.repo 里把　5.5或5.7开启　把　5.6禁用
+wget http://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm
+rpm -ivh mysql-community-release-el7-5.noarch.rpm
+# 修改　/etc/yum.repos.d/mysql-community.repo 里把　5.5开启　把5.6禁用
+git checkout mysql/mysql-community.repo
 rm -rf /etc/yum.repos.d/mysql-community.repo && cp -p mysql/mysql-community.repo /etc/yum.repos.d/
 ```
 
-+ + 5.3.安装MySQL
++ + 4.3.安装MySQL
 ```
 yum install -y mysql-community-server
 ```
 
-+ + 5.4.配置MySQL
++ + 4.4.配置MySQL
 ```
 systemctl enable mysqld && systemctl start mysqld
 mysqladmin -u root password 'PASSWORD'
@@ -308,7 +312,7 @@ source /etc/profile
 ssh-keygen -t rsa
 ```
 
-+ + 2.2.centos-2,centos-3,centos-4,centos-5信任公钥
++ + 2.2.centos-2,centos-3,centos-4,centos-5,centos-6信任公钥
 ```
 scp root@192.168.0.102:/root/.ssh/id_rsa.pub /root/id_rsa.pub
 cat /root/id_rsa.pub >>/root/.ssh/authorized_keys

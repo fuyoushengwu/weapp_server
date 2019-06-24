@@ -258,8 +258,9 @@ rm -rf `find / -name mysql`
 ```
 + + 1.2 安装MySQL的YUM Repository
 ```
-rpm -ivh mysql/mysql-community-release-el7-5.noarch.rpm
-# 修改　/etc/yum.repos.d/mysql-community.repo 里把　5.5或5.7开启　把　5.6禁用
+wget http://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm
+rpm -ivh mysql-community-release-el7-5.noarch.rpm
+# 修改　/etc/yum.repos.d/mysql-community.repo 里把　5.5开启　把5.6禁用
 rm -rf /etc/yum.repos.d/mysql-community.repo && cp -p mysql/mysql-community.repo /etc/yum.repos.d/
 ```
 + + 1.3 安装MySQL
