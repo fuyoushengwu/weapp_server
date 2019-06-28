@@ -3,7 +3,6 @@ package cn.aijiamuyingfang.client.dnspod.api.impl;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.InvocationTargetException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -56,8 +55,7 @@ public class DNSPodClient {
   @HttpService
   private DNSPodApi dnspodApi;
 
-  public void updateDNSPod(String domain, String tokenId, String tokenValue)
-      throws IOException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+  public void updateDNSPod(String domain, String tokenId, String tokenValue) throws IOException {
     String[] domainArrary = domain.split("\\.");
     String rootDomain = domainArrary[domainArrary.length - 2] + '.' + domainArrary[domainArrary.length - 1];
     String prefixDomain = domain.replace(rootDomain, "");
@@ -106,7 +104,7 @@ public class DNSPodClient {
   }
 
   public String getPublicIP() throws IOException {
-    StringBuffer content = new StringBuffer();
+    StringBuilder content = new StringBuilder();
     URL url = new URL(GET_NET_IP_URL);
     HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
     BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -114,7 +112,6 @@ public class DNSPodClient {
     while ((read = in.readLine()) != null) {
       content.append(read);
     }
-    String contentStr = content.toString();
-    return contentStr.split("\\[")[1].split("\\]")[0];
+    return content.toString();
   }
 }
