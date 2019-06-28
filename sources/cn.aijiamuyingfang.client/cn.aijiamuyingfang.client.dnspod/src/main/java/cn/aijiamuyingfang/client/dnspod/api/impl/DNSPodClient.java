@@ -11,12 +11,12 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import cn.aijiamuyingfang.client.commons.utils.StringUtils;
-import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.dnspod.api.DNSPodApi;
 import cn.aijiamuyingfang.client.dnspod.domain.CreateRecordRequest;
 import cn.aijiamuyingfang.client.dnspod.domain.DomainRequest;
 import cn.aijiamuyingfang.client.dnspod.domain.SubDomainRecordListResponse;
 import cn.aijiamuyingfang.client.dnspod.domain.UpdateRecordRequest;
+import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 
 /**
  * [描述]:
@@ -33,9 +33,25 @@ import cn.aijiamuyingfang.client.dnspod.domain.UpdateRecordRequest;
 public class DNSPodClient {
 
   /**
-   * 请求公网IP的URL
+   * 环境变量中,用来存放“请求公网IP的URL”的Key
    */
-  private static final String GET_NET_IP_URL = "http://20019.ip138.com/ic.asp";
+  private static final String NETIP_URL_KEY = "WEAPP_DNSPOD_NETIP";
+
+  /**
+   * 默认请求公网IP的URL
+   */
+  private static final String DEFAULT_NET_IP_URL = "http://ipinfo.io/ip";
+
+  private static final String GET_NET_IP_URL;
+
+  static {
+    String url = System.getenv(NETIP_URL_KEY);
+    if (StringUtils.hasContent(url)) {
+      GET_NET_IP_URL = url;
+    } else {
+      GET_NET_IP_URL = DEFAULT_NET_IP_URL;
+    }
+  }
 
   @HttpService
   private DNSPodApi dnspodApi;

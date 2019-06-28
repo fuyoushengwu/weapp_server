@@ -38,6 +38,7 @@ data:
   WEAPP_DNSPOD_TOKEN_ID: '102188'
   WEAPP_DNSPOD_TOKEN_VALUE: 4330daf0985fc9a2e5fa24a8d771095b
   WEAPP_DNSPOD_DOMAIN: www.aijiamuyingfang.cn,jenkins.aijiamuyingfang.cn
+  WEAPP_DNSPOD_NETIP: http://ifconfig.me/ip
 ---
 apiVersion: v1
 kind: ConfigMap
