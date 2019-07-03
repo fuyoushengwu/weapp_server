@@ -26,7 +26,7 @@ public class GetGoodListRequest {
 
   private int page = 1;
 
-  private int rows = 100;
+  private int rows = 18;
 
   private String sord = "asc";
 

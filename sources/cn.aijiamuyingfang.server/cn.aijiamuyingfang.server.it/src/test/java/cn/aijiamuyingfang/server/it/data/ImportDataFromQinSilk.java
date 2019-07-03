@@ -42,38 +42,51 @@ import cn.aijiamuyingfang.server.it.goods.controller.GoodsTestActions;
 public class ImportDataFromQinSilk {
   private static List<Classify> qinSilkClassifyList = new ArrayList<>();
   {
-    qinSilkClassifyList.add(new Classify("美赞臣", 1649858L));
-    qinSilkClassifyList.add(new Classify("雀巢", 1649861L));
-    qinSilkClassifyList.add(new Classify("完达山", 1649882L));
-    qinSilkClassifyList.add(new Classify("雅培", 1649884L));
-    qinSilkClassifyList.add(new Classify("圣元", 1652416L));
-    qinSilkClassifyList.add(new Classify("蒙牛", 1655814L));
+    // qinSilkClassifyList.add(new Classify("美赞臣", 1649858L));
+    // qinSilkClassifyList.add(new Classify("雀巢", 1649861L));
+    // qinSilkClassifyList.add(new Classify("完达山", 1649882L));
+    // qinSilkClassifyList.add(new Classify("雅培", 1649884L));c
+    // qinSilkClassifyList.add(new Classify("圣元", 1652416L));
+    // qinSilkClassifyList.add(new Classify("蒙牛", 1655814L));
+    // qinSilkClassifyList.add(new Classify("营养强化剂", 1661861L));
+    // qinSilkClassifyList.add(new Classify("辅食", 1661862L));
     // qinSilkClassifyList.add(new Classify("奶瓶", 1662190L));
     // qinSilkClassifyList.add(new Classify("成人尿不湿", 1662191L));
     // qinSilkClassifyList.add(new Classify("拉拉裤", 1662192L));
     // qinSilkClassifyList.add(new Classify("纸尿片", 1662193L));
-    // qinSilkClassifyList.add(new Classify("纸尿裤", 1662194L));
-    // qinSilkClassifyList.add(new Classify("辅食", 1661862L));
-    // qinSilkClassifyList.add(new Classify("营养强化剂", 1661861L));
+    qinSilkClassifyList.add(new Classify("纸尿裤", 1662194L));
     // qinSilkClassifyList.add(new Classify("千山牧雪", 1655813L));
   }
 
   private static List<String> classifyList = new ArrayList<>();
   static {
-    classifyList.add("2c8a82cd6b844430016b84996fdc0007");// 美赞臣
-    classifyList.add("2c8a82cd6b844430016b849ff825000d");// 雀巢
-    classifyList.add("2c8a82cd6b844430016b849b1e82000a");// 完达山
-    classifyList.add("2c8a82cd6b844430016b8494450e0003");// 雅培
-    classifyList.add("2c8a82c96b815357016b8440215f0001");// 圣元
-    classifyList.add("2c8a82cd6b844430016b849a792e0009");// 蒙牛
-    // classifyList.add("");
-    // classifyList.add("");
-    // classifyList.add("");
-    // classifyList.add("");
-    // classifyList.add("");
-    // classifyList.add("");
-    // classifyList.add("");
-    // classifyList.add("");
+    // classifyList.add("2c8a82cd6b844430016b84996fdc0007");// 美赞臣
+    // classifyList.add("2c8a84b06b9c5e7c016b9e0d4c500007");// 雀巢学生
+    // classifyList.add("2c8a84b06b9c5e7c016b9e1fa96a000a");// 雀巢中老年
+    // classifyList.add("2c8a82cd6b844430016b849ff825000d");// 雀巢
+    // classifyList.add("2c8a82cd6b844430016b849b1e82000a");// 完达山
+    // classifyList.add("2c8a84b06b9c5e7c016b9e1fa96a000a");// 完达山中老年
+    // classifyList.add("2c8a82cd6b844430016b8494450e0003");// 雅培
+    // classifyList.add("2c8a82c96b815357016b8440215f0001");// 圣元
+    // classifyList.add("2c8a82cd6b844430016b84eca48a001a");// 圣元孕产妇
+    // classifyList.add("2c8a84b06b9c5e7c016b9e1fa96a000a");// 圣元中老年
+    // classifyList.add("2c8a82c96b815357016b8440215f0001");// 圣元
+    // classifyList.add("2c8a84b06b9c5e7c016b9e0caf1f0005");// 蒙牛学生
+    // classifyList.add("2c8a84b06b9c5e7c016b9e1fa96a000a");// 蒙牛中老年
+    // classifyList.add("2c8a84b06b9c5e7c016b9e1f34980009");// 蒙牛女士
+    // classifyList.add("2c8a82cd6b844430016b84e3848c0019");// 营养强化
+    // classifyList.add("2c8a82cd6b844430016b84e219190016");// 米粉
+    // classifyList.add("2c8a84c76bb18f7e016bb492eded0092");// 小馒头
+    // classifyList.add("2c8a84c76bb18f7e016bb4933b370093");// 面条
+    // classifyList.add("2c8a84c76bb18f7e016bb494319d0095");// 肉酥
+    // classifyList.add("2c8a84c76bb18f7e016bb4937db50094");// 山楂
+    // classifyList.add("2c8a84c76bb18f7e016bb4929beb0091");// 饼干
+    // classifyList.add("2c8a84c76bb18f7e016bb4c08aba00c0");// 营养粥
+    // classifyList.add("2c8a82cd6b844430016b84f1c336001f");// 奶瓶
+    // classifyList.add("2c8a82cd6b844430016b84ee36ad001e");// 成人尿不湿
+    // classifyList.add("2c8a82cd6b844430016b84ed979b001d");// 拉拉裤
+    // classifyList.add("2c8a82cd6b844430016b84ecfbc6001b");// 纸尿片
+    classifyList.add("2c8a82cd6b844430016b84ed4b2d001c");// 纸尿裤
   }
 
   @Autowired
@@ -92,9 +105,9 @@ public class ImportDataFromQinSilk {
   public void importDataFromQinSilk() throws IOException, URISyntaxException {
     for (int i = 0; i < qinSilkClassifyList.size(); i++) {
       Classify c = qinSilkClassifyList.get(i);
-      ResponseBean<Good> responseBean = qinSilkControllerClient.getGoodList(c.getId());
-
-      for (int j = 12; j < responseBean.getRows().size(); j++) {
+      int page = 3;
+      ResponseBean<Good> responseBean = qinSilkControllerClient.getGoodList(c.getId(), page);
+      for (int j = 0; j < responseBean.getRows().size(); j++) {
         Good good = responseBean.getRows().get(j);
         good.setGoodImages(qinSilkControllerClient.getGoodImages(good.getId()));
 
