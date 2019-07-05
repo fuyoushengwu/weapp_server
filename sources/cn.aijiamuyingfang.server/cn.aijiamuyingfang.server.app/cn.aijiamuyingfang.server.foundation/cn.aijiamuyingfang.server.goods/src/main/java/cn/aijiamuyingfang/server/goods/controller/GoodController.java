@@ -161,6 +161,18 @@ public class GoodController {
   }
 
   /**
+   * 获取商品信息
+   * 
+   * @param goodIdList
+   * @return
+   */
+  @PreAuthorize(value = "permitAll()")
+  @GetMapping(value = "/good")
+  public List<Good> getGoodList(@RequestParam("good_id") List<String> goodIdList) {
+    return goodService.getGoodList(goodIdList);
+  }
+
+  /**
    * 废弃商品
    * 
    * @param goodId

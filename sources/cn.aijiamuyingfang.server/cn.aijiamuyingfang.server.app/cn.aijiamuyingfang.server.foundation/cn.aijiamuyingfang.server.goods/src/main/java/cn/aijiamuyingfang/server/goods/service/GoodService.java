@@ -65,6 +65,16 @@ public class GoodService {
   }
 
   /**
+   * 获取商品信息
+   * 
+   * @param goodIdList
+   * @return
+   */
+  public List<Good> getGoodList(List<String> goodIdList) {
+    return goodRepository.findAll(goodIdList);
+  }
+
+  /**
    * 更新Good信息
    * 
    * @param goodId
