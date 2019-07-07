@@ -54,6 +54,7 @@ public class UserController {
 
   /**
    * 获取用户
+   * 
    * @return
    */
   @PreAuthorize(value = "isAuthenticated()")
@@ -166,7 +167,8 @@ public class UserController {
    * @param addressId
    * @return
    */
-  @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
+  @PreAuthorize(
+      value = "isAuthenticated() and (#username.equals(getAuthentication().getName())  or hasAnyAuthority('permission:manager:*','permission:sender:*')))")
   @GetMapping(value = "/user/{username}/recieveaddress/{address_id}")
   public RecieveAddress getRecieveAddress(@PathVariable("username") String username,
       @PathVariable("address_id") String addressId) {

@@ -74,12 +74,7 @@ public enum SendType implements BaseEnum, Parcelable {
   public static final Parcelable.Creator<SendType> CREATOR = new Parcelable.Creator<SendType>() {
     @Override
     public SendType createFromParcel(Parcel in) {
-      for (SendType status : SendType.values()) {
-        if (status.value == in.readInt()) {
-          return status;
-        }
-      }
-      return SendType.UNKNOW;
+      return SendType.fromValue(in.readInt());
     }
 
     @Override

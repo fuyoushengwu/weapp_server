@@ -86,12 +86,7 @@ public enum ShopOrderStatus implements BaseEnum, Parcelable {
   public static final Parcelable.Creator<ShopOrderStatus> CREATOR = new Parcelable.Creator<ShopOrderStatus>() {
     @Override
     public ShopOrderStatus createFromParcel(Parcel in) {
-      for (ShopOrderStatus status : ShopOrderStatus.values()) {
-        if (status.value == in.readInt()) {
-          return status;
-        }
-      }
-      return ShopOrderStatus.UNKNOW;
+      return ShopOrderStatus.fromValue(in.readInt());
     }
 
     @Override
