@@ -168,7 +168,7 @@ public class UserController {
    * @return
    */
   @PreAuthorize(
-      value = "isAuthenticated() and (#username.equals(getAuthentication().getName())  or hasAnyAuthority('permission:manager:*','permission:sender:*')))")
+      value = "isAuthenticated() and (#username.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
   @GetMapping(value = "/user/{username}/recieveaddress/{address_id}")
   public RecieveAddress getRecieveAddress(@PathVariable("username") String username,
       @PathVariable("address_id") String addressId) {
