@@ -15,10 +15,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import cn.aijiamuyingfang.client.domain.filecenter.FileInfo;
-import cn.aijiamuyingfang.client.domain.filecenter.response.GetFileInfoListResponse;
 import cn.aijiamuyingfang.client.rest.api.impl.FileControllerClient;
 import cn.aijiamuyingfang.server.it.ITApplication;
+import cn.aijiamuyingfang.vo.filecenter.FileInfo;
+import cn.aijiamuyingfang.vo.filecenter.PagableFileInfoList;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT, classes = ITApplication.class)
@@ -44,7 +44,7 @@ public class FileControllerTest {
     // Step1: 未上传文件:文件数为0
     Map<String, String> params = new HashMap<String, String>();
     params.put("access_token", testActions.getAdminAccessToken());
-    GetFileInfoListResponse response = fileControllerClient.getFileInfoList(params, testActions.getAdminAccessToken());
+    PagableFileInfoList response = fileControllerClient.getFileInfoList(params, testActions.getAdminAccessToken());
     Assert.assertNotNull(response);
     Assert.assertEquals(0, response.getDataList().size());
 

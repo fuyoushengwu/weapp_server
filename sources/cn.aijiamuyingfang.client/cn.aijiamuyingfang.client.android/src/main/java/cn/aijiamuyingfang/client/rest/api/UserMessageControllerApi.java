@@ -1,8 +1,8 @@
 package cn.aijiamuyingfang.client.rest.api;
 
-import cn.aijiamuyingfang.client.commons.domain.ResponseBean;
-import cn.aijiamuyingfang.client.domain.message.UserMessage;
-import cn.aijiamuyingfang.client.domain.message.response.GetMessagesListResponse;
+import cn.aijiamuyingfang.vo.ResponseBean;
+import cn.aijiamuyingfang.vo.message.PagableUserMessageList;
+import cn.aijiamuyingfang.vo.message.UserMessage;
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -44,7 +44,7 @@ public interface UserMessageControllerApi {
    * @return
    */
   @GET(value = "/user-service/user/{username}/message")
-  public Observable<ResponseBean<GetMessagesListResponse>> getUserMessageList(@Path("username") String username,
+  public Observable<ResponseBean<PagableUserMessageList>> getUserMessageList(@Path("username") String username,
       @Query("current_page") int currentPage, @Query("page_size") int pageSize,
       @Query("access_token") String accessToken);
 

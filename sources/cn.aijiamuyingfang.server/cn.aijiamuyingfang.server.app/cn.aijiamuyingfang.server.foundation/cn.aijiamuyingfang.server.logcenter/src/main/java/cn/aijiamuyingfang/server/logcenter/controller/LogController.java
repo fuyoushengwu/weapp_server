@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import cn.aijiamuyingfang.commons.constants.LogConstants;
-import cn.aijiamuyingfang.server.logcenter.domain.Log;
-import cn.aijiamuyingfang.server.logcenter.domain.response.GetLogListResponse;
+import cn.aijiamuyingfang.server.logcenter.domain.response.PagableLogList;
+import cn.aijiamuyingfang.server.logcenter.dto.Log;
 import cn.aijiamuyingfang.server.logcenter.service.LogService;
 
 @RestController
@@ -48,7 +48,7 @@ public class LogController {
    */
   @PreAuthorize("hasAuthority('permission:manager:*')")
   @GetMapping("/logs")
-  public GetLogListResponse getLogList(@RequestParam Map<String, String> params) {
+  public PagableLogList getLogList(@RequestParam Map<String, String> params) {
     return logService.getLogList(params);
   }
 

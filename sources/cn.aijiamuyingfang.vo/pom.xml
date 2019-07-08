@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>cn.aijiamuyingfang</groupId>
+		<artifactId>cn.aijiamuyingfang</artifactId>
+		<version>0.0.2</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<artifactId>cn.aijiamuyingfang.vo</artifactId>
+	<name>cn.aijiamuyingfang.vo</name>
+	<dependencies>
+		<dependency>
+			<groupId>com.google.android</groupId>
+			<artifactId>android</artifactId>
+			<version>4.1.1.4</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
+	</dependencies>
+</project>

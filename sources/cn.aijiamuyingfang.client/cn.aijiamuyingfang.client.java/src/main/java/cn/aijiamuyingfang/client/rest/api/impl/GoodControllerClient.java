@@ -10,17 +10,17 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import cn.aijiamuyingfang.client.commons.domain.ResponseBean;
-import cn.aijiamuyingfang.client.commons.domain.ResponseCode;
 import cn.aijiamuyingfang.client.commons.utils.StringUtils;
-import cn.aijiamuyingfang.client.domain.classify.response.GetClassifyGoodListResponse;
-import cn.aijiamuyingfang.client.domain.exception.GoodsException;
-import cn.aijiamuyingfang.client.domain.goods.Good;
-import cn.aijiamuyingfang.client.domain.goods.GoodDetail;
-import cn.aijiamuyingfang.client.domain.goods.ShelfLife;
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.GoodControllerApi;
 import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
+import cn.aijiamuyingfang.vo.ResponseBean;
+import cn.aijiamuyingfang.vo.ResponseCode;
+import cn.aijiamuyingfang.vo.exception.GoodsException;
+import cn.aijiamuyingfang.vo.goods.Good;
+import cn.aijiamuyingfang.vo.goods.GoodDetail;
+import cn.aijiamuyingfang.vo.goods.PagableGoodList;
+import cn.aijiamuyingfang.vo.goods.ShelfLife;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.MultipartBody.Builder;
@@ -74,8 +74,8 @@ public class GoodControllerClient {
    * @return
    * @throws IOException
    */
-  public GetClassifyGoodListResponse getClassifyGoodList(String classifyId, List<String> packFilter,
-      List<String> levelFilter, String orderType, String orderValue, int currentPage, int pageSize) throws IOException {
+  public PagableGoodList getClassifyGoodList(String classifyId, List<String> packFilter, List<String> levelFilter,
+      String orderType, String orderValue, int currentPage, int pageSize) throws IOException {
     Response<ResponseBean> response = goodControllerApi
         .getClassifyGoodList(classifyId, packFilter, levelFilter, orderType, orderValue, currentPage, pageSize)
         .execute();
@@ -89,8 +89,8 @@ public class GoodControllerClient {
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
-      GetClassifyGoodListResponse getClassifyGoodListResponse = JsonUtils
-          .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetClassifyGoodListResponse.class);
+      PagableGoodList getClassifyGoodListResponse = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
+          PagableGoodList.class);
       if (null == getClassifyGoodListResponse) {
         throw new GoodsException("500", "get classify good list  return code is '200',but return data is null");
       }
@@ -220,8 +220,8 @@ public class GoodControllerClient {
     if (StringUtils.hasContent(goodRequest.getPack())) {
       requestBodyBuilder.addFormDataPart("pack", goodRequest.getPack());
     }
-    if (StringUtils.hasContent(goodRequest.getVoucherId())) {
-      requestBodyBuilder.addFormDataPart("voucherId", goodRequest.getVoucherId());
+    if (goodRequest.getGoodVoucher() != null) {
+      requestBodyBuilder.addFormDataPart("goodVoucher.voucherId", goodRequest.getGoodVoucher().getId());
     }
   }
 

@@ -26,6 +26,7 @@
 	</properties>
 	<modules>
 		<module>cn.aijiamuyingfang.commons</module>
+		<module>cn.aijiamuyingfang.vo</module>
 		<module>cn.aijiamuyingfang.server</module>
 		<module>cn.aijiamuyingfang.client</module>
 	</modules>

@@ -12,12 +12,12 @@ import cn.aijiamuyingfang.commons.utils.StringUtils;
 import cn.aijiamuyingfang.server.coupon.db.GoodVoucherRepository;
 import cn.aijiamuyingfang.server.coupon.db.UserVoucherRepository;
 import cn.aijiamuyingfang.server.coupon.db.VoucherItemRepository;
-import cn.aijiamuyingfang.server.coupon.domain.GoodVoucher;
-import cn.aijiamuyingfang.server.coupon.domain.UserVoucher;
-import cn.aijiamuyingfang.server.coupon.domain.VoucherItem;
-import cn.aijiamuyingfang.server.coupon.domain.response.GetGoodVoucherListResponse;
-import cn.aijiamuyingfang.server.coupon.domain.response.GetUserVoucherListResponse;
-import cn.aijiamuyingfang.server.coupon.domain.response.GetVoucherItemListResponse;
+import cn.aijiamuyingfang.server.coupon.domain.response.PagableGoodVoucherList;
+import cn.aijiamuyingfang.server.coupon.domain.response.PagableUserVoucherList;
+import cn.aijiamuyingfang.server.coupon.domain.response.PagableVoucherItemList;
+import cn.aijiamuyingfang.server.coupon.dto.GoodVoucher;
+import cn.aijiamuyingfang.server.coupon.dto.UserVoucher;
+import cn.aijiamuyingfang.server.coupon.dto.VoucherItem;
 import cn.aijiamuyingfang.server.exception.CouponException;
 import cn.aijiamuyingfang.server.feign.GoodClient;
 
@@ -56,11 +56,11 @@ public class CouponService {
    * @param pageSize
    * @return
    */
-  public GetUserVoucherListResponse getUserVoucherList(String username, int currentPage, int pageSize) {
+  public PagableUserVoucherList getUserVoucherList(String username, int currentPage, int pageSize) {
     // PageRequest的Page参数是基于0的,但是currentPage是基于1的,所有将currentPage作为参数传递给PgeRequest时需要'-1'
     PageRequest pageRequest = new PageRequest(currentPage - 1, pageSize);
     Page<UserVoucher> userVoucherPage = uservoucherRepository.findByUsername(username, pageRequest);
-    GetUserVoucherListResponse response = new GetUserVoucherListResponse();
+    PagableUserVoucherList response = new PagableUserVoucherList();
     response.setCurrentPage(userVoucherPage.getNumber() + 1);
     response.setDataList(userVoucherPage.getContent());
     response.setTotalpage(userVoucherPage.getTotalPages());
@@ -129,12 +129,12 @@ public class CouponService {
    * @param pageSize
    * @return
    */
-  public GetGoodVoucherListResponse getGoodVoucherList(int currentPage, int pageSize) {
+  public PagableGoodVoucherList getGoodVoucherList(int currentPage, int pageSize) {
     // PageRequest的Page参数是基于0的,但是currentPage是基于1的,所有将currentPage作为参数传递给PgeRequest时需要'-1'
     PageRequest pageRequest = new PageRequest(currentPage - 1, pageSize);
     Page<GoodVoucher> goodVoucherPage = goodvoucherRepository.findAll(pageRequest);
 
-    GetGoodVoucherListResponse response = new GetGoodVoucherListResponse();
+    PagableGoodVoucherList response = new PagableGoodVoucherList();
     response.setCurrentPage(goodVoucherPage.getNumber() + 1);
     response.setDataList(goodVoucherPage.getContent());
     response.setTotalpage(goodVoucherPage.getTotalPages());
@@ -198,11 +198,11 @@ public class CouponService {
    * @param pageSize
    * @return
    */
-  public GetVoucherItemListResponse getVoucherItemList(int currentPage, int pageSize) {
+  public PagableVoucherItemList getVoucherItemList(int currentPage, int pageSize) {
     // PageRequest的Page参数是基于0的,但是currentPage是基于1的,所有将currentPage作为参数传递给PgeRequest时需要'-1'
     PageRequest pageRequest = new PageRequest(currentPage - 1, pageSize);
     Page<VoucherItem> voucherItemPage = voucherItemRepository.findAll(pageRequest);
-    GetVoucherItemListResponse response = new GetVoucherItemListResponse();
+    PagableVoucherItemList response = new PagableVoucherItemList();
     response.setCurrentPage(voucherItemPage.getNumber() + 1);
     response.setDataList(voucherItemPage.getContent());
     response.setTotalpage(voucherItemPage.getTotalPages());

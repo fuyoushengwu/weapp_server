@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import cn.aijiamuyingfang.server.coupon.domain.VoucherItem;
+import cn.aijiamuyingfang.server.coupon.dto.VoucherItem;
 
 /**
  * [描述]:

@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import cn.aijiamuyingfang.server.domain.response.ResponseBean;
-import cn.aijiamuyingfang.server.feign.domain.coupon.GetGoodVoucherListResponse;
-import cn.aijiamuyingfang.server.feign.domain.coupon.GetUserVoucherListResponse;
-import cn.aijiamuyingfang.server.feign.domain.coupon.GetVoucherItemListResponse;
+import cn.aijiamuyingfang.server.feign.domain.coupon.PagableGoodVoucherList;
+import cn.aijiamuyingfang.server.feign.domain.coupon.PagableUserVoucherList;
+import cn.aijiamuyingfang.server.feign.domain.coupon.PagableVoucherItemList;
 import cn.aijiamuyingfang.server.feign.domain.coupon.GoodVoucher;
 import cn.aijiamuyingfang.server.feign.domain.coupon.UserVoucher;
 import cn.aijiamuyingfang.server.feign.domain.coupon.VoucherItem;
@@ -30,7 +30,7 @@ public interface CouponClient {
    * @return
    */
   @GetMapping(value = "/user/{username}/coupon/uservoucher")
-  ResponseBean<GetUserVoucherListResponse> getUserVoucherList(@PathVariable("username") String username,
+  ResponseBean<PagableUserVoucherList> getUserVoucherList(@PathVariable("username") String username,
       @RequestParam("current_page") int currentPage, @RequestParam("page_size") int pageSize);
 
   /**
@@ -73,7 +73,7 @@ public interface CouponClient {
    * @return
    */
   @GetMapping(value = "/coupon/goodvoucher")
-  ResponseBean<GetGoodVoucherListResponse> getGoodVoucherList(@RequestParam(value = "current_page") int currentPage,
+  ResponseBean<PagableGoodVoucherList> getGoodVoucherList(@RequestParam(value = "current_page") int currentPage,
       @RequestParam("page_size") int pageSize);
 
   /**
@@ -101,7 +101,7 @@ public interface CouponClient {
    * @return
    */
   @GetMapping(value = "/coupon/voucher_item")
-  ResponseBean<GetVoucherItemListResponse> getVoucherItemList(@RequestParam("current_page") int currentPage,
+  ResponseBean<PagableVoucherItemList> getVoucherItemList(@RequestParam("current_page") int currentPage,
       @RequestParam("page_size") int pageSize);
 
   /**

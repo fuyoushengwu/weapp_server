@@ -9,16 +9,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import cn.aijiamuyingfang.client.commons.domain.ResponseBean;
-import cn.aijiamuyingfang.client.commons.domain.ResponseCode;
 import cn.aijiamuyingfang.client.commons.utils.StringUtils;
-import cn.aijiamuyingfang.client.domain.exception.FileCenterException;
-import cn.aijiamuyingfang.client.domain.exception.GoodsException;
-import cn.aijiamuyingfang.client.domain.filecenter.FileInfo;
-import cn.aijiamuyingfang.client.domain.filecenter.response.GetFileInfoListResponse;
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.FileControllerApi;
 import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
+import cn.aijiamuyingfang.vo.ResponseBean;
+import cn.aijiamuyingfang.vo.ResponseCode;
+import cn.aijiamuyingfang.vo.exception.FileCenterException;
+import cn.aijiamuyingfang.vo.exception.GoodsException;
+import cn.aijiamuyingfang.vo.filecenter.FileInfo;
+import cn.aijiamuyingfang.vo.filecenter.PagableFileInfoList;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody.Part;
 import okhttp3.RequestBody;
@@ -113,7 +113,7 @@ public class FileControllerClient {
     throw new FileCenterException(ResponseCode.FILECENTER_DELETE_FAILED, fileId);
   }
 
-  public GetFileInfoListResponse getFileInfoList(Map<String, String> params, String accessToken) throws IOException {
+  public PagableFileInfoList getFileInfoList(Map<String, String> params, String accessToken) throws IOException {
     if (null == params) {
       params = new HashMap<>();
     }
@@ -128,8 +128,8 @@ public class FileControllerClient {
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
-      GetFileInfoListResponse getFileInfoListResponse = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
-          GetFileInfoListResponse.class);
+      PagableFileInfoList getFileInfoListResponse = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
+          PagableFileInfoList.class);
       if (null == getFileInfoListResponse) {
         throw new GoodsException("500", "get fileinfo list  return code is '200',but return data is null");
       }

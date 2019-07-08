@@ -2,9 +2,9 @@ package cn.aijiamuyingfang.client.rest.api;
 
 import java.util.List;
 
-import cn.aijiamuyingfang.client.commons.domain.ResponseBean;
-import cn.aijiamuyingfang.client.domain.previeworder.PreviewOrderItem;
 import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
+import cn.aijiamuyingfang.vo.ResponseBean;
+import cn.aijiamuyingfang.vo.review.PreviewOrderItem;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;

@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import cn.aijiamuyingfang.commons.utils.StringUtils;
-import cn.aijiamuyingfang.server.user.domain.UserMessage;
-import cn.aijiamuyingfang.server.user.domain.response.GetMessagesListResponse;
+import cn.aijiamuyingfang.server.user.domain.response.PagableUserMessageList;
+import cn.aijiamuyingfang.server.user.dto.UserMessage;
 import cn.aijiamuyingfang.server.user.service.UserMessageService;
 
 /**
@@ -53,7 +53,7 @@ public class UserMessageController {
    */
   @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
   @GetMapping(value = "/user/{username}/message")
-  public GetMessagesListResponse getUserMessageList(@PathVariable("username") String username,
+  public PagableUserMessageList getUserMessageList(@PathVariable("username") String username,
       @RequestParam("current_page") int currentPage, @RequestParam("page_size") int pageSize) {
     return userMessageService.getUserMessageList(username, currentPage, pageSize);
   }

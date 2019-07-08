@@ -5,9 +5,9 @@ import org.springframework.stereotype.Service;
 
 import cn.aijiamuyingfang.server.it.AbstractTestAction;
 import cn.aijiamuyingfang.server.it.annotation.TargetDataSource;
-import cn.aijiamuyingfang.server.it.shoporder.ShopOrder;
-import cn.aijiamuyingfang.server.it.shoporder.db.PreviewOrderRepository;
-import cn.aijiamuyingfang.server.it.shoporder.db.ShopOrderRepository;
+import cn.aijiamuyingfang.server.it.db.shoporder.PreviewOrderRepository;
+import cn.aijiamuyingfang.server.it.db.shoporder.ShopOrderRepository;
+import cn.aijiamuyingfang.server.it.dto.shoporder.ShopOrderDTO;
 
 /**
  * [描述]:
@@ -39,13 +39,13 @@ public class ShoporderTestActions extends AbstractTestAction {
   }
 
   @TargetDataSource(name = "weapp-shoporder")
-  public ShopOrder getShopOrder(String shoporderId) {
+  public ShopOrderDTO getShopOrder(String shoporderId) {
     return shoporderRepository.findOne(shoporderId);
 
   }
 
   @TargetDataSource(name = "weapp-shoporder")
-  public void updateShopOrder(ShopOrder shoporder) {
+  public void updateShopOrder(ShopOrderDTO shoporder) {
     shoporderRepository.saveAndFlush(shoporder);
   }
 }

@@ -7,15 +7,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import cn.aijiamuyingfang.client.commons.domain.ResponseBean;
-import cn.aijiamuyingfang.client.commons.domain.ResponseCode;
-import cn.aijiamuyingfang.client.domain.exception.ShopCartException;
-import cn.aijiamuyingfang.client.domain.shopcart.ShopCart;
-import cn.aijiamuyingfang.client.domain.shopcart.response.GetShopCartListResponse;
-import cn.aijiamuyingfang.client.domain.shoporder.request.CreateShopCartRequest;
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.ShopCartControllerApi;
 import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
+import cn.aijiamuyingfang.vo.ResponseBean;
+import cn.aijiamuyingfang.vo.ResponseCode;
+import cn.aijiamuyingfang.vo.exception.ShopCartException;
+import cn.aijiamuyingfang.vo.shopcart.CreateShopCartRequest;
+import cn.aijiamuyingfang.vo.shopcart.PagableShopCartList;
+import cn.aijiamuyingfang.vo.shopcart.ShopCart;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -89,7 +89,7 @@ public class ShopCartControllerClient {
    * @return
    * @throws IOException
    */
-  public GetShopCartListResponse getShopCartList(String username, int currentPage, int pageSize, String accessToken)
+  public PagableShopCartList getShopCartList(String username, int currentPage, int pageSize, String accessToken)
       throws IOException {
     Response<ResponseBean> response = shopCartControllerApi.getShopCartList(username, currentPage, pageSize, accessToken)
         .execute();
@@ -103,8 +103,8 @@ public class ShopCartControllerClient {
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
-      GetShopCartListResponse getShopCartListResponse = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
-          GetShopCartListResponse.class);
+      PagableShopCartList getShopCartListResponse = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
+          PagableShopCartList.class);
       if (null == getShopCartListResponse) {
         throw new ShopCartException("500", "get ShopCart list  return code is '200',but return data is null");
       }

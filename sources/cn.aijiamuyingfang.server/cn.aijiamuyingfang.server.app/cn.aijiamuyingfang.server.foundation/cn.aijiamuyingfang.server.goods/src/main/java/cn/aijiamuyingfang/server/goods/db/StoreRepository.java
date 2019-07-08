@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import cn.aijiamuyingfang.server.goods.domain.Store;
+import cn.aijiamuyingfang.server.goods.dto.Store;
 
 /**
  * [描述]:

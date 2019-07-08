@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import cn.aijiamuyingfang.server.domain.response.ResponseBean;
 import cn.aijiamuyingfang.server.feign.domain.filecenter.FileInfo;
-import cn.aijiamuyingfang.server.feign.domain.filecenter.GetFileInfoListResponse;
+import cn.aijiamuyingfang.server.feign.domain.filecenter.PagableFileInfoList;
 import feign.codec.Encoder;
 import feign.form.spring.SpringFormEncoder;
 
@@ -53,7 +53,7 @@ public interface FileClient {
    * @return
    */
   @GetMapping("files")
-  ResponseBean<GetFileInfoListResponse> getFileInfoList(@RequestParam Map<String, String> params);
+  ResponseBean<PagableFileInfoList> getFileInfoList(@RequestParam Map<String, String> params);
 
   class MultipartSupportConfig {
     @Bean

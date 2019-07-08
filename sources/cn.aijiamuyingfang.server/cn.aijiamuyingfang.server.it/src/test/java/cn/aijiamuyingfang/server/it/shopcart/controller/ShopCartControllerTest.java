@@ -12,13 +12,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import cn.aijiamuyingfang.client.domain.exception.ShopCartException;
-import cn.aijiamuyingfang.client.domain.shopcart.ShopCart;
-import cn.aijiamuyingfang.client.domain.shopcart.response.GetShopCartListResponse;
 import cn.aijiamuyingfang.client.rest.api.impl.ShopCartControllerClient;
-import cn.aijiamuyingfang.commons.annotation.UseCaseDescription;
 import cn.aijiamuyingfang.server.it.AbstractTestAction;
 import cn.aijiamuyingfang.server.it.ITApplication;
+import cn.aijiamuyingfang.server.it.UseCaseDescription;
+import cn.aijiamuyingfang.vo.exception.ShopCartException;
+import cn.aijiamuyingfang.vo.shopcart.PagableShopCartList;
+import cn.aijiamuyingfang.vo.shopcart.ShopCart;
 
 /**
  * [描述]:
@@ -72,7 +72,7 @@ public class ShopCartControllerTest {
   @Test
   @UseCaseDescription(description = "购物车中没有商品时获取购物车信息")
   public void test_GetShopCart_001() throws IOException {
-    GetShopCartListResponse response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1,
+    PagableShopCartList response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1,
         10, testActions.getAdminAccessToken());
     Assert.assertEquals(0, response.getDataList().size());
   }
@@ -81,7 +81,7 @@ public class ShopCartControllerTest {
   @UseCaseDescription(description = "购物车中有商品时获取购物车信息")
   public void test_GetShopCart_002() throws IOException {
     testActions.addGoodOne10();
-    GetShopCartListResponse response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1,
+    PagableShopCartList response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1,
         10, testActions.getAdminAccessToken());
     Assert.assertEquals(1, response.getDataList().size());
     Assert.assertEquals(10, response.getDataList().get(0).getCount());
@@ -91,7 +91,7 @@ public class ShopCartControllerTest {
   @UseCaseDescription(description = "别人购物车中有商品,自己购物车中没有商品")
   public void test_GetShopCart_003() throws IOException {
     testActions.addGoodOne10();
-    GetShopCartListResponse response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1,
+    PagableShopCartList response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1,
         10, testActions.getAdminAccessToken());
     Assert.assertEquals(1, response.getDataList().size());
     Assert.assertEquals(10, response.getDataList().get(0).getCount());
@@ -106,7 +106,7 @@ public class ShopCartControllerTest {
   public void test_GetShopCart_004() throws IOException {
     ShopCart shopCartOne = testActions.addGoodOne10();
     ShopCart shopCartTwo = testActions.addGoodTwo10();
-    GetShopCartListResponse response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1,
+    PagableShopCartList response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1,
         10, testActions.getAdminAccessToken());
     Assert.assertEquals(2, response.getDataList().size());
     Assert.assertEquals(shopCartTwo.getId(), response.getDataList().get(0).getId());
@@ -131,7 +131,7 @@ public class ShopCartControllerTest {
   public void test_CheckAllShopCart_002() throws IOException {
     testActions.addGoodOne10();
     testActions.addGoodTwo10();
-    GetShopCartListResponse response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1,
+    PagableShopCartList response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1,
         10, testActions.getAdminAccessToken());
     Assert.assertEquals(2, response.getDataList().size());
     Assert.assertTrue(response.getDataList().get(0).isChecked());
@@ -152,7 +152,7 @@ public class ShopCartControllerTest {
   public void test_CheckAllShopCart_003() throws IOException {
     ShopCart shopCartOne = testActions.addGoodOne10();
     testActions.addGoodTwo10();
-    GetShopCartListResponse response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1,
+    PagableShopCartList response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1,
         10, testActions.getAdminAccessToken());
     Assert.assertEquals(2, response.getDataList().size());
     Assert.assertTrue(response.getDataList().get(0).isChecked());
@@ -207,7 +207,7 @@ public class ShopCartControllerTest {
     shopCartControllerClient.updateShopCartCount(AbstractTestAction.ADMIN_USER_NAME, shopCart.getId(), 20,
         testActions.getAdminAccessToken());
 
-    GetShopCartListResponse response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1,
+    PagableShopCartList response = shopCartControllerClient.getShopCartList(AbstractTestAction.ADMIN_USER_NAME, 1,
         10, testActions.getAdminAccessToken());
     Assert.assertEquals(2, response.getDataList().size());
     Assert.assertEquals(10, response.getDataList().get(0).getCount());

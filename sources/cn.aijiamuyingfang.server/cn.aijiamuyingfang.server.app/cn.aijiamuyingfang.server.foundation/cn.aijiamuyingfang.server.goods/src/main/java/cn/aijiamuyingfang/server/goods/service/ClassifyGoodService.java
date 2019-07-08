@@ -14,9 +14,9 @@ import cn.aijiamuyingfang.server.domain.response.ResponseCode;
 import cn.aijiamuyingfang.server.exception.GoodsException;
 import cn.aijiamuyingfang.server.goods.db.ClassifyRepository;
 import cn.aijiamuyingfang.server.goods.db.GoodRepository;
-import cn.aijiamuyingfang.server.goods.domain.Classify;
-import cn.aijiamuyingfang.server.goods.domain.Good;
-import cn.aijiamuyingfang.server.goods.domain.response.GetClassifyGoodListResponse;
+import cn.aijiamuyingfang.server.goods.domain.response.PagableGoodList;
+import cn.aijiamuyingfang.server.goods.dto.Classify;
+import cn.aijiamuyingfang.server.goods.dto.Good;
 
 /**
  * [描述]:
@@ -56,7 +56,7 @@ public class ClassifyGoodService {
    *          每页商品数
    * @return
    */
-  public GetClassifyGoodListResponse getClassifyGoodList(String classifyId, List<String> packFilter,
+  public PagableGoodList getClassifyGoodList(String classifyId, List<String> packFilter,
       List<String> levelFilter, String orderType, String orderValue, int currentPage, int pageSize) {
     Classify classify = classifyRepository.findOne(classifyId);
     if (null == classify) {
@@ -79,7 +79,7 @@ public class ClassifyGoodService {
     } else {
       goodPage = goodRepository.findClassifyGoodByPackInAndLevelIn(classifyId, packFilter, levelFilter, pageRequest);
     }
-    GetClassifyGoodListResponse response = new GetClassifyGoodListResponse();
+    PagableGoodList response = new PagableGoodList();
     response.setCurrentPage(goodPage.getNumber() + 1);
     response.setDataList(goodPage.getContent());
     response.setTotalpage(goodPage.getTotalPages());

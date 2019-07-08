@@ -1,9 +1,9 @@
 package cn.aijiamuyingfang.client.rest.api;
 
-import cn.aijiamuyingfang.client.commons.domain.ResponseBean;
-import cn.aijiamuyingfang.client.domain.user.RecieveAddress;
-import cn.aijiamuyingfang.client.domain.user.User;
 import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
+import cn.aijiamuyingfang.vo.ResponseBean;
+import cn.aijiamuyingfang.vo.user.RecieveAddress;
+import cn.aijiamuyingfang.vo.user.User;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;

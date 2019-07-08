@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
 import cn.aijiamuyingfang.server.domain.UserAuthority;
 import cn.aijiamuyingfang.server.user.db.UserMessageRepository;
 import cn.aijiamuyingfang.server.user.db.UserRepository;
-import cn.aijiamuyingfang.server.user.domain.User;
-import cn.aijiamuyingfang.server.user.domain.UserMessage;
-import cn.aijiamuyingfang.server.user.domain.response.GetMessagesListResponse;
+import cn.aijiamuyingfang.server.user.domain.response.PagableUserMessageList;
+import cn.aijiamuyingfang.server.user.dto.User;
+import cn.aijiamuyingfang.server.user.dto.UserMessage;
 
 /**
  * [描述]:
@@ -62,11 +62,11 @@ public class UserMessageService {
    * @param pageSize
    * @return
    */
-  public GetMessagesListResponse getUserMessageList(String username, int currentPage, int pageSize) {
+  public PagableUserMessageList getUserMessageList(String username, int currentPage, int pageSize) {
     List<String> usernameList = new ArrayList<>();
     usernameList.add(username);
     usernameList.addAll(userRepository.findUsersByAuthority(UserAuthority.MANAGER_PERMISSION.getValue()));
-    GetMessagesListResponse response = getMessageList(usernameList, currentPage, pageSize);
+    PagableUserMessageList response = getMessageList(usernameList, currentPage, pageSize);
     User user = userRepository.findOne(username);
     if (user != null) {
       user.setLastReadMsgTime(new Date());
@@ -84,13 +84,13 @@ public class UserMessageService {
    * @param pageSize
    * @return
    */
-  private GetMessagesListResponse getMessageList(List<String> usernameList, int currentPage, int pageSize) {
+  private PagableUserMessageList getMessageList(List<String> usernameList, int currentPage, int pageSize) {
     // 在查询之前先把所有过期的消息清除
     cleanOvertimeMessage();
     // PageRequest的Page参数是基于0的,但是currentPage是基于1的,所有将currentPage作为参数传递给PgeRequest时需要'-1'
     PageRequest pageRequest = new PageRequest(currentPage - 1, pageSize, Sort.Direction.DESC, "createTime");
     Page<UserMessage> page = userMessageRepository.findByUsernameIn(usernameList, pageRequest);
-    GetMessagesListResponse response = new GetMessagesListResponse();
+    PagableUserMessageList response = new PagableUserMessageList();
     response.setCurrentPage(page.getNumber() + 1);
     response.setDataList(page.getContent());
     response.setTotalpage(page.getTotalPages());

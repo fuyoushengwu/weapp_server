@@ -13,13 +13,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import cn.aijiamuyingfang.client.domain.exception.UserException;
-import cn.aijiamuyingfang.client.domain.user.RecieveAddress;
-import cn.aijiamuyingfang.client.domain.user.User;
-import cn.aijiamuyingfang.client.domain.user.UserAuthority;
 import cn.aijiamuyingfang.client.rest.api.impl.UserControllerClient;
-import cn.aijiamuyingfang.commons.annotation.UseCaseDescription;
+import cn.aijiamuyingfang.server.it.AbstractTestAction;
 import cn.aijiamuyingfang.server.it.ITApplication;
+import cn.aijiamuyingfang.server.it.UseCaseDescription;
+import cn.aijiamuyingfang.vo.exception.UserException;
+import cn.aijiamuyingfang.vo.user.RecieveAddress;
+import cn.aijiamuyingfang.vo.user.User;
+import cn.aijiamuyingfang.vo.user.UserAuthority;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT, classes = ITApplication.class)
@@ -161,5 +162,25 @@ public class UserControllerTest {
     Assert.assertEquals(senderone.getUsername(), actualUser.getUsername());
     Assert.assertEquals(senderone.getPassword(), actualUser.getPassword());
     Assert.assertEquals(UserAuthority.SENDER_PERMISSION, actualUser.getAuthorityList().get(0));
+  }
+
+  @Test
+  @UseCaseDescription(description = "用户未提供电话")
+  public void test_getUserPhone_001() throws IOException {
+    String phone = userControllerClient.getUserPhone(AbstractTestAction.ADMIN_USER_NAME,
+        testActions.getAdminAccessToken());
+    Assert.assertNull(phone);
+  }
+
+  @Test
+  @UseCaseDescription(description = "用户提供了电话")
+  public void test_getUserPhone_002() throws IOException {
+    User user = new User();
+    user.setPhone("11111111111");
+    userControllerClient.updateUser(AbstractTestAction.ADMIN_USER_NAME, user, testActions.getAdminAccessToken());
+    String phone = userControllerClient.getUserPhone(AbstractTestAction.ADMIN_USER_NAME,
+        testActions.getAdminAccessToken());
+    Assert.assertEquals("11111111111", phone);
+    testActions.clearUserPhone(AbstractTestAction.ADMIN_USER_NAME);
   }
 }

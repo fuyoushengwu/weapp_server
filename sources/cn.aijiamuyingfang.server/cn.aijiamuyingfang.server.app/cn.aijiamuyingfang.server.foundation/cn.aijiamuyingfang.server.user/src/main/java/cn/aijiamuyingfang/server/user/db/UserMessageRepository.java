@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import cn.aijiamuyingfang.server.user.domain.UserMessage;
+import cn.aijiamuyingfang.server.user.dto.UserMessage;
 
 /**
  * [描述]:

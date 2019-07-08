@@ -1,11 +1,15 @@
 package cn.aijiamuyingfang.server.config;
 
+import java.util.List;
+
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import cn.aijiamuyingfang.server.domain.EnumConvertFactory;
@@ -31,5 +35,10 @@ public class DomainProdConfig extends WebMvcConfigurerAdapter {
   public void addFormatters(FormatterRegistry registry) {
     super.addFormatters(registry);
     registry.addConverterFactory(new EnumConvertFactory());
+  }
+
+  @Override
+  public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+    converters.add(new MappingJackson2HttpMessageConverter());
   }
 }

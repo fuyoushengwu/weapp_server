@@ -17,9 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import cn.aijiamuyingfang.commons.utils.StringUtils;
-import cn.aijiamuyingfang.server.user.domain.RecieveAddress;
-import cn.aijiamuyingfang.server.user.domain.User;
-import cn.aijiamuyingfang.server.user.domain.response.GetUserPhoneResponse;
+import cn.aijiamuyingfang.server.user.dto.RecieveAddress;
+import cn.aijiamuyingfang.server.user.dto.User;
 import cn.aijiamuyingfang.server.user.service.UserService;
 
 /**
@@ -102,13 +101,13 @@ public class UserController {
 
   /**
    * 获取用户手机号
-   * 
+   *
    * @param username
    * @return
    */
   @PreAuthorize(value = "hasAnyAuthority('permission:manager:*','permission:sender:*')")
-  @GetMapping(value = "/user/{username}/phone")
-  public GetUserPhoneResponse getUserPhone(@PathVariable("username") String username) {
+  @GetMapping(value = "/user/{username}/phone", produces = { "application/json" })
+  public String getUserPhone(@PathVariable("username") String username) {
     return userService.getUserPhone(username);
   }
 

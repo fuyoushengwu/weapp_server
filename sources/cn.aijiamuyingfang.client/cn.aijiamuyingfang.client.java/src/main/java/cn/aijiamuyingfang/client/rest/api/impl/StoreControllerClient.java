@@ -10,23 +10,22 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import cn.aijiamuyingfang.client.commons.domain.ResponseBean;
-import cn.aijiamuyingfang.client.commons.domain.ResponseCode;
 import cn.aijiamuyingfang.client.commons.utils.StringUtils;
-import cn.aijiamuyingfang.client.domain.address.City;
-import cn.aijiamuyingfang.client.domain.address.Coordinate;
-import cn.aijiamuyingfang.client.domain.address.County;
-import cn.aijiamuyingfang.client.domain.address.Province;
-import cn.aijiamuyingfang.client.domain.address.Town;
-import cn.aijiamuyingfang.client.domain.exception.GoodsException;
-import cn.aijiamuyingfang.client.domain.store.Store;
-import cn.aijiamuyingfang.client.domain.store.StoreAddress;
-import cn.aijiamuyingfang.client.domain.store.WorkTime;
-import cn.aijiamuyingfang.client.domain.store.response.GetDefaultStoreIdResponse;
-import cn.aijiamuyingfang.client.domain.store.response.GetInUseStoreListResponse;
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.StoreControllerApi;
 import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
+import cn.aijiamuyingfang.vo.ResponseBean;
+import cn.aijiamuyingfang.vo.ResponseCode;
+import cn.aijiamuyingfang.vo.address.City;
+import cn.aijiamuyingfang.vo.address.Coordinate;
+import cn.aijiamuyingfang.vo.address.County;
+import cn.aijiamuyingfang.vo.address.Province;
+import cn.aijiamuyingfang.vo.address.Town;
+import cn.aijiamuyingfang.vo.exception.GoodsException;
+import cn.aijiamuyingfang.vo.store.PagableStoreList;
+import cn.aijiamuyingfang.vo.store.Store;
+import cn.aijiamuyingfang.vo.store.StoreAddress;
+import cn.aijiamuyingfang.vo.store.WorkTime;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.MultipartBody.Builder;
@@ -77,7 +76,7 @@ public class StoreControllerClient {
    * @return
    * @throws IOException
    */
-  public GetInUseStoreListResponse getInUseStoreList(int currentPage, int pageSize) throws IOException {
+  public PagableStoreList getInUseStoreList(int currentPage, int pageSize) throws IOException {
     Response<ResponseBean> response = storeControllerApi.getInUseStoreList(currentPage, pageSize).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
@@ -89,8 +88,8 @@ public class StoreControllerClient {
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
-      GetInUseStoreListResponse getInUseStoreListResponse = JsonUtils
-          .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetInUseStoreListResponse.class);
+      PagableStoreList getInUseStoreListResponse = JsonUtils
+          .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), PagableStoreList.class);
       if (null == getInUseStoreListResponse) {
         throw new GoodsException("500", "get inuse store list  return code is '200',but return data is null");
       }
@@ -424,7 +423,7 @@ public class StoreControllerClient {
    * @return
    * @throws IOException
    */
-  public GetDefaultStoreIdResponse getDefaultStoreId() throws IOException {
+  public String getDefaultStoreId() throws IOException {
     Response<ResponseBean> response = storeControllerApi.getDefaultStoreId().execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
@@ -434,9 +433,8 @@ public class StoreControllerClient {
       throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
-    Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
-      return JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetDefaultStoreIdResponse.class);
+      return (String) responseBean.getData();
     }
     LOGGER.error(responseBean.getMsg());
     throw new GoodsException(returnCode, responseBean.getMsg());

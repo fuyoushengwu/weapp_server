@@ -3,17 +3,16 @@ package cn.aijiamuyingfang.client.rest.api;
 import java.util.List;
 import java.util.Map;
 
-import cn.aijiamuyingfang.client.commons.domain.ResponseBean;
-import cn.aijiamuyingfang.client.domain.previeworder.response.GetFinishedPreOrderListResponse;
-import cn.aijiamuyingfang.client.domain.previeworder.response.GetPreOrderGoodListResponse;
-import cn.aijiamuyingfang.client.domain.shoporder.SendType;
-import cn.aijiamuyingfang.client.domain.shoporder.ShopOrder;
-import cn.aijiamuyingfang.client.domain.shoporder.ShopOrderStatus;
-import cn.aijiamuyingfang.client.domain.shoporder.request.CreateShopOrderRequest;
-import cn.aijiamuyingfang.client.domain.shoporder.request.UpdateShopOrderStatusRequest;
-import cn.aijiamuyingfang.client.domain.shoporder.response.ConfirmShopOrderFinishedResponse;
-import cn.aijiamuyingfang.client.domain.shoporder.response.GetShopOrderListResponse;
-import cn.aijiamuyingfang.client.domain.shoporder.response.GetShopOrderVoucherListResponse;
+import cn.aijiamuyingfang.vo.ResponseBean;
+import cn.aijiamuyingfang.vo.preorder.PagablePreOrderGoodList;
+import cn.aijiamuyingfang.vo.shoporder.ConfirmShopOrderFinishedResponse;
+import cn.aijiamuyingfang.vo.shoporder.CreateShopOrderRequest;
+import cn.aijiamuyingfang.vo.shoporder.PagableShopOrderList;
+import cn.aijiamuyingfang.vo.shoporder.SendType;
+import cn.aijiamuyingfang.vo.shoporder.ShopOrder;
+import cn.aijiamuyingfang.vo.shoporder.ShopOrderStatus;
+import cn.aijiamuyingfang.vo.shoporder.ShopOrderVoucher;
+import cn.aijiamuyingfang.vo.shoporder.UpdateShopOrderStatusRequest;
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -47,7 +46,7 @@ public interface ShopOrderControllerApi {
    * @return
    */
   @GET(value = "/shoporder-service/user/{username}/shoporder")
-  public Observable<ResponseBean<GetShopOrderListResponse>> getUserShopOrderList(@Path("username") String username,
+  public Observable<ResponseBean<PagableShopOrderList>> getUserShopOrderList(@Path("username") String username,
       @Query(value = "status") List<ShopOrderStatus> status, @Query(value = "send_type") List<SendType> sendType,
       @Query(value = "current_page") int currentPage, @Query(value = "page_size") int pageSize,
       @Query("access_token") String accessToken);
@@ -61,9 +60,8 @@ public interface ShopOrderControllerApi {
    * @return
    */
   @GET(value = "/shoporder-service/user/{username}/coupon/shoporder")
-  public Observable<ResponseBean<GetShopOrderVoucherListResponse>> getUserShopOrderVoucherList(
-      @Path("username") String username, @Query("good_id") List<String> goodIdList,
-      @Query("access_token") String accessToken);
+  public Observable<ResponseBean<List<ShopOrderVoucher>>> getUserShopOrderVoucherList(@Path("username") String username,
+      @Query("good_id") List<String> goodIdList, @Query("access_token") String accessToken);
 
   /**
    * 分页获取所有的订单信息
@@ -76,7 +74,7 @@ public interface ShopOrderControllerApi {
    * @return
    */
   @GET(value = "/shoporder-service/shoporder")
-  public Observable<ResponseBean<GetShopOrderListResponse>> getShopOrderList(
+  public Observable<ResponseBean<PagableShopOrderList>> getShopOrderList(
       @Query(value = "status") List<ShopOrderStatus> status, @Query(value = "send_type") List<SendType> sendType,
       @Query(value = "current_page") int currentPage, @Query(value = "page_size") int pageSize,
       @Query("access_token") String accessToken);
@@ -152,7 +150,7 @@ public interface ShopOrderControllerApi {
    * @return
    */
   @GET(value = "/shoporder-service/shoporder/preorder/finished")
-  public Observable<ResponseBean<GetFinishedPreOrderListResponse>> getFinishedPreOrderList(
+  public Observable<ResponseBean<PagableShopOrderList>> getFinishedPreOrderList(
       @Query(value = "current_page") int currentPage, @Query(value = "page_size") int pageSize,
       @Query("access_token") String accessToken);
 
@@ -200,7 +198,7 @@ public interface ShopOrderControllerApi {
    * @return
    */
   @GET(value = "/shoporder-service/shoporder/preordergoods")
-  public Observable<ResponseBean<GetPreOrderGoodListResponse>> getPreOrderGoodList(
+  public Observable<ResponseBean<PagablePreOrderGoodList>> getPreOrderGoodList(
       @Query(value = "current_page") int currentPage, @Query(value = "page_size") int pageSize,
       @Query("access_token") String accessToken);
 

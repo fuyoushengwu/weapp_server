@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import cn.aijiamuyingfang.server.shoporder.domain.ShopCart;
+import cn.aijiamuyingfang.server.shoporder.dto.ShopCart;
 
 /**
  * [描述]:

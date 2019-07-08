@@ -5,12 +5,12 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import cn.aijiamuyingfang.client.domain.classify.Classify;
-import cn.aijiamuyingfang.client.domain.goods.Good;
-import cn.aijiamuyingfang.client.domain.store.Store;
 import cn.aijiamuyingfang.client.rest.api.impl.ClassifyControllerClient;
 import cn.aijiamuyingfang.client.rest.api.impl.StoreControllerClient;
 import cn.aijiamuyingfang.server.it.AbstractTestAction;
+import cn.aijiamuyingfang.vo.classify.Classify;
+import cn.aijiamuyingfang.vo.goods.Good;
+import cn.aijiamuyingfang.vo.store.Store;
 
 /**
  * [描述]:

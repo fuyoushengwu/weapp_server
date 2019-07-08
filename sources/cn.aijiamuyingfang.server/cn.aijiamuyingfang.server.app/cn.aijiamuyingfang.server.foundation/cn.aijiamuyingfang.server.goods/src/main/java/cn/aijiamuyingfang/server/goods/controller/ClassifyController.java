@@ -19,8 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import cn.aijiamuyingfang.server.domain.response.ResponseCode;
 import cn.aijiamuyingfang.server.exception.GoodsException;
-import cn.aijiamuyingfang.server.goods.domain.Classify;
-import cn.aijiamuyingfang.server.goods.domain.ImageSource;
+import cn.aijiamuyingfang.server.goods.dto.Classify;
+import cn.aijiamuyingfang.server.goods.dto.ImageSource;
 import cn.aijiamuyingfang.server.goods.service.ClassifyService;
 import cn.aijiamuyingfang.server.goods.service.ImageService;
 

@@ -22,7 +22,7 @@ import cn.aijiamuyingfang.server.exception.ShopOrderException;
 import cn.aijiamuyingfang.server.feign.CouponClient;
 import cn.aijiamuyingfang.server.feign.GoodClient;
 import cn.aijiamuyingfang.server.feign.UserClient;
-import cn.aijiamuyingfang.server.feign.domain.coupon.GetUserVoucherListResponse;
+import cn.aijiamuyingfang.server.feign.domain.coupon.PagableUserVoucherList;
 import cn.aijiamuyingfang.server.feign.domain.coupon.GoodVoucher;
 import cn.aijiamuyingfang.server.feign.domain.coupon.UserVoucher;
 import cn.aijiamuyingfang.server.feign.domain.coupon.VoucherItem;
@@ -32,19 +32,18 @@ import cn.aijiamuyingfang.server.feign.domain.user.User;
 import cn.aijiamuyingfang.server.shoporder.db.PreviewOrderRepository;
 import cn.aijiamuyingfang.server.shoporder.db.ShopCartRepository;
 import cn.aijiamuyingfang.server.shoporder.db.ShopOrderRepository;
-import cn.aijiamuyingfang.server.shoporder.domain.PreOrderGood;
-import cn.aijiamuyingfang.server.shoporder.domain.PreviewOrder;
-import cn.aijiamuyingfang.server.shoporder.domain.PreviewOrderItem;
-import cn.aijiamuyingfang.server.shoporder.domain.ShopOrder;
-import cn.aijiamuyingfang.server.shoporder.domain.ShopOrderItem;
-import cn.aijiamuyingfang.server.shoporder.domain.ShopOrderVoucher;
 import cn.aijiamuyingfang.server.shoporder.domain.request.CreateShopOrderRequest;
 import cn.aijiamuyingfang.server.shoporder.domain.request.UpdateShopOrderStatusRequest;
 import cn.aijiamuyingfang.server.shoporder.domain.response.ConfirmShopOrderFinishedResponse;
-import cn.aijiamuyingfang.server.shoporder.domain.response.GetFinishedPreOrderListResponse;
-import cn.aijiamuyingfang.server.shoporder.domain.response.GetPreOrderGoodListResponse;
-import cn.aijiamuyingfang.server.shoporder.domain.response.GetShopOrderListResponse;
-import cn.aijiamuyingfang.server.shoporder.domain.response.GetShopOrderVoucherListResponse;
+import cn.aijiamuyingfang.server.shoporder.domain.response.PagableFinishedPreOrderList;
+import cn.aijiamuyingfang.server.shoporder.domain.response.PagablePreOrderGoodList;
+import cn.aijiamuyingfang.server.shoporder.domain.response.PagableShopOrderList;
+import cn.aijiamuyingfang.server.shoporder.dto.PreOrderGood;
+import cn.aijiamuyingfang.server.shoporder.dto.PreviewOrder;
+import cn.aijiamuyingfang.server.shoporder.dto.PreviewOrderItem;
+import cn.aijiamuyingfang.server.shoporder.dto.ShopOrder;
+import cn.aijiamuyingfang.server.shoporder.dto.ShopOrderItem;
+import cn.aijiamuyingfang.server.shoporder.dto.ShopOrderVoucher;
 
 /***
  * [描述]:
@@ -91,10 +90,10 @@ public class ShopOrderService {
    * @param pageSize
    * @return
    */
-  public GetShopOrderListResponse getUserShopOrderList(String username, List<ShopOrderStatus> statusList,
+  public PagableShopOrderList getUserShopOrderList(String username, List<ShopOrderStatus> statusList,
       List<SendType> sendTypeList, int currentPage, int pageSize) {
     Page<ShopOrder> shoporderPage = getUserShopOrderPage(username, statusList, sendTypeList, currentPage, pageSize);
-    GetShopOrderListResponse response = new GetShopOrderListResponse();
+    PagableShopOrderList response = new PagableShopOrderList();
     response.setCurrentPage(shoporderPage.getNumber() + 1);
     response.setDataList(shoporderPage.getContent());
     response.setTotalpage(shoporderPage.getTotalPages());
@@ -111,10 +110,10 @@ public class ShopOrderService {
    * @param pageSize
    * @return
    */
-  public GetShopOrderListResponse getShopOrderList(List<ShopOrderStatus> statusList, List<SendType> sendTypeList,
+  public PagableShopOrderList getShopOrderList(List<ShopOrderStatus> statusList, List<SendType> sendTypeList,
       int currentPage, int pageSize) {
     Page<ShopOrder> shoporderPage = getUserShopOrderPage(null, statusList, sendTypeList, currentPage, pageSize);
-    GetShopOrderListResponse response = new GetShopOrderListResponse();
+    PagableShopOrderList response = new PagableShopOrderList();
     response.setCurrentPage(shoporderPage.getNumber() + 1);
     response.setDataList(shoporderPage.getContent());
     response.setTotalpage(shoporderPage.getTotalPages());
@@ -362,11 +361,11 @@ public class ShopOrderService {
    * @param pageSize
    * @return
    */
-  public GetFinishedPreOrderListResponse getFinishedPreOrderList(int currentPage, int pageSize) {
+  public PagableFinishedPreOrderList getFinishedPreOrderList(int currentPage, int pageSize) {
     // PageRequest的Page参数是基于0的,但是currentPage是基于1的,所有将currentPage作为参数传递给PgeRequest时需要'-1'
     PageRequest pageRequest = new PageRequest(currentPage - 1, pageSize, Sort.Direction.DESC, "finishTime");
     Page<ShopOrder> shoporderPage = shopOrderRepository.findByStatus(ShopOrderStatus.FINISHED, pageRequest);
-    GetFinishedPreOrderListResponse response = new GetFinishedPreOrderListResponse();
+    PagableFinishedPreOrderList response = new PagableFinishedPreOrderList();
     response.setCurrentPage(shoporderPage.getNumber() + 1);
     response.setDataList(shoporderPage.getContent());
     response.setTotalpage(shoporderPage.getTotalPages());
@@ -381,10 +380,10 @@ public class ShopOrderService {
    * @param goodIdList
    * @return
    */
-  public GetShopOrderVoucherListResponse getUserShopOrderVoucherList(String username, List<String> goodIdList) {
-    GetShopOrderVoucherListResponse result = new GetShopOrderVoucherListResponse();
+  public List<ShopOrderVoucher> getUserShopOrderVoucherList(String username, List<String> goodIdList) {
+    List<ShopOrderVoucher> result = new ArrayList<>();
 
-    GetUserVoucherListResponse response = couponClient.getUserVoucherList(username, 1, Integer.MAX_VALUE).getData();
+    PagableUserVoucherList response = couponClient.getUserVoucherList(username, 1, Integer.MAX_VALUE).getData();
     for (UserVoucher uservoucher : response.getDataList()) {
       List<String> itemidList = uservoucher.getGoodVoucher().getVoucherItemIdList();
       for (String itemid : itemidList) {
@@ -394,7 +393,7 @@ public class ShopOrderService {
           shoporderVoucher.setUservoucherId(uservoucher.getId());
           shoporderVoucher.setVoucherItemId(item.getId());
           shoporderVoucher.setGoodId(item.getGoodId());
-          result.addUsefulHolderCart(shoporderVoucher);
+          result.add(shoporderVoucher);
           break;
         }
       }
@@ -469,7 +468,7 @@ public class ShopOrderService {
     shoporder.setSendPrice(sendPrice);
     shoporder.setScore(request.getJfNum());
 
-    List<ShopOrderVoucher> shoporderVoucherList = getUserShopOrderVoucherList(username, goodIdList).getVoucherList();
+    List<ShopOrderVoucher> shoporderVoucherList = getUserShopOrderVoucherList(username, goodIdList);
     shoporder.setOrderVoucher(shoporderVoucherList);
     double totalPrice = totalGoodsPrice + sendPrice - request.getJfNum() / 100.0;
     if (!CollectionUtils.isEmpty(shoporderVoucherList)) {
@@ -622,8 +621,8 @@ public class ShopOrderService {
    * @param pageSize
    * @return
    */
-  public GetPreOrderGoodListResponse getPreOrderGoodList(int currentPage, int pageSize) {
-    GetPreOrderGoodListResponse response = new GetPreOrderGoodListResponse();
+  public PagablePreOrderGoodList getPreOrderGoodList(int currentPage, int pageSize) {
+    PagablePreOrderGoodList response = new PagablePreOrderGoodList();
     response.setCurrentPage(currentPage);
     List<ShopOrder> shoporderList = shopOrderRepository.findByStatus(ShopOrderStatus.PREORDER);
     Map<String, Integer> good2ShopOrderItemList = new HashMap<>();

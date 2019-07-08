@@ -13,13 +13,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import cn.aijiamuyingfang.client.domain.message.UserMessage;
-import cn.aijiamuyingfang.client.domain.message.UserMessageType;
-import cn.aijiamuyingfang.client.domain.message.response.GetMessagesListResponse;
-import cn.aijiamuyingfang.client.domain.user.User;
 import cn.aijiamuyingfang.client.rest.api.impl.UserMessageControllerClient;
-import cn.aijiamuyingfang.commons.annotation.UseCaseDescription;
 import cn.aijiamuyingfang.server.it.ITApplication;
+import cn.aijiamuyingfang.server.it.UseCaseDescription;
+import cn.aijiamuyingfang.vo.message.PagableUserMessageList;
+import cn.aijiamuyingfang.vo.message.UserMessage;
+import cn.aijiamuyingfang.vo.message.UserMessageType;
+import cn.aijiamuyingfang.vo.user.User;
 
 /***
  * [描述]:
@@ -75,7 +75,7 @@ public class UserMessageControllerTest {
     count = client.getUserUnReadMessageCount(senderOne.getUsername(), testActions.getSenderOneAccessToken());
     Assert.assertEquals(1, count);
 
-    GetMessagesListResponse userMessageList = client.getUserMessageList(senderOne.getUsername(), 1, 10,
+    PagableUserMessageList userMessageList = client.getUserMessageList(senderOne.getUsername(), 1, 10,
         testActions.getSenderOneAccessToken());
     Assert.assertNotNull(userMessageList);
     Assert.assertEquals(1, userMessageList.getDataList().size());
@@ -114,7 +114,7 @@ public class UserMessageControllerTest {
     count = client.getUserUnReadMessageCount(senderOne.getUsername(), testActions.getSenderOneAccessToken());
     Assert.assertEquals(2, count);
 
-    GetMessagesListResponse response = client.getUserMessageList(senderOne.getUsername(), 1, 10,
+    PagableUserMessageList response = client.getUserMessageList(senderOne.getUsername(), 1, 10,
         testActions.getSenderOneAccessToken());
     Assert.assertEquals(userMessage.getId(), response.getDataList().get(1).getId());
   }

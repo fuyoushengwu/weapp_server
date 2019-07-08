@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
+import cn.aijiamuyingfang.vo.BaseEnum;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 

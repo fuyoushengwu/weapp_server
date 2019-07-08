@@ -13,11 +13,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import cn.aijiamuyingfang.client.domain.classify.Classify;
-import cn.aijiamuyingfang.client.domain.exception.GoodsException;
 import cn.aijiamuyingfang.client.rest.api.impl.ClassifyControllerClient;
-import cn.aijiamuyingfang.commons.annotation.UseCaseDescription;
 import cn.aijiamuyingfang.server.it.ITApplication;
+import cn.aijiamuyingfang.server.it.UseCaseDescription;
+import cn.aijiamuyingfang.vo.classify.Classify;
+import cn.aijiamuyingfang.vo.exception.GoodsException;
 
 /**
  * [描述]:

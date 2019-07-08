@@ -2,10 +2,9 @@ package cn.aijiamuyingfang.client.rest.api;
 
 import java.util.List;
 
-import cn.aijiamuyingfang.client.commons.domain.ResponseBean;
-import cn.aijiamuyingfang.client.domain.user.RecieveAddress;
-import cn.aijiamuyingfang.client.domain.user.User;
-import cn.aijiamuyingfang.client.domain.user.response.GetUserPhoneResponse;
+import cn.aijiamuyingfang.vo.ResponseBean;
+import cn.aijiamuyingfang.vo.user.RecieveAddress;
+import cn.aijiamuyingfang.vo.user.User;
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -57,7 +56,7 @@ public interface UserControllerApi {
    * @return
    */
   @GET(value = "/user-service/user/{username}/phone")
-  public Observable<ResponseBean<GetUserPhoneResponse>> getUserPhone(@Path("username") String username,
+  public Observable<ResponseBean<String>> getUserPhone(@Path("username") String username,
       @Query("access_token") String accessToken);
 
   /**

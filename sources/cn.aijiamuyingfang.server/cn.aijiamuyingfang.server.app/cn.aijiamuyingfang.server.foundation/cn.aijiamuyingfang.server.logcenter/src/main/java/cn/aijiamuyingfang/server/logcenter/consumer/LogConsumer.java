@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import cn.aijiamuyingfang.commons.constants.LogConstants;
-import cn.aijiamuyingfang.server.logcenter.domain.Log;
+import cn.aijiamuyingfang.server.logcenter.dto.Log;
 import cn.aijiamuyingfang.server.logcenter.service.LogService;
 import lombok.extern.slf4j.Slf4j;
 

@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cn.aijiamuyingfang.commons.utils.CollectionUtils;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
-import cn.aijiamuyingfang.server.coupon.domain.GoodVoucher;
-import cn.aijiamuyingfang.server.coupon.domain.UserVoucher;
-import cn.aijiamuyingfang.server.coupon.domain.VoucherItem;
-import cn.aijiamuyingfang.server.coupon.domain.response.GetGoodVoucherListResponse;
-import cn.aijiamuyingfang.server.coupon.domain.response.GetUserVoucherListResponse;
-import cn.aijiamuyingfang.server.coupon.domain.response.GetVoucherItemListResponse;
+import cn.aijiamuyingfang.server.coupon.domain.response.PagableGoodVoucherList;
+import cn.aijiamuyingfang.server.coupon.domain.response.PagableUserVoucherList;
+import cn.aijiamuyingfang.server.coupon.domain.response.PagableVoucherItemList;
+import cn.aijiamuyingfang.server.coupon.dto.GoodVoucher;
+import cn.aijiamuyingfang.server.coupon.dto.UserVoucher;
+import cn.aijiamuyingfang.server.coupon.dto.VoucherItem;
 import cn.aijiamuyingfang.server.coupon.service.CouponService;
 
 /**
@@ -50,7 +50,7 @@ public class CouponController {
   @PreAuthorize(
       value = "isAuthenticated() and (#username.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
   @GetMapping(value = "/user/{username}/coupon/uservoucher")
-  public GetUserVoucherListResponse getUserVoucherList(@PathVariable("username") String username,
+  public PagableUserVoucherList getUserVoucherList(@PathVariable("username") String username,
       @RequestParam("current_page") int currentPage, @RequestParam("page_size") int pageSize) {
     return couponService.getUserVoucherList(username, currentPage, pageSize);
   }
@@ -123,7 +123,7 @@ public class CouponController {
    */
   @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/coupon/goodvoucher")
-  public GetGoodVoucherListResponse getGoodVoucherList(@RequestParam(value = "current_page") int currentPage,
+  public PagableGoodVoucherList getGoodVoucherList(@RequestParam(value = "current_page") int currentPage,
       @RequestParam("page_size") int pageSize) {
     return couponService.getGoodVoucherList(currentPage, pageSize);
   }
@@ -184,7 +184,7 @@ public class CouponController {
    */
   @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/coupon/voucher_item")
-  public GetVoucherItemListResponse getVoucherItemList(@RequestParam("current_page") int currentPage,
+  public PagableVoucherItemList getVoucherItemList(@RequestParam("current_page") int currentPage,
       @RequestParam("page_size") int pageSize) {
     return couponService.getVoucherItemList(currentPage, pageSize);
   }

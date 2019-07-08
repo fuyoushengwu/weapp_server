@@ -6,12 +6,13 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import cn.aijiamuyingfang.client.domain.message.UserMessage;
-import cn.aijiamuyingfang.client.domain.message.UserMessageType;
 import cn.aijiamuyingfang.client.rest.api.impl.UserMessageControllerClient;
 import cn.aijiamuyingfang.server.it.AbstractTestAction;
 import cn.aijiamuyingfang.server.it.annotation.TargetDataSource;
-import cn.aijiamuyingfang.server.it.user.db.UserMessageRepository;
+import cn.aijiamuyingfang.server.it.db.user.UserMessageRepository;
+import cn.aijiamuyingfang.server.it.dto.user.UserDTO;
+import cn.aijiamuyingfang.vo.message.UserMessage;
+import cn.aijiamuyingfang.vo.message.UserMessageType;
 
 @Service
 public class UserTestActions extends AbstractTestAction {
@@ -50,5 +51,12 @@ public class UserTestActions extends AbstractTestAction {
   @TargetDataSource(name = "weapp-user")
   public void clearUserMessage() {
     userMessageRepository.deleteAll();
+  }
+
+  @TargetDataSource(name = "weapp-user")
+  public void clearUserPhone(String userId) {
+    UserDTO user = userRepository.findOne(userId);
+    user.setPhone(null);
+    userRepository.save(user);
   }
 }

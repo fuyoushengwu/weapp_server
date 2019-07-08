@@ -5,11 +5,11 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import cn.aijiamuyingfang.client.domain.coupon.GoodVoucher;
-import cn.aijiamuyingfang.client.domain.coupon.VoucherItem;
-import cn.aijiamuyingfang.client.domain.goods.Good;
 import cn.aijiamuyingfang.client.rest.api.impl.CouponControllerClient;
 import cn.aijiamuyingfang.server.it.AbstractTestAction;
+import cn.aijiamuyingfang.vo.coupon.GoodVoucher;
+import cn.aijiamuyingfang.vo.coupon.VoucherItem;
+import cn.aijiamuyingfang.vo.goods.Good;
 
 /**
  * [描述]:
@@ -34,7 +34,7 @@ public class CouponTestActions extends AbstractTestAction {
       voucherItemRequest.setName("voucher item 1");
       voucherItemRequest.setDescription("voucher item 1");
       voucherItemRequest.setScore(120);
-      voucherItemRequest.setGoodId(getGoodOne().getId());
+      voucherItemRequest.setGood(getGoodOne());
       this.voucherItemOne = couponControllerClient.createVoucherItem(voucherItemRequest, getAdminAccessToken());
     }
     return voucherItemOne;
@@ -46,7 +46,7 @@ public class CouponTestActions extends AbstractTestAction {
       voucherItemRequest.setName("voucher item 2");
       voucherItemRequest.setDescription("voucher item 2");
       voucherItemRequest.setScore(120);
-      voucherItemRequest.setGoodId(getGoodTwo().getId());
+      voucherItemRequest.setGood(getGoodTwo());
       this.voucherItemTwo = couponControllerClient.createVoucherItem(voucherItemRequest, getAdminAccessToken());
     }
     return voucherItemTwo;
@@ -58,7 +58,7 @@ public class CouponTestActions extends AbstractTestAction {
       goodVoucherRequest.setName("good voucher 1");
       goodVoucherRequest.setDescription("good voucher 1");
       goodVoucherRequest.setScore(15);
-      goodVoucherRequest.addVoucherItemId(getVoucherItemOneForGoodOne().getId());
+      goodVoucherRequest.addVoucherItem(getVoucherItemOneForGoodOne());
       this.goodVoucherOne = couponControllerClient.createGoodVoucher(goodVoucherRequest, getAdminAccessToken());
     }
     return goodVoucherOne;
@@ -70,7 +70,7 @@ public class CouponTestActions extends AbstractTestAction {
       goodVoucherRequest.setName("good voucher 2");
       goodVoucherRequest.setDescription("good voucher 2");
       goodVoucherRequest.setScore(15);
-      goodVoucherRequest.addVoucherItemId(getVoucherItemTwoForGoodTwo().getId());
+      goodVoucherRequest.addVoucherItem(getVoucherItemTwoForGoodTwo());
       this.goodVoucherTwo = couponControllerClient.createGoodVoucher(goodVoucherRequest, getAdminAccessToken());
     }
     return goodVoucherTwo;
@@ -78,13 +78,17 @@ public class CouponTestActions extends AbstractTestAction {
 
   public Good applyGoodVoucherOneForGoodOne() throws IOException {
     Good goodRequest = new Good();
-    goodRequest.setVoucherId(getGoodVoucherOneWithVoucherItemOne().getId());
+    GoodVoucher goodVoucher = new GoodVoucher();
+    goodVoucher.setId(getGoodVoucherOneWithVoucherItemOne().getId());
+    goodRequest.setGoodVoucher(goodVoucher);
     return goodControllerClient.updateGood(getGoodOne().getId(), goodRequest, getAdminAccessToken());
   }
 
   public Good applyGoodVoucherTwoForGoodTwo() throws IOException {
     Good goodRequest = new Good();
-    goodRequest.setVoucherId(getGoodVoucherTwoWithVoucherItemTwo().getId());
+    GoodVoucher goodVoucher = new GoodVoucher();
+    goodVoucher.setId(getGoodVoucherTwoWithVoucherItemTwo().getId());
+    goodRequest.setGoodVoucher(goodVoucher);
     return goodControllerClient.updateGood(getGoodTwo().getId(), goodRequest, getAdminAccessToken());
   }
 }

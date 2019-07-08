@@ -1,11 +1,11 @@
 package cn.aijiamuyingfang.client.rest.api;
 
-import cn.aijiamuyingfang.client.commons.domain.ResponseBean;
-import cn.aijiamuyingfang.client.domain.coupon.GoodVoucher;
-import cn.aijiamuyingfang.client.domain.coupon.VoucherItem;
-import cn.aijiamuyingfang.client.domain.coupon.response.GetGoodVoucherListResponse;
-import cn.aijiamuyingfang.client.domain.coupon.response.GetUserVoucherListResponse;
-import cn.aijiamuyingfang.client.domain.coupon.response.GetVoucherItemListResponse;
+import cn.aijiamuyingfang.vo.ResponseBean;
+import cn.aijiamuyingfang.vo.coupon.GoodVoucher;
+import cn.aijiamuyingfang.vo.coupon.PagableGoodVoucherList;
+import cn.aijiamuyingfang.vo.coupon.PagableUserVoucherList;
+import cn.aijiamuyingfang.vo.coupon.PagableVoucherItemList;
+import cn.aijiamuyingfang.vo.coupon.VoucherItem;
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -37,7 +37,7 @@ public interface CouponControllerApi {
    * @return
    */
   @GET(value = "/coupon-service/user/{username}/coupon/uservoucher")
-  public Observable<ResponseBean<GetUserVoucherListResponse>> getUserVoucherList(@Path("username") String username,
+  public Observable<ResponseBean<PagableUserVoucherList>> getUserVoucherList(@Path("username") String username,
       @Query("current_page") int currentPage, @Query("page_size") int pageSize,
       @Query("access_token") String accessToken);
 
@@ -49,7 +49,7 @@ public interface CouponControllerApi {
    * @return
    */
   @GET(value = "/coupon-service/coupon/goodvoucher")
-  public Observable<ResponseBean<GetGoodVoucherListResponse>> getGoodVoucherList(@Query("current_page") int currentPage,
+  public Observable<ResponseBean<PagableGoodVoucherList>> getGoodVoucherList(@Query("current_page") int currentPage,
       @Query("page_size") int pageSize);
 
   /**
@@ -91,7 +91,7 @@ public interface CouponControllerApi {
    * @return
    */
   @GET(value = "/coupon-service/coupon/voucher_item")
-  public Observable<ResponseBean<GetVoucherItemListResponse>> getVoucherItemList(@Query("current_page") int currentPage,
+  public Observable<ResponseBean<PagableVoucherItemList>> getVoucherItemList(@Query("current_page") int currentPage,
       @Query("page_size") int pageSize);
 
   /**

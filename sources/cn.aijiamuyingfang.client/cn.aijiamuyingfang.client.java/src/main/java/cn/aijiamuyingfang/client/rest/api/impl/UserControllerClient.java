@@ -8,16 +8,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import cn.aijiamuyingfang.client.commons.domain.ResponseBean;
-import cn.aijiamuyingfang.client.commons.domain.ResponseCode;
 import cn.aijiamuyingfang.client.commons.exception.OAuthException;
-import cn.aijiamuyingfang.client.domain.exception.UserException;
-import cn.aijiamuyingfang.client.domain.user.RecieveAddress;
-import cn.aijiamuyingfang.client.domain.user.User;
-import cn.aijiamuyingfang.client.domain.user.response.GetUserPhoneResponse;
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.UserControllerApi;
 import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
+import cn.aijiamuyingfang.vo.ResponseBean;
+import cn.aijiamuyingfang.vo.ResponseCode;
+import cn.aijiamuyingfang.vo.exception.UserException;
+import cn.aijiamuyingfang.vo.user.RecieveAddress;
+import cn.aijiamuyingfang.vo.user.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -75,7 +74,7 @@ public class UserControllerClient {
    * @return
    * @throws IOException
    */
-  public GetUserPhoneResponse getUserPhone(String username, String accessToken) throws IOException {
+  public String getUserPhone(String username, String accessToken) throws IOException {
     Response<ResponseBean> response = userControllerApi.getUserPhone(username, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
@@ -85,14 +84,8 @@ public class UserControllerClient {
       throw new UserException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
-    Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
-      GetUserPhoneResponse getUserPhoneResponse = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
-          GetUserPhoneResponse.class);
-      if (null == getUserPhoneResponse) {
-        throw new UserException("500", "get user phone return code is '200',but return data is null");
-      }
-      return getUserPhoneResponse;
+      return (String) responseBean.getData();
     }
     LOGGER.error(responseBean.getMsg());
     throw new UserException(returnCode, responseBean.getMsg());

@@ -2,11 +2,10 @@ package cn.aijiamuyingfang.client.rest.api;
 
 import java.util.List;
 
-import cn.aijiamuyingfang.client.commons.domain.ResponseBean;
-import cn.aijiamuyingfang.client.domain.store.Store;
-import cn.aijiamuyingfang.client.domain.store.StoreAddress;
-import cn.aijiamuyingfang.client.domain.store.response.GetDefaultStoreIdResponse;
-import cn.aijiamuyingfang.client.domain.store.response.GetInUseStoreListResponse;
+import cn.aijiamuyingfang.vo.ResponseBean;
+import cn.aijiamuyingfang.vo.store.PagableStoreList;
+import cn.aijiamuyingfang.vo.store.Store;
+import cn.aijiamuyingfang.vo.store.StoreAddress;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import retrofit2.http.Body;
@@ -40,7 +39,7 @@ public interface StoreControllerApi {
    * @return
    */
   @GET(value = "/goods-service/store")
-  public Observable<ResponseBean<GetInUseStoreListResponse>> getInUseStoreList(
+  public Observable<ResponseBean<PagableStoreList>> getInUseStoreList(
       @Query(value = "current_page") int currentPage, @Query(value = "page_size") int pageSize);
 
   /**
@@ -101,7 +100,7 @@ public interface StoreControllerApi {
    * @return
    */
   @GET(value = "/goods-service/store/defaultid")
-  public Observable<ResponseBean<GetDefaultStoreIdResponse>> getDefaultStoreId();
+  public Observable<ResponseBean<String>> getDefaultStoreId();
 
   /**
    * 获取在哪些城市有门店分布

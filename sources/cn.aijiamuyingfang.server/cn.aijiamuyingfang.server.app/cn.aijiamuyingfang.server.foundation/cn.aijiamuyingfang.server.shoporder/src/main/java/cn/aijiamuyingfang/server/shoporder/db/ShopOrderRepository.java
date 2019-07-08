@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import cn.aijiamuyingfang.server.domain.SendType;
 import cn.aijiamuyingfang.server.domain.ShopOrderStatus;
-import cn.aijiamuyingfang.server.shoporder.domain.ShopOrder;
+import cn.aijiamuyingfang.server.shoporder.dto.ShopOrder;
 
 /**
  * [描述]:

@@ -5,7 +5,7 @@ import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import cn.aijiamuyingfang.server.shoporder.domain.PreviewOrder;
+import cn.aijiamuyingfang.server.shoporder.dto.PreviewOrder;
 
 /**
  * [描述]:

@@ -13,11 +13,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>cn.aijiamuyingfang.client.domain</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
 			<artifactId>cn.aijiamuyingfang.client.rest</artifactId>
 			<version>${project.version}</version>
 		</dependency>

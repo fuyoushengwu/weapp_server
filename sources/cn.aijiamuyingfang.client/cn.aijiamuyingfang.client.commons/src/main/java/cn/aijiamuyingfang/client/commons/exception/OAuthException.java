@@ -1,6 +1,6 @@
 package cn.aijiamuyingfang.client.commons.exception;
 
-import cn.aijiamuyingfang.client.commons.domain.ResponseCode;
+import cn.aijiamuyingfang.vo.ResponseCode;
 
 /**
  * [描述]:

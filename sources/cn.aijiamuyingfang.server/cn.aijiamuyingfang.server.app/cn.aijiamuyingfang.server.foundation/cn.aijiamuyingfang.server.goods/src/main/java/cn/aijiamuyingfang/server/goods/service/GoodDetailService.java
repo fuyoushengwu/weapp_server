@@ -2,7 +2,7 @@ package cn.aijiamuyingfang.server.goods.service;
 
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import cn.aijiamuyingfang.server.goods.db.GoodDetailRepository;
-import cn.aijiamuyingfang.server.goods.domain.GoodDetail;
+import cn.aijiamuyingfang.server.goods.dto.GoodDetail;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

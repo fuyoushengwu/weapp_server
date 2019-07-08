@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import cn.aijiamuyingfang.client.rest.api.impl.FileControllerClient;
 import cn.aijiamuyingfang.server.it.AbstractTestAction;
 import cn.aijiamuyingfang.server.it.annotation.TargetDataSource;
-import cn.aijiamuyingfang.server.it.filecenter.db.FileInfoRepository;
+import cn.aijiamuyingfang.server.it.db.filecenter.FileInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 
 @Service

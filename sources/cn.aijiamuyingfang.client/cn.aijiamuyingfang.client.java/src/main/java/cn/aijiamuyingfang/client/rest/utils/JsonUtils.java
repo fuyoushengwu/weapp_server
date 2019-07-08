@@ -15,11 +15,11 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import cn.aijiamuyingfang.client.commons.utils.StringUtils;
-import cn.aijiamuyingfang.client.domain.message.UserMessageType;
-import cn.aijiamuyingfang.client.domain.shoporder.SendType;
-import cn.aijiamuyingfang.client.domain.shoporder.ShopOrderStatus;
-import cn.aijiamuyingfang.client.domain.user.Gender;
-import cn.aijiamuyingfang.client.domain.user.UserAuthority;
+import cn.aijiamuyingfang.vo.message.UserMessageType;
+import cn.aijiamuyingfang.vo.shoporder.SendType;
+import cn.aijiamuyingfang.vo.shoporder.ShopOrderStatus;
+import cn.aijiamuyingfang.vo.user.Gender;
+import cn.aijiamuyingfang.vo.user.UserAuthority;
 
 /**
  * [描述]:

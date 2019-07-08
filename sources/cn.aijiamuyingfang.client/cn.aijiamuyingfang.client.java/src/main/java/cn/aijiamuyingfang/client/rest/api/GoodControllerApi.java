@@ -2,9 +2,9 @@ package cn.aijiamuyingfang.client.rest.api;
 
 import java.util.List;
 
-import cn.aijiamuyingfang.client.commons.domain.ResponseBean;
-import cn.aijiamuyingfang.client.domain.goods.Good;
 import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
+import cn.aijiamuyingfang.vo.ResponseBean;
+import cn.aijiamuyingfang.vo.goods.Good;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;

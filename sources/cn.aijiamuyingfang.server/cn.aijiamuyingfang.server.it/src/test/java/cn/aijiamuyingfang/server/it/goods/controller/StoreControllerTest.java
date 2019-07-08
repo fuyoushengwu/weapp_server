@@ -19,18 +19,17 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-import cn.aijiamuyingfang.client.domain.address.City;
-import cn.aijiamuyingfang.client.domain.address.County;
-import cn.aijiamuyingfang.client.domain.address.Province;
-import cn.aijiamuyingfang.client.domain.exception.GoodsException;
-import cn.aijiamuyingfang.client.domain.store.Store;
-import cn.aijiamuyingfang.client.domain.store.StoreAddress;
-import cn.aijiamuyingfang.client.domain.store.response.GetDefaultStoreIdResponse;
-import cn.aijiamuyingfang.client.domain.store.response.GetInUseStoreListResponse;
 import cn.aijiamuyingfang.client.rest.api.impl.StoreControllerClient;
-import cn.aijiamuyingfang.commons.annotation.UseCaseDescription;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import cn.aijiamuyingfang.server.it.ITApplication;
+import cn.aijiamuyingfang.server.it.UseCaseDescription;
+import cn.aijiamuyingfang.vo.address.City;
+import cn.aijiamuyingfang.vo.address.County;
+import cn.aijiamuyingfang.vo.address.Province;
+import cn.aijiamuyingfang.vo.exception.GoodsException;
+import cn.aijiamuyingfang.vo.store.PagableStoreList;
+import cn.aijiamuyingfang.vo.store.Store;
+import cn.aijiamuyingfang.vo.store.StoreAddress;
 
 /**
  * [描述]:
@@ -74,7 +73,7 @@ public class StoreControllerTest {
   @Test
   @UseCaseDescription(description = "分页查询门店数据", condition = "数据库中没有分页数据")
   public void testGetInUseStores_001() throws JsonParseException, JsonMappingException, IOException {
-    GetInUseStoreListResponse getInUseStoreResponse = storeControllerClient.getInUseStoreList(1, 2);
+    PagableStoreList getInUseStoreResponse = storeControllerClient.getInUseStoreList(1, 2);
     Assert.assertEquals(0, getInUseStoreResponse.getTotalpage());
     Assert.assertEquals(1, getInUseStoreResponse.getCurrentPage());
     Assert.assertEquals(0, getInUseStoreResponse.getDataList().size());
@@ -99,7 +98,7 @@ public class StoreControllerTest {
     for (int i = 0; i < parameterArr.length; i++) {
       int[] parameter = parameterArr[i];
 
-      GetInUseStoreListResponse getInUseStoreResponse = storeControllerClient.getInUseStoreList(parameter[0],
+      PagableStoreList getInUseStoreResponse = storeControllerClient.getInUseStoreList(parameter[0],
           parameter[1]);
 
       int[] expected = expectedArr[i];
@@ -192,7 +191,7 @@ public class StoreControllerTest {
     Store storeTwo = testActions.getStoreTwo();
     Assert.assertNotNull(storeTwo);
 
-    GetInUseStoreListResponse getInUseStoreResponse = storeControllerClient.getInUseStoreList(1, 10);
+    PagableStoreList getInUseStoreResponse = storeControllerClient.getInUseStoreList(1, 10);
     Assert.assertEquals(1, getInUseStoreResponse.getTotalpage());
     Assert.assertEquals(1, getInUseStoreResponse.getCurrentPage());
     Assert.assertEquals(2, getInUseStoreResponse.getDataList().size());
@@ -214,9 +213,8 @@ public class StoreControllerTest {
   @Test
   @UseCaseDescription(description = "没有门店存在的情况下获取默认门店Id")
   public void testGetDefaultStoreId_001() throws IOException {
-    GetDefaultStoreIdResponse response = storeControllerClient.getDefaultStoreId();
-    Assert.assertNotNull(response);
-    Assert.assertNull(response.getDefaultId());
+    String defaultStoreId = storeControllerClient.getDefaultStoreId();
+    Assert.assertNull(defaultStoreId);
 
   }
 
@@ -228,9 +226,8 @@ public class StoreControllerTest {
     Store storeTwo = testActions.getStoreTwo();
     Assert.assertNotNull(storeTwo);
 
-    GetDefaultStoreIdResponse response = storeControllerClient.getDefaultStoreId();
-    Assert.assertNotNull(response);
-    Assert.assertEquals(storeOne.getId(), response.getDefaultId());
+    String defaultStoreId = storeControllerClient.getDefaultStoreId();
+    Assert.assertEquals(storeOne.getId(), defaultStoreId);
   }
 
   @Test

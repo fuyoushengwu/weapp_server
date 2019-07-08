@@ -13,9 +13,8 @@ import cn.aijiamuyingfang.server.domain.response.ResponseCode;
 import cn.aijiamuyingfang.server.exception.UserException;
 import cn.aijiamuyingfang.server.user.db.RecieveAddressRepository;
 import cn.aijiamuyingfang.server.user.db.UserRepository;
-import cn.aijiamuyingfang.server.user.domain.RecieveAddress;
-import cn.aijiamuyingfang.server.user.domain.User;
-import cn.aijiamuyingfang.server.user.domain.response.GetUserPhoneResponse;
+import cn.aijiamuyingfang.server.user.dto.RecieveAddress;
+import cn.aijiamuyingfang.server.user.dto.User;
 
 /**
  * [描述]:
@@ -97,11 +96,9 @@ public class UserService {
    *          用户id
    * @return
    */
-  public GetUserPhoneResponse getUserPhone(String username) {
+  public String getUserPhone(String username) {
     User user = getUser(username);
-    GetUserPhoneResponse response = new GetUserPhoneResponse();
-    response.setPhone(user.getPhone());
-    return response;
+    return user.getPhone();
   }
 
   /**

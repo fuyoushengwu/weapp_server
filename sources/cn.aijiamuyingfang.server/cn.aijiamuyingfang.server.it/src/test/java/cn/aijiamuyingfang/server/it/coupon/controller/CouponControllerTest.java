@@ -14,23 +14,23 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import cn.aijiamuyingfang.client.domain.coupon.GoodVoucher;
-import cn.aijiamuyingfang.client.domain.coupon.UserVoucher;
-import cn.aijiamuyingfang.client.domain.coupon.VoucherItem;
-import cn.aijiamuyingfang.client.domain.coupon.response.GetGoodVoucherListResponse;
-import cn.aijiamuyingfang.client.domain.coupon.response.GetUserVoucherListResponse;
-import cn.aijiamuyingfang.client.domain.coupon.response.GetVoucherItemListResponse;
-import cn.aijiamuyingfang.client.domain.goods.Good;
-import cn.aijiamuyingfang.client.domain.previeworder.PreviewOrder;
-import cn.aijiamuyingfang.client.domain.shopcart.ShopCart;
-import cn.aijiamuyingfang.client.domain.shoporder.ShopOrder;
-import cn.aijiamuyingfang.client.domain.shoporder.response.ConfirmShopOrderFinishedResponse;
-import cn.aijiamuyingfang.client.domain.shoporder.response.GetShopOrderVoucherListResponse;
 import cn.aijiamuyingfang.client.rest.api.impl.CouponControllerClient;
 import cn.aijiamuyingfang.client.rest.api.impl.ShopOrderControllerClient;
-import cn.aijiamuyingfang.commons.annotation.UseCaseDescription;
 import cn.aijiamuyingfang.server.it.AbstractTestAction;
 import cn.aijiamuyingfang.server.it.ITApplication;
+import cn.aijiamuyingfang.server.it.UseCaseDescription;
+import cn.aijiamuyingfang.vo.coupon.GoodVoucher;
+import cn.aijiamuyingfang.vo.coupon.PagableGoodVoucherList;
+import cn.aijiamuyingfang.vo.coupon.PagableUserVoucherList;
+import cn.aijiamuyingfang.vo.coupon.PagableVoucherItemList;
+import cn.aijiamuyingfang.vo.coupon.UserVoucher;
+import cn.aijiamuyingfang.vo.coupon.VoucherItem;
+import cn.aijiamuyingfang.vo.goods.Good;
+import cn.aijiamuyingfang.vo.review.PreviewOrder;
+import cn.aijiamuyingfang.vo.shopcart.ShopCart;
+import cn.aijiamuyingfang.vo.shoporder.ConfirmShopOrderFinishedResponse;
+import cn.aijiamuyingfang.vo.shoporder.ShopOrder;
+import cn.aijiamuyingfang.vo.shoporder.ShopOrderVoucher;
 
 /**
  * [描述]:
@@ -98,8 +98,8 @@ public class CouponControllerTest {
   @Test
   @UseCaseDescription(description = "当前用户没有兑换券时获得不到用户兑换券")
   public void testGetUserVoucherList_001() throws IOException {
-    GetUserVoucherListResponse response = couponControllerClient.getUserVoucherList(AbstractTestAction.ADMIN_USER_NAME,
-        1, 10, testActions.getAdminAccessToken());
+    PagableUserVoucherList response = couponControllerClient.getUserVoucherList(AbstractTestAction.ADMIN_USER_NAME, 1,
+        10, testActions.getAdminAccessToken());
     Assert.assertNotNull(response);
     Assert.assertEquals(1, response.getCurrentPage());
     Assert.assertEquals(0, response.getTotalpage());
@@ -119,7 +119,7 @@ public class CouponControllerTest {
 
     // 3.关联商品(good 1)和商品兑换券(good voucher 1)
     Good updatedGood = testActions.applyGoodVoucherOneForGoodOne();
-    Assert.assertNotNull(updatedGood.getVoucherId());
+    Assert.assertNotNull(updatedGood.getGoodVoucher());
 
     // 4.用户(Sender)添加购物车
     ShopCart shopCart = testActions.senderOneAdd10GoodOne();
@@ -141,7 +141,7 @@ public class CouponControllerTest {
     Assert.assertNotNull(confirmResponse);
 
     // 9.确认用户(Sender)名下有兑换券
-    GetUserVoucherListResponse getUserVoucherListResponse = couponControllerClient
+    PagableUserVoucherList getUserVoucherListResponse = couponControllerClient
         .getUserVoucherList(testActions.getSenderOne().getUsername(), 1, 10, testActions.getSenderOneAccessToken());
     Assert.assertNotNull(getUserVoucherListResponse);
     Assert.assertEquals(1, getUserVoucherListResponse.getDataList().size());
@@ -192,7 +192,7 @@ public class CouponControllerTest {
     // 7.用户(Sender)确认订单
     testActions.senderOneConfirmOrder(shoporder);
     // 8.确认用户(Sender)名下有兑换券
-    GetUserVoucherListResponse getUserVoucherListResponse = couponControllerClient
+    PagableUserVoucherList getUserVoucherListResponse = couponControllerClient
         .getUserVoucherList(testActions.getSenderOne().getUsername(), 1, 10, testActions.getSenderOneAccessToken());
     Assert.assertNotNull(getUserVoucherListResponse);
     Assert.assertEquals(1, getUserVoucherListResponse.getDataList().size());
@@ -234,7 +234,7 @@ public class CouponControllerTest {
     // 8.用户(Sender)确认订单
     testActions.senderOneConfirmOrder(shoporder);
     // 9.确认用户(Sender)名下有兑换券
-    GetUserVoucherListResponse getUserVoucherListResponse = couponControllerClient
+    PagableUserVoucherList getUserVoucherListResponse = couponControllerClient
         .getUserVoucherList(testActions.getSenderOne().getUsername(), 1, 10, testActions.getSenderOneAccessToken());
     Assert.assertNotNull(getUserVoucherListResponse);
     Assert.assertEquals(1, getUserVoucherListResponse.getDataList().size());
@@ -268,7 +268,7 @@ public class CouponControllerTest {
         getUserVoucherListResponse.getDataList().get(1).getGoodVoucher().getId());
     Assert.assertEquals(150, getUserVoucherListResponse.getDataList().get(1).getScore());
 
-    GetVoucherItemListResponse getVoucherItemListResponse = couponControllerClient.getVoucherItemList(1, 10);
+    PagableVoucherItemList getVoucherItemListResponse = couponControllerClient.getVoucherItemList(1, 10);
     Assert.assertNotNull(getVoucherItemListResponse);
     Assert.assertEquals(2, getVoucherItemListResponse.getDataList().size());
 
@@ -280,11 +280,10 @@ public class CouponControllerTest {
     List<String> goodIdList = new ArrayList<>();
     goodIdList.add(testActions.getGoodOne().getId());
     goodIdList.add(testActions.getGoodTwo().getId());
-    GetShopOrderVoucherListResponse getShopOrderVoucherListResponse = shoporderControllerClient
-        .getUserShopOrderVoucherList(testActions.getSenderOne().getUsername(), goodIdList,
-            testActions.getSenderOneAccessToken());
-    Assert.assertNotNull(getShopOrderVoucherListResponse);
-    Assert.assertEquals(2, getShopOrderVoucherListResponse.getVoucherList().size());
+    List<ShopOrderVoucher> shoporderVoucherList = shoporderControllerClient.getUserShopOrderVoucherList(
+        testActions.getSenderOne().getUsername(), goodIdList, testActions.getSenderOneAccessToken());
+    Assert.assertNotNull(shoporderVoucherList);
+    Assert.assertEquals(2, shoporderVoucherList.size());
 
     couponControllerClient.deprecateVoucherItem(voucherItemOne.getId(), testActions.getAdminAccessToken(), false);
     getVoucherItemListResponse = couponControllerClient.getVoucherItemList(1, 10);
@@ -292,18 +291,17 @@ public class CouponControllerTest {
     Assert.assertEquals(1, getVoucherItemListResponse.getDataList().size());
     Assert.assertEquals(voucherItemTwo.getId(), getVoucherItemListResponse.getDataList().get(0).getId());
 
-    getShopOrderVoucherListResponse = shoporderControllerClient.getUserShopOrderVoucherList(
+    shoporderVoucherList = shoporderControllerClient.getUserShopOrderVoucherList(
         testActions.getSenderOne().getUsername(), goodIdList, testActions.getSenderOneAccessToken());
-    Assert.assertNotNull(getShopOrderVoucherListResponse);
-    Assert.assertEquals(1, getShopOrderVoucherListResponse.getVoucherList().size());
-    Assert.assertEquals(voucherItemTwo.getId(),
-        getShopOrderVoucherListResponse.getVoucherList().get(0).getVoucherItemId());
+    Assert.assertNotNull(shoporderVoucherList);
+    Assert.assertEquals(1, shoporderVoucherList.size());
+    Assert.assertEquals(voucherItemTwo.getId(), shoporderVoucherList.get(0).getVoucherItem().getId());
   }
 
   @Test
   @UseCaseDescription(description = "原来有两个商品兑换券,废弃其中一个")
   public void test_GetGoodVoucherList_001() throws IOException {
-    GetGoodVoucherListResponse response = couponControllerClient.getGoodVoucherList(1, 10);
+    PagableGoodVoucherList response = couponControllerClient.getGoodVoucherList(1, 10);
     Assert.assertNotNull(response);
     Assert.assertEquals(0, response.getDataList().size());
     Assert.assertEquals(0, response.getTotalpage());

@@ -2,10 +2,10 @@ package cn.aijiamuyingfang.client.rest.api;
 
 import java.util.List;
 
-import cn.aijiamuyingfang.client.commons.domain.ResponseBean;
-import cn.aijiamuyingfang.client.domain.classify.response.GetClassifyGoodListResponse;
-import cn.aijiamuyingfang.client.domain.goods.Good;
-import cn.aijiamuyingfang.client.domain.goods.GoodDetail;
+import cn.aijiamuyingfang.vo.ResponseBean;
+import cn.aijiamuyingfang.vo.goods.Good;
+import cn.aijiamuyingfang.vo.goods.GoodDetail;
+import cn.aijiamuyingfang.vo.goods.PagableGoodList;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import retrofit2.http.Body;
@@ -41,7 +41,7 @@ public interface GoodControllerApi {
    * @return
    */
   @GET(value = "/goods-service/classify/{classify_id}/good")
-  public Observable<ResponseBean<GetClassifyGoodListResponse>> getClassifyGoodList(
+  public Observable<ResponseBean<PagableGoodList>> getClassifyGoodList(
       @Path("classify_id") String classifyId, @Query(value = "packFilter") List<String> packFilter,
       @Query(value = "levelFilter") List<String> levelFilter, @Query(value = "orderType") String orderType,
       @Query(value = "orderValue") String orderValue, @Query(value = "current_page") int currentPage,

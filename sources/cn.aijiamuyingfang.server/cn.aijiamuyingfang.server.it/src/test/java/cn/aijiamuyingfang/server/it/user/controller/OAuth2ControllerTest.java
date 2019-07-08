@@ -13,12 +13,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import cn.aijiamuyingfang.client.domain.user.RecieveAddress;
-import cn.aijiamuyingfang.client.domain.user.User;
 import cn.aijiamuyingfang.client.rest.api.impl.UserControllerClient;
-import cn.aijiamuyingfang.commons.annotation.UseCaseDescription;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import cn.aijiamuyingfang.server.it.ITApplication;
+import cn.aijiamuyingfang.server.it.UseCaseDescription;
+import cn.aijiamuyingfang.vo.user.RecieveAddress;
+import cn.aijiamuyingfang.vo.user.User;
 
 /***
  * [描述]:

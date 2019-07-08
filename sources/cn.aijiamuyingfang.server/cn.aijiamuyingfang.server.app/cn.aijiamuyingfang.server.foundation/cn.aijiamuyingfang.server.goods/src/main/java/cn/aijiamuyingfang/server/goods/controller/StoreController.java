@@ -22,11 +22,10 @@ import cn.aijiamuyingfang.commons.utils.CollectionUtils;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import cn.aijiamuyingfang.server.domain.response.ResponseCode;
 import cn.aijiamuyingfang.server.exception.GoodsException;
-import cn.aijiamuyingfang.server.goods.domain.ImageSource;
-import cn.aijiamuyingfang.server.goods.domain.Store;
-import cn.aijiamuyingfang.server.goods.domain.StoreAddress;
-import cn.aijiamuyingfang.server.goods.domain.response.GetDefaultStoreIdResponse;
-import cn.aijiamuyingfang.server.goods.domain.response.GetInUseStoreListResponse;
+import cn.aijiamuyingfang.server.goods.domain.response.PagableStoreList;
+import cn.aijiamuyingfang.server.goods.dto.ImageSource;
+import cn.aijiamuyingfang.server.goods.dto.Store;
+import cn.aijiamuyingfang.server.goods.dto.StoreAddress;
 import cn.aijiamuyingfang.server.goods.service.ImageService;
 import cn.aijiamuyingfang.server.goods.service.StoreService;
 
@@ -61,7 +60,7 @@ public class StoreController {
    */
   @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/store")
-  public GetInUseStoreListResponse getInUseStoreList(@RequestParam(value = "current_page") int currentPage,
+  public PagableStoreList getInUseStoreList(@RequestParam(value = "current_page") int currentPage,
       @RequestParam(value = "page_size") int pageSize) {
     return storeService.getInUseStoreList(currentPage, pageSize);
   }
@@ -182,14 +181,13 @@ public class StoreController {
    */
   @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/store/defaultid")
-  public GetDefaultStoreIdResponse getDefaultStoreId() {
-    GetInUseStoreListResponse response = storeService.getInUseStoreList(1, 1);
+  public String getDefaultStoreId() {
+    PagableStoreList response = storeService.getInUseStoreList(1, 1);
     List<Store> storeList = response.getDataList();
-    GetDefaultStoreIdResponse getDefaultStoreIdResponse = new GetDefaultStoreIdResponse();
     if (storeList != null && storeList.size() == 1) {
-      getDefaultStoreIdResponse.setDefaultId(storeList.get(0).getId());
+      return storeList.get(0).getId();
     }
-    return getDefaultStoreIdResponse;
+    return null;
   }
 
   /**

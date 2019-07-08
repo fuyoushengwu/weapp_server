@@ -16,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import cn.aijiamuyingfang.client.domain.goods.ShelfLife;
 import cn.aijiamuyingfang.client.rest.api.impl.ClassifyControllerClient;
 import cn.aijiamuyingfang.client.rest.api.impl.GoodControllerClient;
 import cn.aijiamuyingfang.server.it.ITApplication;
@@ -25,6 +24,7 @@ import cn.aijiamuyingfang.server.it.data.qinsilk.Good;
 import cn.aijiamuyingfang.server.it.data.qinsilk.GoodImage;
 import cn.aijiamuyingfang.server.it.data.qinsilk.ResponseBean;
 import cn.aijiamuyingfang.server.it.goods.controller.GoodsTestActions;
+import cn.aijiamuyingfang.vo.goods.ShelfLife;
 
 /**
  * [描述]:
@@ -118,7 +118,7 @@ public class ImportDataFromQinSilk {
           File detailImageFile = downloadImage(goodImage.getUrl());
           detailImageFiles.add(detailImageFile);
         }
-        cn.aijiamuyingfang.client.domain.goods.Good goodRequest = new cn.aijiamuyingfang.client.domain.goods.Good();
+        cn.aijiamuyingfang.vo.goods.Good goodRequest = new cn.aijiamuyingfang.vo.goods.Good();
         goodRequest.setBarcode(good.getGoodsSn());
         goodRequest.setCount(1000);
         goodRequest.setLevel(good.getSpecs());
@@ -132,7 +132,7 @@ public class ImportDataFromQinSilk {
         goodRequest.setPrice(1);
         goodRequest.setSalecount(0);
         goodRequest.setScore(0);
-        cn.aijiamuyingfang.client.domain.goods.Good newGood = goodControllerClient.createGood(coverImageFile,
+        cn.aijiamuyingfang.vo.goods.Good newGood = goodControllerClient.createGood(coverImageFile,
             detailImageFiles, goodRequest, testActions.getAdminAccessToken());
         classifyControllerClient.addClassifyGood(classifyList.get(i), newGood.getId(),
             testActions.getAdminAccessToken(), false);

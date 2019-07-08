@@ -17,8 +17,8 @@ import cn.aijiamuyingfang.server.feign.domain.message.TemplateMsg;
 import cn.aijiamuyingfang.server.feign.domain.message.TemplateMsgKeyValue;
 import cn.aijiamuyingfang.server.feign.domain.store.StoreAddress;
 import cn.aijiamuyingfang.server.feign.domain.user.RecieveAddress;
-import cn.aijiamuyingfang.server.shoporder.domain.ShopOrder;
-import cn.aijiamuyingfang.server.shoporder.domain.ShopOrderItem;
+import cn.aijiamuyingfang.server.shoporder.dto.ShopOrder;
+import cn.aijiamuyingfang.server.shoporder.dto.ShopOrderItem;
 
 /**
  * [描述]:

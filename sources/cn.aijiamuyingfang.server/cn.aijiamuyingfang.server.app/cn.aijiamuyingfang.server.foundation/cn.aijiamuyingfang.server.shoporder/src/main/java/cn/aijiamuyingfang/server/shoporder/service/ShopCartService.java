@@ -14,8 +14,8 @@ import cn.aijiamuyingfang.server.feign.UserClient;
 import cn.aijiamuyingfang.server.feign.domain.good.Good;
 import cn.aijiamuyingfang.server.feign.domain.user.User;
 import cn.aijiamuyingfang.server.shoporder.db.ShopCartRepository;
-import cn.aijiamuyingfang.server.shoporder.domain.ShopCart;
-import cn.aijiamuyingfang.server.shoporder.domain.response.GetShopCartListResponse;
+import cn.aijiamuyingfang.server.shoporder.domain.response.PagableShopCartList;
+import cn.aijiamuyingfang.server.shoporder.dto.ShopCart;
 
 /**
  * [描述]:
@@ -83,11 +83,11 @@ public class ShopCartService {
    * @param pageSize
    * @return
    */
-  public GetShopCartListResponse getShopCartList(String username, int currentPage, int pageSize) {
+  public PagableShopCartList getShopCartList(String username, int currentPage, int pageSize) {
     // PageRequest的Page参数是基于0的,但是currentPage是基于1的,所有将currentPage作为参数传递给PgeRequest时需要'-1'
     PageRequest pageRequest = new PageRequest(currentPage - 1, pageSize, Sort.Direction.DESC, "id");
     Page<ShopCart> shopCartPage = shopCartRepository.findByUsername(username, pageRequest);
-    GetShopCartListResponse response = new GetShopCartListResponse();
+    PagableShopCartList response = new PagableShopCartList();
     response.setCurrentPage(shopCartPage.getNumber() + 1);
     response.setDataList(shopCartPage.getContent());
     response.setTotalpage(shopCartPage.getTotalPages());

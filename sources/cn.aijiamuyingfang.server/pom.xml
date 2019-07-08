@@ -15,12 +15,12 @@
 	</properties>
 	
 	<modules>
-		<module>cn.aijiamuyingfang.server.app</module>
-		<module>cn.aijiamuyingfang.server.it</module>
-		<module>cn.aijiamuyingfang.server.logstarter</module>
-		<module>cn.aijiamuyingfang.server.feign.async</module>
 		<module>cn.aijiamuyingfang.server.foundation.commons</module>
 		<module>cn.aijiamuyingfang.server.framework.commons</module>
+		<module>cn.aijiamuyingfang.server.logstarter</module>
+		<module>cn.aijiamuyingfang.server.feign.async</module>
+		<module>cn.aijiamuyingfang.server.app</module>
+		<module>cn.aijiamuyingfang.server.it</module>		
 	</modules>
 	
 	<dependencyManagement>

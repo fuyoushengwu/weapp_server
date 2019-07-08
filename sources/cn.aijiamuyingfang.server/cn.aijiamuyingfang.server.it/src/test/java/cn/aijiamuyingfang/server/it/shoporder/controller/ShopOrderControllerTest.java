@@ -16,18 +16,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import cn.aijiamuyingfang.client.domain.goods.Good;
-import cn.aijiamuyingfang.client.domain.previeworder.response.GetFinishedPreOrderListResponse;
-import cn.aijiamuyingfang.client.domain.previeworder.response.GetPreOrderGoodListResponse;
-import cn.aijiamuyingfang.client.domain.shoporder.ShopOrder;
-import cn.aijiamuyingfang.client.domain.shoporder.ShopOrderStatus;
-import cn.aijiamuyingfang.client.domain.shoporder.response.GetShopOrderListResponse;
-import cn.aijiamuyingfang.client.domain.user.RecieveAddress;
 import cn.aijiamuyingfang.client.rest.api.impl.GoodControllerClient;
 import cn.aijiamuyingfang.client.rest.api.impl.ShopOrderControllerClient;
-import cn.aijiamuyingfang.commons.annotation.UseCaseDescription;
 import cn.aijiamuyingfang.server.it.AbstractTestAction;
 import cn.aijiamuyingfang.server.it.ITApplication;
+import cn.aijiamuyingfang.server.it.UseCaseDescription;
+import cn.aijiamuyingfang.vo.goods.Good;
+import cn.aijiamuyingfang.vo.preorder.PagablePreOrderGoodList;
+import cn.aijiamuyingfang.vo.shoporder.PagableShopOrderList;
+import cn.aijiamuyingfang.vo.shoporder.ShopOrder;
+import cn.aijiamuyingfang.vo.shoporder.ShopOrderStatus;
+import cn.aijiamuyingfang.vo.user.RecieveAddress;
 
 /**
  * [描述]:
@@ -95,8 +94,8 @@ public class ShopOrderControllerTest {
   @Test
   @UseCaseDescription(description = "用户没有订单")
   public void test_GetUserShopOrderList_001() throws IOException {
-    GetShopOrderListResponse response = shoporderControllerClient
-        .getUserShopOrderList(AbstractTestAction.ADMIN_USER_NAME, null, null, 1, 10, testActions.getAdminAccessToken());
+    PagableShopOrderList response = shoporderControllerClient.getUserShopOrderList(AbstractTestAction.ADMIN_USER_NAME,
+        null, null, 1, 10, testActions.getAdminAccessToken());
     Assert.assertEquals(0, response.getDataList().size());
   }
 
@@ -107,7 +106,7 @@ public class ShopOrderControllerTest {
     testActions.senderOnePreviewGoodOne();
     ShopOrder shoporder = testActions.senderOneBuy();
 
-    GetShopOrderListResponse response = shoporderControllerClient.getUserShopOrderList(
+    PagableShopOrderList response = shoporderControllerClient.getUserShopOrderList(
         testActions.getSenderOne().getUsername(), null, null, 1, 10, testActions.getSenderOneAccessToken());
     Assert.assertEquals(1, response.getDataList().size());
 
@@ -164,7 +163,7 @@ public class ShopOrderControllerTest {
   @Test
   @UseCaseDescription(description = "系统中没有订单")
   public void test_GetShopOrderList_001() throws IOException {
-    GetShopOrderListResponse response = shoporderControllerClient.getShopOrderList(null, null, 1, 10,
+    PagableShopOrderList response = shoporderControllerClient.getShopOrderList(null, null, 1, 10,
         testActions.getAdminAccessToken());
     Assert.assertEquals(0, response.getDataList().size());
   }
@@ -184,7 +183,7 @@ public class ShopOrderControllerTest {
 
     List<ShopOrderStatus> statusList = new ArrayList<>();
     statusList.add(ShopOrderStatus.UNSTART);
-    GetShopOrderListResponse response = shoporderControllerClient.getShopOrderList(statusList, null, 1, 10,
+    PagableShopOrderList response = shoporderControllerClient.getShopOrderList(statusList, null, 1, 10,
         testActions.getAdminAccessToken());
     Assert.assertEquals(2, response.getDataList().size());
 
@@ -238,11 +237,11 @@ public class ShopOrderControllerTest {
     testActions.senderOneConfirmOrder(shoporderOne);
     shoporderControllerClient.delete100DaysFinishedShopOrder(shoporderOne.getId(),
         testActions.getSenderOneAccessToken(), false);
-    GetShopOrderListResponse response = shoporderControllerClient.getShopOrderList(null, null, 1, 10,
+    PagableShopOrderList response = shoporderControllerClient.getShopOrderList(null, null, 1, 10,
         testActions.getAdminAccessToken());
     Assert.assertEquals(2, response.getDataList().size());
 
-    cn.aijiamuyingfang.server.it.shoporder.ShopOrder shoporder = testActions.getShopOrder(shoporderOne.getId());
+    cn.aijiamuyingfang.server.it.dto.shoporder.ShopOrderDTO shoporder = testActions.getShopOrder(shoporderOne.getId());
     shoporder.setFinishTime(new Date(System.currentTimeMillis() - 200 * 24 * 60 * 60 * 1000L));
     shoporder.setLastModify(new Date(System.currentTimeMillis() - 200 * 24 * 60 * 60 * 1000L));
     testActions.updateShopOrder(shoporder);
@@ -274,13 +273,13 @@ public class ShopOrderControllerTest {
 
     ShopOrder shoporder = shoporderControllerClient.getUserShopOrder(testActions.getSenderOne().getUsername(),
         senderOneShopOrder.getId(), testActions.getSenderOneAccessToken());
-    Assert.assertEquals(address.getId(), shoporder.getRecieveAddressId());
+    Assert.assertEquals(address.getId(), shoporder.getRecieveAddress().getId());
   }
 
   @Test
   @UseCaseDescription(description = "系统中没有预定订单")
   public void test_GetFinishedPreOrderList_001() throws IOException {
-    GetFinishedPreOrderListResponse response = shoporderControllerClient.getFinishedPreOrderList(1, 10,
+    PagableShopOrderList response = shoporderControllerClient.getFinishedPreOrderList(1, 10,
         testActions.getAdminAccessToken());
     Assert.assertEquals(0, response.getDataList().size());
   }
@@ -302,17 +301,18 @@ public class ShopOrderControllerTest {
     testActions.senderOnePreviewAllGood();
     testActions.senderOneBuy();
 
-    GetShopOrderListResponse response = shoporderControllerClient.getUserShopOrderList(
+    PagableShopOrderList response = shoporderControllerClient.getUserShopOrderList(
         testActions.getSenderOne().getUsername(), null, null, 1, 10, testActions.getSenderOneAccessToken());
     Assert.assertEquals(2, response.getDataList().size());
     Assert.assertEquals(ShopOrderStatus.PREORDER, response.getDataList().get(0).getStatus());
     Assert.assertEquals(ShopOrderStatus.DOING, response.getDataList().get(1).getStatus());
 
-    GetPreOrderGoodListResponse getPreOrderGoodListResponse = shoporderControllerClient.getPreOrderGoodList(1, 10,
+    PagablePreOrderGoodList getPreOrderGoodListResponse = shoporderControllerClient.getPreOrderGoodList(1, 10,
         testActions.getAdminAccessToken());
     Assert.assertEquals(1, getPreOrderGoodListResponse.getDataList().size());
     Assert.assertEquals(10, getPreOrderGoodListResponse.getDataList().get(0).getCount());
-    Assert.assertEquals(testActions.getGoodOne().getId(), getPreOrderGoodListResponse.getDataList().get(0).getGoodId());
+    Assert.assertEquals(testActions.getGoodOne().getId(),
+        getPreOrderGoodListResponse.getDataList().get(0).getGood().getId());
 
     Map<String, Double> statusCount = shoporderControllerClient
         .getUserShopOrderStatusCount(testActions.getSenderOne().getUsername(), testActions.getSenderOneAccessToken());

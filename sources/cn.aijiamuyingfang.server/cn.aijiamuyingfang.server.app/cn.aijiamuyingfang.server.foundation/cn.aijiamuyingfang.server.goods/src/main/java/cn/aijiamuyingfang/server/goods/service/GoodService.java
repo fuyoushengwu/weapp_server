@@ -10,9 +10,9 @@ import cn.aijiamuyingfang.server.domain.response.ResponseCode;
 import cn.aijiamuyingfang.server.exception.GoodsException;
 import cn.aijiamuyingfang.server.goods.db.GoodDetailRepository;
 import cn.aijiamuyingfang.server.goods.db.GoodRepository;
-import cn.aijiamuyingfang.server.goods.domain.Good;
-import cn.aijiamuyingfang.server.goods.domain.GoodDetail;
 import cn.aijiamuyingfang.server.goods.domain.request.SaleGood;
+import cn.aijiamuyingfang.server.goods.dto.Good;
+import cn.aijiamuyingfang.server.goods.dto.GoodDetail;
 
 /**
  * [描述]:

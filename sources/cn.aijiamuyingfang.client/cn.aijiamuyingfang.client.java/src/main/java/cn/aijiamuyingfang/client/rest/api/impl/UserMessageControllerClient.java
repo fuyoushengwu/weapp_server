@@ -7,15 +7,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import cn.aijiamuyingfang.client.commons.domain.ResponseBean;
-import cn.aijiamuyingfang.client.commons.domain.ResponseCode;
-import cn.aijiamuyingfang.client.domain.exception.GoodsException;
-import cn.aijiamuyingfang.client.domain.exception.UserException;
-import cn.aijiamuyingfang.client.domain.message.UserMessage;
-import cn.aijiamuyingfang.client.domain.message.response.GetMessagesListResponse;
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.UserMessageControllerApi;
 import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
+import cn.aijiamuyingfang.vo.ResponseBean;
+import cn.aijiamuyingfang.vo.ResponseCode;
+import cn.aijiamuyingfang.vo.exception.GoodsException;
+import cn.aijiamuyingfang.vo.exception.UserException;
+import cn.aijiamuyingfang.vo.message.PagableUserMessageList;
+import cn.aijiamuyingfang.vo.message.UserMessage;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -89,7 +89,7 @@ public class UserMessageControllerClient {
    * @return
    * @throws IOException
    */
-  public GetMessagesListResponse getUserMessageList(String username, int currentPage, int pageSize, String accessToken)
+  public PagableUserMessageList getUserMessageList(String username, int currentPage, int pageSize, String accessToken)
       throws IOException {
     Response<ResponseBean> response = userMessageControllerApi
         .getUserMessageList(username, currentPage, pageSize, accessToken).execute();
@@ -103,8 +103,8 @@ public class UserMessageControllerClient {
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
-      GetMessagesListResponse getMessagesListResponse = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
-          GetMessagesListResponse.class);
+      PagableUserMessageList getMessagesListResponse = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
+          PagableUserMessageList.class);
       if (null == getMessagesListResponse) {
         throw new UserException("500", "get user message list  return code is '200',but return data is null");
       }

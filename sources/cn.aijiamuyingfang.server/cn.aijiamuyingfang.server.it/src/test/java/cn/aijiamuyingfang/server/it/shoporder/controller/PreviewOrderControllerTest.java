@@ -12,13 +12,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import cn.aijiamuyingfang.client.domain.exception.ShopOrderException;
-import cn.aijiamuyingfang.client.domain.previeworder.PreviewOrder;
-import cn.aijiamuyingfang.client.domain.previeworder.PreviewOrderItem;
 import cn.aijiamuyingfang.client.rest.api.impl.PreviewOrderControllerClient;
-import cn.aijiamuyingfang.commons.annotation.UseCaseDescription;
 import cn.aijiamuyingfang.server.it.AbstractTestAction;
 import cn.aijiamuyingfang.server.it.ITApplication;
+import cn.aijiamuyingfang.server.it.UseCaseDescription;
+import cn.aijiamuyingfang.vo.exception.ShopOrderException;
+import cn.aijiamuyingfang.vo.review.PreviewOrder;
+import cn.aijiamuyingfang.vo.review.PreviewOrderItem;
 
 /***
  * [描述]:
@@ -104,8 +104,8 @@ public class PreviewOrderControllerTest {
 
     PreviewOrderItem updatePreviewOrderItemRequest = new PreviewOrderItem();
     updatePreviewOrderItemRequest.setCount(1);
-    updatePreviewOrderItemRequest.setShopCartId(previeworderItem.getId());
-    updatePreviewOrderItemRequest.setGoodId(previeworderItem.getGoodId());
+    updatePreviewOrderItemRequest.setShopCart(previeworderItem.getShopCart());
+    updatePreviewOrderItemRequest.setGood(previeworderItem.getGood());
     PreviewOrderItem updatedItem = previeworderControllerClient.updatePreviewOrderItem(
         testActions.getSenderOne().getUsername(), previeworderItem.getId(), updatePreviewOrderItemRequest,
         testActions.getSenderOneAccessToken());
@@ -113,8 +113,8 @@ public class PreviewOrderControllerTest {
 
     updatePreviewOrderItemRequest = new PreviewOrderItem();
     updatePreviewOrderItemRequest.setCount(0);
-    updatePreviewOrderItemRequest.setShopCartId(previeworderItem.getId());
-    updatePreviewOrderItemRequest.setGoodId(previeworderItem.getGoodId());
+    updatePreviewOrderItemRequest.setShopCart(previeworderItem.getShopCart());
+    updatePreviewOrderItemRequest.setGood(previeworderItem.getGood());
     updatedItem = previeworderControllerClient.updatePreviewOrderItem(testActions.getSenderOne().getUsername(),
         previeworderItem.getId(), updatePreviewOrderItemRequest, testActions.getSenderOneAccessToken());
     Assert.assertEquals(1, updatedItem.getCount());
@@ -132,8 +132,8 @@ public class PreviewOrderControllerTest {
 
     PreviewOrderItem updatePreviewItemRequest = new PreviewOrderItem();
     updatePreviewItemRequest.setCount(1);
-    updatePreviewItemRequest.setShopCartId(previeworderItem.getId());
-    updatePreviewItemRequest.setGoodId(previeworderItem.getGoodId());
+    updatePreviewItemRequest.setShopCart(previeworderItem.getShopCart());
+    updatePreviewItemRequest.setGood(previeworderItem.getGood());
     previeworderControllerClient.updatePreviewOrderItem(testActions.getSenderOne().getUsername(),
         previeworderItem.getId(), updatePreviewItemRequest, testActions.getSenderOneAccessToken());
   }

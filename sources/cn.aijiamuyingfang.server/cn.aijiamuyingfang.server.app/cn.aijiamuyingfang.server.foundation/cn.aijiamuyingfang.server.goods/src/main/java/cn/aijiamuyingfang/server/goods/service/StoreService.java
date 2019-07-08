@@ -15,9 +15,9 @@ import cn.aijiamuyingfang.server.domain.response.ResponseCode;
 import cn.aijiamuyingfang.server.exception.GoodsException;
 import cn.aijiamuyingfang.server.goods.db.StoreAddressRepository;
 import cn.aijiamuyingfang.server.goods.db.StoreRepository;
-import cn.aijiamuyingfang.server.goods.domain.Store;
-import cn.aijiamuyingfang.server.goods.domain.StoreAddress;
-import cn.aijiamuyingfang.server.goods.domain.response.GetInUseStoreListResponse;
+import cn.aijiamuyingfang.server.goods.domain.response.PagableStoreList;
+import cn.aijiamuyingfang.server.goods.dto.Store;
+import cn.aijiamuyingfang.server.goods.dto.StoreAddress;
 
 /**
  * [描述]:
@@ -47,7 +47,7 @@ public class StoreService {
    *          每页大小 (pageSize必须&gt;0,否则重置为1)
    * @return
    */
-  public GetInUseStoreListResponse getInUseStoreList(int currentPage, int pageSize) {
+  public PagableStoreList getInUseStoreList(int currentPage, int pageSize) {
     // currentPage必须>=1,否则重置为1
     if (currentPage < 1) {
       currentPage = 1;
@@ -60,7 +60,7 @@ public class StoreService {
     // PageRequest的Page参数是基于0的,但是currentPage是基于1的,所有将currentPage作为参数传递给PgeRequest时需要'-1'
     PageRequest pageRequest = new PageRequest(currentPage - 1, pageSize);
     Page<Store> storePage = storeRepository.findInUseStores(pageRequest);
-    GetInUseStoreListResponse response = new GetInUseStoreListResponse();
+    PagableStoreList response = new PagableStoreList();
     response.setCurrentPage(storePage.getNumber() + 1);
     response.setDataList(storePage.getContent());
     response.setTotalpage(storePage.getTotalPages());

@@ -12,15 +12,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import cn.aijiamuyingfang.client.domain.classify.Classify;
-import cn.aijiamuyingfang.client.domain.classify.response.GetClassifyGoodListResponse;
-import cn.aijiamuyingfang.client.domain.exception.GoodsException;
-import cn.aijiamuyingfang.client.domain.goods.Good;
-import cn.aijiamuyingfang.client.domain.goods.GoodDetail;
-import cn.aijiamuyingfang.client.domain.store.Store;
 import cn.aijiamuyingfang.client.rest.api.impl.GoodControllerClient;
-import cn.aijiamuyingfang.commons.annotation.UseCaseDescription;
 import cn.aijiamuyingfang.server.it.ITApplication;
+import cn.aijiamuyingfang.server.it.UseCaseDescription;
+import cn.aijiamuyingfang.vo.classify.Classify;
+import cn.aijiamuyingfang.vo.exception.GoodsException;
+import cn.aijiamuyingfang.vo.goods.Good;
+import cn.aijiamuyingfang.vo.goods.GoodDetail;
+import cn.aijiamuyingfang.vo.goods.PagableGoodList;
+import cn.aijiamuyingfang.vo.store.Store;
 
 /**
  * [描述]:
@@ -73,7 +73,7 @@ public class GoodControllerTest {
     Store storeOne = testActions.getStoreOne();
     Assert.assertNotNull(storeOne);
     Classify classifyOne = testActions.getClassifyOne();
-    GetClassifyGoodListResponse response = goodcontrollerClient.getClassifyGoodList(classifyOne.getId(), null, null,
+    PagableGoodList response = goodcontrollerClient.getClassifyGoodList(classifyOne.getId(), null, null,
         null, null, 1, 10);
     Assert.assertNotNull(response);
     Assert.assertEquals(0, response.getDataList().size());
@@ -84,7 +84,7 @@ public class GoodControllerTest {
   public void test_GetClassifyGoodList_003() throws IOException {
     Classify subClassifyOne = testActions.getSubClassifyOneForClassifyOne();
     testActions.addGoodOneForSubClassifyOne();
-    GetClassifyGoodListResponse response = goodcontrollerClient.getClassifyGoodList(subClassifyOne.getId(), null, null,
+    PagableGoodList response = goodcontrollerClient.getClassifyGoodList(subClassifyOne.getId(), null, null,
         null, null, 1, 10);
     Assert.assertNotNull(response);
     Assert.assertEquals(1, response.getDataList().size());

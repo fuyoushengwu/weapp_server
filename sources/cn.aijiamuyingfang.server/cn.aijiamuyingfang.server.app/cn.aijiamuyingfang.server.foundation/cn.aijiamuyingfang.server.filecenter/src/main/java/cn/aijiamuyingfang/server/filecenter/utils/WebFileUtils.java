@@ -11,7 +11,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import cn.aijiamuyingfang.server.exception.FileCenterException;
-import cn.aijiamuyingfang.server.filecenter.domain.FileInfo;
+import cn.aijiamuyingfang.server.filecenter.dto.FileInfo;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 

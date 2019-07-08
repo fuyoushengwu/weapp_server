@@ -1,9 +1,9 @@
 package cn.aijiamuyingfang.client.rest.api;
 
-import cn.aijiamuyingfang.client.commons.domain.ResponseBean;
-import cn.aijiamuyingfang.client.domain.coupon.GoodVoucher;
-import cn.aijiamuyingfang.client.domain.coupon.VoucherItem;
 import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
+import cn.aijiamuyingfang.vo.ResponseBean;
+import cn.aijiamuyingfang.vo.coupon.GoodVoucher;
+import cn.aijiamuyingfang.vo.coupon.VoucherItem;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;

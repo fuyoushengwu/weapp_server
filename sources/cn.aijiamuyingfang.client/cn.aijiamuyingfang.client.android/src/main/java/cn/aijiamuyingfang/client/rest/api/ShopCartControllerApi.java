@@ -1,9 +1,9 @@
 package cn.aijiamuyingfang.client.rest.api;
 
-import cn.aijiamuyingfang.client.commons.domain.ResponseBean;
-import cn.aijiamuyingfang.client.domain.shopcart.ShopCart;
-import cn.aijiamuyingfang.client.domain.shopcart.response.GetShopCartListResponse;
-import cn.aijiamuyingfang.client.domain.shoporder.request.CreateShopCartRequest;
+import cn.aijiamuyingfang.vo.ResponseBean;
+import cn.aijiamuyingfang.vo.shopcart.CreateShopCartRequest;
+import cn.aijiamuyingfang.vo.shopcart.PagableShopCartList;
+import cn.aijiamuyingfang.vo.shopcart.ShopCart;
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -47,7 +47,7 @@ public interface ShopCartControllerApi {
    * @return
    */
   @GET(value = "/shoporder-service/user/{username}/shop_cart")
-  public Observable<ResponseBean<GetShopCartListResponse>> getShopCartList(@Path("username") String username,
+  public Observable<ResponseBean<PagableShopCartList>> getShopCartList(@Path("username") String username,
       @Query(value = "current_page") int currentPage, @Query(value = "page_size") int pageSize,
       @Query("access_token") String accessToken);
 

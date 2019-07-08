@@ -2,12 +2,12 @@ package cn.aijiamuyingfang.client.rest.api;
 
 import java.util.List;
 
-import cn.aijiamuyingfang.client.commons.domain.ResponseBean;
-import cn.aijiamuyingfang.client.domain.shoporder.SendType;
-import cn.aijiamuyingfang.client.domain.shoporder.ShopOrderStatus;
-import cn.aijiamuyingfang.client.domain.shoporder.request.CreateShopOrderRequest;
-import cn.aijiamuyingfang.client.domain.shoporder.request.UpdateShopOrderStatusRequest;
 import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
+import cn.aijiamuyingfang.vo.ResponseBean;
+import cn.aijiamuyingfang.vo.shoporder.CreateShopOrderRequest;
+import cn.aijiamuyingfang.vo.shoporder.SendType;
+import cn.aijiamuyingfang.vo.shoporder.ShopOrderStatus;
+import cn.aijiamuyingfang.vo.shoporder.UpdateShopOrderStatusRequest;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;

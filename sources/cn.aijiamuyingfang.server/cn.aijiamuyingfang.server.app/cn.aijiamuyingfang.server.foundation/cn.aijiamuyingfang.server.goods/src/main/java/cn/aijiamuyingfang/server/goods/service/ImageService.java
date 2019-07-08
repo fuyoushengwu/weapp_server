@@ -17,7 +17,7 @@ import cn.aijiamuyingfang.server.domain.response.ResponseBean;
 import cn.aijiamuyingfang.server.feign.FileClient;
 import cn.aijiamuyingfang.server.feign.domain.filecenter.FileInfo;
 import cn.aijiamuyingfang.server.goods.db.ImageSourceRepository;
-import cn.aijiamuyingfang.server.goods.domain.ImageSource;
+import cn.aijiamuyingfang.server.goods.dto.ImageSource;
 import lombok.extern.slf4j.Slf4j;
 
 /***

@@ -8,23 +8,22 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import cn.aijiamuyingfang.client.commons.domain.ResponseBean;
-import cn.aijiamuyingfang.client.commons.domain.ResponseCode;
-import cn.aijiamuyingfang.client.domain.exception.CouponException;
-import cn.aijiamuyingfang.client.domain.exception.ShopOrderException;
-import cn.aijiamuyingfang.client.domain.previeworder.response.GetFinishedPreOrderListResponse;
-import cn.aijiamuyingfang.client.domain.previeworder.response.GetPreOrderGoodListResponse;
-import cn.aijiamuyingfang.client.domain.shoporder.SendType;
-import cn.aijiamuyingfang.client.domain.shoporder.ShopOrder;
-import cn.aijiamuyingfang.client.domain.shoporder.ShopOrderStatus;
-import cn.aijiamuyingfang.client.domain.shoporder.request.CreateShopOrderRequest;
-import cn.aijiamuyingfang.client.domain.shoporder.request.UpdateShopOrderStatusRequest;
-import cn.aijiamuyingfang.client.domain.shoporder.response.ConfirmShopOrderFinishedResponse;
-import cn.aijiamuyingfang.client.domain.shoporder.response.GetShopOrderListResponse;
-import cn.aijiamuyingfang.client.domain.shoporder.response.GetShopOrderVoucherListResponse;
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.ShopOrderControllerApi;
 import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
+import cn.aijiamuyingfang.vo.ResponseBean;
+import cn.aijiamuyingfang.vo.ResponseCode;
+import cn.aijiamuyingfang.vo.exception.CouponException;
+import cn.aijiamuyingfang.vo.exception.ShopOrderException;
+import cn.aijiamuyingfang.vo.preorder.PagablePreOrderGoodList;
+import cn.aijiamuyingfang.vo.shoporder.ConfirmShopOrderFinishedResponse;
+import cn.aijiamuyingfang.vo.shoporder.CreateShopOrderRequest;
+import cn.aijiamuyingfang.vo.shoporder.PagableShopOrderList;
+import cn.aijiamuyingfang.vo.shoporder.SendType;
+import cn.aijiamuyingfang.vo.shoporder.ShopOrder;
+import cn.aijiamuyingfang.vo.shoporder.ShopOrderStatus;
+import cn.aijiamuyingfang.vo.shoporder.ShopOrderVoucher;
+import cn.aijiamuyingfang.vo.shoporder.UpdateShopOrderStatusRequest;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -73,7 +72,7 @@ public class ShopOrderControllerClient {
    * @return
    * @throws IOException
    */
-  public GetShopOrderListResponse getUserShopOrderList(String username, List<ShopOrderStatus> statusList,
+  public PagableShopOrderList getUserShopOrderList(String username, List<ShopOrderStatus> statusList,
       List<SendType> sendTypeList, int currentPage, int pageSize, String accessToken) throws IOException {
     Response<ResponseBean> response = shoporderControllerApi
         .getUserShopOrderList(username, statusList, sendTypeList, currentPage, pageSize, accessToken).execute();
@@ -87,8 +86,8 @@ public class ShopOrderControllerClient {
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
-      GetShopOrderListResponse getShopOrderListResponse = JsonUtils
-          .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetShopOrderListResponse.class);
+      PagableShopOrderList getShopOrderListResponse = JsonUtils
+          .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), PagableShopOrderList.class);
       if (null == getShopOrderListResponse) {
         throw new ShopOrderException("500", "get user shoporder list return code is '200',but return data is null");
       }
@@ -107,7 +106,8 @@ public class ShopOrderControllerClient {
    * @return
    * @throws IOException
    */
-  public GetShopOrderVoucherListResponse getUserShopOrderVoucherList(String username, List<String> goodIdList,
+  @SuppressWarnings("unchecked")
+  public List<ShopOrderVoucher> getUserShopOrderVoucherList(String username, List<String> goodIdList,
       String accessToken) throws IOException {
     Response<ResponseBean> response = shoporderControllerApi
         .getUserShopOrderVoucherList(username, goodIdList, accessToken).execute();
@@ -116,14 +116,9 @@ public class ShopOrderControllerClient {
       throw new CouponException(ResponseCode.RESPONSE_BODY_IS_NULL);
     }
     String returnCode = responseBean.getCode();
-    Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
-      GetShopOrderVoucherListResponse shoporderVoucherListResponse = JsonUtils
-          .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetShopOrderVoucherListResponse.class);
-      if (null == shoporderVoucherListResponse) {
-        throw new ShopOrderException("500", "get shoporder voucher list return code is '200',but return data is null");
-      }
-      return shoporderVoucherListResponse;
+      return JsonUtils.json2List(JsonUtils.list2Json((List<ShopOrderVoucher>) responseBean.getData()),
+          ShopOrderVoucher.class);
     }
     LOGGER.error(responseBean.getMsg());
     throw new CouponException(returnCode, responseBean.getMsg());
@@ -140,7 +135,7 @@ public class ShopOrderControllerClient {
    * @return
    * @throws IOException
    */
-  public GetShopOrderListResponse getShopOrderList(List<ShopOrderStatus> statusList, List<SendType> sendTypeList,
+  public PagableShopOrderList getShopOrderList(List<ShopOrderStatus> statusList, List<SendType> sendTypeList,
       int currentPage, int pageSize, String accessToken) throws IOException {
     Response<ResponseBean> response = shoporderControllerApi
         .getShopOrderList(statusList, sendTypeList, currentPage, pageSize, accessToken).execute();
@@ -154,8 +149,8 @@ public class ShopOrderControllerClient {
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
-      GetShopOrderListResponse getShoporderListResponse = JsonUtils
-          .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetShopOrderListResponse.class);
+      PagableShopOrderList getShoporderListResponse = JsonUtils
+          .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), PagableShopOrderList.class);
       if (null == getShoporderListResponse) {
         throw new ShopOrderException("500", "get  shoporder list return code is '200',but return data is null");
       }
@@ -242,8 +237,8 @@ public class ShopOrderControllerClient {
       shoporderControllerApi.deleteUserShopOrder(username, shopOrderId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<
-        ResponseBean> response = shoporderControllerApi.deleteUserShopOrder(username, shopOrderId, accessToken).execute();
+    Response<ResponseBean> response = shoporderControllerApi.deleteUserShopOrder(username, shopOrderId, accessToken)
+        .execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -317,8 +312,8 @@ public class ShopOrderControllerClient {
    * @param async
    * @throws IOException
    */
-  public void updateUserShopOrderRecieveAddress(String username, String shopOrderId, String addressId, String accessToken,
-      boolean async) throws IOException {
+  public void updateUserShopOrderRecieveAddress(String username, String shopOrderId, String addressId,
+      String accessToken, boolean async) throws IOException {
     if (async) {
       shoporderControllerApi.updateUserShopOrderRecieveAddress(username, shopOrderId, addressId, accessToken)
           .enqueue(Empty_Callback);
@@ -350,7 +345,7 @@ public class ShopOrderControllerClient {
    * @return
    * @throws IOException
    */
-  public GetFinishedPreOrderListResponse getFinishedPreOrderList(int currentPage, int pageSize, String accessToken)
+  public PagableShopOrderList getFinishedPreOrderList(int currentPage, int pageSize, String accessToken)
       throws IOException {
     Response<ResponseBean> response = shoporderControllerApi.getFinishedPreOrderList(currentPage, pageSize, accessToken)
         .execute();
@@ -364,8 +359,8 @@ public class ShopOrderControllerClient {
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
-      GetFinishedPreOrderListResponse getFinishedPreOrderListResponse = JsonUtils
-          .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetFinishedPreOrderListResponse.class);
+      PagableShopOrderList getFinishedPreOrderListResponse = JsonUtils
+          .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), PagableShopOrderList.class);
       if (null == getFinishedPreOrderListResponse) {
         throw new ShopOrderException("500", "get finished preorder list  return code is '200',but return data is null");
       }
@@ -401,8 +396,8 @@ public class ShopOrderControllerClient {
    */
   public ShopOrder createUserShopOrder(String username, CreateShopOrderRequest requestBean, String accessToken)
       throws IOException {
-    Response<
-        ResponseBean> response = shoporderControllerApi.createUserShopOrder(username, requestBean, accessToken).execute();
+    Response<ResponseBean> response = shoporderControllerApi.createUserShopOrder(username, requestBean, accessToken)
+        .execute();
     return getShopOrderFromResponse(response, "create user shoporder return code is '200',but return data is null");
   }
 
@@ -458,7 +453,8 @@ public class ShopOrderControllerClient {
    */
   @SuppressWarnings("unchecked")
   public Map<String, Double> getUserShopOrderStatusCount(String username, String accessToken) throws IOException {
-    Response<ResponseBean> response = shoporderControllerApi.getUserShopOrderStatusCount(username, accessToken).execute();
+    Response<
+        ResponseBean> response = shoporderControllerApi.getUserShopOrderStatusCount(username, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -488,7 +484,7 @@ public class ShopOrderControllerClient {
    * @return
    * @throws IOException
    */
-  public GetPreOrderGoodListResponse getPreOrderGoodList(int currentPage, int pageSize, String accessToken)
+  public PagablePreOrderGoodList getPreOrderGoodList(int currentPage, int pageSize, String accessToken)
       throws IOException {
     Response<ResponseBean> response = shoporderControllerApi.getPreOrderGoodList(currentPage, pageSize, accessToken)
         .execute();
@@ -502,8 +498,8 @@ public class ShopOrderControllerClient {
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
-      GetPreOrderGoodListResponse getPreOrderGoodListResponse = JsonUtils
-          .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), GetPreOrderGoodListResponse.class);
+      PagablePreOrderGoodList getPreOrderGoodListResponse = JsonUtils
+          .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), PagablePreOrderGoodList.class);
       if (null == getPreOrderGoodListResponse) {
         throw new ShopOrderException("500", "get preorder good list return code is '200',but return data is null");
       }
