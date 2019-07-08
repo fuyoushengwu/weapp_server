@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import cn.aijiamuyingfang.server.logcenter.db.LogRepository;
 import cn.aijiamuyingfang.server.logcenter.domain.response.PagableLogList;
-import cn.aijiamuyingfang.server.logcenter.dto.Log;
+import cn.aijiamuyingfang.server.logcenter.dto.LogDTO;
 
 /**
  * [描述]:
@@ -37,7 +37,7 @@ public class LogService {
    * @param log
    */
   @Async
-  public void save(Log log) {
+  public void save(LogDTO log) {
     if (null == log) {
       return;
     }
@@ -64,7 +64,7 @@ public class LogService {
     }
     String whereSql = whereSqlBuilder.toString();
     whereSql = whereSql.substring(0, whereSql.length() - 5);
-    Page<Log> logPage = logRepository.findLog(whereSql, pagable);
+    Page<LogDTO> logPage = logRepository.findLog(whereSql, pagable);
     PagableLogList response = new PagableLogList();
     response.setCurrentPage(logPage.getNumber() + 1);
     response.setDataList(logPage.getContent());

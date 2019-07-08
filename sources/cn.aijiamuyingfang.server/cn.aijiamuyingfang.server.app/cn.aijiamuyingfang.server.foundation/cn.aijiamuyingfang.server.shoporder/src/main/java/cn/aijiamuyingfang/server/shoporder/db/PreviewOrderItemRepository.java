@@ -3,7 +3,7 @@ package cn.aijiamuyingfang.server.shoporder.db;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import cn.aijiamuyingfang.server.shoporder.dto.PreviewOrderItem;
+import cn.aijiamuyingfang.server.shoporder.dto.PreviewOrderItemDTO;
 
 /**
  * [描述]:
@@ -17,6 +17,6 @@ import cn.aijiamuyingfang.server.shoporder.dto.PreviewOrderItem;
  * @date 2018-06-25 21:15:03
  */
 @Repository
-public interface PreviewOrderItemRepository extends JpaRepository<PreviewOrderItem, String> {
+public interface PreviewOrderItemRepository extends JpaRepository<PreviewOrderItemDTO, String> {
 
 }

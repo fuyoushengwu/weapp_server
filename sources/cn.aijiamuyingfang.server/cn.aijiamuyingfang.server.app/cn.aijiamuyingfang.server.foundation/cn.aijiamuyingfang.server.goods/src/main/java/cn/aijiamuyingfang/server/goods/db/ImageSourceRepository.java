@@ -3,7 +3,7 @@ package cn.aijiamuyingfang.server.goods.db;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import cn.aijiamuyingfang.server.goods.dto.ImageSource;
+import cn.aijiamuyingfang.server.goods.dto.ImageSourceDTO;
 
 /**
  * [描述]:
@@ -17,6 +17,6 @@ import cn.aijiamuyingfang.server.goods.dto.ImageSource;
  * @date 2019-05-18 03:38:29
  */
 @Repository
-public interface ImageSourceRepository extends JpaRepository<ImageSource, String> {
+public interface ImageSourceRepository extends JpaRepository<ImageSourceDTO, String> {
 
 }

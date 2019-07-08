@@ -5,7 +5,7 @@ import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import cn.aijiamuyingfang.server.shoporder.dto.PreviewOrder;
+import cn.aijiamuyingfang.server.shoporder.dto.PreviewOrderDTO;
 
 /**
  * [描述]:
@@ -19,14 +19,14 @@ import cn.aijiamuyingfang.server.shoporder.dto.PreviewOrder;
  * @date 2018-06-25 21:15:03
  */
 @Repository
-public interface PreviewOrderRepository extends JpaRepository<PreviewOrder, String> {
+public interface PreviewOrderRepository extends JpaRepository<PreviewOrderDTO, String> {
   /**
    * 查找用户的预览订单
    * 
    * @param username
    * @return
    */
-  PreviewOrder findByUsername(String username);
+  PreviewOrderDTO findByUsername(String username);
 
   /**
    * 删除用户的预览订单

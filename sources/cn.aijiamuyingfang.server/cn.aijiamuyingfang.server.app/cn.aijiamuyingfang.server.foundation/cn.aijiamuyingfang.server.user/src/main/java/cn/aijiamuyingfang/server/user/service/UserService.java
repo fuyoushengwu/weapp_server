@@ -13,8 +13,8 @@ import cn.aijiamuyingfang.server.domain.response.ResponseCode;
 import cn.aijiamuyingfang.server.exception.UserException;
 import cn.aijiamuyingfang.server.user.db.RecieveAddressRepository;
 import cn.aijiamuyingfang.server.user.db.UserRepository;
-import cn.aijiamuyingfang.server.user.dto.RecieveAddress;
-import cn.aijiamuyingfang.server.user.dto.User;
+import cn.aijiamuyingfang.server.user.dto.RecieveAddressDTO;
+import cn.aijiamuyingfang.server.user.dto.UserDTO;
 
 /**
  * [描述]:
@@ -43,7 +43,7 @@ public class UserService {
    * 
    * @param request
    */
-  public User registerUser(User request) {
+  public UserDTO registerUser(UserDTO request) {
     String username = request.getUsername();
     if (StringUtils.isEmpty(username)) {
       throw new IllegalArgumentException("register failed,because not provide  username");
@@ -53,7 +53,7 @@ public class UserService {
       throw new IllegalArgumentException("register failed,because not provide  password");
     }
 
-    User user = userRepository.findOne(username);
+    UserDTO user = userRepository.findOne(username);
     if (user != null) {
       return user;
     }
@@ -68,7 +68,7 @@ public class UserService {
    * 
    * @param user
    */
-  public void saveUser(User user) {
+  public void saveUser(UserDTO user) {
     if (user != null) {
       userRepository.saveAndFlush(user);
     }
@@ -81,8 +81,8 @@ public class UserService {
    *          用户id
    * @return
    */
-  public User getUser(String username) {
-    User user = userRepository.findOne(username);
+  public UserDTO getUser(String username) {
+    UserDTO user = userRepository.findOne(username);
     if (null == user) {
       throw new UserException(ResponseCode.USER_NOT_EXIST, username);
     }
@@ -97,7 +97,7 @@ public class UserService {
    * @return
    */
   public String getUserPhone(String username) {
-    User user = getUser(username);
+    UserDTO user = getUser(username);
     return user.getPhone();
   }
 
@@ -109,8 +109,8 @@ public class UserService {
    * @param updateUser
    * @return
    */
-  public User updateUser(String username, User updateUser) {
-    User user = userRepository.findOne(username);
+  public UserDTO updateUser(String username, UserDTO updateUser) {
+    UserDTO user = userRepository.findOne(username);
     if (null == user) {
       throw new UserException(ResponseCode.USER_NOT_EXIST, username);
     }
@@ -129,8 +129,8 @@ public class UserService {
    *          用户id
    * @return
    */
-  public List<RecieveAddress> getUserRecieveAddressList(String username) {
-    User user = userRepository.findOne(username);
+  public List<RecieveAddressDTO> getUserRecieveAddressList(String username) {
+    UserDTO user = userRepository.findOne(username);
     if (null == user) {
       throw new UserException(ResponseCode.USER_NOT_EXIST, username);
     }
@@ -145,8 +145,8 @@ public class UserService {
    * @param recieveAddress
    * @return
    */
-  public RecieveAddress addUserRecieveAddress(String username, RecieveAddress recieveAddress) {
-    User user = userRepository.findOne(username);
+  public RecieveAddressDTO addUserRecieveAddress(String username, RecieveAddressDTO recieveAddress) {
+    UserDTO user = userRepository.findOne(username);
     if (null == user) {
       throw new UserException(ResponseCode.USER_NOT_EXIST, username);
     }
@@ -169,8 +169,8 @@ public class UserService {
    * @param addressId
    * @return
    */
-  public RecieveAddress getRecieveAddress(String username, String addressId) {
-    RecieveAddress recieveAddress = recieveaddressRepository.findOne(addressId);
+  public RecieveAddressDTO getRecieveAddress(String username, String addressId) {
+    RecieveAddressDTO recieveAddress = recieveaddressRepository.findOne(addressId);
     if (null == recieveAddress) {
       throw new UserException(ResponseCode.RECIEVEADDRESS_NOT_EXIST, addressId);
     }
@@ -192,8 +192,8 @@ public class UserService {
    * @param updateRecieveAddress
    * @return
    */
-  public RecieveAddress updateRecieveAddress(String username, String addressId, RecieveAddress updateRecieveAddress) {
-    RecieveAddress recieveAddress = recieveaddressRepository.findOne(addressId);
+  public RecieveAddressDTO updateRecieveAddress(String username, String addressId, RecieveAddressDTO updateRecieveAddress) {
+    RecieveAddressDTO recieveAddress = recieveaddressRepository.findOne(addressId);
     if (null == recieveAddress) {
       throw new UserException(ResponseCode.RECIEVEADDRESS_NOT_EXIST, addressId);
     }
@@ -217,7 +217,7 @@ public class UserService {
    * @param addressId
    */
   public void deprecateRecieveAddress(String username, String addressId) {
-    RecieveAddress recieveAddress = recieveaddressRepository.findOne(addressId);
+    RecieveAddressDTO recieveAddress = recieveaddressRepository.findOne(addressId);
     if (null == recieveAddress) {
       throw new UserException(ResponseCode.RECIEVEADDRESS_NOT_EXIST, addressId);
     }

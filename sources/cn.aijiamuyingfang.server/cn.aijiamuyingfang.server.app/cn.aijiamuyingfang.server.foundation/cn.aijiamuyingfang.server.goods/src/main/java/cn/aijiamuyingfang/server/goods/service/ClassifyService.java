@@ -10,8 +10,8 @@ import cn.aijiamuyingfang.server.domain.response.ResponseCode;
 import cn.aijiamuyingfang.server.exception.GoodsException;
 import cn.aijiamuyingfang.server.goods.db.ClassifyRepository;
 import cn.aijiamuyingfang.server.goods.db.GoodRepository;
-import cn.aijiamuyingfang.server.goods.dto.Classify;
-import cn.aijiamuyingfang.server.goods.dto.Good;
+import cn.aijiamuyingfang.server.goods.dto.ClassifyDTO;
+import cn.aijiamuyingfang.server.goods.dto.GoodDTO;
 
 /**
  * [描述]:
@@ -39,7 +39,7 @@ public class ClassifyService {
    *          条目Id
    * @return
    */
-  public Classify getClassify(String classifyId) {
+  public ClassifyDTO getClassify(String classifyId) {
     return classifyRepository.findOne(classifyId);
   }
 
@@ -58,13 +58,13 @@ public class ClassifyService {
    * @param classify
    * @return
    */
-  public Classify createORUpdateTopClassify(Classify classify) {
+  public ClassifyDTO createORUpdateTopClassify(ClassifyDTO classify) {
     if (null == classify) {
       return null;
     }
     classify.setLevel(1);
     if (StringUtils.hasContent(classify.getId())) {
-      Classify oriClassify = classifyRepository.findOne(classify.getId());
+      ClassifyDTO oriClassify = classifyRepository.findOne(classify.getId());
       if (oriClassify != null) {
         oriClassify.update(classify);
         return classifyRepository.saveAndFlush(oriClassify);
@@ -80,20 +80,20 @@ public class ClassifyService {
    * @param subclassify
    * @return
    */
-  public Classify createORUpdateSubClassify(String topclassifyid, Classify subclassify) {
+  public ClassifyDTO createORUpdateSubClassify(String topclassifyid, ClassifyDTO subclassify) {
     if (null == subclassify) {
       return null;
     }
     subclassify.setLevel(2);
 
     if (StringUtils.hasContent(subclassify.getId())) {
-      Classify oriSubClassify = classifyRepository.findOne(subclassify.getId());
+      ClassifyDTO oriSubClassify = classifyRepository.findOne(subclassify.getId());
       if (oriSubClassify != null) {
         oriSubClassify.update(subclassify);
         return classifyRepository.saveAndFlush(oriSubClassify);
       }
     }
-    Classify topclassify = classifyRepository.findOne(topclassifyid);
+    ClassifyDTO topclassify = classifyRepository.findOne(topclassifyid);
     if (null == topclassify) {
       throw new GoodsException(ResponseCode.CLASSIFY_NOT_EXIST, topclassifyid);
     }
@@ -109,8 +109,8 @@ public class ClassifyService {
    *          父条目Id
    * @return
    */
-  public List<Classify> getSubClassifyList(String classifyId) {
-    Classify classify = classifyRepository.findOne(classifyId);
+  public List<ClassifyDTO> getSubClassifyList(String classifyId) {
+    ClassifyDTO classify = classifyRepository.findOne(classifyId);
     if (null == classify) {
       throw new GoodsException(ResponseCode.CLASSIFY_NOT_EXIST, classifyId);
     }
@@ -125,11 +125,11 @@ public class ClassifyService {
    *          商品id
    */
   public void addGood(String classifyId, String goodId) {
-    Good good = goodRepository.findOne(goodId);
+    GoodDTO good = goodRepository.findOne(goodId);
     if (null == good) {
       throw new GoodsException(ResponseCode.GOOD_NOT_EXIST, goodId);
     }
-    Classify classify = classifyRepository.findOne(classifyId);
+    ClassifyDTO classify = classifyRepository.findOne(classifyId);
     if (null == classify) {
       throw new GoodsException(ResponseCode.CLASSIFY_NOT_EXIST, classifyId);
     }
@@ -144,8 +144,8 @@ public class ClassifyService {
    * @param updateClassify
    * @return
    */
-  public Classify updateClassify(String classifyId, Classify updateClassify) {
-    Classify classify = classifyRepository.findOne(classifyId);
+  public ClassifyDTO updateClassify(String classifyId, ClassifyDTO updateClassify) {
+    ClassifyDTO classify = classifyRepository.findOne(classifyId);
     if (null == classify) {
       throw new GoodsException(ResponseCode.CLASSIFY_NOT_EXIST, classifyId);
     }
@@ -162,7 +162,7 @@ public class ClassifyService {
    * 
    * @return
    */
-  public List<Classify> getTopClassifyList() {
+  public List<ClassifyDTO> getTopClassifyList() {
     return classifyRepository.findByLevel(1);
   }
 

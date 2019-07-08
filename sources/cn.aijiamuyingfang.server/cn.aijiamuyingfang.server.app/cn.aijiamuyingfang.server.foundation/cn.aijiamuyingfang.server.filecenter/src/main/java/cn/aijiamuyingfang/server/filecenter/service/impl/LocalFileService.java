@@ -29,7 +29,7 @@ import cn.aijiamuyingfang.commons.utils.JsonUtils;
 import cn.aijiamuyingfang.server.domain.FileSource;
 import cn.aijiamuyingfang.server.filecenter.db.FileInfoRepository;
 import cn.aijiamuyingfang.server.filecenter.domain.response.PagableFileInfoList;
-import cn.aijiamuyingfang.server.filecenter.dto.FileInfo;
+import cn.aijiamuyingfang.server.filecenter.dto.FileInfoDTO;
 import cn.aijiamuyingfang.server.filecenter.service.FileService;
 import cn.aijiamuyingfang.server.filecenter.utils.WebFileUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -65,8 +65,8 @@ public class LocalFileService implements FileService, InitializingBean {
   @Override
   public void afterPropertiesSet() throws Exception {
     SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
-    AbstractEntityPersister persister = ((AbstractEntityPersister) sessionFactory.getClassMetadata(FileInfo.class));
-    for (Field field : FileInfo.class.getDeclaredFields()) {
+    AbstractEntityPersister persister = ((AbstractEntityPersister) sessionFactory.getClassMetadata(FileInfoDTO.class));
+    for (Field field : FileInfoDTO.class.getDeclaredFields()) {
       if (Modifier.isStatic(field.getModifiers())) {
         continue;
       }
@@ -84,9 +84,9 @@ public class LocalFileService implements FileService, InitializingBean {
   }
 
   @Override
-  public FileInfo upload(MultipartFile file, FileSource fileSource) {
-    FileInfo fileInfo = WebFileUtils.extractFileInfo(file);
-    FileInfo oriFileInfo = fileInfoRepository.findOne(fileInfo.getId());
+  public FileInfoDTO upload(MultipartFile file, FileSource fileSource) {
+    FileInfoDTO fileInfo = WebFileUtils.extractFileInfo(file);
+    FileInfoDTO oriFileInfo = fileInfoRepository.findOne(fileInfo.getId());
     if (oriFileInfo != null) {
       return oriFileInfo;
     }
@@ -123,7 +123,7 @@ public class LocalFileService implements FileService, InitializingBean {
 
   @Override
   public void delete(String id) {
-    FileInfo fileInfo = fileInfoRepository.findOne(id);
+    FileInfoDTO fileInfo = fileInfoRepository.findOne(id);
     if (fileInfo != null) {
       WebFileUtils.deleteFile(fileInfo.getPath());
       fileInfoRepository.delete(fileInfo.getId());
@@ -136,8 +136,8 @@ public class LocalFileService implements FileService, InitializingBean {
     int currentPage = NumberUtils.toInt(params.remove("current_page"), 1);
     int pageSize = NumberUtils.toInt(params.remove("page_size"), 10);
     PageRequest pageRequest = new PageRequest(currentPage - 1, pageSize);
-    FileInfo fileInfo = JsonUtils.fromJson(JsonUtils.toJson(params), FileInfo.class);
-    Page<FileInfo> fileInfoPage = fileInfoRepository.findAll(Example.of(fileInfo), pageRequest);
+    FileInfoDTO fileInfo = JsonUtils.fromJson(JsonUtils.toJson(params), FileInfoDTO.class);
+    Page<FileInfoDTO> fileInfoPage = fileInfoRepository.findAll(Example.of(fileInfo), pageRequest);
     PagableFileInfoList response = new PagableFileInfoList();
     response.setCurrentPage(fileInfoPage.getNumber() + 1);
     response.setDataList(fileInfoPage.getContent());

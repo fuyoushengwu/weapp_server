@@ -16,8 +16,8 @@ import cn.aijiamuyingfang.server.exception.GoodsException;
 import cn.aijiamuyingfang.server.goods.db.StoreAddressRepository;
 import cn.aijiamuyingfang.server.goods.db.StoreRepository;
 import cn.aijiamuyingfang.server.goods.domain.response.PagableStoreList;
-import cn.aijiamuyingfang.server.goods.dto.Store;
-import cn.aijiamuyingfang.server.goods.dto.StoreAddress;
+import cn.aijiamuyingfang.server.goods.dto.StoreDTO;
+import cn.aijiamuyingfang.server.goods.dto.StoreAddressDTO;
 
 /**
  * [描述]:
@@ -59,7 +59,7 @@ public class StoreService {
 
     // PageRequest的Page参数是基于0的,但是currentPage是基于1的,所有将currentPage作为参数传递给PgeRequest时需要'-1'
     PageRequest pageRequest = new PageRequest(currentPage - 1, pageSize);
-    Page<Store> storePage = storeRepository.findInUseStores(pageRequest);
+    Page<StoreDTO> storePage = storeRepository.findInUseStores(pageRequest);
     PagableStoreList response = new PagableStoreList();
     response.setCurrentPage(storePage.getNumber() + 1);
     response.setDataList(storePage.getContent());
@@ -72,12 +72,12 @@ public class StoreService {
    * 
    * @param store
    */
-  public Store createORUpdateStore(Store store) {
+  public StoreDTO createORUpdateStore(StoreDTO store) {
     if (null == store) {
-      store = new Store();
+      store = new StoreDTO();
     }
     if (StringUtils.hasContent(store.getId())) {
-      Store oriStore = storeRepository.findOne(store.getId());
+      StoreDTO oriStore = storeRepository.findOne(store.getId());
       if (oriStore != null) {
         oriStore.update(store);
         return storeRepository.saveAndFlush(oriStore);
@@ -93,7 +93,7 @@ public class StoreService {
    *          门店ID
    * @return
    */
-  public Store getStore(String storeId) {
+  public StoreDTO getStore(String storeId) {
     return storeRepository.findOne(storeId);
   }
 
@@ -103,7 +103,7 @@ public class StoreService {
    * @param storeaddressId
    * @return
    */
-  public StoreAddress getStoreAddress(String storeaddressId) {
+  public StoreAddressDTO getStoreAddress(String storeaddressId) {
     return storeaddressRepository.findOne(storeaddressId);
   }
 
@@ -113,8 +113,8 @@ public class StoreService {
    * @param storeId
    * @param updateStore
    */
-  public Store updateStore(String storeId, Store updateStore) {
-    Store store = storeRepository.findOne(storeId);
+  public StoreDTO updateStore(String storeId, StoreDTO updateStore) {
+    StoreDTO store = storeRepository.findOne(storeId);
     if (null == store) {
       throw new GoodsException(ResponseCode.STORE_NOT_EXIST, storeId);
     }
@@ -131,14 +131,14 @@ public class StoreService {
    * @param storeId
    */
   public void deprecateStore(String storeId) {
-    Store store = storeRepository.findOne(storeId);
+    StoreDTO store = storeRepository.findOne(storeId);
     if (null == store) {
       throw new GoodsException(ResponseCode.STORE_NOT_EXIST, storeId);
     }
     store.setDeprecated(true);
     storeRepository.saveAndFlush(store);
 
-    StoreAddress storeaddress = store.getStoreAddress();
+    StoreAddressDTO storeaddress = store.getStoreAddress();
     if (storeaddress != null) {
       storeaddress.setDeprecated(true);
       storeaddressRepository.saveAndFlush(storeaddress);
@@ -152,10 +152,10 @@ public class StoreService {
    * @return
    */
   public Set<String> getStoresCity() {
-    List<Store> stores = storeRepository.findInUseStores();
+    List<StoreDTO> stores = storeRepository.findInUseStores();
     Set<String> storeCity = new HashSet<>();
-    for (Store store : stores) {
-      StoreAddress storeaddress = store.getStoreAddress();
+    for (StoreDTO store : stores) {
+      StoreAddressDTO storeaddress = store.getStoreAddress();
       if (null == storeaddress) {
         continue;
       }

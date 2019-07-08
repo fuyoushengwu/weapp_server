@@ -11,8 +11,8 @@ import cn.aijiamuyingfang.server.exception.GoodsException;
 import cn.aijiamuyingfang.server.goods.db.GoodDetailRepository;
 import cn.aijiamuyingfang.server.goods.db.GoodRepository;
 import cn.aijiamuyingfang.server.goods.domain.request.SaleGood;
-import cn.aijiamuyingfang.server.goods.dto.Good;
-import cn.aijiamuyingfang.server.goods.dto.GoodDetail;
+import cn.aijiamuyingfang.server.goods.dto.GoodDTO;
+import cn.aijiamuyingfang.server.goods.dto.GoodDetailDTO;
 
 /**
  * [描述]:
@@ -38,12 +38,12 @@ public class GoodService {
    * 
    * @param good
    */
-  public Good createORUpdateGood(Good good) {
+  public GoodDTO createORUpdateGood(GoodDTO good) {
     if (null == good) {
       return good;
     }
     if (StringUtils.hasContent(good.getId())) {
-      Good oriGood = goodRepository.findOne(good.getId());
+      GoodDTO oriGood = goodRepository.findOne(good.getId());
       if (oriGood != null) {
         oriGood.update(good);
         return goodRepository.saveAndFlush(oriGood);
@@ -60,7 +60,7 @@ public class GoodService {
    *          商品id
    * @return
    */
-  public Good getGood(String goodId) {
+  public GoodDTO getGood(String goodId) {
     return goodRepository.findOne(goodId);
   }
 
@@ -70,7 +70,7 @@ public class GoodService {
    * @param goodIdList
    * @return
    */
-  public List<Good> getGoodList(List<String> goodIdList) {
+  public List<GoodDTO> getGoodList(List<String> goodIdList) {
     return goodRepository.findAll(goodIdList);
   }
 
@@ -82,8 +82,8 @@ public class GoodService {
    * @param updateGood
    * @return
    */
-  public Good updateGood(String goodId, Good updateGood) {
-    Good good = goodRepository.findOne(goodId);
+  public GoodDTO updateGood(String goodId, GoodDTO updateGood) {
+    GoodDTO good = goodRepository.findOne(goodId);
     if (null == good) {
       throw new GoodsException(ResponseCode.GOOD_NOT_EXIST, goodId);
     }
@@ -101,11 +101,11 @@ public class GoodService {
    *          商品id
    */
   public void deprecateGood(String goodId) {
-    GoodDetail goodDetail = goodDetailRepository.findOne(goodId);
+    GoodDetailDTO goodDetail = goodDetailRepository.findOne(goodId);
     if (goodDetail != null) {
       goodDetailRepository.delete(goodDetail);
     }
-    Good good = goodRepository.findOne(goodId);
+    GoodDTO good = goodRepository.findOne(goodId);
     if (good != null) {
       good.setDeprecated(true);
       goodRepository.saveAndFlush(good);
@@ -122,7 +122,7 @@ public class GoodService {
     if (StringUtils.isEmpty(goodId) || null == saleGood) {
       return;
     }
-    Good good = goodRepository.findOne(goodId);
+    GoodDTO good = goodRepository.findOne(goodId);
     if (null == good) {
       throw new IllegalArgumentException("good[" + goodId + "] not exist");
     }

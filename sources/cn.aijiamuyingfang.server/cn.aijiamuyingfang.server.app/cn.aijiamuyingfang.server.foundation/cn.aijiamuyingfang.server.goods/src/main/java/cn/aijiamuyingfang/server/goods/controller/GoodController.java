@@ -25,9 +25,9 @@ import cn.aijiamuyingfang.server.feign.ShopCartClient;
 import cn.aijiamuyingfang.server.feign.ShopOrderClient;
 import cn.aijiamuyingfang.server.goods.domain.request.SaleGood;
 import cn.aijiamuyingfang.server.goods.domain.response.PagableGoodList;
-import cn.aijiamuyingfang.server.goods.dto.Good;
-import cn.aijiamuyingfang.server.goods.dto.GoodDetail;
-import cn.aijiamuyingfang.server.goods.dto.ImageSource;
+import cn.aijiamuyingfang.server.goods.dto.GoodDTO;
+import cn.aijiamuyingfang.server.goods.dto.GoodDetailDTO;
+import cn.aijiamuyingfang.server.goods.dto.ImageSourceDTO;
 import cn.aijiamuyingfang.server.goods.service.ClassifyGoodService;
 import cn.aijiamuyingfang.server.goods.service.GoodDetailService;
 import cn.aijiamuyingfang.server.goods.service.GoodService;
@@ -105,8 +105,8 @@ public class GoodController {
    */
   @PreAuthorize("hasAuthority('permission:manager:*')")
   @PostMapping(value = "/good")
-  public Good createGood(@RequestParam(value = "coverImage", required = false) MultipartFile coverImage,
-      @RequestParam(value = "detailImages", required = false) List<MultipartFile> detailImages, Good good,
+  public GoodDTO createGood(@RequestParam(value = "coverImage", required = false) MultipartFile coverImage,
+      @RequestParam(value = "detailImages", required = false) List<MultipartFile> detailImages, GoodDTO good,
       HttpServletRequest request) {
     if (null == good) {
       throw new IllegalArgumentException(REQUEST_BODY_NULL);
@@ -122,20 +122,20 @@ public class GoodController {
     }
     good = goodService.createORUpdateGood(good);
 
-    ImageSource coverImageSource = imageService.saveImage(coverImage);
+    ImageSourceDTO coverImageSource = imageService.saveImage(coverImage);
     if (coverImageSource != null) {
       good.setCoverImg(coverImageSource);
     }
 
-    List<ImageSource> detailImageSourceList = new ArrayList<>();
+    List<ImageSourceDTO> detailImageSourceList = new ArrayList<>();
     if (CollectionUtils.hasContent(detailImages)) {
       for (MultipartFile detailImagePart : detailImages) {
-        ImageSource detailImageSource = imageService.saveImage(detailImagePart);
+        ImageSourceDTO detailImageSource = imageService.saveImage(detailImagePart);
         detailImageSourceList.add(detailImageSource);
       }
     }
 
-    GoodDetail goodDetail = new GoodDetail();
+    GoodDetailDTO goodDetail = new GoodDetailDTO();
     goodDetail.setId(good.getId());
     goodDetail.setLifetime(good.getLifetime());
     goodDetail.setDetailImgList(detailImageSourceList);
@@ -152,8 +152,8 @@ public class GoodController {
    */
   @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/good/{good_id}")
-  public Good getGood(@PathVariable(value = "good_id") String goodId) {
-    Good good = goodService.getGood(goodId);
+  public GoodDTO getGood(@PathVariable(value = "good_id") String goodId) {
+    GoodDTO good = goodService.getGood(goodId);
     if (null == good) {
       throw new GoodsException(ResponseCode.GOOD_NOT_EXIST, goodId);
     }
@@ -168,7 +168,7 @@ public class GoodController {
    */
   @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/good")
-  public List<Good> getGoodList(@RequestParam("good_id") List<String> goodIdList) {
+  public List<GoodDTO> getGoodList(@RequestParam("good_id") List<String> goodIdList) {
     return goodService.getGoodList(goodIdList);
   }
 
@@ -194,8 +194,8 @@ public class GoodController {
    */
   @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/good/{good_id}/detail")
-  public GoodDetail getGoodDetail(@PathVariable(value = "good_id") String goodId) {
-    GoodDetail goodDetail = gooddetailService.getGoodDetail(goodId);
+  public GoodDetailDTO getGoodDetail(@PathVariable(value = "good_id") String goodId) {
+    GoodDetailDTO goodDetail = gooddetailService.getGoodDetail(goodId);
     if (null == goodDetail) {
       throw new GoodsException(ResponseCode.GOODDETAIL_NOT_EXIST, goodId);
     }
@@ -212,11 +212,11 @@ public class GoodController {
    */
   @PreAuthorize("hasAuthority('permission:manager:*')")
   @PutMapping(value = "/good/{good_id}")
-  public Good updateGood(@PathVariable(value = "good_id") String goodId, @RequestBody Good request) {
+  public GoodDTO updateGood(@PathVariable(value = "good_id") String goodId, @RequestBody GoodDTO request) {
     if (null == request) {
       throw new IllegalArgumentException(REQUEST_BODY_NULL);
     }
-    Good good = goodService.updateGood(goodId, request);
+    GoodDTO good = goodService.updateGood(goodId, request);
     if (good != null) {
       shoporderClient.updatePreOrder(goodId);
     }
@@ -230,11 +230,11 @@ public class GoodController {
    */
   @PreAuthorize("hasAuthority('permission:manager:*')")
   @PutMapping(value = "/good")
-  public void updateGood(@RequestBody List<Good> request) {
+  public void updateGood(@RequestBody List<GoodDTO> request) {
     if (null == request) {
       throw new IllegalArgumentException(REQUEST_BODY_NULL);
     }
-    for (Good good : request) {
+    for (GoodDTO good : request) {
       if (null == good || StringUtils.isEmpty(good.getId())) {
         continue;
       }

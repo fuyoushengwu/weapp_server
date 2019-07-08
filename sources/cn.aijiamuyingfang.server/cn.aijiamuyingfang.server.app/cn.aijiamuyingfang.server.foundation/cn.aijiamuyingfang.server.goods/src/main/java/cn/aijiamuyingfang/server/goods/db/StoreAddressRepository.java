@@ -3,7 +3,7 @@ package cn.aijiamuyingfang.server.goods.db;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import cn.aijiamuyingfang.server.goods.dto.StoreAddress;
+import cn.aijiamuyingfang.server.goods.dto.StoreAddressDTO;
 
 /**
  * [描述]:
@@ -17,5 +17,5 @@ import cn.aijiamuyingfang.server.goods.dto.StoreAddress;
  * @date 2018-06-25 21:15:03
  */
 @Repository
-public interface StoreAddressRepository extends JpaRepository<StoreAddress, String> {
+public interface StoreAddressRepository extends JpaRepository<StoreAddressDTO, String> {
 }

@@ -1,6 +1,6 @@
 package cn.aijiamuyingfang.server.coupon.domain.response;
 
-import cn.aijiamuyingfang.server.coupon.dto.UserVoucher;
+import cn.aijiamuyingfang.server.coupon.dto.UserVoucherDTO;
 import cn.aijiamuyingfang.server.domain.response.PageResponse;
 
 /**
@@ -14,6 +14,6 @@ import cn.aijiamuyingfang.server.domain.response.PageResponse;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-06-09 21:25:38
  */
-public class PagableUserVoucherList extends PageResponse<UserVoucher> {
+public class PagableUserVoucherList extends PageResponse<UserVoucherDTO> {
 
 }

@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import cn.aijiamuyingfang.server.shoporder.dto.ShopCart;
+import cn.aijiamuyingfang.server.shoporder.dto.ShopCartDTO;
 
 /**
  * [描述]:
@@ -26,7 +26,7 @@ import cn.aijiamuyingfang.server.shoporder.dto.ShopCart;
  * @date 2018-06-25 21:15:03
  */
 @Repository
-public interface ShopCartRepository extends JpaRepository<ShopCart, String> {
+public interface ShopCartRepository extends JpaRepository<ShopCartDTO, String> {
 
   /**
    * 查找用户在购物车中某一项商品
@@ -36,7 +36,7 @@ public interface ShopCartRepository extends JpaRepository<ShopCart, String> {
    * @param goodId
    *          商品id
    */
-  ShopCart findByUsernameAndGoodId(String username, String goodId);
+  ShopCartDTO findByUsernameAndGoodId(String username, String goodId);
 
   /**
    * 查找用户在购物车中的某几项商品
@@ -47,7 +47,7 @@ public interface ShopCartRepository extends JpaRepository<ShopCart, String> {
    *          商品id列表
    * @return
    */
-  List<ShopCart> findByUsernameAndGoodIdIn(String username, List<String> goodIdList);
+  List<ShopCartDTO> findByUsernameAndGoodIdIn(String username, List<String> goodIdList);
 
   /**
    * 分页查找用户购物车中的所有商品
@@ -58,7 +58,7 @@ public interface ShopCartRepository extends JpaRepository<ShopCart, String> {
    *          分页信息
    * @return
    */
-  Page<ShopCart> findByUsername(String username, Pageable pageable);
+  Page<ShopCartDTO> findByUsername(String username, Pageable pageable);
 
   /**
    * 查找用户所有选中的购车项
@@ -69,7 +69,7 @@ public interface ShopCartRepository extends JpaRepository<ShopCart, String> {
    *          是否选中
    * @return
    */
-  List<ShopCart> findByUsernameAndChecked(String username, boolean checked);
+  List<ShopCartDTO> findByUsernameAndChecked(String username, boolean checked);
 
   /**
    * 全选/全不选用户下的购物车

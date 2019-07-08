@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import cn.aijiamuyingfang.server.logcenter.dto.Log;
+import cn.aijiamuyingfang.server.logcenter.dto.LogDTO;
 
 /**
  * [描述]:
@@ -21,7 +21,7 @@ import cn.aijiamuyingfang.server.logcenter.dto.Log;
  * @date 2019-04-10 18:06:35
  */
 @Repository
-public interface LogRepository extends JpaRepository<Log, String> {
+public interface LogRepository extends JpaRepository<LogDTO, String> {
   /**
    * 分页查询日志
    * 
@@ -31,5 +31,5 @@ public interface LogRepository extends JpaRepository<Log, String> {
    */
   @Query(value = "select * from log :where order by ?#{#pageable}",
       countQuery = "select count(*) from log where :where order by ?#{#pageable}", nativeQuery = true)
-  Page<Log> findLog(@Param("where") String where, Pageable pageable);
+  Page<LogDTO> findLog(@Param("where") String where, Pageable pageable);
 }

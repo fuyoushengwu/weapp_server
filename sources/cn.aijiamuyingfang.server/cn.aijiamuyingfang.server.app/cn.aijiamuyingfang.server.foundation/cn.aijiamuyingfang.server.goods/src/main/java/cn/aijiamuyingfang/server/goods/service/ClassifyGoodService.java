@@ -15,8 +15,8 @@ import cn.aijiamuyingfang.server.exception.GoodsException;
 import cn.aijiamuyingfang.server.goods.db.ClassifyRepository;
 import cn.aijiamuyingfang.server.goods.db.GoodRepository;
 import cn.aijiamuyingfang.server.goods.domain.response.PagableGoodList;
-import cn.aijiamuyingfang.server.goods.dto.Classify;
-import cn.aijiamuyingfang.server.goods.dto.Good;
+import cn.aijiamuyingfang.server.goods.dto.ClassifyDTO;
+import cn.aijiamuyingfang.server.goods.dto.GoodDTO;
 
 /**
  * [描述]:
@@ -58,7 +58,7 @@ public class ClassifyGoodService {
    */
   public PagableGoodList getClassifyGoodList(String classifyId, List<String> packFilter,
       List<String> levelFilter, String orderType, String orderValue, int currentPage, int pageSize) {
-    Classify classify = classifyRepository.findOne(classifyId);
+    ClassifyDTO classify = classifyRepository.findOne(classifyId);
     if (null == classify) {
       throw new GoodsException(ResponseCode.CLASSIFY_NOT_EXIST, classifyId);
     }
@@ -69,7 +69,7 @@ public class ClassifyGoodService {
     } else {
       pageRequest = new PageRequest(currentPage - 1, pageSize);
     }
-    Page<Good> goodPage;
+    Page<GoodDTO> goodPage;
     if (CollectionUtils.isEmpty(packFilter) && CollectionUtils.isEmpty(levelFilter)) {
       goodPage = goodRepository.findClassifyGood(classifyId, pageRequest);
     } else if (CollectionUtils.isEmpty(packFilter)) {

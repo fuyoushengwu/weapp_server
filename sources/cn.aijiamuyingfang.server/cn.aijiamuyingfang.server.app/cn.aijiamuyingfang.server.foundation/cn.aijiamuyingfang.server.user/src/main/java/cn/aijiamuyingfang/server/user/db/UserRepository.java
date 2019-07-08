@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import cn.aijiamuyingfang.server.user.dto.User;
+import cn.aijiamuyingfang.server.user.dto.UserDTO;
 
 /**
  * [描述]:
@@ -21,7 +21,7 @@ import cn.aijiamuyingfang.server.user.dto.User;
  * @date 2018-06-25 21:14:03
  */
 @Repository
-public interface UserRepository extends JpaRepository<User, String> {
+public interface UserRepository extends JpaRepository<UserDTO, String> {
 
   /**
    * 获取不同权限用户的Id

@@ -1,7 +1,7 @@
 package cn.aijiamuyingfang.server.shoporder.domain.response;
 
 import cn.aijiamuyingfang.server.domain.response.PageResponse;
-import cn.aijiamuyingfang.server.shoporder.dto.ShopCart;
+import cn.aijiamuyingfang.server.shoporder.dto.ShopCartDTO;
 
 /**
  * [描述]:
@@ -14,6 +14,6 @@ import cn.aijiamuyingfang.server.shoporder.dto.ShopCart;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-07-02 21:41:56
  */
-public class PagableShopCartList extends PageResponse<ShopCart> {
+public class PagableShopCartList extends PageResponse<ShopCartDTO> {
 
 }

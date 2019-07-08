@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import cn.aijiamuyingfang.server.domain.FileSource;
 import cn.aijiamuyingfang.server.filecenter.domain.response.PagableFileInfoList;
-import cn.aijiamuyingfang.server.filecenter.dto.FileInfo;
+import cn.aijiamuyingfang.server.filecenter.dto.FileInfoDTO;
 import cn.aijiamuyingfang.server.filecenter.service.FileService;
 import cn.aijiamuyingfang.server.filecenter.service.FileServiceFactory;
 
@@ -35,7 +35,7 @@ public class FileController {
    */
   @PreAuthorize("hasAuthority('permission:manager:*')")
   @PostMapping(value = "/files", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public FileInfo upload(@RequestPart("file") MultipartFile file,
+  public FileInfoDTO upload(@RequestPart("file") MultipartFile file,
       @RequestParam(value = "source", required = false) FileSource fileSource) {
     FileService fileService = fileServiceFactory.getFileServiceBySource(fileSource);
     return fileService.upload(file, fileSource);

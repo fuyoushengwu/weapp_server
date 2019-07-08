@@ -4,9 +4,9 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import cn.aijiamuyingfang.server.it.domain.UserAuthority;
+import cn.aijiamuyingfang.server.it.dto.user.UserAuthorityDTO;
 
-@JsonDeserialize(as = UserAuthority.class)
+@JsonDeserialize(as = UserAuthorityDTO.class)
 public interface GrantedAuthority extends Serializable {
 
   String getAuthority();

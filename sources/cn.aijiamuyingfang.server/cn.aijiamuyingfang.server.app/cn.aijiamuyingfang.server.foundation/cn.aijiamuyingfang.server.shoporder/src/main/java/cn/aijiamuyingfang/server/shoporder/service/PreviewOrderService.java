@@ -15,9 +15,9 @@ import cn.aijiamuyingfang.server.feign.domain.user.RecieveAddress;
 import cn.aijiamuyingfang.server.shoporder.db.PreviewOrderItemRepository;
 import cn.aijiamuyingfang.server.shoporder.db.PreviewOrderRepository;
 import cn.aijiamuyingfang.server.shoporder.db.ShopCartRepository;
-import cn.aijiamuyingfang.server.shoporder.dto.PreviewOrder;
-import cn.aijiamuyingfang.server.shoporder.dto.PreviewOrderItem;
-import cn.aijiamuyingfang.server.shoporder.dto.ShopCart;
+import cn.aijiamuyingfang.server.shoporder.dto.PreviewOrderDTO;
+import cn.aijiamuyingfang.server.shoporder.dto.PreviewOrderItemDTO;
+import cn.aijiamuyingfang.server.shoporder.dto.ShopCartDTO;
 
 /**
  * [描述]:
@@ -54,16 +54,16 @@ public class PreviewOrderService {
    * @param updateOrderItem
    * @return
    */
-  public PreviewOrderItem updatePreviewOrderItem(String username, String previewItemId,
-      PreviewOrderItem updateOrderItem) {
+  public PreviewOrderItemDTO updatePreviewOrderItem(String username, String previewItemId,
+      PreviewOrderItemDTO updateOrderItem) {
     if (null == updateOrderItem) {
       return null;
     }
-    PreviewOrder previewOrder = previeworderRepository.findByUsername(username);
+    PreviewOrderDTO previewOrder = previeworderRepository.findByUsername(username);
     if (null == previewOrder) {
       throw new ShopOrderException(ResponseCode.PREVIEWORDER_NOT_EXIST, username);
     }
-    PreviewOrderItem orderItem = previeworderItemRepository.findOne(previewItemId);
+    PreviewOrderItemDTO orderItem = previeworderItemRepository.findOne(previewItemId);
     if (null == orderItem) {
       throw new ShopOrderException(ResponseCode.PREVIEWORDERITEM_NOT_EXIST, previewItemId);
     }
@@ -83,11 +83,11 @@ public class PreviewOrderService {
    * @param itemid
    */
   public void deletePreviewOrderItem(String username, String itemid) {
-    PreviewOrder previewOrder = previeworderRepository.findByUsername(username);
+    PreviewOrderDTO previewOrder = previeworderRepository.findByUsername(username);
     if (null == previewOrder) {
       return;
     }
-    PreviewOrderItem orderItem = previeworderItemRepository.findOne(itemid);
+    PreviewOrderItemDTO orderItem = previeworderItemRepository.findOne(itemid);
     previewOrder.getOrderItemList().remove(orderItem);
     previeworderRepository.saveAndFlush(previewOrder);
     previeworderItemRepository.delete(orderItem.getId());
@@ -102,12 +102,12 @@ public class PreviewOrderService {
    * @return
    */
   @Transactional
-  public PreviewOrder generatePreviewOrder(String username, List<String> goodIdList) {
-    PreviewOrder previeworder = new PreviewOrder();
+  public PreviewOrderDTO generatePreviewOrder(String username, List<String> goodIdList) {
+    PreviewOrderDTO previeworder = new PreviewOrderDTO();
     previeworder.setUsername(username);
-    List<ShopCart> itemList = getShopCartListByGoodIds(username, goodIdList);
-    for (ShopCart item : itemList) {
-      previeworder.addOrderItem(PreviewOrderItem.fromShopCart(item));
+    List<ShopCartDTO> itemList = getShopCartListByGoodIds(username, goodIdList);
+    for (ShopCartDTO item : itemList) {
+      previeworder.addOrderItem(PreviewOrderItemDTO.fromShopCart(item));
     }
 
     List<RecieveAddress> addressList = userClient.getUserRecieveAddressList(username).getData();
@@ -130,7 +130,7 @@ public class PreviewOrderService {
    * @param goodIdList
    * @return
    */
-  private List<ShopCart> getShopCartListByGoodIds(String username, List<String> goodIdList) {
+  private List<ShopCartDTO> getShopCartListByGoodIds(String username, List<String> goodIdList) {
     if (goodIdList != null && !goodIdList.isEmpty()) {
       return shopCartRepository.findByUsernameAndGoodIdIn(username, goodIdList);
     } else {

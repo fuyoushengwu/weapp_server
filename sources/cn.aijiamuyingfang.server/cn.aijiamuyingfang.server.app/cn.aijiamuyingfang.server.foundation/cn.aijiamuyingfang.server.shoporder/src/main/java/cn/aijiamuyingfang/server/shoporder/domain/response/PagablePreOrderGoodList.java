@@ -1,7 +1,7 @@
 package cn.aijiamuyingfang.server.shoporder.domain.response;
 
 import cn.aijiamuyingfang.server.domain.response.PageResponse;
-import cn.aijiamuyingfang.server.shoporder.dto.PreOrderGood;
+import cn.aijiamuyingfang.server.shoporder.domain.PreOrderGood;
 
 /**
  * [描述]:

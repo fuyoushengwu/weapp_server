@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import cn.aijiamuyingfang.commons.utils.NumberUtils;
-import cn.aijiamuyingfang.server.it.domain.FileSource;
 import lombok.Data;
 
 @Entity
@@ -37,19 +36,19 @@ public class FileInfoDTO {
   private String url;
 
   @JsonDeserialize(using = FileSourceDeserializer.class)
-  private FileSource source;
+  private FileSourceDTO source;
 
-  private static class FileSourceDeserializer extends JsonDeserializer<FileSource> {
+  private static class FileSourceDeserializer extends JsonDeserializer<FileSourceDTO> {
 
     @Override
-    public FileSource deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public FileSourceDTO deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
       JsonToken currentToken = p.currentToken();
       if (currentToken == JsonToken.VALUE_NUMBER_INT) {
-        return FileSource.fromValue(p.getIntValue());
+        return FileSourceDTO.fromValue(p.getIntValue());
       } else if (currentToken == JsonToken.VALUE_STRING) {
-        return FileSource.fromValue(NumberUtils.toInt(p.getValueAsString(), 0));
+        return FileSourceDTO.fromValue(NumberUtils.toInt(p.getValueAsString(), 0));
       }
-      return FileSource.LOCAL;
+      return FileSourceDTO.LOCAL;
     }
 
   }

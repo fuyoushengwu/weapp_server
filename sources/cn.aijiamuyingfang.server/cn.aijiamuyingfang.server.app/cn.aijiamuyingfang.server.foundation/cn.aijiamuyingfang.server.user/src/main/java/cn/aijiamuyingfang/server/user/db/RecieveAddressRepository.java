@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import cn.aijiamuyingfang.server.user.dto.RecieveAddress;
+import cn.aijiamuyingfang.server.user.dto.RecieveAddressDTO;
 
 /**
  * [描述]:
@@ -24,11 +24,11 @@ import cn.aijiamuyingfang.server.user.dto.RecieveAddress;
  * @date 2018-06-25 21:15:35
  */
 @Repository
-public interface RecieveAddressRepository extends JpaRepository<RecieveAddress, String> {
+public interface RecieveAddressRepository extends JpaRepository<RecieveAddressDTO, String> {
 
   @Override
   @Query(value = "select r from RecieveAddress r where r.id=:id and r.deprecated=false")
-  RecieveAddress findOne(@Param("id") String id);
+  RecieveAddressDTO findOne(@Param("id") String id);
 
   /**
    * 获取用户的收件地址
@@ -37,7 +37,7 @@ public interface RecieveAddressRepository extends JpaRepository<RecieveAddress, 
    * @return 获取用户的收件地址
    */
   @Query(value = "select * from recieve_address where username=:username and deprecated=false", nativeQuery = true)
-  List<RecieveAddress> findByUsername(@Param("username") String username);
+  List<RecieveAddressDTO> findByUsername(@Param("username") String username);
 
   /**
    * 设置所有收件地址非默认

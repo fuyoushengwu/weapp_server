@@ -25,8 +25,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import cn.aijiamuyingfang.commons.utils.CollectionUtils;
 import cn.aijiamuyingfang.commons.utils.NumberUtils;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
-import cn.aijiamuyingfang.server.it.domain.Gender;
-import cn.aijiamuyingfang.server.it.domain.UserAuthority;
 import lombok.Data;
 
 /**
@@ -74,9 +72,9 @@ public class UserDTO {
    * 用户角色
    */
   @JsonDeserialize(contentUsing = AuthorityListDeserializer.class)
-  @ElementCollection(fetch = FetchType.EAGER, targetClass = UserAuthority.class)
+  @ElementCollection(fetch = FetchType.EAGER, targetClass = UserAuthorityDTO.class)
   @Enumerated(EnumType.ORDINAL)
-  private List<UserAuthority> authorityList = new ArrayList<>();
+  private List<UserAuthorityDTO> authorityList = new ArrayList<>();
 
   private static class AuthorityListDeserializer extends JsonDeserializer<GrantedAuthority> {
 
@@ -84,11 +82,11 @@ public class UserDTO {
     public GrantedAuthority deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
       JsonToken currentToken = p.currentToken();
       if (currentToken == JsonToken.VALUE_NUMBER_INT) {
-        return UserAuthority.fromValue(p.getIntValue());
+        return UserAuthorityDTO.fromValue(p.getIntValue());
       } else if (currentToken == JsonToken.VALUE_STRING) {
-        return UserAuthority.fromValue(NumberUtils.toInt(p.getValueAsString(), 0));
+        return UserAuthorityDTO.fromValue(NumberUtils.toInt(p.getValueAsString(), 0));
       }
-      return UserAuthority.UNKNOW;
+      return UserAuthorityDTO.UNKNOW;
     }
 
   }
@@ -103,19 +101,19 @@ public class UserDTO {
    * 性别
    */
   @JsonDeserialize(using = GenderDeserializer.class)
-  private Gender gender;
+  private GenderDTO gender;
 
-  private static class GenderDeserializer extends JsonDeserializer<Gender> {
+  private static class GenderDeserializer extends JsonDeserializer<GenderDTO> {
 
     @Override
-    public Gender deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public GenderDTO deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
       JsonToken currentToken = p.currentToken();
       if (currentToken == JsonToken.VALUE_NUMBER_INT) {
-        return Gender.fromValue(p.getIntValue());
+        return GenderDTO.fromValue(p.getIntValue());
       } else if (currentToken == JsonToken.VALUE_STRING) {
-        return Gender.fromValue(NumberUtils.toInt(p.getValueAsString(), 0));
+        return GenderDTO.fromValue(NumberUtils.toInt(p.getValueAsString(), 0));
       }
-      return Gender.UNKNOW;
+      return GenderDTO.UNKNOW;
     }
 
   }
@@ -184,7 +182,7 @@ public class UserDTO {
     this.genericScore -= score;
   }
 
-  public void addAuthority(UserAuthority authority) {
+  public void addAuthority(UserAuthorityDTO authority) {
     synchronized (this) {
       if (null == this.authorityList) {
         this.authorityList = new ArrayList<>();

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import cn.aijiamuyingfang.server.domain.FileSource;
 import cn.aijiamuyingfang.server.filecenter.db.FileInfoRepository;
-import cn.aijiamuyingfang.server.filecenter.dto.FileInfo;
+import cn.aijiamuyingfang.server.filecenter.dto.FileInfoDTO;
 
 /**
  * FileService工厂<br>
@@ -67,7 +67,7 @@ public class FileServiceFactory {
    * @return
    */
   public FileService getFileServiceById(String id) {
-    FileInfo fileInfo = fileInfoRepository.findOne(id);
+    FileInfoDTO fileInfo = fileInfoRepository.findOne(id);
     if (fileInfo != null) {
       return getFileServiceBySource(fileInfo.getSource());
     }

@@ -2,7 +2,7 @@ package cn.aijiamuyingfang.server.goods.service;
 
 import cn.aijiamuyingfang.commons.utils.StringUtils;
 import cn.aijiamuyingfang.server.goods.db.GoodDetailRepository;
-import cn.aijiamuyingfang.server.goods.dto.GoodDetail;
+import cn.aijiamuyingfang.server.goods.dto.GoodDetailDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,12 +28,12 @@ public class GoodDetailService {
    * 
    * @param gooddetail
    */
-  public GoodDetail createORUpdateGoodDetail(GoodDetail gooddetail) {
+  public GoodDetailDTO createORUpdateGoodDetail(GoodDetailDTO gooddetail) {
     if (null == gooddetail) {
       return null;
     }
     if (StringUtils.hasContent(gooddetail.getId())) {
-      GoodDetail oriGoodDetail = goodDetailRepository.findOne(gooddetail.getId());
+      GoodDetailDTO oriGoodDetail = goodDetailRepository.findOne(gooddetail.getId());
       if (oriGoodDetail != null) {
         oriGoodDetail.update(gooddetail);
         return goodDetailRepository.saveAndFlush(gooddetail);
@@ -48,7 +48,7 @@ public class GoodDetailService {
    * @param gooddetailId
    * @return
    */
-  public GoodDetail getGoodDetail(String gooddetailId) {
+  public GoodDetailDTO getGoodDetail(String gooddetailId) {
     return goodDetailRepository.findOne(gooddetailId);
   }
 }

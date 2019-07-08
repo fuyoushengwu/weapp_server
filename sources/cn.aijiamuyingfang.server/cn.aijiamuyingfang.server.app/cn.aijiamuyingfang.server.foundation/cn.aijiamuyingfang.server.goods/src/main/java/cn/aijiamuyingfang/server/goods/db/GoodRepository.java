@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import cn.aijiamuyingfang.server.goods.dto.Good;
+import cn.aijiamuyingfang.server.goods.dto.GoodDTO;
 
 /**
  * [描述]:
@@ -26,11 +26,11 @@ import cn.aijiamuyingfang.server.goods.dto.Good;
  * @date 2018-06-25 21:15:03
  */
 @Repository
-public interface GoodRepository extends JpaRepository<Good, String> {
+public interface GoodRepository extends JpaRepository<GoodDTO, String> {
 
   @Override
   @Query(value = "select * from good where id=:good_id and deprecated=false", nativeQuery = true)
-  Good findOne(@Param("good_id") String goodId);
+  GoodDTO findOne(@Param("good_id") String goodId);
 
   /**
    * 按照打包方式和阶段分页获取条目下的商品
@@ -48,7 +48,7 @@ public interface GoodRepository extends JpaRepository<Good, String> {
           + "g.deprecated=false and c.classify_id=:classify_id and g.pack in :pack and g.level in :level order by "
           + "?#{#pageable}",
       nativeQuery = true)
-  Page<Good> findClassifyGoodByPackInAndLevelIn(@Param("classify_id") String classifyId,
+  Page<GoodDTO> findClassifyGoodByPackInAndLevelIn(@Param("classify_id") String classifyId,
       @Param("pack") List<String> packList, @Param("level") List<String> levelList, Pageable pageable);
 
   /**
@@ -66,7 +66,7 @@ public interface GoodRepository extends JpaRepository<Good, String> {
       countQuery = "select count(*) from good g inner join classify_good_list c on g.id=c.good_list_id where "
           + "g.deprecated=false and c.classify_id=:classify_id and g.pack in :pack order by ?#{#pageable}",
       nativeQuery = true)
-  Page<Good> findClassifyGoodByPackIn(@Param("classify_id") String classifyId, @Param("pack") List<String> packList,
+  Page<GoodDTO> findClassifyGoodByPackIn(@Param("classify_id") String classifyId, @Param("pack") List<String> packList,
       Pageable pageable);
 
   /**
@@ -84,7 +84,7 @@ public interface GoodRepository extends JpaRepository<Good, String> {
       countQuery = "select count(*) from good g inner join classify_good_list c on g.id=c.good_list_id "
           + "where g.deprecated=false and c.classify_id=:classify_id and g.level in :level order by ?#{#pageable}",
       nativeQuery = true)
-  Page<Good> findClassifyGoodByLevelIn(@Param("classify_id") String classifyId, @Param("level") List<String> levelList,
+  Page<GoodDTO> findClassifyGoodByLevelIn(@Param("classify_id") String classifyId, @Param("level") List<String> levelList,
       Pageable pageable);
 
   /**
@@ -101,7 +101,7 @@ public interface GoodRepository extends JpaRepository<Good, String> {
       countQuery = "select count(*) from good g inner join classify_good_list c on g.id=c.good_list_id "
           + "where g.deprecated=false and c.classify_id=:classify_id order by ?#{#pageable}",
       nativeQuery = true)
-  Page<Good> findClassifyGood(@Param("classify_id") String classifyId, Pageable pageable);
+  Page<GoodDTO> findClassifyGood(@Param("classify_id") String classifyId, Pageable pageable);
 
   /**
    * 将Good中对应goodvoucherId的GoodVoucher废弃

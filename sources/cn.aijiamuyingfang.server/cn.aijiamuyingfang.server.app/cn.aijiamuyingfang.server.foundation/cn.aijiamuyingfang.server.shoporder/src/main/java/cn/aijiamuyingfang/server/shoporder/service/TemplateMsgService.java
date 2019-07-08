@@ -17,8 +17,8 @@ import cn.aijiamuyingfang.server.feign.domain.message.TemplateMsg;
 import cn.aijiamuyingfang.server.feign.domain.message.TemplateMsgKeyValue;
 import cn.aijiamuyingfang.server.feign.domain.store.StoreAddress;
 import cn.aijiamuyingfang.server.feign.domain.user.RecieveAddress;
-import cn.aijiamuyingfang.server.shoporder.dto.ShopOrder;
-import cn.aijiamuyingfang.server.shoporder.dto.ShopOrderItem;
+import cn.aijiamuyingfang.server.shoporder.dto.ShopOrderDTO;
+import cn.aijiamuyingfang.server.shoporder.dto.ShopOrderItemDTO;
 
 /**
  * [描述]:
@@ -54,7 +54,7 @@ public class TemplateMsgService {
    * @param order
    * @param updatedGood
    */
-  public void sendPreOrderMsg(String username, ShopOrder order, Good updatedGood) {
+  public void sendPreOrderMsg(String username, ShopOrderDTO order, Good updatedGood) {
     if (null == order || null == updatedGood) {
       return;
     }
@@ -78,7 +78,7 @@ public class TemplateMsgService {
    * @param username
    * @param order
    */
-  public void sendPickupMsg(String username, ShopOrder order) {
+  public void sendPickupMsg(String username, ShopOrderDTO order) {
     if (null == order) {
       return;
     }
@@ -89,9 +89,9 @@ public class TemplateMsgService {
     String keyword1Value = order.getOrderNo();
 
     StringBuilder contentSB = new StringBuilder();
-    List<ShopOrderItem> shoporderitemList = order.getOrderItemList();
+    List<ShopOrderItemDTO> shoporderitemList = order.getOrderItemList();
     if (!CollectionUtils.isEmpty(shoporderitemList)) {
-      for (ShopOrderItem item : shoporderitemList) {
+      for (ShopOrderItemDTO item : shoporderitemList) {
         contentSB.append(item.getGoodName()).append(" ");
         contentSB.append(item.getCount()).append(item.getGoodPack()).append("\n");
       }
@@ -120,7 +120,7 @@ public class TemplateMsgService {
    * @param username
    * @param order
    */
-  public void sendThirdSendMsg(String username, ShopOrder order) {
+  public void sendThirdSendMsg(String username, ShopOrderDTO order) {
     if (null == order) {
       return;
     }
@@ -130,9 +130,9 @@ public class TemplateMsgService {
     String keyword1Value = order.getOrderNo();
 
     StringBuilder contentSB = new StringBuilder();
-    List<ShopOrderItem> shoporderitemList = order.getOrderItemList();
+    List<ShopOrderItemDTO> shoporderitemList = order.getOrderItemList();
     if (!CollectionUtils.isEmpty(shoporderitemList)) {
-      for (ShopOrderItem item : shoporderitemList) {
+      for (ShopOrderItemDTO item : shoporderitemList) {
         contentSB.append(item.getGoodName()).append(" ");
         contentSB.append(item.getCount()).append(item.getGoodPack()).append("\n");
       }
@@ -162,7 +162,7 @@ public class TemplateMsgService {
    * @param username
    * @param order
    */
-  public void sendOwnSendMsg(String username, ShopOrder order) {
+  public void sendOwnSendMsg(String username, ShopOrderDTO order) {
     if (null == order) {
       return;
     }
@@ -179,9 +179,9 @@ public class TemplateMsgService {
     String keyword4Value = order.getThirdsendNo();
 
     StringBuilder contentSB = new StringBuilder();
-    List<ShopOrderItem> shoporderitemList = order.getOrderItemList();
+    List<ShopOrderItemDTO> shoporderitemList = order.getOrderItemList();
     if (!CollectionUtils.isEmpty(shoporderitemList)) {
-      for (ShopOrderItem item : shoporderitemList) {
+      for (ShopOrderItemDTO item : shoporderitemList) {
         contentSB.append(item.getGoodName()).append(" ");
         contentSB.append(item.getCount()).append(item.getGoodPack()).append("\n");
       }
@@ -223,7 +223,7 @@ public class TemplateMsgService {
    * @param shoporder
    * @param messagedata
    */
-  private TemplateMsg createTemplateMsg(ShopOrder shoporder, String... messagedata) {
+  private TemplateMsg createTemplateMsg(ShopOrderDTO shoporder, String... messagedata) {
     TemplateMsg message = new TemplateMsg();
     message.setPage("/pages/order_detail?shop_order_id=" + shoporder.getId());
     message.setFormid(shoporder.getFormid());

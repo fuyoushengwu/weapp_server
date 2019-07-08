@@ -32,18 +32,18 @@ import cn.aijiamuyingfang.server.feign.domain.user.User;
 import cn.aijiamuyingfang.server.shoporder.db.PreviewOrderRepository;
 import cn.aijiamuyingfang.server.shoporder.db.ShopCartRepository;
 import cn.aijiamuyingfang.server.shoporder.db.ShopOrderRepository;
+import cn.aijiamuyingfang.server.shoporder.domain.PreOrderGood;
 import cn.aijiamuyingfang.server.shoporder.domain.request.CreateShopOrderRequest;
 import cn.aijiamuyingfang.server.shoporder.domain.request.UpdateShopOrderStatusRequest;
 import cn.aijiamuyingfang.server.shoporder.domain.response.ConfirmShopOrderFinishedResponse;
 import cn.aijiamuyingfang.server.shoporder.domain.response.PagableFinishedPreOrderList;
 import cn.aijiamuyingfang.server.shoporder.domain.response.PagablePreOrderGoodList;
 import cn.aijiamuyingfang.server.shoporder.domain.response.PagableShopOrderList;
-import cn.aijiamuyingfang.server.shoporder.dto.PreOrderGood;
-import cn.aijiamuyingfang.server.shoporder.dto.PreviewOrder;
-import cn.aijiamuyingfang.server.shoporder.dto.PreviewOrderItem;
-import cn.aijiamuyingfang.server.shoporder.dto.ShopOrder;
-import cn.aijiamuyingfang.server.shoporder.dto.ShopOrderItem;
-import cn.aijiamuyingfang.server.shoporder.dto.ShopOrderVoucher;
+import cn.aijiamuyingfang.server.shoporder.dto.PreviewOrderDTO;
+import cn.aijiamuyingfang.server.shoporder.dto.PreviewOrderItemDTO;
+import cn.aijiamuyingfang.server.shoporder.dto.ShopOrderDTO;
+import cn.aijiamuyingfang.server.shoporder.dto.ShopOrderItemDTO;
+import cn.aijiamuyingfang.server.shoporder.dto.ShopOrderVoucherDTO;
 
 /***
  * [描述]:
@@ -92,7 +92,7 @@ public class ShopOrderService {
    */
   public PagableShopOrderList getUserShopOrderList(String username, List<ShopOrderStatus> statusList,
       List<SendType> sendTypeList, int currentPage, int pageSize) {
-    Page<ShopOrder> shoporderPage = getUserShopOrderPage(username, statusList, sendTypeList, currentPage, pageSize);
+    Page<ShopOrderDTO> shoporderPage = getUserShopOrderPage(username, statusList, sendTypeList, currentPage, pageSize);
     PagableShopOrderList response = new PagableShopOrderList();
     response.setCurrentPage(shoporderPage.getNumber() + 1);
     response.setDataList(shoporderPage.getContent());
@@ -112,7 +112,7 @@ public class ShopOrderService {
    */
   public PagableShopOrderList getShopOrderList(List<ShopOrderStatus> statusList, List<SendType> sendTypeList,
       int currentPage, int pageSize) {
-    Page<ShopOrder> shoporderPage = getUserShopOrderPage(null, statusList, sendTypeList, currentPage, pageSize);
+    Page<ShopOrderDTO> shoporderPage = getUserShopOrderPage(null, statusList, sendTypeList, currentPage, pageSize);
     PagableShopOrderList response = new PagableShopOrderList();
     response.setCurrentPage(shoporderPage.getNumber() + 1);
     response.setDataList(shoporderPage.getContent());
@@ -131,7 +131,7 @@ public class ShopOrderService {
    * @param pageSize
    * @return
    */
-  private Page<ShopOrder> getUserShopOrderPage(String username, List<ShopOrderStatus> statusList,
+  private Page<ShopOrderDTO> getUserShopOrderPage(String username, List<ShopOrderStatus> statusList,
       List<SendType> sendTypeList, int currentPage, int pageSize) {
     if (null == statusList || statusList.isEmpty()) {
       statusList = new ArrayList<>();
@@ -167,7 +167,7 @@ public class ShopOrderService {
    * @param requestBean
    */
   public void updateShopOrderStatus(String shopOrderId, UpdateShopOrderStatusRequest requestBean) {
-    ShopOrder shoporder = shopOrderRepository.findOne(shopOrderId);
+    ShopOrderDTO shoporder = shopOrderRepository.findOne(shopOrderId);
     if (null == shoporder) {
       throw new ShopOrderException(ResponseCode.SHOPORDER_NOT_EXIST, shopOrderId);
     }
@@ -191,7 +191,7 @@ public class ShopOrderService {
     if (updateStatus == ShopOrderStatus.DOING) {
       // 当开始发货的时候,才减去商品数量，面对买家恶意刷单
       List<SaleGood> saleGoodList = new ArrayList<>();
-      for (ShopOrderItem shoporderGood : shoporder.getOrderItemList()) {
+      for (ShopOrderItemDTO shoporderGood : shoporder.getOrderItemList()) {
         saleGoodList.add(new SaleGood(shoporderGood.getGoodId(), shoporderGood.getCount()));
       }
       goodClient.saleGoodList(saleGoodList);
@@ -219,7 +219,7 @@ public class ShopOrderService {
    * @param shopOrderId
    */
   public void delete100DaysFinishedShopOrder(String shopOrderId) {
-    ShopOrder shopOrder = shopOrderRepository.findOne(shopOrderId);
+    ShopOrderDTO shopOrder = shopOrderRepository.findOne(shopOrderId);
     if (shopOrder != null && shopOrder.getStatus().equals(ShopOrderStatus.FINISHED)
         && shopOrder.getLastModifyTime() > 100) {
       shopOrderRepository.delete(shopOrder);
@@ -234,7 +234,7 @@ public class ShopOrderService {
    * @param shopOrderId
    */
   public void deleteUserShopOrder(String username, String shopOrderId) {
-    ShopOrder shopOrder = shopOrderRepository.findOne(shopOrderId);
+    ShopOrderDTO shopOrder = shopOrderRepository.findOne(shopOrderId);
     if (null == shopOrder) {
       throw new ShopOrderException(ResponseCode.SHOPORDER_NOT_EXIST, shopOrderId);
     }
@@ -252,9 +252,9 @@ public class ShopOrderService {
     }
 
     if (ShopOrderStatus.UNSTART.equals(shopOrder.getStatus())) {
-      List<ShopOrderVoucher> shoporderVoucherList = shopOrder.getOrderVoucher();
+      List<ShopOrderVoucherDTO> shoporderVoucherList = shopOrder.getOrderVoucher();
       List<UserVoucher> updateUserVoucherList = new ArrayList<>();
-      for (ShopOrderVoucher shoporderVoucher : shoporderVoucherList) {
+      for (ShopOrderVoucherDTO shoporderVoucher : shoporderVoucherList) {
         UserVoucher userVoucher = couponClient.getUserVoucher(username, shoporderVoucher.getUservoucherId()).getData();
         VoucherItem voucherItem = couponClient.getVoucherItem(shoporderVoucher.getVoucherItemId()).getData();
         userVoucher.increaseScore(voucherItem.getScore());
@@ -280,7 +280,7 @@ public class ShopOrderService {
    * @return
    */
   public ConfirmShopOrderFinishedResponse confirmUserShopOrderFinished(String username, String shopOrderId) {
-    ShopOrder shoporder = shopOrderRepository.findOne(shopOrderId);
+    ShopOrderDTO shoporder = shopOrderRepository.findOne(shopOrderId);
     if (null == shoporder) {
       throw new ShopOrderException(ResponseCode.SHOPORDER_NOT_EXIST, shopOrderId);
     }
@@ -301,7 +301,7 @@ public class ShopOrderService {
       return response;
     }
     List<UserVoucher> updateUserVoucherList = new ArrayList<>();
-    for (ShopOrderItem shoporderItem : shoporder.getOrderItemList()) {
+    for (ShopOrderItemDTO shoporderItem : shoporder.getOrderItemList()) {
       Good good = goodClient.getGood(shoporderItem.getGoodId()).getData();
       int genericScore = good.getScore() * shoporderItem.getCount();
       user.increaseGenericScore(genericScore);
@@ -338,7 +338,7 @@ public class ShopOrderService {
    * @param addressId
    */
   public void updateUserShopOrderRecieveAddress(String username, String shopOrderId, String addressId) {
-    ShopOrder shoporder = shopOrderRepository.findOne(shopOrderId);
+    ShopOrderDTO shoporder = shopOrderRepository.findOne(shopOrderId);
     if (null == shoporder) {
       throw new ShopOrderException(ResponseCode.SHOPORDER_NOT_EXIST, shopOrderId);
     }
@@ -364,7 +364,7 @@ public class ShopOrderService {
   public PagableFinishedPreOrderList getFinishedPreOrderList(int currentPage, int pageSize) {
     // PageRequest的Page参数是基于0的,但是currentPage是基于1的,所有将currentPage作为参数传递给PgeRequest时需要'-1'
     PageRequest pageRequest = new PageRequest(currentPage - 1, pageSize, Sort.Direction.DESC, "finishTime");
-    Page<ShopOrder> shoporderPage = shopOrderRepository.findByStatus(ShopOrderStatus.FINISHED, pageRequest);
+    Page<ShopOrderDTO> shoporderPage = shopOrderRepository.findByStatus(ShopOrderStatus.FINISHED, pageRequest);
     PagableFinishedPreOrderList response = new PagableFinishedPreOrderList();
     response.setCurrentPage(shoporderPage.getNumber() + 1);
     response.setDataList(shoporderPage.getContent());
@@ -380,8 +380,8 @@ public class ShopOrderService {
    * @param goodIdList
    * @return
    */
-  public List<ShopOrderVoucher> getUserShopOrderVoucherList(String username, List<String> goodIdList) {
-    List<ShopOrderVoucher> result = new ArrayList<>();
+  public List<ShopOrderVoucherDTO> getUserShopOrderVoucherList(String username, List<String> goodIdList) {
+    List<ShopOrderVoucherDTO> result = new ArrayList<>();
 
     PagableUserVoucherList response = couponClient.getUserVoucherList(username, 1, Integer.MAX_VALUE).getData();
     for (UserVoucher uservoucher : response.getDataList()) {
@@ -389,7 +389,7 @@ public class ShopOrderService {
       for (String itemid : itemidList) {
         VoucherItem item = couponClient.getVoucherItem(itemid).getData();
         if (item != null && goodIdList.contains(item.getGoodId()) && item.getScore() <= uservoucher.getScore()) {
-          ShopOrderVoucher shoporderVoucher = new ShopOrderVoucher();
+          ShopOrderVoucherDTO shoporderVoucher = new ShopOrderVoucherDTO();
           shoporderVoucher.setUservoucherId(uservoucher.getId());
           shoporderVoucher.setVoucherItemId(item.getId());
           shoporderVoucher.setGoodId(item.getGoodId());
@@ -409,8 +409,8 @@ public class ShopOrderService {
    * @param shopOrderId
    * @return
    */
-  public ShopOrder getUserShopOrder(String username, String shopOrderId) {
-    ShopOrder shoporder = shopOrderRepository.findOne(shopOrderId);
+  public ShopOrderDTO getUserShopOrder(String username, String shopOrderId) {
+    ShopOrderDTO shoporder = shopOrderRepository.findOne(shopOrderId);
     if (null == shoporder) {
       throw new ShopOrderException(ResponseCode.SHOPORDER_NOT_EXIST, shopOrderId);
     }
@@ -427,12 +427,12 @@ public class ShopOrderService {
    * @param request
    * @return
    */
-  public ShopOrder createUserShopOrder(String username, CreateShopOrderRequest request) {
-    PreviewOrder previeworder = previeworderRepository.findByUsername(username);
+  public ShopOrderDTO createUserShopOrder(String username, CreateShopOrderRequest request) {
+    PreviewOrderDTO previeworder = previeworderRepository.findByUsername(username);
     if (null == previeworder) {
       throw new ShopOrderException("500", "user should first preview order and then create shoporder");
     }
-    ShopOrder shoporder = new ShopOrder();
+    ShopOrderDTO shoporder = new ShopOrderDTO();
     shoporder.setCreateTime(new Date());
     shoporder.setSendType(request.getSendType());
     if (SendType.PICKUP.equals(request.getSendType())) {
@@ -447,13 +447,13 @@ public class ShopOrderService {
 
     double totalGoodsPrice = 0;
     List<String> goodIdList = new ArrayList<>();
-    for (PreviewOrderItem previeworderItem : previeworder.getOrderItemList()) {
+    for (PreviewOrderItemDTO previeworderItem : previeworder.getOrderItemList()) {
       Good good = goodClient.getGood(previeworderItem.getGoodId()).getData();
       if (previeworderItem.getCount() > good.getCount()) {
         shoporder.setStatus(ShopOrderStatus.PREORDER);
         shoporder.setFromPreOrder(true);
       }
-      ShopOrderItem shoporderItem = fromPreviewOrderItem(previeworderItem, good);
+      ShopOrderItemDTO shoporderItem = fromPreviewOrderItem(previeworderItem, good);
       shoporder.addOrderItem(shoporderItem);
       totalGoodsPrice += shoporderItem.getPrice();
       goodIdList.add(shoporderItem.getGoodId());
@@ -468,12 +468,12 @@ public class ShopOrderService {
     shoporder.setSendPrice(sendPrice);
     shoporder.setScore(request.getJfNum());
 
-    List<ShopOrderVoucher> shoporderVoucherList = getUserShopOrderVoucherList(username, goodIdList);
+    List<ShopOrderVoucherDTO> shoporderVoucherList = getUserShopOrderVoucherList(username, goodIdList);
     shoporder.setOrderVoucher(shoporderVoucherList);
     double totalPrice = totalGoodsPrice + sendPrice - request.getJfNum() / 100.0;
     if (!CollectionUtils.isEmpty(shoporderVoucherList)) {
       List<UserVoucher> updateUserVoucherList = new ArrayList<>();
-      for (ShopOrderVoucher shoporderVoucher : shoporderVoucherList) {
+      for (ShopOrderVoucherDTO shoporderVoucher : shoporderVoucherList) {
         Good good = goodClient.getGood(shoporderVoucher.getGoodId()).getData();
         UserVoucher userVoucher = couponClient.getUserVoucher(username, shoporderVoucher.getUservoucherId()).getData();
         VoucherItem voucherItem = couponClient.getVoucherItem(shoporderVoucher.getVoucherItemId()).getData();
@@ -500,11 +500,11 @@ public class ShopOrderService {
     return shoporder;
   }
 
-  private ShopOrderItem fromPreviewOrderItem(PreviewOrderItem previeworderItem, Good good) {
+  private ShopOrderItemDTO fromPreviewOrderItem(PreviewOrderItemDTO previeworderItem, Good good) {
     if (null == previeworderItem) {
       return null;
     }
-    ShopOrderItem shoporderItem = new ShopOrderItem();
+    ShopOrderItemDTO shoporderItem = new ShopOrderItemDTO();
     shoporderItem.setGoodId(good.getId());
     shoporderItem.setGoodName(good.getName());
     shoporderItem.setGoodPack(good.getPack());
@@ -624,10 +624,10 @@ public class ShopOrderService {
   public PagablePreOrderGoodList getPreOrderGoodList(int currentPage, int pageSize) {
     PagablePreOrderGoodList response = new PagablePreOrderGoodList();
     response.setCurrentPage(currentPage);
-    List<ShopOrder> shoporderList = shopOrderRepository.findByStatus(ShopOrderStatus.PREORDER);
+    List<ShopOrderDTO> shoporderList = shopOrderRepository.findByStatus(ShopOrderStatus.PREORDER);
     Map<String, Integer> good2ShopOrderItemList = new HashMap<>();
-    for (ShopOrder shoporder : shoporderList) {
-      for (ShopOrderItem shoporderItem : shoporder.getOrderItemList()) {
+    for (ShopOrderDTO shoporder : shoporderList) {
+      for (ShopOrderItemDTO shoporderItem : shoporder.getOrderItemList()) {
         String goodId = shoporderItem.getGoodId();
         Integer count = 0;
         if (good2ShopOrderItemList.containsKey(goodId)) {
@@ -671,12 +671,12 @@ public class ShopOrderService {
    * @param goodId
    */
   public void updatePreOrders(String goodId) {
-    List<ShopOrder> shoporderList = shopOrderRepository.findPreOrderContainsGoodid(goodId);
-    for (ShopOrder shoporder : shoporderList) {
+    List<ShopOrderDTO> shoporderList = shopOrderRepository.findPreOrderContainsGoodid(goodId);
+    for (ShopOrderDTO shoporder : shoporderList) {
       boolean update = true;
       List<SaleGood> saleGoodList = new ArrayList<>();
       Good updateGood = null;
-      for (ShopOrderItem item : shoporder.getOrderItemList()) {
+      for (ShopOrderItemDTO item : shoporder.getOrderItemList()) {
         Good good = goodClient.getGood(item.getGoodId()).getData();
         int buyCount = item.getCount();
         if (buyCount > good.getCount()) {

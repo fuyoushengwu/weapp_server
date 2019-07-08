@@ -17,7 +17,7 @@ import cn.aijiamuyingfang.server.domain.response.ResponseBean;
 import cn.aijiamuyingfang.server.feign.FileClient;
 import cn.aijiamuyingfang.server.feign.domain.filecenter.FileInfo;
 import cn.aijiamuyingfang.server.goods.db.ImageSourceRepository;
-import cn.aijiamuyingfang.server.goods.dto.ImageSource;
+import cn.aijiamuyingfang.server.goods.dto.ImageSourceDTO;
 import lombok.extern.slf4j.Slf4j;
 
 /***
@@ -49,7 +49,7 @@ public class ImageService {
    * @param imagePart
    * @return
    */
-  public ImageSource saveImage(MultipartFile imagePart) {
+  public ImageSourceDTO saveImage(MultipartFile imagePart) {
     if (null == imagePart) {
       return null;
     }
@@ -60,7 +60,7 @@ public class ImageService {
       log.error("md5 upload file failed", e);
       return null;
     }
-    ImageSource imageSource = imageSourceRepository.findOne(md5);
+    ImageSourceDTO imageSource = imageSourceRepository.findOne(md5);
     if (null == imageSource) {
 
       ResponseBean<FileInfo> responseBean = fileClient.upload(new CustomMultipartFile("file", imagePart), null);
@@ -68,7 +68,7 @@ public class ImageService {
       if (null == fileInfo) {
         return null;
       }
-      imageSource = new ImageSource();
+      imageSource = new ImageSourceDTO();
       imageSource.setId(fileInfo.getId());
       imageSource.setUrl(fileInfo.getUrl());
       imageSourceRepository.saveAndFlush(imageSource);
@@ -81,7 +81,7 @@ public class ImageService {
    * 
    * @param imageSource
    */
-  public void deleteImage(ImageSource imageSource) {
+  public void deleteImage(ImageSourceDTO imageSource) {
     if (null == imageSource || StringUtils.isEmpty(imageSource.getId())) {
       return;
     }
@@ -93,9 +93,9 @@ public class ImageService {
    * 
    * @param imageSourceList
    */
-  public void deleteImage(List<ImageSource> imageSourceList) {
+  public void deleteImage(List<ImageSourceDTO> imageSourceList) {
     if (CollectionUtils.hasContent(imageSourceList)) {
-      for (ImageSource imageSource : imageSourceList) {
+      for (ImageSourceDTO imageSource : imageSourceList) {
         deleteImage(imageSource);
       }
     }

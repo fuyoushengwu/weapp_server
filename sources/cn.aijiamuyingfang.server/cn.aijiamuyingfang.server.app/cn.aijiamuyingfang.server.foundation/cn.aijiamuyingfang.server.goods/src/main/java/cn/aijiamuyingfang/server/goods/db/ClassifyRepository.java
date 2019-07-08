@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import cn.aijiamuyingfang.server.goods.dto.Classify;
+import cn.aijiamuyingfang.server.goods.dto.ClassifyDTO;
 
 /**
  * [描述]:
@@ -26,7 +26,7 @@ import cn.aijiamuyingfang.server.goods.dto.Classify;
  * @date 2018-06-25 21:15:03
  */
 @Repository
-public interface ClassifyRepository extends JpaRepository<Classify, String> {
+public interface ClassifyRepository extends JpaRepository<ClassifyDTO, String> {
 
   /**
    * 分页查找所有顶层条目
@@ -37,7 +37,7 @@ public interface ClassifyRepository extends JpaRepository<Classify, String> {
    */
   @Query(value = "select * from classify where level=1 order by ?#{#pageable}",
       countQuery = "select count(*) from classify where level=1 order by ?#{#pageable}", nativeQuery = true)
-  Page<Classify> findTopClassifyList(Pageable pageable);
+  Page<ClassifyDTO> findTopClassifyList(Pageable pageable);
 
   /**
    * 查找某一等级下的所有条目
@@ -46,7 +46,7 @@ public interface ClassifyRepository extends JpaRepository<Classify, String> {
    * @return
    */
   @Query(value = "select * from classify where level=:level", nativeQuery = true)
-  List<Classify> findByLevel(@Param("level") int level);
+  List<ClassifyDTO> findByLevel(@Param("level") int level);
 
   /**
    * 根据名称查找条目
@@ -55,7 +55,7 @@ public interface ClassifyRepository extends JpaRepository<Classify, String> {
    * @return
    */
   @Query(value = "select * from classify where name=:name", nativeQuery = true)
-  List<Classify> findByName(@Param("name") String name);
+  List<ClassifyDTO> findByName(@Param("name") String name);
 
   /**
    * 移除条目下的商品

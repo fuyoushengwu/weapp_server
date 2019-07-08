@@ -3,8 +3,8 @@ package cn.aijiamuyingfang.server.user.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import cn.aijiamuyingfang.server.user.dto.TemplateMsg;
-import cn.aijiamuyingfang.server.user.dto.TemplateMsgKeyValue;
+import cn.aijiamuyingfang.server.user.domain.TemplateMsg;
+import cn.aijiamuyingfang.server.user.domain.TemplateMsgKeyValue;
 import cn.binarywang.wx.miniapp.api.WxMaMsgService;
 import cn.binarywang.wx.miniapp.bean.WxMaTemplateMessage;
 import cn.binarywang.wx.miniapp.bean.WxMaTemplateMessage.Data;

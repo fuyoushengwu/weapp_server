@@ -1,7 +1,7 @@
 package cn.aijiamuyingfang.server.shoporder.domain.response;
 
 import cn.aijiamuyingfang.server.domain.response.PageResponse;
-import cn.aijiamuyingfang.server.shoporder.dto.ShopOrder;
+import cn.aijiamuyingfang.server.shoporder.dto.ShopOrderDTO;
 
 /**
  * [描述]:
@@ -14,6 +14,6 @@ import cn.aijiamuyingfang.server.shoporder.dto.ShopOrder;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-07-03 04:20:28
  */
-public class PagableFinishedPreOrderList extends PageResponse<ShopOrder> {
+public class PagableFinishedPreOrderList extends PageResponse<ShopOrderDTO> {
 
 }

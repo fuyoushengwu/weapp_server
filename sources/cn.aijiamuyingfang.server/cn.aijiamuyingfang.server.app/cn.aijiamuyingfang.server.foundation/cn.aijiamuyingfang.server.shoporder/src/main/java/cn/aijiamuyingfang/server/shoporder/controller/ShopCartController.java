@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cn.aijiamuyingfang.server.shoporder.domain.request.CreateShopCartRequest;
 import cn.aijiamuyingfang.server.shoporder.domain.response.PagableShopCartList;
-import cn.aijiamuyingfang.server.shoporder.dto.ShopCart;
+import cn.aijiamuyingfang.server.shoporder.dto.ShopCartDTO;
 import cn.aijiamuyingfang.server.shoporder.service.ShopCartService;
 
 /**
@@ -41,7 +41,7 @@ public class ShopCartController {
    */
   @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
   @PostMapping(value = "/user/{username}/shop_cart")
-  public ShopCart addShopCart(@PathVariable("username") String username,
+  public ShopCartDTO addShopCart(@PathVariable("username") String username,
       @RequestBody CreateShopCartRequest requestBean) {
     return shopCartService.addShopCart(username, requestBean.getGoodId(), requestBean.getGoodNum());
   }
@@ -111,7 +111,7 @@ public class ShopCartController {
    */
   @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
   @PutMapping(value = "/user/{username}/shop_cart/{shop_cart_id}/count/{count}")
-  public ShopCart updateShopCartCount(@PathVariable("username") String username,
+  public ShopCartDTO updateShopCartCount(@PathVariable("username") String username,
       @PathVariable("shop_cart_id") String shopCartId, @PathVariable("count") int count) {
     return shopCartService.updateShopCartCount(username, shopCartId, count);
   }

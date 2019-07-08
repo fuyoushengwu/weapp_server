@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import cn.aijiamuyingfang.server.shoporder.dto.PreviewOrder;
-import cn.aijiamuyingfang.server.shoporder.dto.PreviewOrderItem;
+import cn.aijiamuyingfang.server.shoporder.dto.PreviewOrderDTO;
+import cn.aijiamuyingfang.server.shoporder.dto.PreviewOrderItemDTO;
 import cn.aijiamuyingfang.server.shoporder.service.PreviewOrderService;
 
 /**
@@ -42,8 +42,8 @@ public class PreviewOrderController {
    */
   @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
   @PutMapping(value = "/user/{username}/previeworder/item/{preview_item_id}")
-  public PreviewOrderItem updatePreviewOrderItem(@PathVariable("username") String username,
-      @PathVariable("preview_item_id") String previewItemId, @RequestBody PreviewOrderItem request) {
+  public PreviewOrderItemDTO updatePreviewOrderItem(@PathVariable("username") String username,
+      @PathVariable("preview_item_id") String previewItemId, @RequestBody PreviewOrderItemDTO request) {
     if (null == request) {
       throw new IllegalArgumentException("update previeworderitem request is null");
     }
@@ -72,7 +72,7 @@ public class PreviewOrderController {
    */
   @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
   @GetMapping(value = "/user/{username}/previeworder")
-  public PreviewOrder generatePreviewOrder(@PathVariable("username") String username,
+  public PreviewOrderDTO generatePreviewOrder(@PathVariable("username") String username,
       @RequestParam(name = "good_id", required = false) List<String> goodIdList) {
     return previeworderService.generatePreviewOrder(username, goodIdList);
   }

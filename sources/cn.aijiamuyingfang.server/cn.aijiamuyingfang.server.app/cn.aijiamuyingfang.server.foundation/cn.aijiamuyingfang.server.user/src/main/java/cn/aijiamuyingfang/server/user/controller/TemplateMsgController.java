@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import cn.aijiamuyingfang.server.user.dto.TemplateMsg;
+import cn.aijiamuyingfang.server.user.domain.TemplateMsg;
 import cn.aijiamuyingfang.server.user.service.TemplateMsgService;
 import me.chanjar.weixin.common.exception.WxErrorException;
 

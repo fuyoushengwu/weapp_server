@@ -1,7 +1,7 @@
 package cn.aijiamuyingfang.server.logcenter.domain.response;
 
 import cn.aijiamuyingfang.server.domain.response.PageResponse;
-import cn.aijiamuyingfang.server.logcenter.dto.Log;
+import cn.aijiamuyingfang.server.logcenter.dto.LogDTO;
 
 /**
  * [描述]:
@@ -14,6 +14,6 @@ import cn.aijiamuyingfang.server.logcenter.dto.Log;
  * @email shiweideyouxiang@sina.cn
  * @date 2019-04-10 16:46:45
  */
-public class PagableLogList extends PageResponse<Log> {
+public class PagableLogList extends PageResponse<LogDTO> {
 
 }

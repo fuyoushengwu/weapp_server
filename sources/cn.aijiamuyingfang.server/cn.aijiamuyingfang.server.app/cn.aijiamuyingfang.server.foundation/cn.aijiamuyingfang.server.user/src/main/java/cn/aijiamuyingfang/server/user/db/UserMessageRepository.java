@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import cn.aijiamuyingfang.server.user.dto.UserMessage;
+import cn.aijiamuyingfang.server.user.dto.UserMessageDTO;
 
 /**
  * [描述]:
@@ -26,7 +26,7 @@ import cn.aijiamuyingfang.server.user.dto.UserMessage;
  * @date 2018-06-25 21:14:03
  */
 @Repository
-public interface UserMessageRepository extends JpaRepository<UserMessage, String> {
+public interface UserMessageRepository extends JpaRepository<UserMessageDTO, String> {
   /**
    * 分页查找用户消息
    * 
@@ -36,7 +36,7 @@ public interface UserMessageRepository extends JpaRepository<UserMessage, String
    *          分页信息
    * @return
    */
-  Page<UserMessage> findByUsernameIn(List<String> usernameList, Pageable pageable);
+  Page<UserMessageDTO> findByUsernameIn(List<String> usernameList, Pageable pageable);
 
   /**
    * 清除过期的消息

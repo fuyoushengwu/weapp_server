@@ -22,8 +22,8 @@ import cn.aijiamuyingfang.server.shoporder.domain.response.ConfirmShopOrderFinis
 import cn.aijiamuyingfang.server.shoporder.domain.response.PagableFinishedPreOrderList;
 import cn.aijiamuyingfang.server.shoporder.domain.response.PagablePreOrderGoodList;
 import cn.aijiamuyingfang.server.shoporder.domain.response.PagableShopOrderList;
-import cn.aijiamuyingfang.server.shoporder.dto.ShopOrder;
-import cn.aijiamuyingfang.server.shoporder.dto.ShopOrderVoucher;
+import cn.aijiamuyingfang.server.shoporder.dto.ShopOrderDTO;
+import cn.aijiamuyingfang.server.shoporder.dto.ShopOrderVoucherDTO;
 import cn.aijiamuyingfang.server.shoporder.service.ShopOrderService;
 
 /***
@@ -72,7 +72,7 @@ public class ShopOrderController {
   @PreAuthorize(
       value = "isAuthenticated() and (#username.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
   @GetMapping(value = "/user/{username}/coupon/shoporder")
-  public List<ShopOrderVoucher> getUserShopOrderVoucherList(@PathVariable("username") String username,
+  public List<ShopOrderVoucherDTO> getUserShopOrderVoucherList(@PathVariable("username") String username,
       @RequestParam(name = "good_id", required = false) List<String> goodIdList) {
     return shoporderSerivce.getUserShopOrderVoucherList(username, goodIdList);
   }
@@ -184,7 +184,7 @@ public class ShopOrderController {
   @PreAuthorize(
       value = "isAuthenticated() and (#username.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
   @GetMapping(value = "/user/{username}/shoporder/{shop_order_id}")
-  public ShopOrder getUserShopOrder(@PathVariable("username") String username,
+  public ShopOrderDTO getUserShopOrder(@PathVariable("username") String username,
       @PathVariable(name = "shop_order_id") String shopOrderId) {
     return shoporderSerivce.getUserShopOrder(username, shopOrderId);
   }
@@ -198,7 +198,7 @@ public class ShopOrderController {
    */
   @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
   @PostMapping(value = "/user/{username}/shoporder")
-  public ShopOrder createUserShopOrder(@PathVariable("username") String username,
+  public ShopOrderDTO createUserShopOrder(@PathVariable("username") String username,
       @RequestBody CreateShopOrderRequest requestBean) {
     return shoporderSerivce.createUserShopOrder(username, requestBean);
   }

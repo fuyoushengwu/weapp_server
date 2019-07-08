@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import cn.aijiamuyingfang.server.domain.FileSource;
 import cn.aijiamuyingfang.server.filecenter.domain.response.PagableFileInfoList;
-import cn.aijiamuyingfang.server.filecenter.dto.FileInfo;
+import cn.aijiamuyingfang.server.filecenter.dto.FileInfoDTO;
 
 /**
  * [描述]:
@@ -29,7 +29,7 @@ public interface FileService {
    *          文件来源(根据fileSource选择上传方式，目前仅实现了上传到本地)
    * @return
    */
-  FileInfo upload(MultipartFile part, FileSource fileSource);
+  FileInfoDTO upload(MultipartFile part, FileSource fileSource);
 
   /**
    * 文件删除

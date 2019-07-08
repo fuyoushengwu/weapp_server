@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import cn.aijiamuyingfang.server.coupon.dto.UserVoucher;
+import cn.aijiamuyingfang.server.coupon.dto.UserVoucherDTO;
 
 /**
  * [描述]:
@@ -23,7 +23,7 @@ import cn.aijiamuyingfang.server.coupon.dto.UserVoucher;
  * @date 2018-06-25 21:15:03
  */
 @Repository
-public interface UserVoucherRepository extends JpaRepository<UserVoucher, String> {
+public interface UserVoucherRepository extends JpaRepository<UserVoucherDTO, String> {
   /**
    * 分页查询用户的兑换券
    * 
@@ -36,7 +36,7 @@ public interface UserVoucherRepository extends JpaRepository<UserVoucher, String
   @Query(value = "select * from user_voucher where username=:username and deprecated=false order by ?#{#pageable}",
       countQuery = "select count(*) from user_voucher where username=:username and deprecated=false order by ?#{#pageable}",
       nativeQuery = true)
-  Page<UserVoucher> findByUsername(@Param("username") String username, Pageable pageable);
+  Page<UserVoucherDTO> findByUsername(@Param("username") String username, Pageable pageable);
 
   /**
    * 查询用户的兑换券
@@ -46,7 +46,7 @@ public interface UserVoucherRepository extends JpaRepository<UserVoucher, String
    * @return
    */
   @Query(value = "select * from user_voucher where username=:username and deprecated=false", nativeQuery = true)
-  List<UserVoucher> findByUsername(@Param("username") String username);
+  List<UserVoucherDTO> findByUsername(@Param("username") String username);
 
   /**
    * 查找用户领取过的某类兑换券信息
@@ -58,7 +58,7 @@ public interface UserVoucherRepository extends JpaRepository<UserVoucher, String
    */
   @Query(value = "select * from user_voucher where username=:username and good_voucher_id="
       + ":good_vourcher_id and deprecated=false", nativeQuery = true)
-  UserVoucher findByUsernameAndGoodVoucher(@Param("username") String username,
+  UserVoucherDTO findByUsernameAndGoodVoucher(@Param("username") String username,
       @Param("good_vourcher_id") String goodvoucherId);
 
   /**
@@ -68,6 +68,6 @@ public interface UserVoucherRepository extends JpaRepository<UserVoucher, String
    */
   @Query(value = "select * from user_voucher where good_voucher_id=:good_voucher_id and deprecated=false",
       nativeQuery = true)
-  UserVoucher findByGoodVoucherId(@Param("good_voucher_id") String goodvoucherId);
+  UserVoucherDTO findByGoodVoucherId(@Param("good_voucher_id") String goodvoucherId);
 
 }

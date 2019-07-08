@@ -1,7 +1,7 @@
 package cn.aijiamuyingfang.server.goods.domain.response;
 
 import cn.aijiamuyingfang.server.domain.response.PageResponse;
-import cn.aijiamuyingfang.server.goods.dto.Store;
+import cn.aijiamuyingfang.server.goods.dto.StoreDTO;
 
 /**
  * [描述]:
@@ -14,5 +14,5 @@ import cn.aijiamuyingfang.server.goods.dto.Store;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-06-28 16:51:36
  */
-public class PagableStoreList extends PageResponse<Store> {
+public class PagableStoreList extends PageResponse<StoreDTO> {
 }

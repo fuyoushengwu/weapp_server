@@ -1,7 +1,7 @@
 package cn.aijiamuyingfang.server.goods.domain.response;
 
 import cn.aijiamuyingfang.server.domain.response.PageResponse;
-import cn.aijiamuyingfang.server.goods.dto.Classify;
+import cn.aijiamuyingfang.server.goods.dto.ClassifyDTO;
 
 /**
  * [描述]:
@@ -13,6 +13,6 @@ import cn.aijiamuyingfang.server.goods.dto.Classify;
  * @author shiweideyouxiang@sina.cn
  * @date 2018-07-28 03:43:24
  */
-public class PagableTopClassifyList extends PageResponse<Classify> {
+public class PagableTopClassifyList extends PageResponse<ClassifyDTO> {
 
 }

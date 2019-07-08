@@ -15,7 +15,7 @@ import cn.aijiamuyingfang.server.feign.domain.good.Good;
 import cn.aijiamuyingfang.server.feign.domain.user.User;
 import cn.aijiamuyingfang.server.shoporder.db.ShopCartRepository;
 import cn.aijiamuyingfang.server.shoporder.domain.response.PagableShopCartList;
-import cn.aijiamuyingfang.server.shoporder.dto.ShopCart;
+import cn.aijiamuyingfang.server.shoporder.dto.ShopCartDTO;
 
 /**
  * [描述]:
@@ -49,7 +49,7 @@ public class ShopCartService {
    * @param goodNum
    * @return
    */
-  public ShopCart addShopCart(String username, String goodId, int goodNum) {
+  public ShopCartDTO addShopCart(String username, String goodId, int goodNum) {
     User user = userClient.getUserInternal(username).getData();
     if (null == user) {
       throw new ShopCartException(ResponseCode.USER_NOT_EXIST, username);
@@ -62,9 +62,9 @@ public class ShopCartService {
     if (null == good) {
       throw new ShopCartException(ResponseCode.GOOD_NOT_EXIST, goodId);
     }
-    ShopCart shopCart = shopCartRepository.findByUsernameAndGoodId(username, goodId);
+    ShopCartDTO shopCart = shopCartRepository.findByUsernameAndGoodId(username, goodId);
     if (null == shopCart) {
-      shopCart = new ShopCart();
+      shopCart = new ShopCartDTO();
       shopCart.setUsername(username);
       shopCart.setGoodId(good.getId());
       shopCart.setCount(0);
@@ -86,7 +86,7 @@ public class ShopCartService {
   public PagableShopCartList getShopCartList(String username, int currentPage, int pageSize) {
     // PageRequest的Page参数是基于0的,但是currentPage是基于1的,所有将currentPage作为参数传递给PgeRequest时需要'-1'
     PageRequest pageRequest = new PageRequest(currentPage - 1, pageSize, Sort.Direction.DESC, "id");
-    Page<ShopCart> shopCartPage = shopCartRepository.findByUsername(username, pageRequest);
+    Page<ShopCartDTO> shopCartPage = shopCartRepository.findByUsername(username, pageRequest);
     PagableShopCartList response = new PagableShopCartList();
     response.setCurrentPage(shopCartPage.getNumber() + 1);
     response.setDataList(shopCartPage.getContent());
@@ -114,7 +114,7 @@ public class ShopCartService {
    * @param checked
    */
   public void checkShopCart(String username, String shopCartId, boolean checked) {
-    ShopCart shopCart = shopCartRepository.findOne(shopCartId);
+    ShopCartDTO shopCart = shopCartRepository.findOne(shopCartId);
     if (null == shopCart) {
       return;
     }
@@ -133,7 +133,7 @@ public class ShopCartService {
    * @param shopCartId
    */
   public void deleteShopCart(String username, String shopCartId) {
-    ShopCart shopCart = shopCartRepository.findOne(shopCartId);
+    ShopCartDTO shopCart = shopCartRepository.findOne(shopCartId);
     if (null == shopCart) {
       return;
     }
@@ -152,8 +152,8 @@ public class ShopCartService {
    * @param count
    * @return
    */
-  public ShopCart updateShopCartCount(String username, String shopCartId, int count) {
-    ShopCart shopCart = shopCartRepository.findOne(shopCartId);
+  public ShopCartDTO updateShopCartCount(String username, String shopCartId, int count) {
+    ShopCartDTO shopCart = shopCartRepository.findOne(shopCartId);
     if (null == shopCart) {
       throw new IllegalArgumentException("ShopCart item not exist");
     }

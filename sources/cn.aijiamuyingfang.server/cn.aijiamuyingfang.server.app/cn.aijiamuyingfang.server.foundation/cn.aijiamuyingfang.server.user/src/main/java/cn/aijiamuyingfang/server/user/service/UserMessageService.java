@@ -15,8 +15,8 @@ import cn.aijiamuyingfang.server.domain.UserAuthority;
 import cn.aijiamuyingfang.server.user.db.UserMessageRepository;
 import cn.aijiamuyingfang.server.user.db.UserRepository;
 import cn.aijiamuyingfang.server.user.domain.response.PagableUserMessageList;
-import cn.aijiamuyingfang.server.user.dto.User;
-import cn.aijiamuyingfang.server.user.dto.UserMessage;
+import cn.aijiamuyingfang.server.user.dto.UserDTO;
+import cn.aijiamuyingfang.server.user.dto.UserMessageDTO;
 
 /**
  * [描述]:
@@ -67,7 +67,7 @@ public class UserMessageService {
     usernameList.add(username);
     usernameList.addAll(userRepository.findUsersByAuthority(UserAuthority.MANAGER_PERMISSION.getValue()));
     PagableUserMessageList response = getMessageList(usernameList, currentPage, pageSize);
-    User user = userRepository.findOne(username);
+    UserDTO user = userRepository.findOne(username);
     if (user != null) {
       user.setLastReadMsgTime(new Date());
       userRepository.saveAndFlush(user);
@@ -89,7 +89,7 @@ public class UserMessageService {
     cleanOvertimeMessage();
     // PageRequest的Page参数是基于0的,但是currentPage是基于1的,所有将currentPage作为参数传递给PgeRequest时需要'-1'
     PageRequest pageRequest = new PageRequest(currentPage - 1, pageSize, Sort.Direction.DESC, "createTime");
-    Page<UserMessage> page = userMessageRepository.findByUsernameIn(usernameList, pageRequest);
+    Page<UserMessageDTO> page = userMessageRepository.findByUsernameIn(usernameList, pageRequest);
     PagableUserMessageList response = new PagableUserMessageList();
     response.setCurrentPage(page.getNumber() + 1);
     response.setDataList(page.getContent());
@@ -112,7 +112,7 @@ public class UserMessageService {
    * @param message
    * @return
    */
-  public UserMessage createMessage(String username, UserMessage message) {
+  public UserMessageDTO createMessage(String username, UserMessageDTO message) {
     if (message != null) {
       message.setUsername(username);
       userMessageRepository.saveAndFlush(message);
@@ -128,7 +128,7 @@ public class UserMessageService {
    * @param messageId
    */
   public void deleteMessage(String username, String messageId) {
-    UserMessage message = userMessageRepository.findOne(messageId);
+    UserMessageDTO message = userMessageRepository.findOne(messageId);
     if (null == message) {
       return;
     }

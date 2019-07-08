@@ -26,8 +26,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import cn.aijiamuyingfang.commons.utils.NumberUtils;
 import cn.aijiamuyingfang.commons.utils.StringUtils;
-import cn.aijiamuyingfang.server.it.domain.SendType;
-import cn.aijiamuyingfang.server.it.domain.ShopOrderStatus;
 import lombok.Data;
 
 /**
@@ -67,19 +65,19 @@ public class ShopOrderDTO {
    * 订单状态:0:预订;1:未开始;2:进行中;3:已完成;4:订单超时
    */
   @JsonDeserialize(using = StatusDeserializer.class)
-  private ShopOrderStatus status;
+  private ShopOrderStatusDTO status;
 
-  private static class StatusDeserializer extends JsonDeserializer<ShopOrderStatus> {
+  private static class StatusDeserializer extends JsonDeserializer<ShopOrderStatusDTO> {
 
     @Override
-    public ShopOrderStatus deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public ShopOrderStatusDTO deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
       JsonToken currentToken = p.currentToken();
       if (currentToken == JsonToken.VALUE_NUMBER_INT) {
-        return ShopOrderStatus.fromValue(p.getIntValue());
+        return ShopOrderStatusDTO.fromValue(p.getIntValue());
       } else if (currentToken == JsonToken.VALUE_STRING) {
-        return ShopOrderStatus.fromValue(NumberUtils.toInt(p.getValueAsString(), 0));
+        return ShopOrderStatusDTO.fromValue(NumberUtils.toInt(p.getValueAsString(), 0));
       }
-      return ShopOrderStatus.UNKNOW;
+      return ShopOrderStatusDTO.UNKNOW;
     }
 
   }
@@ -93,19 +91,19 @@ public class ShopOrderDTO {
    * 订单的配送方式: 0:到店自取(pickup); 1:送货上门(ownsend); 2:快递(thirdsend);
    */
   @JsonDeserialize(using = SendTypeDeserializer.class)
-  private SendType sendType;
+  private SendTypeDTO sendType;
 
-  private static class SendTypeDeserializer extends JsonDeserializer<SendType> {
+  private static class SendTypeDeserializer extends JsonDeserializer<SendTypeDTO> {
 
     @Override
-    public SendType deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public SendTypeDTO deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
       JsonToken currentToken = p.currentToken();
       if (currentToken == JsonToken.VALUE_NUMBER_INT) {
-        return SendType.fromValue(p.getIntValue());
+        return SendTypeDTO.fromValue(p.getIntValue());
       } else if (currentToken == JsonToken.VALUE_STRING) {
-        return SendType.fromValue(NumberUtils.toInt(p.getValueAsString(), 0));
+        return SendTypeDTO.fromValue(NumberUtils.toInt(p.getValueAsString(), 0));
       }
-      return SendType.UNKNOW;
+      return SendTypeDTO.UNKNOW;
     }
 
   }
@@ -248,7 +246,7 @@ public class ShopOrderDTO {
     }
   }
 
-  public void setStatus(ShopOrderStatus status) {
+  public void setStatus(ShopOrderStatusDTO status) {
     this.status = status;
     this.lastModify = new Date();
   }
