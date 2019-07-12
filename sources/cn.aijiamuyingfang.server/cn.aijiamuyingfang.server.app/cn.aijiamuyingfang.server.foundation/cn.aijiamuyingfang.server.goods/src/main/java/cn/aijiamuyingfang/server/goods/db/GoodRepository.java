@@ -45,8 +45,7 @@ public interface GoodRepository extends JpaRepository<GoodDTO, String> {
       value = "select * from good g inner join classify_good_list c on g.id=c.good_list_id where g.deprecated=false "
           + "and c.classify_id=:classify_id and g.pack in :pack and g.level in :level order by ?#{#pageable}",
       countQuery = "select count(*) from good g inner join classify_good_list c on g.id=c.good_list_id where "
-          + "g.deprecated=false and c.classify_id=:classify_id and g.pack in :pack and g.level in :level order by "
-          + "?#{#pageable}",
+          + "g.deprecated=false and c.classify_id=:classify_id and g.pack in :pack and g.level in :level order by ?#{#pageable}",
       nativeQuery = true)
   Page<GoodDTO> findClassifyGoodByPackInAndLevelIn(@Param("classify_id") String classifyId,
       @Param("pack") List<String> packList, @Param("level") List<String> levelList, Pageable pageable);
@@ -84,8 +83,8 @@ public interface GoodRepository extends JpaRepository<GoodDTO, String> {
       countQuery = "select count(*) from good g inner join classify_good_list c on g.id=c.good_list_id "
           + "where g.deprecated=false and c.classify_id=:classify_id and g.level in :level order by ?#{#pageable}",
       nativeQuery = true)
-  Page<GoodDTO> findClassifyGoodByLevelIn(@Param("classify_id") String classifyId, @Param("level") List<String> levelList,
-      Pageable pageable);
+  Page<GoodDTO> findClassifyGoodByLevelIn(@Param("classify_id") String classifyId,
+      @Param("level") List<String> levelList, Pageable pageable);
 
   /**
    * 分页获取条目下的商品

@@ -20,7 +20,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import cn.aijiamuyingfang.client.rest.api.impl.StoreControllerClient;
-import cn.aijiamuyingfang.commons.utils.StringUtils;
 import cn.aijiamuyingfang.server.it.ITApplication;
 import cn.aijiamuyingfang.server.it.UseCaseDescription;
 import cn.aijiamuyingfang.vo.address.City;
@@ -30,6 +29,7 @@ import cn.aijiamuyingfang.vo.exception.GoodsException;
 import cn.aijiamuyingfang.vo.store.PagableStoreList;
 import cn.aijiamuyingfang.vo.store.Store;
 import cn.aijiamuyingfang.vo.store.StoreAddress;
+import cn.aijiamuyingfang.vo.utils.StringUtils;
 
 /**
  * [描述]:

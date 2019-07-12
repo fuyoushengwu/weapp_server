@@ -2,12 +2,12 @@ package cn.aijiamuyingfang.server.it.utils;
 
 import java.io.IOException;
 
-import cn.aijiamuyingfang.client.commons.exception.OAuthException;
 import cn.aijiamuyingfang.client.commons.utils.RetrofitUtils;
 import cn.aijiamuyingfang.client.oauth2.Constants;
 import cn.aijiamuyingfang.client.oauth2.OAuth2Client;
 import cn.aijiamuyingfang.client.oauth2.OAuthResponse;
-import cn.aijiamuyingfang.vo.ResponseCode;
+import cn.aijiamuyingfang.vo.exception.OAuthException;
+import cn.aijiamuyingfang.vo.response.ResponseCode;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;

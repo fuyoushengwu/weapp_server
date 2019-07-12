@@ -8,18 +8,22 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import cn.aijiamuyingfang.commons.utils.CollectionUtils;
-import cn.aijiamuyingfang.commons.utils.StringUtils;
 import cn.aijiamuyingfang.server.coupon.db.GoodVoucherRepository;
 import cn.aijiamuyingfang.server.coupon.db.UserVoucherRepository;
 import cn.aijiamuyingfang.server.coupon.db.VoucherItemRepository;
-import cn.aijiamuyingfang.server.coupon.domain.response.PagableGoodVoucherList;
-import cn.aijiamuyingfang.server.coupon.domain.response.PagableUserVoucherList;
-import cn.aijiamuyingfang.server.coupon.domain.response.PagableVoucherItemList;
 import cn.aijiamuyingfang.server.coupon.dto.GoodVoucherDTO;
 import cn.aijiamuyingfang.server.coupon.dto.UserVoucherDTO;
 import cn.aijiamuyingfang.server.coupon.dto.VoucherItemDTO;
-import cn.aijiamuyingfang.server.exception.CouponException;
+import cn.aijiamuyingfang.server.coupon.utils.ConvertService;
 import cn.aijiamuyingfang.server.feign.GoodClient;
+import cn.aijiamuyingfang.vo.coupon.GoodVoucher;
+import cn.aijiamuyingfang.vo.coupon.PagableGoodVoucherList;
+import cn.aijiamuyingfang.vo.coupon.PagableUserVoucherList;
+import cn.aijiamuyingfang.vo.coupon.PagableVoucherItemList;
+import cn.aijiamuyingfang.vo.coupon.UserVoucher;
+import cn.aijiamuyingfang.vo.coupon.VoucherItem;
+import cn.aijiamuyingfang.vo.exception.CouponException;
+import cn.aijiamuyingfang.vo.utils.StringUtils;
 
 /**
  * [描述]:
@@ -47,6 +51,9 @@ public class CouponService {
   @Autowired
   private VoucherItemRepository voucherItemRepository;
 
+  @Autowired
+  private ConvertService convertService;
+
   /**
    * 分页获得用户的兑换券
    * 
@@ -59,11 +66,11 @@ public class CouponService {
   public PagableUserVoucherList getUserVoucherList(String username, int currentPage, int pageSize) {
     // PageRequest的Page参数是基于0的,但是currentPage是基于1的,所有将currentPage作为参数传递给PgeRequest时需要'-1'
     PageRequest pageRequest = new PageRequest(currentPage - 1, pageSize);
-    Page<UserVoucherDTO> userVoucherPage = uservoucherRepository.findByUsername(username, pageRequest);
+    Page<UserVoucherDTO> userVoucherDTOPage = uservoucherRepository.findByUsername(username, pageRequest);
     PagableUserVoucherList response = new PagableUserVoucherList();
-    response.setCurrentPage(userVoucherPage.getNumber() + 1);
-    response.setDataList(userVoucherPage.getContent());
-    response.setTotalpage(userVoucherPage.getTotalPages());
+    response.setCurrentPage(userVoucherDTOPage.getNumber() + 1);
+    response.setDataList(convertService.convertUserVoucherDTOList(userVoucherDTOPage.getContent()));
+    response.setTotalpage(userVoucherDTOPage.getTotalPages());
     return response;
   }
 
@@ -73,8 +80,8 @@ public class CouponService {
    * @param voucherId
    * @return
    */
-  public UserVoucherDTO getUserVoucher(String voucherId) {
-    return uservoucherRepository.findOne(voucherId);
+  public UserVoucher getUserVoucher(String voucherId) {
+    return convertService.convertUserVoucherDTO(uservoucherRepository.findOne(voucherId));
   }
 
   /**
@@ -84,8 +91,9 @@ public class CouponService {
    * @param goodvoucherId
    * @return
    */
-  public UserVoucherDTO getUserVoucherForGoodVoucher(String username, String goodvoucherId) {
-    return uservoucherRepository.findByUsernameAndGoodVoucher(username, goodvoucherId);
+  public UserVoucher getUserVoucherForGoodVoucher(String username, String goodvoucherId) {
+    return convertService
+        .convertUserVoucherDTO(uservoucherRepository.findByUsernameAndGoodVoucher(username, goodvoucherId));
   }
 
   /**
@@ -93,9 +101,9 @@ public class CouponService {
    * 
    * @param userVoucherList
    */
-  public void updateUserVoucher(List<UserVoucherDTO> userVoucherList) {
+  public void updateUserVoucher(List<UserVoucher> userVoucherList) {
     if (CollectionUtils.hasContent(userVoucherList)) {
-      for (UserVoucherDTO userVoucher : userVoucherList) {
+      for (UserVoucher userVoucher : userVoucherList) {
         updateUserVoucher(userVoucher);
       }
     }
@@ -106,20 +114,20 @@ public class CouponService {
    * 
    * @param userVoucher
    */
-  public void updateUserVoucher(UserVoucherDTO userVoucher) {
+  public void updateUserVoucher(UserVoucher userVoucher) {
     if (null == userVoucher) {
       return;
     }
     if (StringUtils.isEmpty(userVoucher.getId())) {
-      uservoucherRepository.saveAndFlush(userVoucher);
+      uservoucherRepository.saveAndFlush(convertService.convertUserVoucher(userVoucher));
       return;
     }
-    UserVoucherDTO oriUserVoucher = uservoucherRepository.findOne(userVoucher.getId());
-    if (null == oriUserVoucher) {
+    UserVoucherDTO oriUserVoucherDTO = uservoucherRepository.findOne(userVoucher.getId());
+    if (null == oriUserVoucherDTO) {
       throw new CouponException("404", "UserVoucher[" + userVoucher.getId() + "] not exist");
     }
-    oriUserVoucher.update(userVoucher);
-    uservoucherRepository.saveAndFlush(oriUserVoucher);
+    oriUserVoucherDTO.update(userVoucher);
+    uservoucherRepository.saveAndFlush(oriUserVoucherDTO);
   }
 
   /**
@@ -132,17 +140,17 @@ public class CouponService {
   public PagableGoodVoucherList getGoodVoucherList(int currentPage, int pageSize) {
     // PageRequest的Page参数是基于0的,但是currentPage是基于1的,所有将currentPage作为参数传递给PgeRequest时需要'-1'
     PageRequest pageRequest = new PageRequest(currentPage - 1, pageSize);
-    Page<GoodVoucherDTO> goodVoucherPage = goodvoucherRepository.findAll(pageRequest);
+    Page<GoodVoucherDTO> goodVoucherDTOPage = goodvoucherRepository.findAll(pageRequest);
 
     PagableGoodVoucherList response = new PagableGoodVoucherList();
-    response.setCurrentPage(goodVoucherPage.getNumber() + 1);
-    response.setDataList(goodVoucherPage.getContent());
-    response.setTotalpage(goodVoucherPage.getTotalPages());
+    response.setCurrentPage(goodVoucherDTOPage.getNumber() + 1);
+    response.setDataList(convertService.convertGoodVoucherDTOList(goodVoucherDTOPage.getContent()));
+    response.setTotalpage(goodVoucherDTOPage.getTotalPages());
     return response;
   }
 
-  public GoodVoucherDTO getGoodVoucher(String voucherId) {
-    return goodvoucherRepository.findOne(voucherId);
+  public GoodVoucher getGoodVoucher(String voucherId) {
+    return convertService.convertGoodVoucherDTO(goodvoucherRepository.findOne(voucherId));
   }
 
   /**
@@ -151,18 +159,19 @@ public class CouponService {
    * @param goodVoucher
    * @return
    */
-  public GoodVoucherDTO createORUpdateGoodVoucher(GoodVoucherDTO goodVoucher) {
+  public GoodVoucher createORUpdateGoodVoucher(GoodVoucher goodVoucher) {
     if (null == goodVoucher) {
       return null;
     }
     if (StringUtils.hasContent(goodVoucher.getId())) {
-      GoodVoucherDTO oriGoodVoucher = goodvoucherRepository.findOne(goodVoucher.getId());
-      if (oriGoodVoucher != null) {
-        oriGoodVoucher.update(goodVoucher);
-        return goodvoucherRepository.saveAndFlush(oriGoodVoucher);
+      GoodVoucherDTO oriGoodVoucherDTO = goodvoucherRepository.findOne(goodVoucher.getId());
+      if (oriGoodVoucherDTO != null) {
+        oriGoodVoucherDTO.update(goodVoucher);
+        return convertService.convertGoodVoucherDTO(goodvoucherRepository.saveAndFlush(oriGoodVoucherDTO));
       }
     }
-    return goodvoucherRepository.saveAndFlush(goodVoucher);
+    return convertService
+        .convertGoodVoucherDTO(goodvoucherRepository.saveAndFlush(convertService.convertGoodVoucher(goodVoucher)));
   }
 
   /**
@@ -172,20 +181,20 @@ public class CouponService {
    */
   public void deprecateGoodVoucher(String voucherId) {
     // 废弃GoodVoucher
-    GoodVoucherDTO goodVoucher = goodvoucherRepository.findOne(voucherId);
-    if (null == goodVoucher || goodVoucher.isDeprecated()) {
+    GoodVoucherDTO goodVoucherDTO = goodvoucherRepository.findOne(voucherId);
+    if (null == goodVoucherDTO || goodVoucherDTO.isDeprecated()) {
       return;
     }
-    goodVoucher.setDeprecated(true);
-    goodvoucherRepository.saveAndFlush(goodVoucher);
+    goodVoucherDTO.setDeprecated(true);
+    goodvoucherRepository.saveAndFlush(goodVoucherDTO);
 
     // 废弃UserVoucher
-    UserVoucherDTO userVoucher = uservoucherRepository.findByGoodVoucherId(voucherId);
-    if (null == userVoucher || userVoucher.isDeprecated()) {
+    UserVoucherDTO userVoucherDTO = uservoucherRepository.findByGoodVoucherId(voucherId);
+    if (null == userVoucherDTO || userVoucherDTO.isDeprecated()) {
       return;
     }
-    userVoucher.setDeprecated(true);
-    uservoucherRepository.saveAndFlush(userVoucher);
+    userVoucherDTO.setDeprecated(true);
+    uservoucherRepository.saveAndFlush(userVoucherDTO);
 
     // 消除Good对GoodVoucherId的引用
     goodClient.deprecateGoodVoucher(voucherId);
@@ -201,11 +210,11 @@ public class CouponService {
   public PagableVoucherItemList getVoucherItemList(int currentPage, int pageSize) {
     // PageRequest的Page参数是基于0的,但是currentPage是基于1的,所有将currentPage作为参数传递给PgeRequest时需要'-1'
     PageRequest pageRequest = new PageRequest(currentPage - 1, pageSize);
-    Page<VoucherItemDTO> voucherItemPage = voucherItemRepository.findAll(pageRequest);
+    Page<VoucherItemDTO> voucherItemDTOPage = voucherItemRepository.findAll(pageRequest);
     PagableVoucherItemList response = new PagableVoucherItemList();
-    response.setCurrentPage(voucherItemPage.getNumber() + 1);
-    response.setDataList(voucherItemPage.getContent());
-    response.setTotalpage(voucherItemPage.getTotalPages());
+    response.setCurrentPage(voucherItemDTOPage.getNumber() + 1);
+    response.setDataList(convertService.convertVoucherItemDTOList(voucherItemDTOPage.getContent()));
+    response.setTotalpage(voucherItemDTOPage.getTotalPages());
     return response;
   }
 
@@ -215,8 +224,12 @@ public class CouponService {
    * @param voucherItemId
    * @return
    */
-  public VoucherItemDTO getVoucherItem(String voucherItemId) {
-    return voucherItemRepository.findOne(voucherItemId);
+  public VoucherItem getVoucherItem(String voucherItemId) {
+    return convertService.convertVoucherItemDTO(voucherItemRepository.findOne(voucherItemId));
+  }
+
+  public List<VoucherItem> getVoucherItemList(List<String> voucherItemIdList) {
+    return convertService.convertVoucherItemDTOList(voucherItemRepository.findAll(voucherItemIdList));
   }
 
   /**
@@ -225,18 +238,19 @@ public class CouponService {
    * @param voucherItem
    * @return
    */
-  public VoucherItemDTO createORUpdateVoucherItem(VoucherItemDTO voucherItem) {
+  public VoucherItem createORUpdateVoucherItem(VoucherItem voucherItem) {
     if (null == voucherItem) {
       return null;
     }
     if (StringUtils.hasContent(voucherItem.getId())) {
-      VoucherItemDTO oriVoucherItem = voucherItemRepository.findOne(voucherItem.getId());
-      if (oriVoucherItem != null) {
-        oriVoucherItem.update(voucherItem);
-        return voucherItemRepository.saveAndFlush(oriVoucherItem);
+      VoucherItemDTO oriVoucherItemDTO = voucherItemRepository.findOne(voucherItem.getId());
+      if (oriVoucherItemDTO != null) {
+        oriVoucherItemDTO.update(voucherItem);
+        return convertService.convertVoucherItemDTO(voucherItemRepository.saveAndFlush(oriVoucherItemDTO));
       }
     }
-    return voucherItemRepository.saveAndFlush(voucherItem);
+    return convertService
+        .convertVoucherItemDTO(voucherItemRepository.saveAndFlush(convertService.convertVoucherItem(voucherItem)));
   }
 
   /**
@@ -246,12 +260,12 @@ public class CouponService {
    */
   public void deprecateVoucherItem(String voucherItemId) {
     // 废弃VoucherItem
-    VoucherItemDTO voucherItem = voucherItemRepository.findOne(voucherItemId);
-    if (null == voucherItem || voucherItem.isDeprecated()) {
+    VoucherItemDTO voucherItemDTO = voucherItemRepository.findOne(voucherItemId);
+    if (null == voucherItemDTO || voucherItemDTO.isDeprecated()) {
       return;
     }
-    voucherItem.setDeprecated(true);
-    voucherItemRepository.saveAndFlush(voucherItem);
+    voucherItemDTO.setDeprecated(true);
+    voucherItemRepository.saveAndFlush(voucherItemDTO);
 
     // GoodVoucher中引用的VoucherItem也删除
     goodvoucherRepository.deprecateVoucherItem(voucherItemId);

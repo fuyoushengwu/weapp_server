@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import cn.aijiamuyingfang.server.domain.response.ResponseBean;
-import cn.aijiamuyingfang.server.feign.domain.message.TemplateMsg;
+import cn.aijiamuyingfang.vo.message.TemplateMsg;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
 
 @FeignClient(name = "user-service")
 public interface TemplateMsgClient {

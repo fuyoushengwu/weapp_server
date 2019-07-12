@@ -25,16 +25,14 @@ import cn.aijiamuyingfang.server.it.dto.user.RecieveAddressDTO;
  */
 @Repository
 public interface RecieveAddressRepository extends JpaRepository<RecieveAddressDTO, String> {
-
   @Override
-  @Query(value = "select r from RecieveAddress r where r.id=:id and r.deprecated=false")
+  @Query(value = "select * from recieve_address where id=:id and deprecated=false", nativeQuery = true)
   RecieveAddressDTO findOne(@Param("id") String id);
 
   /**
    * 获取用户的收件地址
    * 
    * @param username
-   *          用户id
    * @return 获取用户的收件地址
    */
   @Query(value = "select * from recieve_address where username=:username and deprecated=false", nativeQuery = true)

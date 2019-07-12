@@ -19,7 +19,7 @@ import lombok.Data;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-06-27 03:36:05
  */
-@Entity
+@Entity(name = "shop_cart")
 @Data
 public class ShopCartDTO {
   /**
@@ -49,14 +49,4 @@ public class ShopCartDTO {
    * 商品数量
    */
   private int count;
-
-  /**
-   * 增加购物车中商品数量
-   * 
-   * @param c
-   *          商品增加的数量
-   */
-  public void addCount(int c) {
-    this.count += c;
-  }
 }

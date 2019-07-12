@@ -5,14 +5,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import cn.aijiamuyingfang.commons.utils.StringUtils;
-import cn.aijiamuyingfang.server.domain.response.ResponseCode;
-import cn.aijiamuyingfang.server.exception.GoodsException;
 import cn.aijiamuyingfang.server.goods.db.GoodDetailRepository;
 import cn.aijiamuyingfang.server.goods.db.GoodRepository;
-import cn.aijiamuyingfang.server.goods.domain.request.SaleGood;
 import cn.aijiamuyingfang.server.goods.dto.GoodDTO;
 import cn.aijiamuyingfang.server.goods.dto.GoodDetailDTO;
+import cn.aijiamuyingfang.server.goods.utils.ConvertService;
+import cn.aijiamuyingfang.vo.exception.GoodsException;
+import cn.aijiamuyingfang.vo.goods.Good;
+import cn.aijiamuyingfang.vo.goods.SaleGood;
+import cn.aijiamuyingfang.vo.response.ResponseCode;
+import cn.aijiamuyingfang.vo.utils.StringUtils;
 
 /**
  * [描述]:
@@ -33,23 +35,26 @@ public class GoodService {
   @Autowired
   private GoodDetailRepository goodDetailRepository;
 
+  @Autowired
+  private ConvertService convertService;
+
   /**
    * 添加商品
    * 
    * @param good
    */
-  public GoodDTO createORUpdateGood(GoodDTO good) {
+  public Good createORUpdateGood(Good good) {
     if (null == good) {
       return good;
     }
     if (StringUtils.hasContent(good.getId())) {
-      GoodDTO oriGood = goodRepository.findOne(good.getId());
-      if (oriGood != null) {
-        oriGood.update(good);
-        return goodRepository.saveAndFlush(oriGood);
+      GoodDTO oriGoodDTO = goodRepository.findOne(good.getId());
+      if (oriGoodDTO != null) {
+        oriGoodDTO.update(good);
+        return convertService.convertGoodDTO(goodRepository.saveAndFlush(oriGoodDTO));
       }
     }
-    return goodRepository.saveAndFlush(good);
+    return convertService.convertGoodDTO(goodRepository.saveAndFlush(convertService.convertGood(good)));
   }
 
   /**
@@ -60,8 +65,8 @@ public class GoodService {
    *          商品id
    * @return
    */
-  public GoodDTO getGood(String goodId) {
-    return goodRepository.findOne(goodId);
+  public Good getGood(String goodId) {
+    return convertService.convertGoodDTO(goodRepository.findOne(goodId));
   }
 
   /**
@@ -70,8 +75,8 @@ public class GoodService {
    * @param goodIdList
    * @return
    */
-  public List<GoodDTO> getGoodList(List<String> goodIdList) {
-    return goodRepository.findAll(goodIdList);
+  public List<Good> getGoodList(List<String> goodIdList) {
+    return convertService.convertGoodDTOList(goodRepository.findAll(goodIdList));
   }
 
   /**
@@ -82,16 +87,16 @@ public class GoodService {
    * @param updateGood
    * @return
    */
-  public GoodDTO updateGood(String goodId, GoodDTO updateGood) {
-    GoodDTO good = goodRepository.findOne(goodId);
-    if (null == good) {
+  public Good updateGood(String goodId, Good updateGood) {
+    GoodDTO goodDTO = goodRepository.findOne(goodId);
+    if (null == goodDTO) {
       throw new GoodsException(ResponseCode.GOOD_NOT_EXIST, goodId);
     }
     if (null == updateGood) {
-      return good;
+      return convertService.convertGoodDTO(goodDTO);
     }
-    good.update(updateGood);
-    return goodRepository.saveAndFlush(good);
+    goodDTO.update(updateGood);
+    return convertService.convertGoodDTO(goodRepository.saveAndFlush(goodDTO));
   }
 
   /**
@@ -101,14 +106,14 @@ public class GoodService {
    *          商品id
    */
   public void deprecateGood(String goodId) {
-    GoodDetailDTO goodDetail = goodDetailRepository.findOne(goodId);
-    if (goodDetail != null) {
-      goodDetailRepository.delete(goodDetail);
+    GoodDetailDTO goodDetailDTO = goodDetailRepository.findOne(goodId);
+    if (goodDetailDTO != null) {
+      goodDetailRepository.delete(goodDetailDTO);
     }
-    GoodDTO good = goodRepository.findOne(goodId);
-    if (good != null) {
-      good.setDeprecated(true);
-      goodRepository.saveAndFlush(good);
+    GoodDTO goodDTO = goodRepository.findOne(goodId);
+    if (goodDTO != null) {
+      goodDTO.setDeprecated(true);
+      goodRepository.saveAndFlush(goodDTO);
     }
   }
 
@@ -122,19 +127,19 @@ public class GoodService {
     if (StringUtils.isEmpty(goodId) || null == saleGood) {
       return;
     }
-    GoodDTO good = goodRepository.findOne(goodId);
-    if (null == good) {
+    GoodDTO goodDTO = goodRepository.findOne(goodId);
+    if (null == goodDTO) {
       throw new IllegalArgumentException("good[" + goodId + "] not exist");
     }
     int saleCount = saleGood.getSalecount();
-    int goodCount = good.getCount();
+    int goodCount = goodDTO.getCount();
 
     if (saleCount > goodCount) {
       throw new IllegalArgumentException("sale count > good count");
     }
-    good.setCount(goodCount - saleCount);
-    good.setSalecount(saleCount + good.getSalecount());
-    goodRepository.saveAndFlush(good);
+    goodDTO.setCount(goodCount - saleCount);
+    goodDTO.setSalecount(saleCount + goodDTO.getSalecount());
+    goodRepository.saveAndFlush(goodDTO);
   }
 
   /**

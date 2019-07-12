@@ -22,7 +22,6 @@ import cn.aijiamuyingfang.server.it.dto.user.UserDTO;
  */
 @Repository
 public interface UserRepository extends JpaRepository<UserDTO, String> {
-
   /**
    * 获取不同权限用户的Id
    * 
@@ -31,5 +30,4 @@ public interface UserRepository extends JpaRepository<UserDTO, String> {
    */
   @Query(value = "select user_username from user_authority_list where authority_list=:type", nativeQuery = true)
   List<String> findUsersByAuthority(@Param("type") int authority);
-
 }

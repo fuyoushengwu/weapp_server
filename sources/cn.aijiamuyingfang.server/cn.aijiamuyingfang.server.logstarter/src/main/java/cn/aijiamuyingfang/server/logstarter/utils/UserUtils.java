@@ -7,8 +7,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
-import cn.aijiamuyingfang.commons.utils.JsonUtils;
-import cn.aijiamuyingfang.server.logstarter.domain.User;
+import cn.aijiamuyingfang.vo.user.User;
+import cn.aijiamuyingfang.vo.utils.JsonUtils;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -41,7 +41,7 @@ public class UserUtils {
         Map map = (Map) authenticationToken.getDetails();
         map = (Map) map.get("principal");
 
-        return JsonUtils.fromJson(JsonUtils.toJson(map), User.class);
+        return JsonUtils.json2Bean(JsonUtils.bean2Json(map), User.class);
       }
     }
     return null;

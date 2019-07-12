@@ -10,18 +10,19 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import cn.aijiamuyingfang.client.commons.utils.StringUtils;
+import cn.aijiamuyingfang.client.commons.constant.ClientRestConstants;
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.GoodControllerApi;
-import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
-import cn.aijiamuyingfang.vo.ResponseBean;
-import cn.aijiamuyingfang.vo.ResponseCode;
+import cn.aijiamuyingfang.client.rest.utils.ResponseUtils;
 import cn.aijiamuyingfang.vo.exception.GoodsException;
 import cn.aijiamuyingfang.vo.goods.Good;
 import cn.aijiamuyingfang.vo.goods.GoodDetail;
 import cn.aijiamuyingfang.vo.goods.PagableGoodList;
 import cn.aijiamuyingfang.vo.goods.ShelfLife;
-import okhttp3.MediaType;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
+import cn.aijiamuyingfang.vo.response.ResponseCode;
+import cn.aijiamuyingfang.vo.utils.JsonUtils;
+import cn.aijiamuyingfang.vo.utils.StringUtils;
 import okhttp3.MultipartBody;
 import okhttp3.MultipartBody.Builder;
 import okhttp3.RequestBody;
@@ -49,7 +50,7 @@ public class GoodControllerClient {
 
     @Override
     public void onResponse(Call<ResponseBean> call, Response<ResponseBean> response) {
-      LOGGER.info("onResponse:" + response.message());
+      LOGGER.info("onResponse:{}", response.message());
     }
 
     @Override
@@ -166,7 +167,7 @@ public class GoodControllerClient {
    */
   private void buildCoverImage(MultipartBody.Builder requestBodyBuilder, File coverImageFile) {
     if (coverImageFile != null) {
-      RequestBody requestCoverImg = RequestBody.create(MediaType.parse("multipart/form-data"), coverImageFile);
+      RequestBody requestCoverImg = RequestBody.create(ClientRestConstants.MEDIA_TYPE_MULTIPART, coverImageFile);
       requestBodyBuilder.addFormDataPart("coverImage", coverImageFile.getName(), requestCoverImg);
     }
   }
@@ -180,7 +181,7 @@ public class GoodControllerClient {
   private void buildDetailImage(Builder requestBodyBuilder, List<File> detailImageFiles) {
     if (!CollectionUtils.isEmpty(detailImageFiles)) {
       for (File detailImageFile : detailImageFiles) {
-        RequestBody requestdetailImg = RequestBody.create(MediaType.parse("multipart/form-data"), detailImageFile);
+        RequestBody requestdetailImg = RequestBody.create(ClientRestConstants.MEDIA_TYPE_MULTIPART, detailImageFile);
         requestBodyBuilder.addFormDataPart("detailImages", detailImageFile.getName(), requestdetailImg);
       }
     }
@@ -291,20 +292,7 @@ public class GoodControllerClient {
       goodControllerApi.deprecateGood(goodId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = goodControllerApi.deprecateGood(goodId, accessToken).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      if (response.errorBody() != null) {
-        LOGGER.error(new String(response.errorBody().bytes()));
-      }
-      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    if ("200".equals(returnCode)) {
-      return;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new GoodsException(returnCode, responseBean.getMsg());
+    ResponseUtils.handleGoodsVOIDResponse(goodControllerApi.deprecateGood(goodId, accessToken).execute(), LOGGER);
   }
 
   /**

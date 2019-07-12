@@ -1,8 +1,8 @@
 package cn.aijiamuyingfang.client.rest.api;
 
-import cn.aijiamuyingfang.vo.ResponseBean;
 import cn.aijiamuyingfang.vo.message.PagableUserMessageList;
 import cn.aijiamuyingfang.vo.message.UserMessage;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;

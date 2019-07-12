@@ -11,9 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
-import cn.aijiamuyingfang.commons.utils.CollectionUtils;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * [描述]:
@@ -26,9 +24,8 @@ import lombok.NoArgsConstructor;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-06-27 00:13:06
  */
-@Entity
+@Entity(name = "good_detail")
 @Data
-@NoArgsConstructor
 public class GoodDetailDTO {
   /**
    * 商品详情Id
@@ -49,16 +46,4 @@ public class GoodDetailDTO {
    */
   @ManyToMany
   private List<ImageSourceDTO> detailImgList = new ArrayList<>();
-
-  public void update(GoodDetailDTO updateGoodDetail) {
-    if (null == updateGoodDetail) {
-      return;
-    }
-    if (updateGoodDetail.lifetime != null) {
-      this.lifetime = updateGoodDetail.lifetime;
-    }
-    if (!CollectionUtils.isEmpty(updateGoodDetail.detailImgList)) {
-      this.detailImgList = updateGoodDetail.detailImgList;
-    }
-  }
 }

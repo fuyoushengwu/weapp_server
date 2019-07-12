@@ -3,10 +3,6 @@ package cn.aijiamuyingfang.server.it.dto.shoporder;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Convert;
 
-import com.google.gson.annotations.SerializedName;
-
-import cn.aijiamuyingfang.server.it.dto.BaseEnum;
-
 /**
  * [描述]:
  * <p>
@@ -19,28 +15,24 @@ import cn.aijiamuyingfang.server.it.dto.BaseEnum;
  * @date 2018-06-27 15:51:30
  */
 @Convert(converter = SendTypeDTO.SendTypeConverter.class)
-public enum SendTypeDTO implements BaseEnum {
+public enum SendTypeDTO {
   /**
    * 未知类型
    */
-  @SerializedName("0")
   UNKNOW(0),
   /**
    * 自取
    */
-  @SerializedName("1")
   PICKUP(1),
 
   /**
    * 送货
    */
-  @SerializedName("2")
   OWNSEND(2),
 
   /**
    * 快递
    */
-  @SerializedName("3")
   THIRDSEND(3);
 
   private int value;
@@ -58,21 +50,16 @@ public enum SendTypeDTO implements BaseEnum {
     return UNKNOW;
   }
 
-  @Override
-  public int getValue() {
-    return value;
-  }
-
   class SendTypeConverter implements AttributeConverter<SendTypeDTO, Integer> {
 
     @Override
-    public Integer convertToDatabaseColumn(SendTypeDTO attribute) {
-      return attribute.getValue();
+    public Integer convertToDatabaseColumn(SendTypeDTO type) {
+      return type.value;
     }
 
     @Override
-    public SendTypeDTO convertToEntityAttribute(Integer dbData) {
-      return SendTypeDTO.fromValue(dbData);
+    public SendTypeDTO convertToEntityAttribute(Integer value) {
+      return SendTypeDTO.fromValue(value);
     }
   }
 }

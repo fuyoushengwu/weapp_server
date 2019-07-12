@@ -3,7 +3,7 @@ package cn.aijiamuyingfang.client.rest.api;
 import java.util.List;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
-import cn.aijiamuyingfang.vo.ResponseBean;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
 import cn.aijiamuyingfang.vo.shoporder.CreateShopOrderRequest;
 import cn.aijiamuyingfang.vo.shoporder.SendType;
 import cn.aijiamuyingfang.vo.shoporder.ShopOrderStatus;

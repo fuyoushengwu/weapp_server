@@ -19,7 +19,7 @@ import lombok.Data;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-06-27 15:55:10
  */
-@Entity
+@Entity(name = "preview_order_item")
 @Data
 public class PreviewOrderItemDTO {
   /**
@@ -44,37 +44,4 @@ public class PreviewOrderItemDTO {
    * 商品Id
    */
   private String goodId;
-
-  /**
-   * 通过ShopCart生成PreviewOrderItem
-   * 
-   * @param shopCart
-   *          购物车项
-   * @return 预览项
-   */
-  public static PreviewOrderItemDTO fromShopCart(ShopCartDTO shopCart) {
-    if (null == shopCart) {
-      return null;
-    }
-    PreviewOrderItemDTO previeworderItem = new PreviewOrderItemDTO();
-    previeworderItem.setCount(shopCart.getCount());
-    previeworderItem.setGoodId(shopCart.getGoodId());
-    previeworderItem.setShopCartId(shopCart.getId());
-    return previeworderItem;
-  }
-
-  /**
-   * 使用提供的updateOrderItem更新预览项
-   * 
-   * @param updateOrderItem
-   *          预览项
-   */
-  public void update(PreviewOrderItemDTO updateOrderItem) {
-    if (null == updateOrderItem) {
-      return;
-    }
-    if (updateOrderItem.count != 0) {
-      this.count = updateOrderItem.count;
-    }
-  }
 }

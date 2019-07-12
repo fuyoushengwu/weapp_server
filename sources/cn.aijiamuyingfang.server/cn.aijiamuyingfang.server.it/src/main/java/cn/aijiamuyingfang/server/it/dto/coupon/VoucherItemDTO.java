@@ -6,9 +6,7 @@ import javax.persistence.Id;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import cn.aijiamuyingfang.commons.utils.StringUtils;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * [描述]:
@@ -21,9 +19,8 @@ import lombok.NoArgsConstructor;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-06-27 03:11:54
  */
-@Entity
+@Entity(name = "voucher_item")
 @Data
-@NoArgsConstructor
 public class VoucherItemDTO {
   @Id
   @GeneratedValue(generator = "strategy_uuid")
@@ -54,28 +51,4 @@ public class VoucherItemDTO {
    * 多少兑换值可以兑换商品
    */
   private int score;
-
-  /**
-   * 使用提供的VoucherItem更新本商品兑换券信息
-   * 
-   * @param updateVoucherItem
-   *          要更新的兑换券信息
-   */
-  public void update(VoucherItemDTO updateVoucherItem) {
-    if (null == updateVoucherItem) {
-      return;
-    }
-    if (StringUtils.hasContent(updateVoucherItem.name)) {
-      this.name = updateVoucherItem.name;
-    }
-    if (StringUtils.hasContent(updateVoucherItem.description)) {
-      this.description = updateVoucherItem.description;
-    }
-    if (StringUtils.hasContent(updateVoucherItem.goodId)) {
-      this.goodId = updateVoucherItem.goodId;
-    }
-    if (updateVoucherItem.score > 0) {
-      this.score = updateVoucherItem.score;
-    }
-  }
 }

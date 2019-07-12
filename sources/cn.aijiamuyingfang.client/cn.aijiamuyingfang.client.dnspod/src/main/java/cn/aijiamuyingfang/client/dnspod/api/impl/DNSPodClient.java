@@ -9,13 +9,13 @@ import java.net.URL;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
-import cn.aijiamuyingfang.client.commons.utils.StringUtils;
 import cn.aijiamuyingfang.client.dnspod.api.DNSPodApi;
 import cn.aijiamuyingfang.client.dnspod.domain.CreateRecordRequest;
 import cn.aijiamuyingfang.client.dnspod.domain.DomainRequest;
 import cn.aijiamuyingfang.client.dnspod.domain.SubDomainRecordListResponse;
 import cn.aijiamuyingfang.client.dnspod.domain.UpdateRecordRequest;
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
+import cn.aijiamuyingfang.vo.utils.StringUtils;
 
 /**
  * [描述]:
@@ -58,9 +58,9 @@ public class DNSPodClient {
   public void updateDNSPod(String domain, String tokenId, String tokenValue) throws IOException {
     String[] domainArrary = domain.split("\\.");
     String rootDomain = domainArrary[domainArrary.length - 2] + '.' + domainArrary[domainArrary.length - 1];
-    String prefixDomain = domain.replace(rootDomain, "");
-    if (prefixDomain.endsWith(".")) {
-      prefixDomain = prefixDomain.substring(0, prefixDomain.length() - 1);
+    String domainPrefix = domain.replace(rootDomain, "");
+    if (domainPrefix.endsWith(".")) {
+      domainPrefix = domainPrefix.substring(0, domainPrefix.length() - 1);
     }
 
     DomainRequest request = new DomainRequest(tokenId, tokenValue, rootDomain);
@@ -70,7 +70,7 @@ public class DNSPodClient {
     SubDomainRecordListResponse.Record wildRecord = null;
     if (subDomainListResponse != null && CollectionUtils.isNotEmpty(subDomainListResponse.getRecords())) {
       for (SubDomainRecordListResponse.Record record : subDomainListResponse.getRecords()) {
-        if (prefixDomain.equals(record.getSubDomain())) {
+        if (domainPrefix.equals(record.getSubDomain())) {
           equalRecord = record;
         }
         if ("*".equals(record.getSubDomain())) {
@@ -78,6 +78,24 @@ public class DNSPodClient {
         }
       }
     }
+    
+    syncRealIP(tokenId, tokenValue, rootDomain, domainPrefix, equalRecord, wildRecord);
+  }
+
+
+  /**
+   * 域名同步真實IP
+   * @param tokenId
+   * @param tokenValue
+   * @param rootDomain
+   * @param domainPrefix
+   * @param equalRecord
+   * @param wildRecord
+   * @throws IOException
+   */
+  private void syncRealIP(String tokenId, String tokenValue, String rootDomain, String domainPrefix,
+      SubDomainRecordListResponse.Record equalRecord, SubDomainRecordListResponse.Record wildRecord)
+      throws IOException {
     String actualIp = getPublicIP();
     String recordIp = null;
     String recordId = null;
@@ -92,16 +110,17 @@ public class DNSPodClient {
       recordLine = wildRecord.getArea();
     } else {
       CreateRecordRequest createRecordRequest = new CreateRecordRequest(tokenId, tokenValue, rootDomain, actualIp);
-      createRecordRequest.setSubDomain(StringUtils.hasContent(prefixDomain) ? prefixDomain : "@");
+      createRecordRequest.setSubDomain(StringUtils.hasContent(domainPrefix) ? domainPrefix : "@");
       dnspodApi.createRecord(createRecordRequest.toPartMap()).execute();
       return;
     }
     if (!actualIp.equals(recordIp)) {
-      UpdateRecordRequest updateRecordRequest = new UpdateRecordRequest(tokenId, tokenValue, rootDomain, prefixDomain,
+      UpdateRecordRequest updateRecordRequest = new UpdateRecordRequest(tokenId, tokenValue, rootDomain, domainPrefix,
           recordId, recordLine);
       dnspodApi.updateDynamicDNS(updateRecordRequest.toPartMap()).execute();
     }
   }
+  
 
   public String getPublicIP() throws IOException {
     StringBuilder content = new StringBuilder();

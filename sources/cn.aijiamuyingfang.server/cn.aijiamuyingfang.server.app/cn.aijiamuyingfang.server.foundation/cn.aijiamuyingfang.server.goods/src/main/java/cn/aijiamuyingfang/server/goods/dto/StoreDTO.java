@@ -17,10 +17,11 @@ import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import cn.aijiamuyingfang.commons.utils.StringUtils;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import cn.aijiamuyingfang.commons.utils.CollectionUtils;
+import cn.aijiamuyingfang.server.goods.utils.ConvertUtils;
+import cn.aijiamuyingfang.vo.store.Store;
+import cn.aijiamuyingfang.vo.utils.StringUtils;
+import lombok.Data;
 
 /**
  * [描述]:
@@ -33,10 +34,8 @@ import lombok.Setter;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-06-27 00:12:21
  */
-@Entity
-@Getter
-@Setter
-@NoArgsConstructor
+@Entity(name = "store")
+@Data
 public class StoreDTO {
 
   /**
@@ -89,24 +88,24 @@ public class StoreDTO {
    * @param updateStore
    *          要更新的门店信息
    */
-  public void update(StoreDTO updateStore) {
+  public void update(Store updateStore) {
     if (null == updateStore) {
       return;
     }
-    if (StringUtils.hasContent(updateStore.name)) {
-      this.name = updateStore.name;
+    if (StringUtils.hasContent(updateStore.getName())) {
+      this.setName(updateStore.getName());
     }
-    if (updateStore.workTime != null) {
-      this.workTime.update(updateStore.workTime);
+    if (updateStore.getWorkTime() != null && this.workTime != null) {
+      this.workTime.update(updateStore.getWorkTime());
     }
-    if (updateStore.coverImg != null) {
-      this.coverImg.update(updateStore.coverImg);
+    if (updateStore.getCoverImg() != null) {
+      this.setCoverImg(ConvertUtils.convertImageSource(updateStore.getCoverImg()));
     }
-    if (updateStore.detailImgList != null && !updateStore.detailImgList.isEmpty()) {
-      this.detailImgList = updateStore.detailImgList;
+    if (CollectionUtils.hasContent(updateStore.getDetailImgList())) {
+      this.setDetailImgList(ConvertUtils.convertImageSourceList(updateStore.getDetailImgList()));
     }
-    if (updateStore.storeAddress != null) {
-      this.storeAddress = updateStore.storeAddress;
+    if (updateStore.getStoreAddress() != null) {
+      this.setStoreAddress(ConvertUtils.convertStoreAddress(updateStore.getStoreAddress()));
     }
   }
 }

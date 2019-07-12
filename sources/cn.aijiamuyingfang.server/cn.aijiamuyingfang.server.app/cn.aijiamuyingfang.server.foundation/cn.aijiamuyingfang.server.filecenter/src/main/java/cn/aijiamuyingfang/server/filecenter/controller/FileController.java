@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import cn.aijiamuyingfang.server.domain.FileSource;
-import cn.aijiamuyingfang.server.filecenter.domain.response.PagableFileInfoList;
-import cn.aijiamuyingfang.server.filecenter.dto.FileInfoDTO;
 import cn.aijiamuyingfang.server.filecenter.service.FileService;
 import cn.aijiamuyingfang.server.filecenter.service.FileServiceFactory;
+import cn.aijiamuyingfang.vo.filecenter.FileInfo;
+import cn.aijiamuyingfang.vo.filecenter.FileSource;
+import cn.aijiamuyingfang.vo.filecenter.PagableFileInfoList;
 
 @RestController
 public class FileController {
@@ -35,7 +35,7 @@ public class FileController {
    */
   @PreAuthorize("hasAuthority('permission:manager:*')")
   @PostMapping(value = "/files", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public FileInfoDTO upload(@RequestPart("file") MultipartFile file,
+  public FileInfo upload(@RequestPart("file") MultipartFile file,
       @RequestParam(value = "source", required = false) FileSource fileSource) {
     FileService fileService = fileServiceFactory.getFileServiceBySource(fileSource);
     return fileService.upload(file, fileSource);

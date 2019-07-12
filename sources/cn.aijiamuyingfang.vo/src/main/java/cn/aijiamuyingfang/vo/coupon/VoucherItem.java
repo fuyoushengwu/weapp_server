@@ -2,7 +2,6 @@ package cn.aijiamuyingfang.vo.coupon;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import cn.aijiamuyingfang.vo.goods.Good;
 import lombok.Data;
 
 /**
@@ -36,10 +35,10 @@ public class VoucherItem implements Parcelable {
   private String description;
 
   /**
-   * 兑换券关联的商品
+   * 兑换券关联的商品ID
    */
-  private Good good;
-
+  private String goodId;
+  
   /**
    * 多少兑换值可以兑换商品
    */
@@ -56,7 +55,7 @@ public class VoucherItem implements Parcelable {
     dest.writeByte((byte) (deprecated ? 1 : 0));
     dest.writeString(name);
     dest.writeString(description);
-    dest.writeParcelable(good, flags);
+    dest.writeString(goodId);
     dest.writeInt(score);
   }
 
@@ -68,7 +67,7 @@ public class VoucherItem implements Parcelable {
     deprecated = in.readByte() != 0;
     name = in.readString();
     description = in.readString();
-    good = in.readParcelable(Good.class.getClassLoader());
+    goodId = in.readString();
     score = in.readInt();
   }
 

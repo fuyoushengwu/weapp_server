@@ -55,8 +55,8 @@ public class UserTestActions extends AbstractTestAction {
 
   @TargetDataSource(name = "weapp-user")
   public void clearUserPhone(String userId) {
-    UserDTO user = userRepository.findOne(userId);
-    user.setPhone(null);
-    userRepository.save(user);
+    UserDTO userDTO = userRepository.findOne(userId);
+    userDTO.setPhone(null);
+    userRepository.save(userDTO);
   }
 }

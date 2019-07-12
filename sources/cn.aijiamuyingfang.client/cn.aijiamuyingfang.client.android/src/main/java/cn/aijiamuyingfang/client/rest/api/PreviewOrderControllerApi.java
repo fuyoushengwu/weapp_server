@@ -2,7 +2,7 @@ package cn.aijiamuyingfang.client.rest.api;
 
 import java.util.List;
 
-import cn.aijiamuyingfang.vo.ResponseBean;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
 import cn.aijiamuyingfang.vo.review.PreviewOrder;
 import cn.aijiamuyingfang.vo.review.PreviewOrderItem;
 import io.reactivex.Observable;

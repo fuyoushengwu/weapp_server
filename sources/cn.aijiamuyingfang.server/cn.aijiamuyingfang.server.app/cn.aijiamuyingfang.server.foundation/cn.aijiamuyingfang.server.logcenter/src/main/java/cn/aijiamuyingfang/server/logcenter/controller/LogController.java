@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import cn.aijiamuyingfang.commons.constants.LogConstants;
-import cn.aijiamuyingfang.server.logcenter.domain.response.PagableLogList;
-import cn.aijiamuyingfang.server.logcenter.dto.LogDTO;
 import cn.aijiamuyingfang.server.logcenter.service.LogService;
+import cn.aijiamuyingfang.vo.logcenter.Log;
+import cn.aijiamuyingfang.vo.logcenter.PagableLogList;
 
 @RestController
 public class LogController {
@@ -26,7 +26,7 @@ public class LogController {
    * @param log
    */
   @PostMapping("/logs-anon/internal")
-  public void save(@RequestBody LogDTO log) {
+  public void save(@RequestBody Log log) {
     logService.save(log);
   }
 

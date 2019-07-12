@@ -9,15 +9,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import cn.aijiamuyingfang.commons.utils.StringUtils;
-import cn.aijiamuyingfang.server.domain.address.City;
-import cn.aijiamuyingfang.server.domain.response.ResponseCode;
-import cn.aijiamuyingfang.server.exception.GoodsException;
+import cn.aijiamuyingfang.server.dto.address.CityDTO;
 import cn.aijiamuyingfang.server.goods.db.StoreAddressRepository;
 import cn.aijiamuyingfang.server.goods.db.StoreRepository;
-import cn.aijiamuyingfang.server.goods.domain.response.PagableStoreList;
-import cn.aijiamuyingfang.server.goods.dto.StoreDTO;
 import cn.aijiamuyingfang.server.goods.dto.StoreAddressDTO;
+import cn.aijiamuyingfang.server.goods.dto.StoreDTO;
+import cn.aijiamuyingfang.server.goods.utils.ConvertUtils;
+import cn.aijiamuyingfang.vo.exception.GoodsException;
+import cn.aijiamuyingfang.vo.response.ResponseCode;
+import cn.aijiamuyingfang.vo.store.PagableStoreList;
+import cn.aijiamuyingfang.vo.store.Store;
+import cn.aijiamuyingfang.vo.store.StoreAddress;
+import cn.aijiamuyingfang.vo.utils.StringUtils;
 
 /**
  * [描述]:
@@ -59,11 +62,11 @@ public class StoreService {
 
     // PageRequest的Page参数是基于0的,但是currentPage是基于1的,所有将currentPage作为参数传递给PgeRequest时需要'-1'
     PageRequest pageRequest = new PageRequest(currentPage - 1, pageSize);
-    Page<StoreDTO> storePage = storeRepository.findInUseStores(pageRequest);
+    Page<StoreDTO> storeDTOPage = storeRepository.findInUseStores(pageRequest);
     PagableStoreList response = new PagableStoreList();
-    response.setCurrentPage(storePage.getNumber() + 1);
-    response.setDataList(storePage.getContent());
-    response.setTotalpage(storePage.getTotalPages());
+    response.setCurrentPage(storeDTOPage.getNumber() + 1);
+    response.setDataList(ConvertUtils.convertStoreDTOList(storeDTOPage.getContent()));
+    response.setTotalpage(storeDTOPage.getTotalPages());
     return response;
   }
 
@@ -72,18 +75,18 @@ public class StoreService {
    * 
    * @param store
    */
-  public StoreDTO createORUpdateStore(StoreDTO store) {
+  public Store createORUpdateStore(Store store) {
     if (null == store) {
-      store = new StoreDTO();
+      store = new Store();
     }
     if (StringUtils.hasContent(store.getId())) {
-      StoreDTO oriStore = storeRepository.findOne(store.getId());
-      if (oriStore != null) {
-        oriStore.update(store);
-        return storeRepository.saveAndFlush(oriStore);
+      StoreDTO oriStoreDTO = storeRepository.findOne(store.getId());
+      if (oriStoreDTO != null) {
+        oriStoreDTO.update(store);
+        return ConvertUtils.convertStoreDTO(storeRepository.saveAndFlush(oriStoreDTO));
       }
     }
-    return storeRepository.saveAndFlush(store);
+    return ConvertUtils.convertStoreDTO(storeRepository.saveAndFlush(ConvertUtils.convertStore(store)));
   }
 
   /**
@@ -93,8 +96,8 @@ public class StoreService {
    *          门店ID
    * @return
    */
-  public StoreDTO getStore(String storeId) {
-    return storeRepository.findOne(storeId);
+  public Store getStore(String storeId) {
+    return ConvertUtils.convertStoreDTO(storeRepository.findOne(storeId));
   }
 
   /**
@@ -103,8 +106,8 @@ public class StoreService {
    * @param storeaddressId
    * @return
    */
-  public StoreAddressDTO getStoreAddress(String storeaddressId) {
-    return storeaddressRepository.findOne(storeaddressId);
+  public StoreAddress getStoreAddress(String storeaddressId) {
+    return ConvertUtils.convertStoreAddressDTO(storeaddressRepository.findOne(storeaddressId));
   }
 
   /**
@@ -113,16 +116,16 @@ public class StoreService {
    * @param storeId
    * @param updateStore
    */
-  public StoreDTO updateStore(String storeId, StoreDTO updateStore) {
-    StoreDTO store = storeRepository.findOne(storeId);
-    if (null == store) {
+  public Store updateStore(String storeId, Store updateStore) {
+    StoreDTO storeDTO = storeRepository.findOne(storeId);
+    if (null == storeDTO) {
       throw new GoodsException(ResponseCode.STORE_NOT_EXIST, storeId);
     }
     if (null == updateStore) {
-      return store;
+      return ConvertUtils.convertStoreDTO(storeDTO);
     }
-    store.update(updateStore);
-    return storeRepository.saveAndFlush(store);
+    storeDTO.update(updateStore);
+    return ConvertUtils.convertStoreDTO(storeRepository.saveAndFlush(storeDTO));
   }
 
   /**
@@ -131,17 +134,17 @@ public class StoreService {
    * @param storeId
    */
   public void deprecateStore(String storeId) {
-    StoreDTO store = storeRepository.findOne(storeId);
-    if (null == store) {
+    StoreDTO storeDTO = storeRepository.findOne(storeId);
+    if (null == storeDTO) {
       throw new GoodsException(ResponseCode.STORE_NOT_EXIST, storeId);
     }
-    store.setDeprecated(true);
-    storeRepository.saveAndFlush(store);
+    storeDTO.setDeprecated(true);
+    storeRepository.saveAndFlush(storeDTO);
 
-    StoreAddressDTO storeaddress = store.getStoreAddress();
-    if (storeaddress != null) {
-      storeaddress.setDeprecated(true);
-      storeaddressRepository.saveAndFlush(storeaddress);
+    StoreAddressDTO storeAddressDTO = storeDTO.getStoreAddress();
+    if (storeAddressDTO != null) {
+      storeAddressDTO.setDeprecated(true);
+      storeaddressRepository.saveAndFlush(storeAddressDTO);
     }
 
   }
@@ -152,16 +155,16 @@ public class StoreService {
    * @return
    */
   public Set<String> getStoresCity() {
-    List<StoreDTO> stores = storeRepository.findInUseStores();
+    List<StoreDTO> storeDTOList = storeRepository.findInUseStores();
     Set<String> storeCity = new HashSet<>();
-    for (StoreDTO store : stores) {
-      StoreAddressDTO storeaddress = store.getStoreAddress();
-      if (null == storeaddress) {
+    for (StoreDTO storeDTO : storeDTOList) {
+      StoreAddressDTO storeAddressDTO = storeDTO.getStoreAddress();
+      if (null == storeAddressDTO) {
         continue;
       }
-      City city = storeaddress.getCity();
-      if (city != null && StringUtils.hasContent(city.getName())) {
-        storeCity.add(city.getName());
+      CityDTO cityDTO = storeAddressDTO.getCity();
+      if (cityDTO != null && StringUtils.hasContent(cityDTO.getName())) {
+        storeCity.add(cityDTO.getName());
       }
     }
     return storeCity;

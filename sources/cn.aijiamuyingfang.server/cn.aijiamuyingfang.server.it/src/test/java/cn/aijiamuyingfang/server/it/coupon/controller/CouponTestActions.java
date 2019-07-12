@@ -34,7 +34,7 @@ public class CouponTestActions extends AbstractTestAction {
       voucherItemRequest.setName("voucher item 1");
       voucherItemRequest.setDescription("voucher item 1");
       voucherItemRequest.setScore(120);
-      voucherItemRequest.setGood(getGoodOne());
+      voucherItemRequest.setGoodId(getGoodOne().getId());
       this.voucherItemOne = couponControllerClient.createVoucherItem(voucherItemRequest, getAdminAccessToken());
     }
     return voucherItemOne;
@@ -46,7 +46,7 @@ public class CouponTestActions extends AbstractTestAction {
       voucherItemRequest.setName("voucher item 2");
       voucherItemRequest.setDescription("voucher item 2");
       voucherItemRequest.setScore(120);
-      voucherItemRequest.setGood(getGoodTwo());
+      voucherItemRequest.setGoodId(getGoodTwo().getId());
       this.voucherItemTwo = couponControllerClient.createVoucherItem(voucherItemRequest, getAdminAccessToken());
     }
     return voucherItemTwo;

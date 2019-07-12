@@ -8,15 +8,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import cn.aijiamuyingfang.client.commons.exception.OAuthException;
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.UserControllerApi;
-import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
-import cn.aijiamuyingfang.vo.ResponseBean;
-import cn.aijiamuyingfang.vo.ResponseCode;
+import cn.aijiamuyingfang.client.rest.utils.ResponseUtils;
+import cn.aijiamuyingfang.vo.exception.OAuthException;
 import cn.aijiamuyingfang.vo.exception.UserException;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
+import cn.aijiamuyingfang.vo.response.ResponseCode;
 import cn.aijiamuyingfang.vo.user.RecieveAddress;
 import cn.aijiamuyingfang.vo.user.User;
+import cn.aijiamuyingfang.vo.utils.JsonUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,7 +42,7 @@ public class UserControllerClient {
 
     @Override
     public void onResponse(Call<ResponseBean> call, Response<ResponseBean> response) {
-      LOGGER.info("onResponse:" + response.message());
+      LOGGER.info("onResponse:{}", response.message());
     }
 
     @Override
@@ -340,21 +341,8 @@ public class UserControllerClient {
       userControllerApi.deprecateRecieveAddress(username, addressId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<
-        ResponseBean> response = userControllerApi.deprecateRecieveAddress(username, addressId, accessToken).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      if (response.errorBody() != null) {
-        LOGGER.error(new String(response.errorBody().bytes()));
-      }
-      throw new UserException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    if ("200".equals(returnCode)) {
-      return;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new UserException(returnCode, responseBean.getMsg());
+    ResponseUtils.handleUserVOIDResponse(
+        userControllerApi.deprecateRecieveAddress(username, addressId, accessToken).execute(), LOGGER);
   }
 
 }

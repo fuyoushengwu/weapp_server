@@ -15,10 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import cn.aijiamuyingfang.commons.annotation.LogAnnotation;
 import cn.aijiamuyingfang.commons.constants.LogConstants;
-import cn.aijiamuyingfang.commons.utils.JsonUtils;
-import cn.aijiamuyingfang.server.logstarter.domain.Log;
-import cn.aijiamuyingfang.server.logstarter.domain.User;
 import cn.aijiamuyingfang.server.logstarter.utils.UserUtils;
+import cn.aijiamuyingfang.vo.logcenter.Log;
+import cn.aijiamuyingfang.vo.user.User;
+import cn.aijiamuyingfang.vo.utils.JsonUtils;
 
 /**
  * [描述]:
@@ -60,7 +60,7 @@ public class LogAop {
         }
 
         try {
-          log.setParams(JsonUtils.toJson(params));
+          log.setParams(JsonUtils.bean2Json(params));
         } catch (Exception e) {
           logger.error("记录参数失败:{}", e.getMessage());
         }

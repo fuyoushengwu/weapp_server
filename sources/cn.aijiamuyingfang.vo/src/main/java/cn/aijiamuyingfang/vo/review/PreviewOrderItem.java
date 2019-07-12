@@ -36,4 +36,22 @@ public class PreviewOrderItem {
    * 商品
    */
   private Good good;
+
+  /**
+   * 通过ShopCart生成PreviewOrderItem
+   * 
+   * @param shopCart
+   *          购物车项
+   * @return 预览项
+   */
+  public static PreviewOrderItem fromShopCart(ShopCart shopCart) {
+    if (null == shopCart) {
+      return null;
+    }
+    PreviewOrderItem previeworderItem = new PreviewOrderItem();
+    previeworderItem.setCount(shopCart.getCount());
+    previeworderItem.setGood(shopCart.getGood());
+    previeworderItem.setShopCart(shopCart);
+    return previeworderItem;
+  }
 }

@@ -25,6 +25,7 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import cn.aijiamuyingfang.client.commons.domain.EnumRetrofitConverterFactory;
+import cn.aijiamuyingfang.vo.utils.StringUtils;
 import lombok.experimental.UtilityClass;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -66,10 +67,12 @@ public class RetrofitUtils {
   private static final TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
     @Override
     public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) {
+      // 信任所有证书,不需要做检查
     }
 
     @Override
     public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) {
+      // 信任所有证书,不需要做检查
     }
 
     @Override
@@ -145,5 +148,4 @@ public class RetrofitUtils {
     retrofitBuilder.baseUrl(baseurl);
     return retrofitBuilder;
   }
-
 }

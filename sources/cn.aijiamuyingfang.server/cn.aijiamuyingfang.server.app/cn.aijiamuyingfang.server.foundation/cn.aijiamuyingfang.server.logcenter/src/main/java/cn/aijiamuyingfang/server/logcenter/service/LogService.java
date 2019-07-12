@@ -12,8 +12,10 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import cn.aijiamuyingfang.server.logcenter.db.LogRepository;
-import cn.aijiamuyingfang.server.logcenter.domain.response.PagableLogList;
 import cn.aijiamuyingfang.server.logcenter.dto.LogDTO;
+import cn.aijiamuyingfang.server.logcenter.utils.ConvertUtils;
+import cn.aijiamuyingfang.vo.logcenter.Log;
+import cn.aijiamuyingfang.vo.logcenter.PagableLogList;
 
 /**
  * [描述]:
@@ -37,14 +39,14 @@ public class LogService {
    * @param log
    */
   @Async
-  public void save(LogDTO log) {
+  public void save(Log log) {
     if (null == log) {
       return;
     }
     if (null == log.getCreateTime()) {
       log.setCreateTime(new Date());
     }
-    logRepository.saveAndFlush(log);
+    logRepository.saveAndFlush(ConvertUtils.convertLog(log));
   }
 
   /**
@@ -64,11 +66,11 @@ public class LogService {
     }
     String whereSql = whereSqlBuilder.toString();
     whereSql = whereSql.substring(0, whereSql.length() - 5);
-    Page<LogDTO> logPage = logRepository.findLog(whereSql, pagable);
+    Page<LogDTO> logDTOPage = logRepository.findLog(whereSql, pagable);
     PagableLogList response = new PagableLogList();
-    response.setCurrentPage(logPage.getNumber() + 1);
-    response.setDataList(logPage.getContent());
-    response.setTotalpage(logPage.getTotalPages());
+    response.setCurrentPage(logDTOPage.getNumber() + 1);
+    response.setDataList(ConvertUtils.convertLogDTOList(logDTOPage.getContent()));
+    response.setTotalpage(logDTOPage.getTotalPages());
     return response;
   }
 

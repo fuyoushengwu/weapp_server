@@ -6,13 +6,13 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
-import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
 import cn.aijiamuyingfang.server.it.data.qinsilk.GetGoodListRequest;
 import cn.aijiamuyingfang.server.it.data.qinsilk.Good;
 import cn.aijiamuyingfang.server.it.data.qinsilk.GoodImage;
 import cn.aijiamuyingfang.server.it.data.qinsilk.ResponseBean;
-import cn.aijiamuyingfang.vo.ResponseCode;
 import cn.aijiamuyingfang.vo.exception.GoodsException;
+import cn.aijiamuyingfang.vo.response.ResponseCode;
+import cn.aijiamuyingfang.vo.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import retrofit2.Response;
 

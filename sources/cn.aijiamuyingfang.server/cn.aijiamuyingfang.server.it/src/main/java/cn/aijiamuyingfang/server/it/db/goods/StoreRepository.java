@@ -25,9 +25,8 @@ import cn.aijiamuyingfang.server.it.dto.goods.StoreDTO;
 
 @Repository
 public interface StoreRepository extends JpaRepository<StoreDTO, String> {
-
   @Override
-  @Query(value = "select s from Store s where s.id=:id and s.deprecated=false")
+  @Query(value = "select * from store where id=:id and deprecated=false", nativeQuery = true)
   StoreDTO findOne(@Param("id") String id);
 
   /**
@@ -37,8 +36,8 @@ public interface StoreRepository extends JpaRepository<StoreDTO, String> {
    *          分页信息
    * @return
    */
-  @Query(value = "select  * from store where deprecated=false  order by ?#{#pageable}",
-      countQuery = "select count(*) from store where deprecated=false  order by ?#{#pageable}", nativeQuery = true)
+  @Query(value = "select * from store where deprecated=false order by ?#{#pageable}",
+      countQuery = "select count(*) from store where deprecated=false order by ?#{#pageable}", nativeQuery = true)
   Page<StoreDTO> findInUseStores(Pageable pageable);
 
   /**
@@ -46,7 +45,6 @@ public interface StoreRepository extends JpaRepository<StoreDTO, String> {
    * 
    * @return
    */
-  @Query(value = "select  * from store where deprecated=false", nativeQuery = true)
+  @Query(value = "select * from store where deprecated=false", nativeQuery = true)
   List<StoreDTO> findInUseStores();
-
 }

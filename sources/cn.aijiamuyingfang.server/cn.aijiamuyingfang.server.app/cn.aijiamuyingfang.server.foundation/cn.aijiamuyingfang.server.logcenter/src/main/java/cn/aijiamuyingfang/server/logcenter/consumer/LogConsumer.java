@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import cn.aijiamuyingfang.commons.constants.LogConstants;
-import cn.aijiamuyingfang.server.logcenter.dto.LogDTO;
 import cn.aijiamuyingfang.server.logcenter.service.LogService;
+import cn.aijiamuyingfang.vo.logcenter.Log;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -29,7 +29,7 @@ public class LogConsumer {
   private LogService logService;
 
   @RabbitHandler
-  public void logHandler(LogDTO log) {
+  public void logHandler(Log log) {
     try {
       logService.save(log);
     } catch (Exception e) {

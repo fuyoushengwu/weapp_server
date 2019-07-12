@@ -1,6 +1,6 @@
 package cn.aijiamuyingfang.client.rest.api;
 
-import cn.aijiamuyingfang.vo.ResponseBean;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
 import cn.aijiamuyingfang.vo.shopcart.CreateShopCartRequest;
 import cn.aijiamuyingfang.vo.shopcart.PagableShopCartList;
 import cn.aijiamuyingfang.vo.shopcart.ShopCart;

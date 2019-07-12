@@ -3,8 +3,8 @@ package cn.aijiamuyingfang.client.rest.api;
 import java.util.List;
 import java.util.Map;
 
-import cn.aijiamuyingfang.vo.ResponseBean;
 import cn.aijiamuyingfang.vo.preorder.PagablePreOrderGoodList;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
 import cn.aijiamuyingfang.vo.shoporder.ConfirmShopOrderFinishedResponse;
 import cn.aijiamuyingfang.vo.shoporder.CreateShopOrderRequest;
 import cn.aijiamuyingfang.vo.shoporder.PagableShopOrderList;

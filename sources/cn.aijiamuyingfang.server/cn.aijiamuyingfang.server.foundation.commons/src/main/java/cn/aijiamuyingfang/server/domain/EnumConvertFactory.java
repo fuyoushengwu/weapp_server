@@ -7,7 +7,13 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterFactory;
 import org.springframework.security.core.GrantedAuthority;
 
-import cn.aijiamuyingfang.commons.utils.NumberUtils;
+import cn.aijiamuyingfang.vo.BaseEnum;
+import cn.aijiamuyingfang.vo.message.UserMessageType;
+import cn.aijiamuyingfang.vo.shoporder.SendType;
+import cn.aijiamuyingfang.vo.shoporder.ShopOrderStatus;
+import cn.aijiamuyingfang.vo.user.Gender;
+import cn.aijiamuyingfang.vo.user.UserAuthority;
+import cn.aijiamuyingfang.vo.utils.NumberUtils;
 
 public class EnumConvertFactory implements ConverterFactory<String, BaseEnum> {
   private static final Map<Class<?>, Converter<String, ? extends BaseEnum>> converterMap = new WeakHashMap<>();

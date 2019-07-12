@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.vo;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * [描述]:
  * <p>
@@ -12,5 +14,6 @@ package cn.aijiamuyingfang.vo;
  * @date 2018-06-27 03:38:50
  */
 public interface BaseEnum {
+  @JsonValue
   int getValue();
 }

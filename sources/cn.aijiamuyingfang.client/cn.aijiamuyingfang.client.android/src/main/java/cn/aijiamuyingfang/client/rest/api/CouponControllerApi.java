@@ -1,11 +1,11 @@
 package cn.aijiamuyingfang.client.rest.api;
 
-import cn.aijiamuyingfang.vo.ResponseBean;
 import cn.aijiamuyingfang.vo.coupon.GoodVoucher;
 import cn.aijiamuyingfang.vo.coupon.PagableGoodVoucherList;
 import cn.aijiamuyingfang.vo.coupon.PagableUserVoucherList;
 import cn.aijiamuyingfang.vo.coupon.PagableVoucherItemList;
 import cn.aijiamuyingfang.vo.coupon.VoucherItem;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;

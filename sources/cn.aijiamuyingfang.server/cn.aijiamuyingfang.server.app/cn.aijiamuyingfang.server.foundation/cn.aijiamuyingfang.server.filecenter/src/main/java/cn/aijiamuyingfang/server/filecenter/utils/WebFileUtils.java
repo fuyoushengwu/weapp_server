@@ -10,8 +10,8 @@ import java.util.Date;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import cn.aijiamuyingfang.server.exception.FileCenterException;
-import cn.aijiamuyingfang.server.filecenter.dto.FileInfoDTO;
+import cn.aijiamuyingfang.vo.exception.FileCenterException;
+import cn.aijiamuyingfang.vo.filecenter.FileInfo;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,8 +35,8 @@ public class WebFileUtils {
    * @param file
    * @return
    */
-  public static FileInfoDTO extractFileInfo(MultipartFile file) {
-    FileInfoDTO fileInfo = new FileInfoDTO();
+  public static FileInfo extractFileInfo(MultipartFile file) {
+    FileInfo fileInfo = new FileInfo();
     try {
       fileInfo.setId(md5(file.getInputStream()));
     } catch (IOException e) {

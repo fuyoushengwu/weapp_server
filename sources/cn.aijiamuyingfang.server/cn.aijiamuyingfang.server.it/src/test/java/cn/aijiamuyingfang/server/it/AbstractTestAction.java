@@ -14,7 +14,6 @@ import cn.aijiamuyingfang.client.rest.api.impl.PreviewOrderControllerClient;
 import cn.aijiamuyingfang.client.rest.api.impl.ShopCartControllerClient;
 import cn.aijiamuyingfang.client.rest.api.impl.ShopOrderControllerClient;
 import cn.aijiamuyingfang.client.rest.api.impl.UserControllerClient;
-import cn.aijiamuyingfang.commons.utils.StringUtils;
 import cn.aijiamuyingfang.server.it.annotation.TargetDataSource;
 import cn.aijiamuyingfang.server.it.db.coupon.GoodVoucherRepository;
 import cn.aijiamuyingfang.server.it.db.coupon.UserVoucherRepository;
@@ -52,6 +51,7 @@ import cn.aijiamuyingfang.vo.user.Gender;
 import cn.aijiamuyingfang.vo.user.RecieveAddress;
 import cn.aijiamuyingfang.vo.user.User;
 import cn.aijiamuyingfang.vo.user.UserAuthority;
+import cn.aijiamuyingfang.vo.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -251,6 +251,23 @@ public abstract class AbstractTestAction {
           recieveaddressRequest, getSenderOneAccessToken());
     }
     return this.senderOneRecieveAddressOne;
+  }
+
+  private RecieveAddress senderOneRecieveAddressTwo;
+
+  public RecieveAddress getSenderOneRecieveTwo() throws IOException {
+    if (null == senderOneRecieveAddressTwo) {
+      RecieveAddress recieveaddressRequest = new RecieveAddress();
+      recieveaddressRequest.setProvince(new Province("jiangsu", "210000"));
+      recieveaddressRequest.setCity(new City("nanjing", "210100"));
+      recieveaddressRequest.setCounty(new County("yuhuaqiao", "210101"));
+      recieveaddressRequest.setTown(new Town("tiexinqiao", "000001"));
+      recieveaddressRequest.setDef(true);
+      recieveaddressRequest.setPhone("11111111111");
+      this.senderOneRecieveAddressTwo = userControllerClient.addUserRecieveAddress(getSenderOne().getUsername(),
+          recieveaddressRequest, getSenderOneAccessToken());
+    }
+    return this.senderOneRecieveAddressTwo;
   }
 
   public User getSenderTwo() throws IOException {
@@ -457,9 +474,9 @@ public abstract class AbstractTestAction {
 
   @TargetDataSource(name = "weapp-user")
   public void clearUser() {
-    userRepository.findAll().forEach(user -> {
-      if (!ADMIN_USER_NAME.equals(user.getUsername())) {
-        userRepository.delete(user);
+    userRepository.findAll().forEach(userDTO -> {
+      if (!ADMIN_USER_NAME.equals(userDTO.getUsername())) {
+        userRepository.delete(userDTO);
       }
     });
     this.senderOne = null;
@@ -473,17 +490,18 @@ public abstract class AbstractTestAction {
   public void clearRecieveAddress() {
     recieveAddressRepository.deleteAll();
     this.senderOneRecieveAddressOne = null;
+    this.senderOneRecieveAddressTwo = null;
   }
 
   @TargetDataSource(name = "weapp-goods")
   public void clearGood() {
-    goodRepository.findAll().forEach(good -> {
-      if (null == good) {
+    goodRepository.findAll().forEach(goodDTO -> {
+      if (null == goodDTO) {
         return;
       }
-      goodRepository.delete(good.getId());
-      if (good.getCoverImg() != null) {
-        deleteImage(good.getCoverImg().getId());
+      goodRepository.delete(goodDTO.getId());
+      if (goodDTO.getCoverImg() != null) {
+        deleteImage(goodDTO.getCoverImg().getId());
       }
 
     });
@@ -498,30 +516,30 @@ public abstract class AbstractTestAction {
 
   @TargetDataSource(name = "weapp-goods")
   public void clearGoodDetail() {
-    goodDetailRepository.findAll().forEach(goodDetail -> {
-      if (null == goodDetail) {
+    goodDetailRepository.findAll().forEach(goodDetailDTO -> {
+      if (null == goodDetailDTO) {
         return;
       }
-      goodDetail.getDetailImgList().forEach(imageSource -> {
+      goodDetailDTO.getDetailImgList().forEach(imageSource -> {
         if (imageSource != null) {
           deleteImage(imageSource.getId());
         }
       });
-      goodDetailRepository.delete(goodDetail);
+      goodDetailRepository.delete(goodDetailDTO);
     });
 
   }
 
   @TargetDataSource(name = "weapp-goods")
   public void clearClassify() {
-    classifyRepository.findAll().forEach(classify -> {
-      if (null == classify) {
+    classifyRepository.findAll().forEach(classifyDTO -> {
+      if (null == classifyDTO) {
         return;
       }
-      if (classify.getCoverImg() != null) {
-        deleteImage(classify.getCoverImg().getId());
+      if (classifyDTO.getCoverImg() != null) {
+        deleteImage(classifyDTO.getCoverImg().getId());
       }
-      classifyRepository.delete(classify);
+      classifyRepository.delete(classifyDTO);
     });
     classifyOne = null;
     subClassifyOne = null;
@@ -529,19 +547,19 @@ public abstract class AbstractTestAction {
 
   @TargetDataSource(name = "weapp-goods")
   public void clearStore() {
-    storeRepository.findAll().forEach(store -> {
-      if (null == store) {
+    storeRepository.findAll().forEach(storeDTO -> {
+      if (null == storeDTO) {
         return;
       }
-      if (store.getCoverImg() != null) {
-        deleteImage(store.getCoverImg().getId());
+      if (storeDTO.getCoverImg() != null) {
+        deleteImage(storeDTO.getCoverImg().getId());
       }
-      store.getDetailImgList().forEach(imageSource -> {
+      storeDTO.getDetailImgList().forEach(imageSource -> {
         if (imageSource != null) {
           deleteImage(imageSource.getId());
         }
       });
-      storeRepository.delete(store);
+      storeRepository.delete(storeDTO);
     });
     storeOne = null;
     storeTwo = null;

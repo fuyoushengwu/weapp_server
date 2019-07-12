@@ -14,7 +14,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.TokenGranter;
-import org.springframework.security.oauth2.provider.TokenRequest;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 import cn.aijiamuyingfang.server.auth.granter.JSCodeTokenGranter;
@@ -64,18 +63,16 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     JSCodeTokenGranter jscodeTokenGranter = new JSCodeTokenGranter(oauth2Service, authenticationManager,
         endpoints.getTokenServices(), endpoints.getClientDetailsService(), endpoints.getOAuth2RequestFactory());
     final TokenGranter delegate = endpoints.getTokenGranter();
-    endpoints.tokenGranter(new TokenGranter() {
-      @Override
-      public OAuth2AccessToken grant(String grantType, TokenRequest tokenRequest) {
-        OAuth2AccessToken result = null;
-        if (delegate != null) {
-          result = delegate.grant(grantType, tokenRequest);
-        }
-        if (null == result) {
-          result = jscodeTokenGranter.grant(grantType, tokenRequest);
-        }
-        return result;
+    endpoints.tokenGranter((grantType, tokenRequest) -> {
+      OAuth2AccessToken result = null;
+      if (delegate != null) {
+        result = delegate.grant(grantType, tokenRequest);
       }
+      if (null == result) {
+        result = jscodeTokenGranter.grant(grantType, tokenRequest);
+      }
+      return result;
+
     });
   }
 

@@ -27,12 +27,13 @@ import cn.aijiamuyingfang.server.coupon.dto.GoodVoucherDTO;
 public interface GoodVoucherRepository extends JpaRepository<GoodVoucherDTO, String> {
 
   @Override
-  @Query(value = "select g from GoodVoucher g where g.id=:voucher_id and g.deprecated=false")
+  @Query(value = "select * from good_voucher where id=:voucher_id and deprecated=false", nativeQuery = true)
   GoodVoucherDTO findOne(@Param("voucher_id") String voucherId);
 
   @Override
-  @Query(value = "select g from GoodVoucher g where g.deprecated=false order by ?#{#pageable}",
-      countQuery = "select count(g) from GoodVoucher g where g.deprecated=false order by ?#{#pageable}")
+  @Query(value = "select * from good_voucher where deprecated=false order by ?#{#pageable}",
+      countQuery = "select count(*) from good_voucher where deprecated=false order by ?#{#pageable}",
+      nativeQuery = true)
   Page<GoodVoucherDTO> findAll(Pageable pageable);
 
   /**

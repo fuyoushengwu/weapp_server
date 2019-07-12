@@ -2,7 +2,7 @@ package cn.aijiamuyingfang.server.goods.dto;
 
 import javax.persistence.Entity;
 
-import cn.aijiamuyingfang.server.domain.address.Address;
+import cn.aijiamuyingfang.server.dto.address.AddressDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,11 +18,11 @@ import lombok.Setter;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-06-25 20:37:56
  */
-@Entity
+@Entity(name = "store_address")
 @Getter
 @Setter
 @NoArgsConstructor
-public class StoreAddressDTO extends Address {
+public class StoreAddressDTO extends AddressDTO {
   /**
    * 店铺地址-联系电话
    */
@@ -32,4 +32,14 @@ public class StoreAddressDTO extends Address {
    * 店铺地址-联系人
    */
   private String contactor;
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return super.equals(obj);
+  }
 }

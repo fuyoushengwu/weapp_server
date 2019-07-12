@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.client.commons.constant;
 
+import okhttp3.MediaType;
+
 /**
  * [描述]:
  * <p>
@@ -35,6 +37,11 @@ public final class ClientRestConstants {
    * 基础地质
    */
   public static final String DEFAULT_BASE_URL = "https://www.aijiamuyingfang.cn:8443";
+  
+  /**
+   * multipart/form-data
+   */
+  public static final MediaType MEDIA_TYPE_MULTIPART = MediaType.parse("multipart/form-data");
 
   private ClientRestConstants() {
   }

@@ -22,13 +22,12 @@ import cn.aijiamuyingfang.server.it.dto.coupon.VoucherItemDTO;
  */
 @Repository
 public interface VoucherItemRepository extends JpaRepository<VoucherItemDTO, String> {
-
   @Override
-  @Query(value = "select v from VoucherItem v where v.id=:id and v.deprecated=false")
+  @Query(value = "select * from voucher_item where id=:id and deprecated=false",nativeQuery = true)
   VoucherItemDTO findOne(@Param("id") String voucherItemId);
 
   @Override
-  @Query(value = "select v from VoucherItem v  where v.deprecated=false order by ?#{#pageable}",
-      countQuery = "select count(v) from VoucherItem v where v.deprecated=false order by ?#{#pageable}")
+  @Query(value = "select * from voucher_item where deprecated=false order by ?#{#pageable}",
+      countQuery = "select count(*) from voucher_item where deprecated=false order by ?#{#pageable}",nativeQuery = true)
   Page<VoucherItemDTO> findAll(Pageable pageable);
 }

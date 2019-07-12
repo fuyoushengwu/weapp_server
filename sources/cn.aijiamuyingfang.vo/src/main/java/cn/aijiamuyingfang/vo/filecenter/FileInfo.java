@@ -2,6 +2,8 @@ package cn.aijiamuyingfang.vo.filecenter;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Data
@@ -23,5 +25,6 @@ public class FileInfo {
 
   private FileSource source;
 
+  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
   private Date createTime;
 }

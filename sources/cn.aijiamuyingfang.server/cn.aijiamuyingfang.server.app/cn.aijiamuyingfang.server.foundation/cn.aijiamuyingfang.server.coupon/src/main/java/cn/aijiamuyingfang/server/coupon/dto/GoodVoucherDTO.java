@@ -11,9 +11,10 @@ import javax.persistence.Id;
 import org.hibernate.annotations.GenericGenerator;
 
 import cn.aijiamuyingfang.commons.utils.CollectionUtils;
-import cn.aijiamuyingfang.commons.utils.StringUtils;
+import cn.aijiamuyingfang.vo.coupon.GoodVoucher;
+import cn.aijiamuyingfang.vo.coupon.VoucherItem;
+import cn.aijiamuyingfang.vo.utils.StringUtils;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * [描述]:
@@ -26,9 +27,8 @@ import lombok.NoArgsConstructor;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-06-27 03:02:06
  */
-@Entity
+@Entity(name = "good_voucher")
 @Data
-@NoArgsConstructor
 public class GoodVoucherDTO {
   /**
    * 兑换券-Id
@@ -67,27 +67,27 @@ public class GoodVoucherDTO {
    * @param updateVoucher
    *          要更新的商品兑换信息
    */
-  public void update(GoodVoucherDTO updateVoucher) {
+  public void update(GoodVoucher updateVoucher) {
     if (null == updateVoucher) {
       return;
     }
-    if (StringUtils.hasContent(updateVoucher.name)) {
-      this.name = updateVoucher.name;
+    if (StringUtils.hasContent(updateVoucher.getName())) {
+      this.setName(updateVoucher.getName());
     }
-    if (StringUtils.hasContent(updateVoucher.description)) {
-      this.description = updateVoucher.description;
+    if (StringUtils.hasContent(updateVoucher.getDescription())) {
+      this.setDescription(updateVoucher.getDescription());
     }
-    if (updateVoucher.score != 0) {
-      this.score = updateVoucher.score;
+    if (updateVoucher.getScore() != 0) {
+      this.setScore(updateVoucher.getScore());
     }
-    if (!CollectionUtils.isEmpty(updateVoucher.voucherItemIdList)) {
-      this.voucherItemIdList = updateVoucher.voucherItemIdList;
-    }
-  }
 
-  public void addVoucherItemId(String voucherItemId) {
-    if (StringUtils.hasContent(voucherItemId)) {
-      this.voucherItemIdList.add(voucherItemId);
+    if (CollectionUtils.hasContent(updateVoucher.getVoucherItemList())) {
+      this.voucherItemIdList = new ArrayList<>();
+      for (VoucherItem voucherItem : updateVoucher.getVoucherItemList()) {
+        if (voucherItem != null) {
+          this.voucherItemIdList.add(voucherItem.getId());
+        }
+      }
     }
   }
 }

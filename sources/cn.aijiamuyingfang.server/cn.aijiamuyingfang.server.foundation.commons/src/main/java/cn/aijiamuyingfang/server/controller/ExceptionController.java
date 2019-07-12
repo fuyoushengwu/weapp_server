@@ -6,16 +6,16 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import cn.aijiamuyingfang.server.domain.response.ResponseBean;
-import cn.aijiamuyingfang.server.domain.response.ResponseCode;
-import cn.aijiamuyingfang.server.exception.CouponException;
-import cn.aijiamuyingfang.server.exception.FileCenterException;
-import cn.aijiamuyingfang.server.exception.GoodsException;
-import cn.aijiamuyingfang.server.exception.OAuthException;
-import cn.aijiamuyingfang.server.exception.ShopCartException;
-import cn.aijiamuyingfang.server.exception.ShopOrderException;
-import cn.aijiamuyingfang.server.exception.UserException;
-import cn.aijiamuyingfang.server.exception.WeChatServiceException;
+import cn.aijiamuyingfang.vo.exception.CouponException;
+import cn.aijiamuyingfang.vo.exception.FileCenterException;
+import cn.aijiamuyingfang.vo.exception.GoodsException;
+import cn.aijiamuyingfang.vo.exception.OAuthException;
+import cn.aijiamuyingfang.vo.exception.ShopCartException;
+import cn.aijiamuyingfang.vo.exception.ShopOrderException;
+import cn.aijiamuyingfang.vo.exception.UserException;
+import cn.aijiamuyingfang.vo.exception.WeChatServiceException;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
+import cn.aijiamuyingfang.vo.response.ResponseCode;
 import lombok.extern.slf4j.Slf4j;
 
 /**

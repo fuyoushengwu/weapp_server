@@ -1,8 +1,10 @@
 package cn.aijiamuyingfang.client.oauth2.utils;
 
-import cn.aijiamuyingfang.client.commons.utils.StringUtils;
+import cn.aijiamuyingfang.vo.utils.StringUtils;
+import lombok.experimental.UtilityClass;
 
-public abstract class Assert {
+@UtilityClass
+public class Assert {
 
   /**
    * Assert that the given String is not empty; that is, it must not be {@code null} and not the

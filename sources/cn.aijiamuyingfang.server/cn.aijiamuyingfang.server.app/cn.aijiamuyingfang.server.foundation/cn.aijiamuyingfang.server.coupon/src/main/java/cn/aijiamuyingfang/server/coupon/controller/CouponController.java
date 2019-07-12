@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import cn.aijiamuyingfang.commons.utils.CollectionUtils;
-import cn.aijiamuyingfang.commons.utils.StringUtils;
-import cn.aijiamuyingfang.server.coupon.domain.response.PagableGoodVoucherList;
-import cn.aijiamuyingfang.server.coupon.domain.response.PagableUserVoucherList;
-import cn.aijiamuyingfang.server.coupon.domain.response.PagableVoucherItemList;
-import cn.aijiamuyingfang.server.coupon.dto.GoodVoucherDTO;
-import cn.aijiamuyingfang.server.coupon.dto.UserVoucherDTO;
-import cn.aijiamuyingfang.server.coupon.dto.VoucherItemDTO;
 import cn.aijiamuyingfang.server.coupon.service.CouponService;
+import cn.aijiamuyingfang.vo.coupon.GoodVoucher;
+import cn.aijiamuyingfang.vo.coupon.PagableGoodVoucherList;
+import cn.aijiamuyingfang.vo.coupon.PagableUserVoucherList;
+import cn.aijiamuyingfang.vo.coupon.PagableVoucherItemList;
+import cn.aijiamuyingfang.vo.coupon.UserVoucher;
+import cn.aijiamuyingfang.vo.coupon.VoucherItem;
+import cn.aijiamuyingfang.vo.utils.StringUtils;
 
 /**
  * [描述]:
@@ -65,7 +65,7 @@ public class CouponController {
       value = "isAuthenticated() and (#username.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
   @PutMapping(value = "/user/{username}/coupon/uservoucher")
   public void updateUserVoucherList(@PathVariable("username") String username,
-      @RequestBody List<UserVoucherDTO> userVoucherList) {
+      @RequestBody List<UserVoucher> userVoucherList) {
     couponService.updateUserVoucher(userVoucherList);
   }
 
@@ -79,7 +79,7 @@ public class CouponController {
   @PreAuthorize(
       value = "isAuthenticated() and (#username.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
   @GetMapping(value = "/user/{username}/coupon/uservoucher/{voucher_id}")
-  public UserVoucherDTO getUserVoucher(@PathVariable("username") String username,
+  public UserVoucher getUserVoucher(@PathVariable("username") String username,
       @PathVariable("voucher_id") String voucherId) {
     return couponService.getUserVoucher(voucherId);
   }
@@ -94,7 +94,7 @@ public class CouponController {
   @PreAuthorize(
       value = "isAuthenticated() and (#username.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
   @GetMapping(value = "/user/{username}/coupon/uservoucher/goodvoucher/{voucher_id}")
-  public UserVoucherDTO getUserVoucherForGoodVoucher(@PathVariable("username") String username,
+  public UserVoucher getUserVoucherForGoodVoucher(@PathVariable("username") String username,
       @PathVariable("voucher_id") String voucherId) {
     return couponService.getUserVoucherForGoodVoucher(username, voucherId);
   }
@@ -110,7 +110,7 @@ public class CouponController {
       value = "isAuthenticated() and (#username.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
   @PutMapping(value = "/user/{username}/coupon/uservoucher/{voucher_id}")
   public void updateUserVoucher(@PathVariable("username") String username, @PathVariable("voucher_id") String voucherId,
-      @RequestBody UserVoucherDTO uservoucher) {
+      @RequestBody UserVoucher uservoucher) {
     couponService.updateUserVoucher(uservoucher);
   }
 
@@ -136,7 +136,7 @@ public class CouponController {
    */
   @PreAuthorize("hasAuthority('permission:manager:*')")
   @PostMapping(value = "/coupon/goodvoucher")
-  public GoodVoucherDTO createGoodVoucher(@RequestBody GoodVoucherDTO request) {
+  public GoodVoucher createGoodVoucher(@RequestBody GoodVoucher request) {
     if (null == request) {
       throw new IllegalArgumentException("goodvoucher request  body is null");
     }
@@ -146,7 +146,7 @@ public class CouponController {
     if (request.getScore() == 0) {
       throw new IllegalArgumentException("good voucher score is 0");
     }
-    if (CollectionUtils.isEmpty(request.getVoucherItemIdList())) {
+    if (CollectionUtils.isEmpty(request.getVoucherItemList())) {
       throw new IllegalArgumentException("good voucher items is empyt");
     }
     return couponService.createORUpdateGoodVoucher(request);
@@ -160,7 +160,7 @@ public class CouponController {
    */
   @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/coupon/goodvoucher/{voucher_id}")
-  public GoodVoucherDTO getGoodVoucher(@PathVariable("voucher_id") String voucherId) {
+  public GoodVoucher getGoodVoucher(@PathVariable("voucher_id") String voucherId) {
     return couponService.getGoodVoucher(voucherId);
   }
 
@@ -197,7 +197,7 @@ public class CouponController {
    */
   @PreAuthorize("hasAuthority('permission:manager:*')")
   @PostMapping(value = "/coupon/voucher_item")
-  public VoucherItemDTO createVoucherItem(@RequestBody VoucherItemDTO request) {
+  public VoucherItem createVoucherItem(@RequestBody VoucherItem request) {
     if (null == request) {
       throw new IllegalArgumentException("VoucherItem request body is null");
     }
@@ -222,7 +222,7 @@ public class CouponController {
    */
   @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/coupon/voucher_item/{voucher_item_id}")
-  public VoucherItemDTO getVoucherItem(@PathVariable("voucher_item_id") String voucherItemId) {
+  public VoucherItem getVoucherItem(@PathVariable("voucher_item_id") String voucherItemId) {
     return couponService.getVoucherItem(voucherItemId);
   }
 

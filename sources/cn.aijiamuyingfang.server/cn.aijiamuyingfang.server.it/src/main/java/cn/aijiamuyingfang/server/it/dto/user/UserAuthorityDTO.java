@@ -3,12 +3,6 @@ package cn.aijiamuyingfang.server.it.dto.user;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Convert;
 
-import org.springframework.security.core.GrantedAuthority;
-
-import com.google.gson.annotations.SerializedName;
-
-import cn.aijiamuyingfang.server.it.dto.BaseEnum;
-
 /**
  * [描述]:
  * <p>
@@ -21,57 +15,37 @@ import cn.aijiamuyingfang.server.it.dto.BaseEnum;
  * @date 2018-07-07 00:54:17
  */
 @Convert(converter = UserAuthorityDTO.UserAuthorityConverter.class)
-public enum UserAuthorityDTO implements GrantedAuthority, BaseEnum {
-
+public enum UserAuthorityDTO {
   /**
    * 未知类型
    */
-  @SerializedName("0")
-  UNKNOW("permission:anymouse", 0),
+  UNKNOW(0),
   /**
    * 管理员的所有权限
    */
-  @SerializedName("1")
-  MANAGER_PERMISSION("permission:manager:*", 1),
+  MANAGER_PERMISSION(1),
   /**
    * 送货员的所有权限
    */
-  @SerializedName("2")
-  SENDER_PERMISSION("permission:sender:*", 2),
+  SENDER_PERMISSION(2),
   /**
    * 顾客的所有权限
    */
-  @SerializedName("3")
-  BUYER_PERMISSION("permission:buyer:*", 3);
-  /**
-   * 权限名
-   */
-  private String authority;
+  BUYER_PERMISSION(3);
 
   /**
    * 权限值
    */
   private int value;
 
-  UserAuthorityDTO(String authority, int value) {
-    this.authority = authority;
+  UserAuthorityDTO(int value) {
     this.value = value;
   }
 
-  @Override
-  public int getValue() {
-    return value;
-  }
-
-  @Override
-  public String getAuthority() {
-    return this.authority;
-  }
-
   public static UserAuthorityDTO fromValue(int value) {
-    for (UserAuthorityDTO type : UserAuthorityDTO.values()) {
-      if (type.getValue() == value) {
-        return type;
+    for (UserAuthorityDTO authority : UserAuthorityDTO.values()) {
+      if (authority.value == value) {
+        return authority;
       }
     }
     return UNKNOW;
@@ -80,13 +54,13 @@ public enum UserAuthorityDTO implements GrantedAuthority, BaseEnum {
   class UserAuthorityConverter implements AttributeConverter<UserAuthorityDTO, Integer> {
 
     @Override
-    public Integer convertToDatabaseColumn(UserAuthorityDTO attribute) {
-      return attribute.getValue();
+    public Integer convertToDatabaseColumn(UserAuthorityDTO authority) {
+      return authority.value;
     }
 
     @Override
-    public UserAuthorityDTO convertToEntityAttribute(Integer dbData) {
-      return UserAuthorityDTO.fromValue(dbData);
+    public UserAuthorityDTO convertToEntityAttribute(Integer value) {
+      return UserAuthorityDTO.fromValue(value);
     }
   }
 }

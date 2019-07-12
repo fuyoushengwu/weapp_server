@@ -9,9 +9,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import cn.aijiamuyingfang.server.domain.SendType;
-import cn.aijiamuyingfang.server.domain.ShopOrderStatus;
+import cn.aijiamuyingfang.server.shoporder.dto.SendTypeDTO;
 import cn.aijiamuyingfang.server.shoporder.dto.ShopOrderDTO;
+import cn.aijiamuyingfang.server.shoporder.dto.ShopOrderStatusDTO;
 
 /**
  * [描述]:
@@ -36,8 +36,8 @@ public interface ShopOrderRepository extends JpaRepository<ShopOrderDTO, String>
    * @param sendTypeList
    * @return
    */
-  int countByUsernameAndStatusInAndSendTypeIn(String username, List<ShopOrderStatus> statusList,
-      List<SendType> sendTypeList);
+  int countByUsernameAndStatusInAndSendTypeIn(String username, List<ShopOrderStatusDTO> statusList,
+      List<SendTypeDTO> sendTypeList);
 
   /**
    * 根据订单状态、配送方式分页查找用户的订单
@@ -50,8 +50,8 @@ public interface ShopOrderRepository extends JpaRepository<ShopOrderDTO, String>
    *          分页信息
    * @return
    */
-  Page<ShopOrderDTO> findByUsernameAndStatusInAndSendTypeIn(String username, List<ShopOrderStatus> statusList,
-      List<SendType> sendTypeList, Pageable pageable);
+  Page<ShopOrderDTO> findByUsernameAndStatusInAndSendTypeIn(String username, List<ShopOrderStatusDTO> statusList,
+      List<SendTypeDTO> sendTypeList, Pageable pageable);
 
   /**
    * 根据订单状态、配送方式分页查找所有订单
@@ -62,26 +62,26 @@ public interface ShopOrderRepository extends JpaRepository<ShopOrderDTO, String>
    *          分页信息
    * @return
    */
-  Page<ShopOrderDTO> findByStatusInAndSendTypeIn(List<ShopOrderStatus> statusList, List<SendType> sendTypeList,
+  Page<ShopOrderDTO> findByStatusInAndSendTypeIn(List<ShopOrderStatusDTO> statusList, List<SendTypeDTO> sendTypeList,
       Pageable pageable);
 
   /**
    * 根据状态和分页条件,查找订单
    * 
-   * @param status
+   * @param statusDTO
    * @param pageable
    *          分页信息
    * @return
    */
-  Page<ShopOrderDTO> findByStatus(ShopOrderStatus status, Pageable pageable);
+  Page<ShopOrderDTO> findByStatus(ShopOrderStatusDTO statusDTO, Pageable pageable);
 
   /**
    * 根据状态查找订单(非分页)
    * 
-   * @param status
+   * @param statusDTO
    * @return
    */
-  List<ShopOrderDTO> findByStatus(ShopOrderStatus status);
+  List<ShopOrderDTO> findByStatus(ShopOrderStatusDTO statusDTO);
 
   /**
    * 查找包含某件商品的预约单
@@ -92,7 +92,7 @@ public interface ShopOrderRepository extends JpaRepository<ShopOrderDTO, String>
    */
   @Query(
       value = "select * from shop_order where status=1 and id in (select shop_order_id from shop_order_order_item_list where "
-          + "order_item_list_id in (select id from shop_order_item  where good_id=:good_id))",
+          + "order_item_list_id in (select id from shop_order_item where good_id=:good_id))",
       nativeQuery = true)
   List<ShopOrderDTO> findPreOrderContainsGoodid(@Param("good_id") String goodId);
 }

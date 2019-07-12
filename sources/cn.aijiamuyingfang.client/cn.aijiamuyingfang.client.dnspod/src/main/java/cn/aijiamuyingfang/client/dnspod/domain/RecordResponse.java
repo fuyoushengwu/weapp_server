@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 /**
  * [描述]:
  * <p>
- * TODO
  * </p>
  * 
  * @version 1.0.0
@@ -16,7 +15,7 @@ import lombok.NoArgsConstructor;
  * @date 2019-06-10 06:43:22
  */
 @Data
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 public class RecordResponse extends BaseResponse {
 

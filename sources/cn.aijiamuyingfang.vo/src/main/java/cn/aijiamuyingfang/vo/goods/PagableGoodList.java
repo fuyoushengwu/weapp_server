@@ -1,13 +1,8 @@
 package cn.aijiamuyingfang.vo.goods;
 
-import cn.aijiamuyingfang.vo.PageResponse;
+import cn.aijiamuyingfang.vo.response.PageResponse;
 
 /**
- * [描述]:
- * <p>
- * 获取某个条目下商品的返回类型
- * </p>
- * 
  * @version 1.0.0
  * @author ShiWei
  * @email shiweideyouxiang@sina.cn

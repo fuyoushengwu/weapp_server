@@ -20,7 +20,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.common.DefaultExpiringOAuth2RefreshToken;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.DefaultOAuth2RefreshToken;
@@ -53,6 +52,7 @@ import org.springframework.util.Assert;
  */
 public class DefaultTokenServices
     implements AuthorizationServerTokenServices, ResourceServerTokenServices, ConsumerTokenServices, InitializingBean {
+  private static final String INVALID_ACCESS_TOKEN = "Invalid access token: ";
 
   private int refreshTokenValiditySeconds = 60 * 60 * 24 * 30; // default 30 days.
 
@@ -77,7 +77,7 @@ public class DefaultTokenServices
     Assert.notNull(tokenStore, "tokenStore must be set");
   }
 
-  public OAuth2AccessToken createAccessToken(OAuth2Authentication authentication) throws AuthenticationException {
+  public OAuth2AccessToken createAccessToken(OAuth2Authentication authentication) {
 
     OAuth2AccessToken existingAccessToken = tokenStore.getAccessToken(authentication);
     OAuth2RefreshToken refreshToken = null;
@@ -126,8 +126,7 @@ public class DefaultTokenServices
 
   }
 
-  public OAuth2AccessToken refreshAccessToken(String refreshTokenValue, TokenRequest tokenRequest)
-      throws AuthenticationException {
+  public OAuth2AccessToken refreshAccessToken(String refreshTokenValue, TokenRequest tokenRequest) {
 
     if (!supportRefreshToken) {
       throw new InvalidGrantException("Invalid refresh token: " + refreshTokenValue);
@@ -196,7 +195,6 @@ public class DefaultTokenServices
    */
   private OAuth2Authentication createRefreshedAuthentication(OAuth2Authentication authentication,
       TokenRequest request) {
-    OAuth2Authentication narrowed = authentication;
     Set<String> scope = request.getScope();
     OAuth2Request clientAuth = authentication.getOAuth2Request().refresh(request);
     if (scope != null && !scope.isEmpty()) {
@@ -208,8 +206,7 @@ public class DefaultTokenServices
         clientAuth = clientAuth.narrowScope(scope);
       }
     }
-    narrowed = new OAuth2Authentication(clientAuth, authentication.getUserAuthentication());
-    return narrowed;
+    return new OAuth2Authentication(clientAuth, authentication.getUserAuthentication());
   }
 
   protected boolean isExpired(OAuth2RefreshToken refreshToken) {
@@ -225,11 +222,10 @@ public class DefaultTokenServices
     return tokenStore.readAccessToken(accessToken);
   }
 
-  public OAuth2Authentication loadAuthentication(String accessTokenValue)
-      throws AuthenticationException, InvalidTokenException {
+  public OAuth2Authentication loadAuthentication(String accessTokenValue) {
     OAuth2AccessToken accessToken = tokenStore.readAccessToken(accessTokenValue);
     if (accessToken == null) {
-      throw new InvalidTokenException("Invalid access token: " + accessTokenValue);
+      throw new InvalidTokenException(INVALID_ACCESS_TOKEN + accessTokenValue);
     } else if (accessToken.isExpired()) {
       tokenStore.removeAccessToken(accessToken);
       throw new InvalidTokenException("Access token expired: " + accessTokenValue);
@@ -238,7 +234,7 @@ public class DefaultTokenServices
     OAuth2Authentication result = tokenStore.readAuthentication(accessToken);
     if (result == null) {
       // in case of race condition
-      throw new InvalidTokenException("Invalid access token: " + accessTokenValue);
+      throw new InvalidTokenException(INVALID_ACCESS_TOKEN + accessTokenValue);
     }
     if (clientDetailsService != null) {
       String clientId = result.getOAuth2Request().getClientId();
@@ -254,7 +250,7 @@ public class DefaultTokenServices
   public String getClientId(String tokenValue) {
     OAuth2Authentication authentication = tokenStore.readAuthentication(tokenValue);
     if (authentication == null) {
-      throw new InvalidTokenException("Invalid access token: " + tokenValue);
+      throw new InvalidTokenException(INVALID_ACCESS_TOKEN + tokenValue);
     }
     OAuth2Request clientAuth = authentication.getOAuth2Request();
     if (clientAuth == null) {

@@ -24,7 +24,7 @@ import lombok.Data;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-06-27 15:54:00
  */
-@Entity
+@Entity(name = "preview_order")
 @Data
 public class PreviewOrderDTO {
   @Id
@@ -47,22 +47,4 @@ public class PreviewOrderDTO {
    */
   @OneToMany(cascade = CascadeType.ALL)
   private List<PreviewOrderItemDTO> orderItemList = new ArrayList<>();
-
-  /**
-   * 添加预览项
-   * 
-   * @param item
-   *          预览项
-   */
-  public void addOrderItem(PreviewOrderItemDTO item) {
-    if (null == item) {
-      return;
-    }
-    synchronized (this) {
-      if (null == this.orderItemList) {
-        this.orderItemList = new ArrayList<>();
-      }
-    }
-    this.orderItemList.add(item);
-  }
 }

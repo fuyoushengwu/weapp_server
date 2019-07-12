@@ -2,7 +2,7 @@ package cn.aijiamuyingfang.client.oauth2;
 
 import java.io.IOException;
 
-import cn.aijiamuyingfang.client.oauth2.utils.JsonUtils;
+import cn.aijiamuyingfang.vo.utils.JsonUtils;
 import okhttp3.Response;
 
 public class OAuthResponse {
@@ -25,14 +25,14 @@ public class OAuthResponse {
 
       if (Utils.isJsonResponse(response)) {
         if (response.isSuccessful()) {
-          token = JsonUtils.fromJson(responseBody, Token.class);
+          token = JsonUtils.json2Bean(responseBody, Token.class);
           jsonParsed = true;
 
           if (token.getExpiresIn() != null)
             expiresAt = (token.getExpiresIn() * 1000) + System.currentTimeMillis();
         } else {
           try {
-            error = JsonUtils.fromJson(responseBody, OAuthError.class);
+            error = JsonUtils.json2Bean(responseBody, OAuthError.class);
             jsonParsed = true;
           } catch (Exception e) {
             error = new OAuthError(e);

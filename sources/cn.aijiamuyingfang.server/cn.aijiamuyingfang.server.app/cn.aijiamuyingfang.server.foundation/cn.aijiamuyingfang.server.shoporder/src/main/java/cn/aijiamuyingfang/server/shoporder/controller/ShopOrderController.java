@@ -14,17 +14,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import cn.aijiamuyingfang.server.domain.SendType;
-import cn.aijiamuyingfang.server.domain.ShopOrderStatus;
-import cn.aijiamuyingfang.server.shoporder.domain.request.CreateShopOrderRequest;
-import cn.aijiamuyingfang.server.shoporder.domain.request.UpdateShopOrderStatusRequest;
-import cn.aijiamuyingfang.server.shoporder.domain.response.ConfirmShopOrderFinishedResponse;
-import cn.aijiamuyingfang.server.shoporder.domain.response.PagableFinishedPreOrderList;
-import cn.aijiamuyingfang.server.shoporder.domain.response.PagablePreOrderGoodList;
-import cn.aijiamuyingfang.server.shoporder.domain.response.PagableShopOrderList;
-import cn.aijiamuyingfang.server.shoporder.dto.ShopOrderDTO;
-import cn.aijiamuyingfang.server.shoporder.dto.ShopOrderVoucherDTO;
 import cn.aijiamuyingfang.server.shoporder.service.ShopOrderService;
+import cn.aijiamuyingfang.vo.preorder.PagablePreOrderGoodList;
+import cn.aijiamuyingfang.vo.shoporder.ConfirmShopOrderFinishedResponse;
+import cn.aijiamuyingfang.vo.shoporder.CreateShopOrderRequest;
+import cn.aijiamuyingfang.vo.shoporder.PagableShopOrderList;
+import cn.aijiamuyingfang.vo.shoporder.SendType;
+import cn.aijiamuyingfang.vo.shoporder.ShopOrder;
+import cn.aijiamuyingfang.vo.shoporder.ShopOrderStatus;
+import cn.aijiamuyingfang.vo.shoporder.ShopOrderVoucher;
+import cn.aijiamuyingfang.vo.shoporder.UpdateShopOrderStatusRequest;
 
 /***
  * [描述]:
@@ -72,7 +71,7 @@ public class ShopOrderController {
   @PreAuthorize(
       value = "isAuthenticated() and (#username.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
   @GetMapping(value = "/user/{username}/coupon/shoporder")
-  public List<ShopOrderVoucherDTO> getUserShopOrderVoucherList(@PathVariable("username") String username,
+  public List<ShopOrderVoucher> getUserShopOrderVoucherList(@PathVariable("username") String username,
       @RequestParam(name = "good_id", required = false) List<String> goodIdList) {
     return shoporderSerivce.getUserShopOrderVoucherList(username, goodIdList);
   }
@@ -169,7 +168,7 @@ public class ShopOrderController {
    */
   @PreAuthorize(value = "hasAnyAuthority('permission:manager:*','permission:sender:*')")
   @GetMapping(value = "/shoporder/preorder/finished")
-  public PagableFinishedPreOrderList PagableFinishedPreOrderList(@RequestParam(value = "current_page") int currentPage,
+  public PagableShopOrderList getFinishedPreOrderList(@RequestParam(value = "current_page") int currentPage,
       @RequestParam(value = "page_size") int pageSize) {
     return shoporderSerivce.getFinishedPreOrderList(currentPage, pageSize);
   }
@@ -184,7 +183,7 @@ public class ShopOrderController {
   @PreAuthorize(
       value = "isAuthenticated() and (#username.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
   @GetMapping(value = "/user/{username}/shoporder/{shop_order_id}")
-  public ShopOrderDTO getUserShopOrder(@PathVariable("username") String username,
+  public ShopOrder getUserShopOrder(@PathVariable("username") String username,
       @PathVariable(name = "shop_order_id") String shopOrderId) {
     return shoporderSerivce.getUserShopOrder(username, shopOrderId);
   }
@@ -198,7 +197,7 @@ public class ShopOrderController {
    */
   @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
   @PostMapping(value = "/user/{username}/shoporder")
-  public ShopOrderDTO createUserShopOrder(@PathVariable("username") String username,
+  public ShopOrder createUserShopOrder(@PathVariable("username") String username,
       @RequestBody CreateShopOrderRequest requestBean) {
     return shoporderSerivce.createUserShopOrder(username, requestBean);
   }

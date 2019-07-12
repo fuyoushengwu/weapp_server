@@ -2,7 +2,7 @@ package cn.aijiamuyingfang.client.rest.api;
 
 import java.util.List;
 
-import cn.aijiamuyingfang.vo.ResponseBean;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
 import cn.aijiamuyingfang.vo.user.RecieveAddress;
 import cn.aijiamuyingfang.vo.user.User;
 import io.reactivex.Observable;

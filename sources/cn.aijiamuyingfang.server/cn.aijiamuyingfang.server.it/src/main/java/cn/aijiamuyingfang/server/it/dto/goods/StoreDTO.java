@@ -17,10 +17,7 @@ import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import cn.aijiamuyingfang.commons.utils.StringUtils;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
 /**
  * [描述]:
@@ -33,10 +30,8 @@ import lombok.Setter;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-06-27 00:12:21
  */
-@Entity
-@Getter
-@Setter
-@NoArgsConstructor
+@Entity(name = "store")
+@Data
 public class StoreDTO {
 
   /**
@@ -82,31 +77,4 @@ public class StoreDTO {
    */
   @OneToOne(cascade = CascadeType.ALL)
   private StoreAddressDTO storeAddress;
-
-  /**
-   * 根据提供的Store更新本门店的信息
-   * 
-   * @param updateStore
-   *          要更新的门店信息
-   */
-  public void update(StoreDTO updateStore) {
-    if (null == updateStore) {
-      return;
-    }
-    if (StringUtils.hasContent(updateStore.name)) {
-      this.name = updateStore.name;
-    }
-    if (updateStore.workTime != null) {
-      this.workTime.update(updateStore.workTime);
-    }
-    if (updateStore.coverImg != null) {
-      this.coverImg.update(updateStore.coverImg);
-    }
-    if (updateStore.detailImgList != null && !updateStore.detailImgList.isEmpty()) {
-      this.detailImgList = updateStore.detailImgList;
-    }
-    if (updateStore.storeAddress != null) {
-      this.storeAddress = updateStore.storeAddress;
-    }
-  }
 }

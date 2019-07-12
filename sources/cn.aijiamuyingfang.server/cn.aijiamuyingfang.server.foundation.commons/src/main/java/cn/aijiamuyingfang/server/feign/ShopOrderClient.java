@@ -6,7 +6,7 @@ import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
-import cn.aijiamuyingfang.server.domain.response.ResponseBean;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
 
 @FeignClient(name = "shoporder-service")
 public interface ShopOrderClient {

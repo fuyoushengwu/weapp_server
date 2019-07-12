@@ -22,14 +22,14 @@ import feign.InvocationHandlerFactory;
  */
 
 public interface AsyncMethodCall {
-  Future<?> create(Map<Method, InvocationHandlerFactory.MethodHandler> dispath, Method method, Object[] args,
+  Future<Object> create(Map<Method, InvocationHandlerFactory.MethodHandler> dispath, Method method, Object[] args,
       Executor executor);
 
   public static class Default implements AsyncMethodCall {
 
     @Override
-    public Future<?> create(Map<Method, InvocationHandlerFactory.MethodHandler> dispath, Method method, Object[] args,
-        Executor executor) {
+    public Future<Object> create(Map<Method, InvocationHandlerFactory.MethodHandler> dispath, Method method,
+        Object[] args, Executor executor) {
       return CompletableFuture.supplyAsync(() -> {
         try {
           return dispath.get(method).invoke(args);

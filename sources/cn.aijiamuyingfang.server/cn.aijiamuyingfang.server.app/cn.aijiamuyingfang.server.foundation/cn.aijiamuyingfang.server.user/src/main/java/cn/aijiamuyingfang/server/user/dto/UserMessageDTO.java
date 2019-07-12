@@ -1,6 +1,5 @@
 package cn.aijiamuyingfang.server.user.dto;
 
-import java.io.IOException;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -11,17 +10,7 @@ import javax.persistence.Lob;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
-import cn.aijiamuyingfang.commons.utils.NumberUtils;
-import cn.aijiamuyingfang.server.domain.UserMessageType;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * [描述]:
@@ -34,9 +23,8 @@ import lombok.NoArgsConstructor;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-06-27 17:11:10
  */
-@Entity
+@Entity(name = "user_message")
 @Data
-@NoArgsConstructor
 public class UserMessageDTO {
 
   @Id
@@ -52,23 +40,7 @@ public class UserMessageDTO {
   /**
    * 用户消息类型
    */
-  @JsonDeserialize(using = TypeDeserializer.class)
-  private UserMessageType type;
-
-  private static class TypeDeserializer extends JsonDeserializer<UserMessageType> {
-
-    @Override
-    public UserMessageType deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-      JsonToken currentToken = p.currentToken();
-      if (currentToken == JsonToken.VALUE_NUMBER_INT) {
-        return UserMessageType.fromValue(p.getIntValue());
-      } else if (currentToken == JsonToken.VALUE_STRING) {
-        return UserMessageType.fromValue(NumberUtils.toInt(p.getValueAsString(), 0));
-      }
-      return UserMessageType.UNKNOW;
-    }
-
-  }
+  private UserMessageTypeDTO type;
 
   /**
    * 消息标题
@@ -90,13 +62,11 @@ public class UserMessageDTO {
   /**
    * 消息创建时间
    */
-  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
   private Date createTime = new Date();
 
   /**
    * 消息结束时间
    */
-  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
   private Date finishTime;
 
   /**

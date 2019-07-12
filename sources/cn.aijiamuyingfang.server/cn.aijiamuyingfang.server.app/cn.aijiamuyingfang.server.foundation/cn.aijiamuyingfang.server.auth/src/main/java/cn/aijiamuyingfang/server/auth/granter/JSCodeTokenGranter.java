@@ -21,13 +21,13 @@ import org.springframework.security.oauth2.provider.TokenGranter;
 import org.springframework.security.oauth2.provider.TokenRequest;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 
-import cn.aijiamuyingfang.commons.utils.NumberUtils;
 import cn.aijiamuyingfang.server.auth.domain.WeChatSession;
 import cn.aijiamuyingfang.server.auth.service.OAuth2Service;
-import cn.aijiamuyingfang.server.domain.Gender;
-import cn.aijiamuyingfang.server.exception.OAuthException;
-import cn.aijiamuyingfang.server.exception.WeChatServiceException;
-import cn.aijiamuyingfang.server.feign.domain.user.User;
+import cn.aijiamuyingfang.vo.exception.OAuthException;
+import cn.aijiamuyingfang.vo.exception.WeChatServiceException;
+import cn.aijiamuyingfang.vo.user.Gender;
+import cn.aijiamuyingfang.vo.user.User;
+import cn.aijiamuyingfang.vo.utils.NumberUtils;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -76,7 +76,7 @@ public class JSCodeTokenGranter implements TokenGranter {
 
   private User getUser(TokenRequest tokenRequest) {
     Map<String, String> parameters = tokenRequest.getRequestParameters();
-    String jscode = parameters.get("jscode");
+    String jscode = parameters.get(GRANT_TYPE);
     String password = parameters.get("password");
     String nickname = parameters.get("nickname");
     String avatar = parameters.get("avatar");

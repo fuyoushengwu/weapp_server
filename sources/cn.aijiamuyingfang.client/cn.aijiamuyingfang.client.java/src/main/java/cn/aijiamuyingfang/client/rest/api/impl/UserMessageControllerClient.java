@@ -9,13 +9,14 @@ import org.springframework.stereotype.Service;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.UserMessageControllerApi;
-import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
-import cn.aijiamuyingfang.vo.ResponseBean;
-import cn.aijiamuyingfang.vo.ResponseCode;
+import cn.aijiamuyingfang.client.rest.utils.ResponseUtils;
 import cn.aijiamuyingfang.vo.exception.GoodsException;
 import cn.aijiamuyingfang.vo.exception.UserException;
 import cn.aijiamuyingfang.vo.message.PagableUserMessageList;
 import cn.aijiamuyingfang.vo.message.UserMessage;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
+import cn.aijiamuyingfang.vo.response.ResponseCode;
+import cn.aijiamuyingfang.vo.utils.JsonUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,7 +41,7 @@ public class UserMessageControllerClient {
 
     @Override
     public void onResponse(Call<ResponseBean> call, Response<ResponseBean> response) {
-      LOGGER.info("onResponse:" + response.message());
+      LOGGER.info("onResponse:{}", response.message());
     }
 
     @Override
@@ -172,20 +173,7 @@ public class UserMessageControllerClient {
       userMessageControllerApi.deleteMessage(username, messageId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<
-        ResponseBean> response = userMessageControllerApi.deleteMessage(username, messageId, accessToken).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      if (response.errorBody() != null) {
-        LOGGER.error(new String(response.errorBody().bytes()));
-      }
-      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    if ("200".equals(returnCode)) {
-      return;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new UserException(returnCode, responseBean.getMsg());
+    ResponseUtils.handleGoodsVOIDResponse(
+        userMessageControllerApi.deleteMessage(username, messageId, accessToken).execute(), LOGGER);
   }
 }

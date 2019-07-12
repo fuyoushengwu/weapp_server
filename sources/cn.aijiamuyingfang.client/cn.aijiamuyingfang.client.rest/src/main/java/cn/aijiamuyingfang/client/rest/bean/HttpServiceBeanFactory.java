@@ -8,10 +8,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.aijiamuyingfang.client.commons.utils.RetrofitUtils;
-import cn.aijiamuyingfang.client.commons.utils.StringUtils;
+import cn.aijiamuyingfang.vo.utils.StringUtils;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import retrofit2.Retrofit;;
+import retrofit2.Retrofit;
 
 /**
  * [描述]:
@@ -47,8 +47,7 @@ public class HttpServiceBeanFactory {
     HttpServiceBean httpServiceBean = serviceBeans.get(baseurl);
     if (null == httpServiceBean) {
       httpServiceBean = new HttpServiceBean();
-      Retrofit retrofit = RetrofitUtils.getRetrofitBuilder(baseurl)
-          .client(getOkHttpClient(baseurl, interceptorClasses)).build();
+      Retrofit retrofit = RetrofitUtils.getRetrofitBuilder(baseurl).client(getOkHttpClient(interceptorClasses)).build();
       httpServiceBean.setRetrofit(retrofit);
       serviceBeans.put(baseurl, httpServiceBean);
     }
@@ -67,7 +66,7 @@ public class HttpServiceBeanFactory {
    * @param interceptorClasses
    * @return
    */
-  private static OkHttpClient getOkHttpClient(String baseurl, Class<?>... interceptorClasses) {
+  private static OkHttpClient getOkHttpClient(Class<?>... interceptorClasses) {
     OkHttpClient.Builder clientBuilder = RetrofitUtils.getOkHttpClientBuilder(DEFAULT_CONNECT_TIMEOUT,
         DEFAULT_READ_TIMEOUT, DEFAULT_WRITE_TIMEOUT);
 
@@ -77,6 +76,7 @@ public class HttpServiceBeanFactory {
         try {
           clientBuilder.addInterceptor((Interceptor) interceptorClass.newInstance());
         } catch (InstantiationException | IllegalAccessException e) {
+          //异常不需要处理
         }
       }
     }

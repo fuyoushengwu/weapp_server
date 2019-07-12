@@ -3,7 +3,6 @@ package cn.aijiamuyingfang.server.goods.dto;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import cn.aijiamuyingfang.commons.utils.StringUtils;
 import lombok.Data;
 
 /**
@@ -17,29 +16,11 @@ import lombok.Data;
  * @email shiweideyouxiang@sina.cn
  * @date 2019-05-17 18:28:31
  */
-@Entity
+@Entity(name = "image_source")
 @Data
 public class ImageSourceDTO {
   @Id
   private String id;
 
   private String url;
-
-  public void update(ImageSourceDTO coverImg) {
-    if (null == coverImg || StringUtils.isEmpty(coverImg.id) || StringUtils.isEmpty(coverImg.url)) {
-      return;
-    }
-    this.url = coverImg.url;
-    this.id = coverImg.id;
-  }
-
-  public ImageSourceDTO() {
-  }
-
-  public ImageSourceDTO(String id, String url) {
-    super();
-    this.id = id;
-    this.url = url;
-  }
-
 }

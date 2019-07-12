@@ -2,14 +2,14 @@ package cn.aijiamuyingfang.client.dnspod.domain;
 
 import java.util.Map;
 
+import cn.aijiamuyingfang.client.commons.constant.ClientRestConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 @Data
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 public class CreateRecordRequest extends DomainRequest {
 
@@ -57,17 +57,18 @@ public class CreateRecordRequest extends DomainRequest {
     super(tokenId, tokenValue, rootDomain);
     this.value = ip;
   }
-  
-  public Map<String,RequestBody> toPartMap(){
-    Map<String,RequestBody> partMap=super.toPartMap();
-    partMap.put("sub_domain", RequestBody.create(MediaType.parse("multipart/form-data"), subDomain));
-    partMap.put("record_type", RequestBody.create(MediaType.parse("multipart/form-data"), recordType));
-    partMap.put("record_line", RequestBody.create(MediaType.parse("multipart/form-data"), recordLine));
-    partMap.put("value", RequestBody.create(MediaType.parse("multipart/form-data"), value));
-    partMap.put("mx", RequestBody.create(MediaType.parse("multipart/form-data"), Integer.toString(mx)));
-    partMap.put("ttl", RequestBody.create(MediaType.parse("multipart/form-data"), Integer.toString(ttl)));
-    partMap.put("status", RequestBody.create(MediaType.parse("multipart/form-data"), status));
-    partMap.put("weight", RequestBody.create(MediaType.parse("multipart/form-data"), Integer.toString(weight)));
+
+  @Override
+  public Map<String, RequestBody> toPartMap() {
+    Map<String, RequestBody> partMap = super.toPartMap();
+    partMap.put("sub_domain", RequestBody.create(ClientRestConstants.MEDIA_TYPE_MULTIPART, subDomain));
+    partMap.put("record_type", RequestBody.create(ClientRestConstants.MEDIA_TYPE_MULTIPART, recordType));
+    partMap.put("record_line", RequestBody.create(ClientRestConstants.MEDIA_TYPE_MULTIPART, recordLine));
+    partMap.put("value", RequestBody.create(ClientRestConstants.MEDIA_TYPE_MULTIPART, value));
+    partMap.put("mx", RequestBody.create(ClientRestConstants.MEDIA_TYPE_MULTIPART, Integer.toString(mx)));
+    partMap.put("ttl", RequestBody.create(ClientRestConstants.MEDIA_TYPE_MULTIPART, Integer.toString(ttl)));
+    partMap.put("status", RequestBody.create(ClientRestConstants.MEDIA_TYPE_MULTIPART, status));
+    partMap.put("weight", RequestBody.create(ClientRestConstants.MEDIA_TYPE_MULTIPART, Integer.toString(weight)));
     return partMap;
   }
 }

@@ -3,22 +3,16 @@ package cn.aijiamuyingfang.server.it.dto.filecenter;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Convert;
 
-import com.google.gson.annotations.SerializedName;
-
-import cn.aijiamuyingfang.server.it.dto.BaseEnum;
-
 @Convert(converter = FileSourceDTO.FileSourceConverter.class)
-public enum FileSourceDTO implements BaseEnum {
+public enum FileSourceDTO {
   /**
    * 未知类型
    */
-  @SerializedName("0")
   UNKNOW(0),
 
   /**
    * 本地
    */
-  @SerializedName("1")
   LOCAL(1);
 
   private int value;
@@ -27,15 +21,10 @@ public enum FileSourceDTO implements BaseEnum {
     this.value = value;
   }
 
-  @Override
-  public int getValue() {
-    return value;
-  }
-
-  public static FileSourceDTO fromValue(int source) {
-    for (FileSourceDTO fileSource : FileSourceDTO.values()) {
-      if (fileSource.getValue() == source) {
-        return fileSource;
+  public static FileSourceDTO fromValue(int value) {
+    for (FileSourceDTO source : FileSourceDTO.values()) {
+      if (source.value == value) {
+        return source;
       }
     }
     return LOCAL;
@@ -44,13 +33,13 @@ public enum FileSourceDTO implements BaseEnum {
   class FileSourceConverter implements AttributeConverter<FileSourceDTO, Integer> {
 
     @Override
-    public Integer convertToDatabaseColumn(FileSourceDTO attribute) {
-      return attribute.getValue();
+    public Integer convertToDatabaseColumn(FileSourceDTO source) {
+      return source.value;
     }
 
     @Override
-    public FileSourceDTO convertToEntityAttribute(Integer dbData) {
-      return FileSourceDTO.fromValue(dbData);
+    public FileSourceDTO convertToEntityAttribute(Integer value) {
+      return FileSourceDTO.fromValue(value);
     }
   }
 }

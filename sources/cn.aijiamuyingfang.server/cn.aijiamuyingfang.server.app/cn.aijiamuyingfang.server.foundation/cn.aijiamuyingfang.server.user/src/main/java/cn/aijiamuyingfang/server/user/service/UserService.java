@@ -7,14 +7,17 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import cn.aijiamuyingfang.commons.utils.StringUtils;
-import cn.aijiamuyingfang.server.domain.UserAuthority;
-import cn.aijiamuyingfang.server.domain.response.ResponseCode;
-import cn.aijiamuyingfang.server.exception.UserException;
 import cn.aijiamuyingfang.server.user.db.RecieveAddressRepository;
 import cn.aijiamuyingfang.server.user.db.UserRepository;
 import cn.aijiamuyingfang.server.user.dto.RecieveAddressDTO;
 import cn.aijiamuyingfang.server.user.dto.UserDTO;
+import cn.aijiamuyingfang.server.user.utils.ConvertUtils;
+import cn.aijiamuyingfang.vo.exception.UserException;
+import cn.aijiamuyingfang.vo.response.ResponseCode;
+import cn.aijiamuyingfang.vo.user.RecieveAddress;
+import cn.aijiamuyingfang.vo.user.User;
+import cn.aijiamuyingfang.vo.user.UserAuthority;
+import cn.aijiamuyingfang.vo.utils.StringUtils;
 
 /**
  * [描述]:
@@ -43,7 +46,7 @@ public class UserService {
    * 
    * @param request
    */
-  public UserDTO registerUser(UserDTO request) {
+  public User registerUser(User request) {
     String username = request.getUsername();
     if (StringUtils.isEmpty(username)) {
       throw new IllegalArgumentException("register failed,because not provide  username");
@@ -53,25 +56,13 @@ public class UserService {
       throw new IllegalArgumentException("register failed,because not provide  password");
     }
 
-    UserDTO user = userRepository.findOne(username);
-    if (user != null) {
-      return user;
+    UserDTO userDTO = userRepository.findOne(username);
+    if (userDTO != null) {
+      return ConvertUtils.convertUserDTO(userDTO);
     }
     request.setPassword(encoder.encode(password));
     request.addAuthority(UserAuthority.SENDER_PERMISSION);
-    userRepository.saveAndFlush(request);
-    return request;
-  }
-
-  /**
-   * 创建用户
-   * 
-   * @param user
-   */
-  public void saveUser(UserDTO user) {
-    if (user != null) {
-      userRepository.saveAndFlush(user);
-    }
+    return ConvertUtils.convertUserDTO(userRepository.saveAndFlush(ConvertUtils.convertUser(request)));
   }
 
   /**
@@ -81,12 +72,12 @@ public class UserService {
    *          用户id
    * @return
    */
-  public UserDTO getUser(String username) {
-    UserDTO user = userRepository.findOne(username);
-    if (null == user) {
+  public User getUser(String username) {
+    UserDTO userDTO = userRepository.findOne(username);
+    if (null == userDTO) {
       throw new UserException(ResponseCode.USER_NOT_EXIST, username);
     }
-    return user;
+    return ConvertUtils.convertUserDTO(userDTO);
   }
 
   /**
@@ -97,7 +88,7 @@ public class UserService {
    * @return
    */
   public String getUserPhone(String username) {
-    UserDTO user = getUser(username);
+    User user = getUser(username);
     return user.getPhone();
   }
 
@@ -109,17 +100,17 @@ public class UserService {
    * @param updateUser
    * @return
    */
-  public UserDTO updateUser(String username, UserDTO updateUser) {
-    UserDTO user = userRepository.findOne(username);
-    if (null == user) {
+  public User updateUser(String username, User updateUser) {
+    UserDTO userDTO = userRepository.findOne(username);
+    if (null == userDTO) {
       throw new UserException(ResponseCode.USER_NOT_EXIST, username);
     }
     if (null == updateUser) {
-      return user;
+      return ConvertUtils.convertUserDTO(userDTO);
     }
-    user.update(updateUser);
-    userRepository.saveAndFlush(user);
-    return user;
+    userDTO.update(updateUser);
+    userRepository.saveAndFlush(userDTO);
+    return ConvertUtils.convertUserDTO(userDTO);
   }
 
   /**
@@ -129,12 +120,12 @@ public class UserService {
    *          用户id
    * @return
    */
-  public List<RecieveAddressDTO> getUserRecieveAddressList(String username) {
-    UserDTO user = userRepository.findOne(username);
-    if (null == user) {
+  public List<RecieveAddress> getUserRecieveAddressList(String username) {
+    UserDTO userDTO = userRepository.findOne(username);
+    if (null == userDTO) {
       throw new UserException(ResponseCode.USER_NOT_EXIST, username);
     }
-    return recieveaddressRepository.findByUsername(username);
+    return ConvertUtils.convertRecieveAddressDTOList(recieveaddressRepository.findByUsername(username));
   }
 
   /**
@@ -145,9 +136,9 @@ public class UserService {
    * @param recieveAddress
    * @return
    */
-  public RecieveAddressDTO addUserRecieveAddress(String username, RecieveAddressDTO recieveAddress) {
-    UserDTO user = userRepository.findOne(username);
-    if (null == user) {
+  public RecieveAddress addUserRecieveAddress(String username, RecieveAddress recieveAddress) {
+    UserDTO userDTO = userRepository.findOne(username);
+    if (null == userDTO) {
       throw new UserException(ResponseCode.USER_NOT_EXIST, username);
     }
     if (null == recieveAddress) {
@@ -157,8 +148,9 @@ public class UserService {
     if (recieveAddress.isDef()) {
       recieveaddressRepository.setAllRecieveAddressNotDef();
     }
-    recieveaddressRepository.saveAndFlush(recieveAddress);
-    return recieveAddress;
+    RecieveAddressDTO recieveAddressDTO = recieveaddressRepository
+        .saveAndFlush(ConvertUtils.convertRecieveAddress(recieveAddress));
+    return ConvertUtils.convertRecieveAddressDTO(recieveAddressDTO);
   }
 
   /**
@@ -169,13 +161,13 @@ public class UserService {
    * @param addressId
    * @return
    */
-  public RecieveAddressDTO getRecieveAddress(String username, String addressId) {
-    RecieveAddressDTO recieveAddress = recieveaddressRepository.findOne(addressId);
-    if (null == recieveAddress) {
+  public RecieveAddress getRecieveAddress(String username, String addressId) {
+    RecieveAddressDTO recieveAddressDTO = recieveaddressRepository.findOne(addressId);
+    if (null == recieveAddressDTO) {
       throw new UserException(ResponseCode.RECIEVEADDRESS_NOT_EXIST, addressId);
     }
-    if (username.equals(recieveAddress.getUsername())) {
-      return recieveAddress;
+    if (username.equals(recieveAddressDTO.getUsername())) {
+      return ConvertUtils.convertRecieveAddressDTO(recieveAddressDTO);
     } else {
       throw new AccessDeniedException("no permission get other user's recieve address");
     }
@@ -192,21 +184,21 @@ public class UserService {
    * @param updateRecieveAddress
    * @return
    */
-  public RecieveAddressDTO updateRecieveAddress(String username, String addressId, RecieveAddressDTO updateRecieveAddress) {
-    RecieveAddressDTO recieveAddress = recieveaddressRepository.findOne(addressId);
-    if (null == recieveAddress) {
+  public RecieveAddress updateRecieveAddress(String username, String addressId, RecieveAddress updateRecieveAddress) {
+    RecieveAddressDTO recieveAddressDTO = recieveaddressRepository.findOne(addressId);
+    if (null == recieveAddressDTO) {
       throw new UserException(ResponseCode.RECIEVEADDRESS_NOT_EXIST, addressId);
     }
-    if (!username.equals(recieveAddress.getUsername())) {
+    if (!username.equals(recieveAddressDTO.getUsername())) {
       throw new AccessDeniedException("no permission change other user's recieve address");
     }
 
-    recieveAddress.update(updateRecieveAddress);
-    if (recieveAddress.isDef()) {
+    recieveAddressDTO.update(updateRecieveAddress);
+    if (recieveAddressDTO.isDef()) {
       recieveaddressRepository.setAllRecieveAddressNotDef();
     }
-    recieveaddressRepository.saveAndFlush(recieveAddress);
-    return recieveAddress;
+    recieveaddressRepository.saveAndFlush(recieveAddressDTO);
+    return ConvertUtils.convertRecieveAddressDTO(recieveAddressDTO);
   }
 
   /**
@@ -217,17 +209,17 @@ public class UserService {
    * @param addressId
    */
   public void deprecateRecieveAddress(String username, String addressId) {
-    RecieveAddressDTO recieveAddress = recieveaddressRepository.findOne(addressId);
-    if (null == recieveAddress) {
+    RecieveAddressDTO recieveAddressDTO = recieveaddressRepository.findOne(addressId);
+    if (null == recieveAddressDTO) {
       throw new UserException(ResponseCode.RECIEVEADDRESS_NOT_EXIST, addressId);
     }
 
-    if (!username.equals(recieveAddress.getUsername())) {
+    if (!username.equals(recieveAddressDTO.getUsername())) {
       throw new AccessDeniedException("no permission deprecate other user's recieve address");
     }
 
-    recieveAddress.setDeprecated(true);
-    recieveaddressRepository.saveAndFlush(recieveAddress);
+    recieveAddressDTO.setDeprecated(true);
+    recieveaddressRepository.saveAndFlush(recieveAddressDTO);
   }
 
 }

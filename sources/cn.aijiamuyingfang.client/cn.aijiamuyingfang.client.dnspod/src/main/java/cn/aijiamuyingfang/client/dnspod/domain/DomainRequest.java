@@ -2,14 +2,14 @@ package cn.aijiamuyingfang.client.dnspod.domain;
 
 import java.util.Map;
 
+import cn.aijiamuyingfang.client.commons.constant.ClientRestConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 @Data
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 public class DomainRequest extends BaseRequest {
   /**
@@ -34,11 +34,12 @@ public class DomainRequest extends BaseRequest {
     super(tokenId, tokenValue);
     this.domain = domain;
   }
-  
-  public Map<String,RequestBody> toPartMap(){
-    Map<String,RequestBody> partMap=super.toPartMap();
-    partMap.put("type", RequestBody.create(MediaType.parse("multipart/form-data"), type));
-    partMap.put("domain", RequestBody.create(MediaType.parse("multipart/form-data"), domain));
+
+  @Override
+  public Map<String, RequestBody> toPartMap() {
+    Map<String, RequestBody> partMap = super.toPartMap();
+    partMap.put("type", RequestBody.create(ClientRestConstants.MEDIA_TYPE_MULTIPART, type));
+    partMap.put("domain", RequestBody.create(ClientRestConstants.MEDIA_TYPE_MULTIPART, domain));
     return partMap;
   }
 

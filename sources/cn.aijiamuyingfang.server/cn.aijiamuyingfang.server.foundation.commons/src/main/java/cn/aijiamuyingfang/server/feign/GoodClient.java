@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import cn.aijiamuyingfang.server.domain.response.ResponseBean;
-import cn.aijiamuyingfang.server.feign.domain.good.Good;
-import cn.aijiamuyingfang.server.feign.domain.good.SaleGood;
+import cn.aijiamuyingfang.vo.goods.Good;
+import cn.aijiamuyingfang.vo.goods.SaleGood;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
 
 /**
  * [描述]:

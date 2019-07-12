@@ -18,12 +18,14 @@ import feign.Retryer;
 
 @Configuration
 public class FeignAsyncConfiguration {
-  @Autowired(required = false)
-  private List<AnnotatedParameterProcessor> parameterProcessors = new ArrayList<>();
 
   @Bean
-  public Contract feignContract(ConversionService feignConversionService) {
-    Contract delegate = new SpringMvcContract(this.parameterProcessors, feignConversionService);
+  public Contract feignContract(@Autowired(required = false)List<AnnotatedParameterProcessor> parameterProcessors,
+      ConversionService feignConversionService) {
+    if(null==parameterProcessors) {
+      parameterProcessors=new ArrayList<>();
+    }
+    Contract delegate = new SpringMvcContract(parameterProcessors, feignConversionService);
     return new FutureContract(delegate);
   }
 

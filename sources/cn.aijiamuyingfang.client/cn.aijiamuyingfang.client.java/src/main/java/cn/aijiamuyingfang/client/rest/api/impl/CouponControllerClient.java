@@ -9,15 +9,16 @@ import org.springframework.stereotype.Service;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.CouponControllerApi;
-import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
-import cn.aijiamuyingfang.vo.ResponseBean;
-import cn.aijiamuyingfang.vo.ResponseCode;
+import cn.aijiamuyingfang.client.rest.utils.ResponseUtils;
 import cn.aijiamuyingfang.vo.coupon.GoodVoucher;
 import cn.aijiamuyingfang.vo.coupon.PagableGoodVoucherList;
 import cn.aijiamuyingfang.vo.coupon.PagableUserVoucherList;
 import cn.aijiamuyingfang.vo.coupon.PagableVoucherItemList;
 import cn.aijiamuyingfang.vo.coupon.VoucherItem;
 import cn.aijiamuyingfang.vo.exception.CouponException;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
+import cn.aijiamuyingfang.vo.response.ResponseCode;
+import cn.aijiamuyingfang.vo.utils.JsonUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,7 +43,7 @@ public class CouponControllerClient {
 
     @Override
     public void onResponse(Call<ResponseBean> call, Response<ResponseBean> response) {
-      LOGGER.info("onResponse:" + response.message());
+      LOGGER.info("onResponse:{}", response.message());
     }
 
     @Override
@@ -66,8 +67,8 @@ public class CouponControllerClient {
    */
   public PagableUserVoucherList getUserVoucherList(String username, int currentPage, int pageSize, String accessToken)
       throws IOException {
-    Response<ResponseBean> response = couponControllerApi.getUserVoucherList(username, currentPage, pageSize, accessToken)
-        .execute();
+    Response<ResponseBean> response = couponControllerApi
+        .getUserVoucherList(username, currentPage, pageSize, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -78,8 +79,8 @@ public class CouponControllerClient {
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
-      PagableUserVoucherList uservoucherListResponse = JsonUtils
-          .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), PagableUserVoucherList.class);
+      PagableUserVoucherList uservoucherListResponse = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
+          PagableUserVoucherList.class);
       if (null == uservoucherListResponse) {
         throw new CouponException("500", "get user voucher list  return code is '200',but return data is null");
       }
@@ -109,8 +110,8 @@ public class CouponControllerClient {
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
-      PagableGoodVoucherList goodvoucherListResponse = JsonUtils
-          .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), PagableGoodVoucherList.class);
+      PagableGoodVoucherList goodvoucherListResponse = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
+          PagableGoodVoucherList.class);
       if (null == goodvoucherListResponse) {
         throw new CouponException("500", "get good voucher list return code is '200',but return data is null");
       }
@@ -198,20 +199,8 @@ public class CouponControllerClient {
       couponControllerApi.deprecateGoodVoucher(voucherId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = couponControllerApi.deprecateGoodVoucher(voucherId, accessToken).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      if (response.errorBody() != null) {
-        LOGGER.error(new String(response.errorBody().bytes()));
-      }
-      throw new CouponException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    if ("200".equals(returnCode)) {
-      return;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new CouponException(returnCode, responseBean.getMsg());
+    ResponseUtils.handleCouponVOIDResponse(couponControllerApi.deprecateGoodVoucher(voucherId, accessToken).execute(),
+        LOGGER);
   }
 
   /**
@@ -234,8 +223,8 @@ public class CouponControllerClient {
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
-      PagableVoucherItemList voucherItemListResponse = JsonUtils
-          .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), PagableVoucherItemList.class);
+      PagableVoucherItemList voucherItemListResponse = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
+          PagableVoucherItemList.class);
       if (null == voucherItemListResponse) {
         throw new CouponException("500", "get voucher item list  return code is '200',but return data is null");
       }
@@ -324,20 +313,8 @@ public class CouponControllerClient {
       couponControllerApi.deprecateVoucherItem(voucherItemId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = couponControllerApi.deprecateVoucherItem(voucherItemId, accessToken).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      if (response.errorBody() != null) {
-        LOGGER.error(new String(response.errorBody().bytes()));
-      }
-      throw new CouponException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    if ("200".equals(returnCode)) {
-      return;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new CouponException(returnCode, responseBean.getMsg());
+    ResponseUtils.handleCouponVOIDResponse(
+        couponControllerApi.deprecateVoucherItem(voucherItemId, accessToken).execute(), LOGGER);
 
   }
 

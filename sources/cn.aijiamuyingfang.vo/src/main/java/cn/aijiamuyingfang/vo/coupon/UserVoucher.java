@@ -39,6 +39,26 @@ public class UserVoucher implements Parcelable {
    */
   private int score;
 
+  /**
+   * 增加兑换券积分
+   * 
+   * @param param
+   *          要增加的兑换积分
+   */
+  public void increaseScore(int param) {
+    this.score += param;
+  }
+
+  /**
+   * 减少兑换券积分
+   * 
+   * @param param
+   *          要减少的兑换积分
+   */
+  public void decreaseScore(int param) {
+    this.score -= param;
+  }
+
   @Override
   public int describeContents() {
     return 0;

@@ -241,10 +241,11 @@ public class ShopOrderControllerTest {
         testActions.getAdminAccessToken());
     Assert.assertEquals(2, response.getDataList().size());
 
-    cn.aijiamuyingfang.server.it.dto.shoporder.ShopOrderDTO shoporder = testActions.getShopOrder(shoporderOne.getId());
-    shoporder.setFinishTime(new Date(System.currentTimeMillis() - 200 * 24 * 60 * 60 * 1000L));
-    shoporder.setLastModify(new Date(System.currentTimeMillis() - 200 * 24 * 60 * 60 * 1000L));
-    testActions.updateShopOrder(shoporder);
+    cn.aijiamuyingfang.server.it.dto.shoporder.ShopOrderDTO shoporderDTO = testActions
+        .getShopOrder(shoporderOne.getId());
+    shoporderDTO.setFinishTime(new Date(System.currentTimeMillis() - 200 * 24 * 60 * 60 * 1000L));
+    shoporderDTO.setLastModify(new Date(System.currentTimeMillis() - 200 * 24 * 60 * 60 * 1000L));
+    testActions.updateShopOrder(shoporderDTO);
 
     Thread.sleep(5000);
     shoporderControllerClient.delete100DaysFinishedShopOrder(shoporderOne.getId(),
@@ -266,8 +267,7 @@ public class ShopOrderControllerTest {
     testActions.senderOnePreviewAllGood();
     ShopOrder senderOneShopOrder = testActions.senderOneBuy();
 
-    RecieveAddress address = testActions.getSenderTwoRecieveOne();
-
+    RecieveAddress address = testActions.getSenderOneRecieveTwo();
     shoporderControllerClient.updateUserShopOrderRecieveAddress(testActions.getSenderOne().getUsername(),
         senderOneShopOrder.getId(), address.getId(), testActions.getSenderOneAccessToken(), false);
 

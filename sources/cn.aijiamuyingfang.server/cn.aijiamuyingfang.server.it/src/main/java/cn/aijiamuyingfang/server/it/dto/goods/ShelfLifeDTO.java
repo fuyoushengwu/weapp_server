@@ -1,15 +1,11 @@
 package cn.aijiamuyingfang.server.it.dto.goods;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
 /**
  * 保质期
  */
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 public class ShelfLifeDTO {
   /**
    * 保质期-开始时间

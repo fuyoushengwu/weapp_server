@@ -1,7 +1,7 @@
 package cn.aijiamuyingfang.client.rest.api;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
-import cn.aijiamuyingfang.vo.ResponseBean;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
 import cn.aijiamuyingfang.vo.user.RecieveAddress;
 import cn.aijiamuyingfang.vo.user.User;
 import retrofit2.Call;

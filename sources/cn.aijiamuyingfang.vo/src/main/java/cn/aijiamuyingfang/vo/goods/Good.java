@@ -4,7 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import cn.aijiamuyingfang.vo.ImageSource;
 import cn.aijiamuyingfang.vo.coupon.GoodVoucher;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * [描述]:
@@ -17,7 +18,8 @@ import lombok.Data;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-06-27 00:12:50
  */
-@Data
+@Getter
+@Setter
 public class Good implements Parcelable {
   /**
    * 商品Id
@@ -143,5 +145,28 @@ public class Good implements Parcelable {
       return new Good[size];
     }
   };
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Good other = (Good) obj;
+    if (null == id) {
+      return null == other.id;
+    }
+    return id.equals(other.id);
+  }
 
 }

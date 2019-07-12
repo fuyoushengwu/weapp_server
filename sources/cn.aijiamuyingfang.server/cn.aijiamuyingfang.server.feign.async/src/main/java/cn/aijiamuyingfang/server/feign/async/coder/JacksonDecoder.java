@@ -50,7 +50,7 @@ public class JacksonDecoder implements Decoder {
           return this.mapper.readValue((Reader) reader, this.mapper.constructType(type));
         }
       } catch (RuntimeJsonMappingException var5) {
-        if (var5.getCause() != null && var5.getCause() instanceof IOException) {
+        if (var5.getCause() instanceof IOException) {
           throw (IOException) IOException.class.cast(var5.getCause());
         } else {
           throw var5;

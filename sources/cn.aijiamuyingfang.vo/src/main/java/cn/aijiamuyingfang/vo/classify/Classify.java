@@ -1,8 +1,14 @@
 package cn.aijiamuyingfang.vo.classify;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 import cn.aijiamuyingfang.vo.ImageSource;
+import cn.aijiamuyingfang.vo.goods.Good;
 import lombok.Data;
 
 /**
@@ -37,6 +43,15 @@ public class Classify implements Parcelable {
    * 条目封面
    */
   private ImageSource coverImg;
+
+  /**
+   * 子条目
+   */
+  @JsonIgnore
+  private List<Classify> subClassifyList = new ArrayList<>();
+
+  @JsonIgnore
+  private List<Good> goodList = new ArrayList<>();
 
   @Override
   public int describeContents() {

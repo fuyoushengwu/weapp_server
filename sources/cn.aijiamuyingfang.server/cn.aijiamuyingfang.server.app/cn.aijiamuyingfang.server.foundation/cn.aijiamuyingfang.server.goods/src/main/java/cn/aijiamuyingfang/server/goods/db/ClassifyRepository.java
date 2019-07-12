@@ -67,5 +67,4 @@ public interface ClassifyRepository extends JpaRepository<ClassifyDTO, String> {
   @Transactional
   @Query(value = "delete from classify_good_list where good_list_id=:good_id", nativeQuery = true)
   public void removeClassifyGood(@Param("good_id") String goodId);
-
 }

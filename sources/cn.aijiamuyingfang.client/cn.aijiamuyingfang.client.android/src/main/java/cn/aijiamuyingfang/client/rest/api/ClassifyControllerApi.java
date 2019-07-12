@@ -2,8 +2,8 @@ package cn.aijiamuyingfang.client.rest.api;
 
 import java.util.List;
 
-import cn.aijiamuyingfang.vo.ResponseBean;
 import cn.aijiamuyingfang.vo.classify.Classify;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import retrofit2.http.Body;

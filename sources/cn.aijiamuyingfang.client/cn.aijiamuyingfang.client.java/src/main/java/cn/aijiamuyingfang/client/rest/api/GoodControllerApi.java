@@ -3,8 +3,8 @@ package cn.aijiamuyingfang.client.rest.api;
 import java.util.List;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
-import cn.aijiamuyingfang.vo.ResponseBean;
 import cn.aijiamuyingfang.vo.goods.Good;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;

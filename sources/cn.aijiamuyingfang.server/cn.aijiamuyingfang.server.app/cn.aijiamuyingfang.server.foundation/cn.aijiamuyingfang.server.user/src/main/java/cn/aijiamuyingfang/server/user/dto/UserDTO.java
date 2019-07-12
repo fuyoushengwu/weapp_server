@@ -1,8 +1,6 @@
 package cn.aijiamuyingfang.server.user.dto;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -13,21 +11,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
 import cn.aijiamuyingfang.commons.utils.CollectionUtils;
-import cn.aijiamuyingfang.commons.utils.NumberUtils;
-import cn.aijiamuyingfang.commons.utils.StringUtils;
-import cn.aijiamuyingfang.server.domain.Gender;
-import cn.aijiamuyingfang.server.domain.UserAuthority;
+import cn.aijiamuyingfang.server.user.utils.ConvertUtils;
+import cn.aijiamuyingfang.vo.user.User;
+import cn.aijiamuyingfang.vo.utils.StringUtils;
 import lombok.Data;
 
 /**
@@ -41,11 +28,9 @@ import lombok.Data;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-06-25 16:38:56
  */
-@Entity
+@Entity(name = "user")
 @Data
-public class UserDTO implements UserDetails {
-  private static final long serialVersionUID = 443722768236688870L;
-
+public class UserDTO {
   /**
    * 小程序用戶沒有username,使用openid作爲username,
    */
@@ -75,25 +60,9 @@ public class UserDTO implements UserDetails {
   /**
    * 用户角色
    */
-  @JsonDeserialize(contentUsing = AuthorityListDeserializer.class)
-  @ElementCollection(fetch = FetchType.EAGER, targetClass = UserAuthority.class)
+  @ElementCollection(fetch = FetchType.EAGER, targetClass = UserAuthorityDTO.class)
   @Enumerated(EnumType.ORDINAL)
-  private List<UserAuthority> authorityList = new ArrayList<>();
-
-  private static class AuthorityListDeserializer extends JsonDeserializer<UserAuthority> {
-
-    @Override
-    public UserAuthority deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-      JsonToken currentToken = p.currentToken();
-      if (currentToken == JsonToken.VALUE_NUMBER_INT) {
-        return UserAuthority.fromValue(p.getIntValue());
-      } else if (currentToken == JsonToken.VALUE_STRING) {
-        return UserAuthority.fromValue(NumberUtils.toInt(p.getValueAsString(), 0));
-      }
-      return UserAuthority.UNKNOW;
-    }
-
-  }
+  private List<UserAuthorityDTO> authorityList = new ArrayList<>();
 
   /**
    * 用户所在的APP ID
@@ -103,28 +72,11 @@ public class UserDTO implements UserDetails {
   /**
    * 性别
    */
-  @JsonDeserialize(using = GenderDeserializer.class)
-  private Gender gender;
-
-  private static class GenderDeserializer extends JsonDeserializer<Gender> {
-
-    @Override
-    public Gender deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-      JsonToken currentToken = p.currentToken();
-      if (currentToken == JsonToken.VALUE_NUMBER_INT) {
-        return Gender.fromValue(p.getIntValue());
-      } else if (currentToken == JsonToken.VALUE_STRING) {
-        return Gender.fromValue(NumberUtils.toInt(p.getValueAsString(), 0));
-      }
-      return Gender.UNKNOW;
-    }
-
-  }
+  private GenderDTO gender;
 
   /**
    * 最后一次消息读取时间
    */
-  @JsonIgnore
   private Date lastReadMsgTime = new Date(0);
 
   /**
@@ -138,97 +90,30 @@ public class UserDTO implements UserDetails {
    * @param updateUser
    *          要更新的用户信息
    */
-  public void update(UserDTO updateUser) {
+  public void update(User updateUser) {
     if (null == updateUser) {
       return;
     }
-    if (StringUtils.hasContent(updateUser.nickname)) {
-      this.nickname = updateUser.nickname;
+    if (StringUtils.hasContent(updateUser.getNickname())) {
+      this.setNickname(updateUser.getNickname());
     }
-    if (updateUser.gender != null) {
-      this.gender = updateUser.gender;
+    if (updateUser.getGender() != null) {
+      this.setGender(ConvertUtils.convertGender(updateUser.getGender()));
     }
-    if (StringUtils.hasContent(updateUser.avatar)) {
-      this.avatar = updateUser.avatar;
+    if (StringUtils.hasContent(updateUser.getAvatar())) {
+      this.setAvatar(updateUser.getAvatar());
     }
-    if (StringUtils.hasContent(updateUser.phone)) {
-      this.phone = updateUser.phone;
+    if (StringUtils.hasContent(updateUser.getPhone())) {
+      this.setPhone(updateUser.getPhone());
     }
-    if (updateUser.lastReadMsgTime != null) {
-      this.lastReadMsgTime = updateUser.lastReadMsgTime;
+    if (updateUser.getLastReadMsgTime() != null) {
+      this.setLastReadMsgTime(updateUser.getLastReadMsgTime());
     }
-    if (updateUser.genericScore != 0) {
-      this.genericScore = updateUser.genericScore;
+    if (updateUser.getGenericScore() != 0) {
+      this.setGenericScore(updateUser.getGenericScore());
     }
-    if (!CollectionUtils.isEmpty(updateUser.authorityList)) {
-      this.authorityList = updateUser.authorityList;
-    }
-  }
-
-  /**
-   * 增加用户通用积分
-   * 
-   * @param score
-   *          要添加的用户通用积分
-   */
-  public void increaseGenericScore(int score) {
-    this.genericScore += score;
-  }
-
-  /**
-   * 减少用户通用积分
-   * 
-   * @param score
-   *          要减少的用户通用积分
-   */
-  public void decreaseGenericScore(int score) {
-    this.genericScore -= score;
-  }
-
-  public void addAuthority(UserAuthority authority) {
-    synchronized (this) {
-      if (null == this.authorityList) {
-        this.authorityList = new ArrayList<>();
-      }
-      if (authority != null && !this.authorityList.contains(authority)) {
-        this.authorityList.add(authority);
-      }
+    if (!CollectionUtils.isEmpty(updateUser.getAuthorityList())) {
+      this.setAuthorityList(ConvertUtils.convertUserAuthorityList(updateUser.getAuthorityList()));
     }
   }
-
-  @Override
-  @JsonIgnore
-  public Collection<? extends GrantedAuthority> getAuthorities() {
-    return authorityList;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  @Override
-  public String getUsername() {
-    return this.username;
-  }
-
-  @Override
-  public boolean isAccountNonExpired() {
-    return true;
-  }
-
-  @Override
-  public boolean isAccountNonLocked() {
-    return true;
-  }
-
-  @Override
-  public boolean isCredentialsNonExpired() {
-    return true;
-  }
-
-  @Override
-  public boolean isEnabled() {
-    return true;
-  }
-
 }

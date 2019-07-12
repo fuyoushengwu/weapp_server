@@ -33,7 +33,7 @@ public interface UserVoucherRepository extends JpaRepository<UserVoucherDTO, Str
    *          分页信息
    * @return
    */
-  @Query(value = "select * from user_voucher where username=:username and deprecated=false order by ?#{#pageable}",
+  @Query(value = "select * from user_voucher r where username=:username and deprecated=false order by ?#{#pageable}",
       countQuery = "select count(*) from user_voucher where username=:username and deprecated=false order by ?#{#pageable}",
       nativeQuery = true)
   Page<UserVoucherDTO> findByUsername(@Param("username") String username, Pageable pageable);
@@ -69,5 +69,4 @@ public interface UserVoucherRepository extends JpaRepository<UserVoucherDTO, Str
   @Query(value = "select * from user_voucher where good_voucher_id=:good_voucher_id and deprecated=false",
       nativeQuery = true)
   UserVoucherDTO findByGoodVoucherId(@Param("good_voucher_id") String goodvoucherId);
-
 }

@@ -45,7 +45,7 @@ public class ShoporderTestActions extends AbstractTestAction {
   }
 
   @TargetDataSource(name = "weapp-shoporder")
-  public void updateShopOrder(ShopOrderDTO shoporder) {
-    shoporderRepository.saveAndFlush(shoporder);
+  public void updateShopOrder(ShopOrderDTO shoporderDTO) {
+    shoporderRepository.saveAndFlush(shoporderDTO);
   }
 }

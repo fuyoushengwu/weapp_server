@@ -13,13 +13,10 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import cn.aijiamuyingfang.commons.utils.CollectionUtils;
-import cn.aijiamuyingfang.commons.utils.StringUtils;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import cn.aijiamuyingfang.server.goods.utils.ConvertUtils;
+import cn.aijiamuyingfang.vo.classify.Classify;
+import cn.aijiamuyingfang.vo.utils.StringUtils;
+import lombok.Data;
 
 /**
  * [描述]:
@@ -32,10 +29,8 @@ import lombok.Setter;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-06-27 00:12:32
  */
-@Entity
-@Getter
-@Setter
-@NoArgsConstructor
+@Entity(name = "classify")
+@Data
 public class ClassifyDTO {
   /**
    * 条目Id
@@ -65,41 +60,10 @@ public class ClassifyDTO {
    * 子条目
    */
   @OneToMany(cascade = CascadeType.ALL)
-  @JsonIgnore
   private List<ClassifyDTO> subClassifyList = new ArrayList<>();
 
   @ManyToMany
-  @JsonIgnore
   private List<GoodDTO> goodList = new ArrayList<>();
-
-  /**
-   * 添加子条目
-   * 
-   * @param subclassify
-   *          子条目
-   */
-  public void addSubClassify(ClassifyDTO subclassify) {
-    synchronized (this) {
-      if (null == this.subClassifyList) {
-        this.subClassifyList = new ArrayList<>();
-      }
-    }
-    if (subclassify != null) {
-      this.subClassifyList.add(subclassify);
-    }
-  }
-
-  /**
-   * 条目下添加商品
-   * 
-   * @param good
-   *          商品
-   */
-  public void addGood(GoodDTO good) {
-    if (good != null) {
-      this.goodList.add(good);
-    }
-  }
 
   /**
    * 根据提供的Classify更新本条目的信息
@@ -107,25 +71,46 @@ public class ClassifyDTO {
    * @param updateClassify
    *          要更新的条目信息
    */
-  public void update(ClassifyDTO updateClassify) {
+  public void update(Classify updateClassify) {
     if (null == updateClassify) {
       return;
     }
-    if (StringUtils.hasContent(updateClassify.name)) {
-      this.name = updateClassify.name;
+    if (StringUtils.hasContent(updateClassify.getName())) {
+      this.setName(updateClassify.getName());
     }
-    if (updateClassify.level != 0) {
-      this.level = updateClassify.level;
+    if (updateClassify.getLevel() != 0) {
+      this.setLevel(updateClassify.getLevel());
     }
-    if (updateClassify.coverImg != null) {
-      this.coverImg.update(updateClassify.coverImg);
-    }
-    if (!CollectionUtils.isEmpty(updateClassify.subClassifyList)) {
-      this.subClassifyList = updateClassify.subClassifyList;
-    }
-    if (!CollectionUtils.isEmpty(updateClassify.goodList)) {
-      this.goodList = updateClassify.goodList;
+    if (updateClassify.getCoverImg() != null) {
+      this.setCoverImg(ConvertUtils.convertImageSource(updateClassify.getCoverImg()));
     }
   }
 
+  /**
+   * 添加子条目
+   * 
+   * @param subclassifyDTO
+   */
+  public void addSubClassify(ClassifyDTO subclassifyDTO) {
+    synchronized (this) {
+      if (null == this.subClassifyList) {
+        this.subClassifyList = new ArrayList<>();
+      }
+    }
+    if (subclassifyDTO != null) {
+      this.subClassifyList.add(subclassifyDTO);
+    }
+  }
+
+  /**
+   * 条目下添加商品
+   * 
+   * @param goodDTO
+   *          商品
+   */
+  public void addGood(GoodDTO goodDTO) {
+    if (goodDTO != null) {
+      this.goodList.add(goodDTO);
+    }
+  }
 }

@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.ShopOrderControllerApi;
-import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
-import cn.aijiamuyingfang.vo.ResponseBean;
-import cn.aijiamuyingfang.vo.ResponseCode;
+import cn.aijiamuyingfang.client.rest.utils.ResponseUtils;
 import cn.aijiamuyingfang.vo.exception.CouponException;
 import cn.aijiamuyingfang.vo.exception.ShopOrderException;
 import cn.aijiamuyingfang.vo.preorder.PagablePreOrderGoodList;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
+import cn.aijiamuyingfang.vo.response.ResponseCode;
 import cn.aijiamuyingfang.vo.shoporder.ConfirmShopOrderFinishedResponse;
 import cn.aijiamuyingfang.vo.shoporder.CreateShopOrderRequest;
 import cn.aijiamuyingfang.vo.shoporder.PagableShopOrderList;
@@ -24,6 +24,7 @@ import cn.aijiamuyingfang.vo.shoporder.ShopOrder;
 import cn.aijiamuyingfang.vo.shoporder.ShopOrderStatus;
 import cn.aijiamuyingfang.vo.shoporder.ShopOrderVoucher;
 import cn.aijiamuyingfang.vo.shoporder.UpdateShopOrderStatusRequest;
+import cn.aijiamuyingfang.vo.utils.JsonUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,7 +49,7 @@ public class ShopOrderControllerClient {
 
     @Override
     public void onResponse(Call<ResponseBean> call, Response<ResponseBean> response) {
-      LOGGER.info("onResponse:" + response.message());
+      LOGGER.info("onResponse:{}", response.message());
     }
 
     @Override
@@ -86,8 +87,8 @@ public class ShopOrderControllerClient {
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
-      PagableShopOrderList getShopOrderListResponse = JsonUtils
-          .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), PagableShopOrderList.class);
+      PagableShopOrderList getShopOrderListResponse = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
+          PagableShopOrderList.class);
       if (null == getShopOrderListResponse) {
         throw new ShopOrderException("500", "get user shoporder list return code is '200',but return data is null");
       }
@@ -149,8 +150,8 @@ public class ShopOrderControllerClient {
     String returnCode = responseBean.getCode();
     Object returnData = responseBean.getData();
     if ("200".equals(returnCode)) {
-      PagableShopOrderList getShoporderListResponse = JsonUtils
-          .json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData), PagableShopOrderList.class);
+      PagableShopOrderList getShoporderListResponse = JsonUtils.json2Bean(JsonUtils.map2Json((Map<?, ?>) returnData),
+          PagableShopOrderList.class);
       if (null == getShoporderListResponse) {
         throw new ShopOrderException("500", "get  shoporder list return code is '200',but return data is null");
       }
@@ -175,21 +176,8 @@ public class ShopOrderControllerClient {
       shoporderControllerApi.updateShopOrderStatus(shopOrderId, requestBean, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = shoporderControllerApi
-        .updateShopOrderStatus(shopOrderId, requestBean, accessToken).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      if (response.errorBody() != null) {
-        LOGGER.error(new String(response.errorBody().bytes()));
-      }
-      throw new ShopOrderException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    if ("200".equals(returnCode)) {
-      return;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new ShopOrderException(returnCode, responseBean.getMsg());
+    ResponseUtils.handleShopOrderVOIDResponse(
+        shoporderControllerApi.updateShopOrderStatus(shopOrderId, requestBean, accessToken).execute(), LOGGER);
   }
 
   /**
@@ -205,21 +193,8 @@ public class ShopOrderControllerClient {
       shoporderControllerApi.delete100DaysFinishedShopOrder(shopOrderId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = shoporderControllerApi.delete100DaysFinishedShopOrder(shopOrderId, accessToken)
-        .execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      if (response.errorBody() != null) {
-        LOGGER.error(new String(response.errorBody().bytes()));
-      }
-      throw new ShopOrderException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    if ("200".equals(returnCode)) {
-      return;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new ShopOrderException(returnCode, responseBean.getMsg());
+    ResponseUtils.handleShopOrderVOIDResponse(
+        shoporderControllerApi.delete100DaysFinishedShopOrder(shopOrderId, accessToken).execute(), LOGGER);
   }
 
   /**
@@ -237,21 +212,8 @@ public class ShopOrderControllerClient {
       shoporderControllerApi.deleteUserShopOrder(username, shopOrderId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = shoporderControllerApi.deleteUserShopOrder(username, shopOrderId, accessToken)
-        .execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      if (response.errorBody() != null) {
-        LOGGER.error(new String(response.errorBody().bytes()));
-      }
-      throw new ShopOrderException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    if ("200".equals(returnCode)) {
-      return;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new ShopOrderException(returnCode, responseBean.getMsg());
+    ResponseUtils.handleShopOrderVOIDResponse(
+        shoporderControllerApi.deleteUserShopOrder(username, shopOrderId, accessToken).execute(), LOGGER);
   }
 
   /**
@@ -319,21 +281,8 @@ public class ShopOrderControllerClient {
           .enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = shoporderControllerApi
-        .updateUserShopOrderRecieveAddress(username, shopOrderId, addressId, accessToken).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      if (response.errorBody() != null) {
-        LOGGER.error(new String(response.errorBody().bytes()));
-      }
-      throw new ShopOrderException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    if ("200".equals(returnCode)) {
-      return;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new ShopOrderException(returnCode, responseBean.getMsg());
+    ResponseUtils.handleShopOrderVOIDResponse(shoporderControllerApi
+        .updateUserShopOrderRecieveAddress(username, shopOrderId, addressId, accessToken).execute(), LOGGER);
   }
 
   /**
@@ -522,19 +471,7 @@ public class ShopOrderControllerClient {
       shoporderControllerApi.updatePreOrder(goodId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = shoporderControllerApi.updatePreOrder(goodId, accessToken).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      if (response.errorBody() != null) {
-        LOGGER.error(new String(response.errorBody().bytes()));
-      }
-      throw new ShopOrderException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    if ("200".equals(returnCode)) {
-      return;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new ShopOrderException(returnCode, responseBean.getMsg());
+    ResponseUtils.handleShopOrderVOIDResponse(shoporderControllerApi.updatePreOrder(goodId, accessToken).execute(),
+        LOGGER);
   }
 }

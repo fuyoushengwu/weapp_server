@@ -1,5 +1,7 @@
 package cn.aijiamuyingfang.vo.user;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import com.google.gson.annotations.SerializedName;
 
 import cn.aijiamuyingfang.vo.BaseEnum;
@@ -15,7 +17,7 @@ import cn.aijiamuyingfang.vo.BaseEnum;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-07-07 00:54:17
  */
-public enum UserAuthority implements BaseEnum {
+public enum UserAuthority implements GrantedAuthority, BaseEnum {
 
   /**
    * 未知类型
@@ -62,9 +64,9 @@ public enum UserAuthority implements BaseEnum {
   }
 
   public static UserAuthority fromValue(int value) {
-    for (UserAuthority type : UserAuthority.values()) {
-      if (type.getValue() == value) {
-        return type;
+    for (UserAuthority authority : UserAuthority.values()) {
+      if (authority.getValue() == value) {
+        return authority;
       }
     }
     return UNKNOW;

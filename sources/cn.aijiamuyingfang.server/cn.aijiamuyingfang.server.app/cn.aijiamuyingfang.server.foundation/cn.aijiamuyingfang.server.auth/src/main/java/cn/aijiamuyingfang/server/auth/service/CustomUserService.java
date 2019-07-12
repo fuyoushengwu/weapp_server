@@ -6,10 +6,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-import cn.aijiamuyingfang.server.domain.response.ResponseBean;
-import cn.aijiamuyingfang.server.domain.response.ResponseCode;
 import cn.aijiamuyingfang.server.feign.UserClient;
-import cn.aijiamuyingfang.server.feign.domain.user.User;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
+import cn.aijiamuyingfang.vo.response.ResponseCode;
+import cn.aijiamuyingfang.vo.user.User;
 
 @Service
 public class CustomUserService implements UserDetailsService {

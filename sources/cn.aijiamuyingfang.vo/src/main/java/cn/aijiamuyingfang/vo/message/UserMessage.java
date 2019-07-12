@@ -2,6 +2,8 @@ package cn.aijiamuyingfang.vo.message;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 import lombok.Data;
@@ -50,11 +52,13 @@ public class UserMessage implements Parcelable {
   /**
    * 消息创建时间
    */
+  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
   private Date createTime = new Date();
 
   /**
    * 消息结束时间
    */
+  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
   private Date finishTime;
 
   /**

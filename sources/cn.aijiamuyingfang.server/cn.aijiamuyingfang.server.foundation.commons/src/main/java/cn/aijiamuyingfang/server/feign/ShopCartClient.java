@@ -6,7 +6,7 @@ import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import cn.aijiamuyingfang.server.domain.response.ResponseBean;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
 
 /**
  * [描述]:

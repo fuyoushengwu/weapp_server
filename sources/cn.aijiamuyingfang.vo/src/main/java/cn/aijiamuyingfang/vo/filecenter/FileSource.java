@@ -28,10 +28,10 @@ public enum FileSource implements BaseEnum {
     return value;
   }
 
-  public static FileSource fromValue(int source) {
-    for (FileSource fileSource : FileSource.values()) {
-      if (fileSource.getValue() == source) {
-        return fileSource;
+  public static FileSource fromValue(int value) {
+    for (FileSource source : FileSource.values()) {
+      if (source.getValue() == value) {
+        return source;
       }
     }
     return LOCAL;

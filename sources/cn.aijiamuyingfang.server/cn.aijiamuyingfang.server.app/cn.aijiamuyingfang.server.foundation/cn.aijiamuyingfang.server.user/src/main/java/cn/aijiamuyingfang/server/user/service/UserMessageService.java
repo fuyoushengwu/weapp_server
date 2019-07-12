@@ -11,12 +11,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
-import cn.aijiamuyingfang.server.domain.UserAuthority;
 import cn.aijiamuyingfang.server.user.db.UserMessageRepository;
 import cn.aijiamuyingfang.server.user.db.UserRepository;
-import cn.aijiamuyingfang.server.user.domain.response.PagableUserMessageList;
 import cn.aijiamuyingfang.server.user.dto.UserDTO;
 import cn.aijiamuyingfang.server.user.dto.UserMessageDTO;
+import cn.aijiamuyingfang.server.user.utils.ConvertUtils;
+import cn.aijiamuyingfang.vo.message.PagableUserMessageList;
+import cn.aijiamuyingfang.vo.message.UserMessage;
+import cn.aijiamuyingfang.vo.user.UserAuthority;
 
 /**
  * [描述]:
@@ -67,10 +69,10 @@ public class UserMessageService {
     usernameList.add(username);
     usernameList.addAll(userRepository.findUsersByAuthority(UserAuthority.MANAGER_PERMISSION.getValue()));
     PagableUserMessageList response = getMessageList(usernameList, currentPage, pageSize);
-    UserDTO user = userRepository.findOne(username);
-    if (user != null) {
-      user.setLastReadMsgTime(new Date());
-      userRepository.saveAndFlush(user);
+    UserDTO userDTO = userRepository.findOne(username);
+    if (userDTO != null) {
+      userDTO.setLastReadMsgTime(new Date());
+      userRepository.saveAndFlush(userDTO);
     }
     return response;
   }
@@ -89,11 +91,11 @@ public class UserMessageService {
     cleanOvertimeMessage();
     // PageRequest的Page参数是基于0的,但是currentPage是基于1的,所有将currentPage作为参数传递给PgeRequest时需要'-1'
     PageRequest pageRequest = new PageRequest(currentPage - 1, pageSize, Sort.Direction.DESC, "createTime");
-    Page<UserMessageDTO> page = userMessageRepository.findByUsernameIn(usernameList, pageRequest);
+    Page<UserMessageDTO> userMessageDTOPage = userMessageRepository.findByUsernameIn(usernameList, pageRequest);
     PagableUserMessageList response = new PagableUserMessageList();
-    response.setCurrentPage(page.getNumber() + 1);
-    response.setDataList(page.getContent());
-    response.setTotalpage(page.getTotalPages());
+    response.setCurrentPage(userMessageDTOPage.getNumber() + 1);
+    response.setDataList(ConvertUtils.convertUserMessageDTOList(userMessageDTOPage.getContent()));
+    response.setTotalpage(userMessageDTOPage.getTotalPages());
     return response;
   }
 
@@ -112,12 +114,13 @@ public class UserMessageService {
    * @param message
    * @return
    */
-  public UserMessageDTO createMessage(String username, UserMessageDTO message) {
-    if (message != null) {
-      message.setUsername(username);
-      userMessageRepository.saveAndFlush(message);
+  public UserMessage createMessage(String username, UserMessage message) {
+    if (null == message) {
+      return null;
     }
-    return message;
+    message.setUsername(username);
+    UserMessageDTO userMessageDTO = userMessageRepository.saveAndFlush(ConvertUtils.convertUserMessage(message));
+    return ConvertUtils.convertUserMessageDTO(userMessageDTO);
   }
 
   /**
@@ -128,12 +131,12 @@ public class UserMessageService {
    * @param messageId
    */
   public void deleteMessage(String username, String messageId) {
-    UserMessageDTO message = userMessageRepository.findOne(messageId);
-    if (null == message) {
+    UserMessageDTO messageDTO = userMessageRepository.findOne(messageId);
+    if (null == messageDTO) {
       return;
     }
-    if (username.equals(message.getUsername())) {
-      userMessageRepository.delete(message);
+    if (username.equals(messageDTO.getUsername())) {
+      userMessageRepository.delete(messageDTO);
     } else {
       throw new AccessDeniedException("no permission delete other user's message");
     }

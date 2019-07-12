@@ -1,16 +1,13 @@
 package cn.aijiamuyingfang.server.goods.dto;
 
-import cn.aijiamuyingfang.commons.utils.StringUtils;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import cn.aijiamuyingfang.vo.store.WorkTime;
+import cn.aijiamuyingfang.vo.utils.StringUtils;
+import lombok.Data;
 
 /**
  * 营业时间
  */
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 public class WorkTimeDTO {
   /**
    * 开始时间
@@ -22,15 +19,15 @@ public class WorkTimeDTO {
    */
   private String end;
 
-  public void update(WorkTimeDTO updateWorktime) {
+  public void update(WorkTime updateWorktime) {
     if (null == updateWorktime) {
       return;
     }
-    if (StringUtils.hasContent(updateWorktime.start)) {
-      this.start = updateWorktime.start;
+    if (StringUtils.hasContent(updateWorktime.getStart())) {
+      this.setStart(updateWorktime.getStart());
     }
-    if (StringUtils.hasContent(updateWorktime.end)) {
-      this.end = updateWorktime.end;
+    if (StringUtils.hasContent(updateWorktime.getEnd())) {
+      this.setEnd(updateWorktime.getEnd());
     }
   }
 }

@@ -1,6 +1,6 @@
 package cn.aijiamuyingfang.vo.exception;
 
-import cn.aijiamuyingfang.vo.ResponseCode;
+import cn.aijiamuyingfang.vo.response.ResponseCode;
 
 /**
  * [描述]:

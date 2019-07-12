@@ -9,15 +9,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import cn.aijiamuyingfang.client.commons.utils.StringUtils;
+import cn.aijiamuyingfang.client.commons.constant.ClientRestConstants;
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.ClassifyControllerApi;
-import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
-import cn.aijiamuyingfang.vo.ResponseBean;
-import cn.aijiamuyingfang.vo.ResponseCode;
+import cn.aijiamuyingfang.client.rest.utils.ResponseUtils;
 import cn.aijiamuyingfang.vo.classify.Classify;
 import cn.aijiamuyingfang.vo.exception.GoodsException;
-import okhttp3.MediaType;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
+import cn.aijiamuyingfang.vo.response.ResponseCode;
+import cn.aijiamuyingfang.vo.utils.JsonUtils;
+import cn.aijiamuyingfang.vo.utils.StringUtils;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -44,7 +45,7 @@ public class ClassifyControllerClient {
 
     @Override
     public void onResponse(Call<ResponseBean> call, Response<ResponseBean> response) {
-      LOGGER.info("onResponse:" + response.message());
+      LOGGER.info("onResponse:{}", response.message());
     }
 
     @Override
@@ -151,20 +152,8 @@ public class ClassifyControllerClient {
       classifyControllerApi.deleteClassify(classifyId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = classifyControllerApi.deleteClassify(classifyId, accessToken).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      if (response.errorBody() != null) {
-        LOGGER.error(new String(response.errorBody().bytes()));
-      }
-      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    if ("200".equals(returnCode)) {
-      return;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new GoodsException(returnCode, responseBean.getMsg());
+    ResponseUtils.handleGoodsVOIDResponse(classifyControllerApi.deleteClassify(classifyId, accessToken).execute(),
+        LOGGER);
   }
 
   /**
@@ -249,7 +238,7 @@ public class ClassifyControllerClient {
   private MultipartBody convert(File coverImageFile, Classify classifyRequest) {
     MultipartBody.Builder requestBodyBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
     if (coverImageFile != null) {
-      RequestBody requestCoverImg = RequestBody.create(MediaType.parse("multipart/form-data"), coverImageFile);
+      RequestBody requestCoverImg = RequestBody.create(ClientRestConstants.MEDIA_TYPE_MULTIPART, coverImageFile);
       requestBodyBuilder.addFormDataPart("coverImage", coverImageFile.getName(), requestCoverImg);
     }
     if (null == classifyRequest) {
@@ -275,19 +264,7 @@ public class ClassifyControllerClient {
       classifyControllerApi.addClassifyGood(classifyId, goodId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = classifyControllerApi.addClassifyGood(classifyId, goodId, accessToken).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      if (response.errorBody() != null) {
-        LOGGER.error(new String(response.errorBody().bytes()));
-      }
-      throw new GoodsException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    if ("200".equals(returnCode)) {
-      return;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new GoodsException(returnCode, responseBean.getMsg());
+    ResponseUtils.handleGoodsVOIDResponse(
+        classifyControllerApi.addClassifyGood(classifyId, goodId, accessToken).execute(), LOGGER);
   }
 }

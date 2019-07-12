@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import cn.aijiamuyingfang.commons.utils.StringUtils;
-import cn.aijiamuyingfang.server.user.dto.RecieveAddressDTO;
-import cn.aijiamuyingfang.server.user.dto.UserDTO;
 import cn.aijiamuyingfang.server.user.service.UserService;
+import cn.aijiamuyingfang.vo.user.RecieveAddress;
+import cn.aijiamuyingfang.vo.user.User;
+import cn.aijiamuyingfang.vo.utils.StringUtils;
 
 /**
  * [描述]:
@@ -47,7 +47,7 @@ public class UserController {
   @PreAuthorize(
       value = "isAuthenticated() and (#username.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
   @GetMapping(value = "/user/{username}")
-  public UserDTO getUser(@PathVariable("username") String username) {
+  public User getUser(@PathVariable("username") String username) {
     return getUserInternal(username);
   }
 
@@ -58,7 +58,7 @@ public class UserController {
    */
   @PreAuthorize(value = "isAuthenticated()")
   @GetMapping(value = "/user")
-  public UserDTO getUser() {
+  public User getUser() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (!(authentication instanceof OAuth2Authentication)) {
       throw new IllegalArgumentException("username is empty");
@@ -73,7 +73,7 @@ public class UserController {
 
   @PreAuthorize("hasAuthority('permission:manager:*')")
   @PostMapping("/user/register")
-  public UserDTO registerUser(@RequestBody UserDTO user) {
+  public User registerUser(@RequestBody User user) {
     return userService.registerUser(user);
   }
 
@@ -84,7 +84,7 @@ public class UserController {
    * @return
    */
   @GetMapping(value = "/users-anon/internal/user")
-  public UserDTO getUserInternal(@RequestParam(value = "username") String username) {
+  public User getUserInternal(@RequestParam(value = "username") String username) {
     return userService.getUser(username);
   }
 
@@ -95,7 +95,7 @@ public class UserController {
    * @return
    */
   @PostMapping(value = "/users-anon/internal/user")
-  public UserDTO registerUserInternal(@RequestBody UserDTO user) {
+  public User registerUserInternal(@RequestBody User user) {
     return userService.registerUser(user);
   }
 
@@ -120,7 +120,7 @@ public class UserController {
    */
   @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
   @PutMapping(value = "/user/{username}")
-  public UserDTO updateUser(@PathVariable("username") String username, @RequestBody UserDTO user) {
+  public User updateUser(@PathVariable("username") String username, @RequestBody User user) {
     if (null == user) {
       throw new IllegalArgumentException("update user request body is null");
     }
@@ -135,7 +135,7 @@ public class UserController {
    */
   @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
   @GetMapping(value = "/user/{username}/recieveaddress")
-  public List<RecieveAddressDTO> getUserRecieveAddressList(@PathVariable("username") String username) {
+  public List<RecieveAddress> getUserRecieveAddressList(@PathVariable("username") String username) {
     return userService.getUserRecieveAddressList(username);
   }
 
@@ -148,8 +148,8 @@ public class UserController {
    */
   @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
   @PostMapping(value = "/user/{username}/recieveaddress")
-  public RecieveAddressDTO addUserRecieveAddress(@PathVariable("username") String username,
-      @RequestBody RecieveAddressDTO request) {
+  public RecieveAddress addUserRecieveAddress(@PathVariable("username") String username,
+      @RequestBody RecieveAddress request) {
     if (null == request) {
       throw new IllegalArgumentException("add user recieveaddress request body is null");
     }
@@ -169,7 +169,7 @@ public class UserController {
   @PreAuthorize(
       value = "isAuthenticated() and (#username.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
   @GetMapping(value = "/user/{username}/recieveaddress/{address_id}")
-  public RecieveAddressDTO getRecieveAddress(@PathVariable("username") String username,
+  public RecieveAddress getRecieveAddress(@PathVariable("username") String username,
       @PathVariable("address_id") String addressId) {
     return userService.getRecieveAddress(username, addressId);
   }
@@ -184,8 +184,8 @@ public class UserController {
    */
   @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
   @PutMapping(value = "/user/{username}/recieveaddress/{address_id}")
-  public RecieveAddressDTO updateRecieveAddress(@PathVariable("username") String username,
-      @PathVariable("address_id") String addressId, @RequestBody RecieveAddressDTO request) {
+  public RecieveAddress updateRecieveAddress(@PathVariable("username") String username,
+      @PathVariable("address_id") String addressId, @RequestBody RecieveAddress request) {
     if (null == request) {
       throw new IllegalArgumentException("update recieveaddress request body is null");
     }

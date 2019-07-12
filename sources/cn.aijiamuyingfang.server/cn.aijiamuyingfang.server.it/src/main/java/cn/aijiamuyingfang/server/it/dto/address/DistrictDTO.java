@@ -2,10 +2,7 @@ package cn.aijiamuyingfang.server.it.dto.address;
 
 import javax.persistence.MappedSuperclass;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
 /**
  * [描述]:
@@ -21,10 +18,7 @@ import lombok.Setter;
  * @date 2018-06-28 02:57:25
  */
 @MappedSuperclass
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 public abstract class DistrictDTO {
   /**
    * 行政区名

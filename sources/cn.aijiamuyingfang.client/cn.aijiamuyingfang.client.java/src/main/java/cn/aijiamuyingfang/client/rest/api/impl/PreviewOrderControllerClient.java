@@ -10,12 +10,13 @@ import org.springframework.stereotype.Service;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.PreviewOrderControllerApi;
-import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
-import cn.aijiamuyingfang.vo.ResponseBean;
-import cn.aijiamuyingfang.vo.ResponseCode;
+import cn.aijiamuyingfang.client.rest.utils.ResponseUtils;
 import cn.aijiamuyingfang.vo.exception.ShopOrderException;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
+import cn.aijiamuyingfang.vo.response.ResponseCode;
 import cn.aijiamuyingfang.vo.review.PreviewOrder;
 import cn.aijiamuyingfang.vo.review.PreviewOrderItem;
+import cn.aijiamuyingfang.vo.utils.JsonUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,7 +41,7 @@ public class PreviewOrderControllerClient {
 
     @Override
     public void onResponse(Call<ResponseBean> call, Response<ResponseBean> response) {
-      LOGGER.info("onResponse:" + response.message());
+      LOGGER.info("onResponse:{}", response.message());
     }
 
     @Override
@@ -116,21 +117,8 @@ public class PreviewOrderControllerClient {
       previeworderControllerApi.deletePreviewOrderItem(username, previewItemId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = previeworderControllerApi
-        .deletePreviewOrderItem(username, previewItemId, accessToken).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      if (response.errorBody() != null) {
-        LOGGER.error(new String(response.errorBody().bytes()));
-      }
-      throw new ShopOrderException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    if ("200".equals(returnCode)) {
-      return;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new ShopOrderException(returnCode, responseBean.getMsg());
+    ResponseUtils.handleShopOrderVOIDResponse(
+        previeworderControllerApi.deletePreviewOrderItem(username, previewItemId, accessToken).execute(), LOGGER);
   }
 
   /**

@@ -40,4 +40,14 @@ public class ShopCart {
    * 商品数量
    */
   private int count;
+
+  /**
+   * 增加购物车中商品数量
+   * 
+   * @param c
+   *          商品增加的数量
+   */
+  public void addCount(int c) {
+    this.count += c;
+  }
 }

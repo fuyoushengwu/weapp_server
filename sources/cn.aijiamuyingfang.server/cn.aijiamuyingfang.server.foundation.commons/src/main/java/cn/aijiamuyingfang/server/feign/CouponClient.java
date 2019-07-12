@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import cn.aijiamuyingfang.server.domain.response.ResponseBean;
-import cn.aijiamuyingfang.server.feign.domain.coupon.PagableGoodVoucherList;
-import cn.aijiamuyingfang.server.feign.domain.coupon.PagableUserVoucherList;
-import cn.aijiamuyingfang.server.feign.domain.coupon.PagableVoucherItemList;
-import cn.aijiamuyingfang.server.feign.domain.coupon.GoodVoucher;
-import cn.aijiamuyingfang.server.feign.domain.coupon.UserVoucher;
-import cn.aijiamuyingfang.server.feign.domain.coupon.VoucherItem;
+import cn.aijiamuyingfang.vo.coupon.GoodVoucher;
+import cn.aijiamuyingfang.vo.coupon.PagableGoodVoucherList;
+import cn.aijiamuyingfang.vo.coupon.PagableUserVoucherList;
+import cn.aijiamuyingfang.vo.coupon.PagableVoucherItemList;
+import cn.aijiamuyingfang.vo.coupon.UserVoucher;
+import cn.aijiamuyingfang.vo.coupon.VoucherItem;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
 
 @FeignClient(name = "coupon-service")
 public interface CouponClient {
@@ -112,5 +112,4 @@ public interface CouponClient {
    */
   @GetMapping(value = "/coupon/voucher_item/{voucher_item_id}")
   ResponseBean<VoucherItem> getVoucherItem(@PathVariable("voucher_item_id") String voucherItemId);
-
 }

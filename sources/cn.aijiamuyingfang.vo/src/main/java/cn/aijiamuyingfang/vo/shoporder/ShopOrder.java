@@ -6,10 +6,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 import cn.aijiamuyingfang.vo.store.StoreAddress;
 import cn.aijiamuyingfang.vo.user.RecieveAddress;
+import cn.aijiamuyingfang.vo.utils.StringUtils;
 import lombok.Data;
 
 /**
@@ -59,16 +62,19 @@ public class ShopOrder implements Parcelable {
   /**
    * 订单创建时间
    */
+  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
   private Date createTime = new Date();
 
   /**
    * 订单创建时间
    */
+  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
   private Date finishTime;
 
   /**
    * 预订取货时间
    */
+  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
   private Date pickupTime;
 
   /**
@@ -105,6 +111,7 @@ public class ShopOrder implements Parcelable {
   /**
    * 订单信息最后修改时间
    */
+  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
   private Date lastModify = new Date();
 
   /**
@@ -149,6 +156,42 @@ public class ShopOrder implements Parcelable {
   public int getLastModifyTime() {
     Date now = new Date();
     return (int) ((now.getTime() - lastModify.getTime()) / 1000 / 60 / 60 / 24);
+  }
+
+  /**
+   * 添加操作员
+   * 
+   * @param operator
+   *          操作员
+   */
+  public void addOperator(String operator) {
+    synchronized (this) {
+      if (null == this.operator) {
+        this.operator = new ArrayList<>();
+      }
+    }
+
+    if (StringUtils.hasContent(operator)) {
+      this.operator.add(operator);
+    }
+  }
+
+  /**
+   * 添加订单项
+   * 
+   * @param orderItem
+   *          购物项
+   */
+  public void addOrderItem(ShopOrderItem orderItem) {
+    synchronized (this) {
+      if (null == this.orderItemList) {
+        this.orderItemList = new ArrayList<>();
+      }
+    }
+    if (null == orderItem) {
+      return;
+    }
+    this.orderItemList.add(orderItem);
   }
 
   public ShopOrder() {

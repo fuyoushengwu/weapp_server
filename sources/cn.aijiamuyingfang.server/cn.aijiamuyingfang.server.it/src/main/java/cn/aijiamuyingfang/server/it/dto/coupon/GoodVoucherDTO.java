@@ -10,10 +10,7 @@ import javax.persistence.Id;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import cn.aijiamuyingfang.commons.utils.CollectionUtils;
-import cn.aijiamuyingfang.commons.utils.StringUtils;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * [描述]:
@@ -26,9 +23,8 @@ import lombok.NoArgsConstructor;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-06-27 03:02:06
  */
-@Entity
+@Entity(name = "good_voucher")
 @Data
-@NoArgsConstructor
 public class GoodVoucherDTO {
   /**
    * 兑换券-Id
@@ -60,35 +56,4 @@ public class GoodVoucherDTO {
    * 兑换券中可用的兑换值
    */
   private int score;
-
-  /**
-   * 使用提供的GoodVoucher更新本商品兑换券信息
-   * 
-   * @param updateVoucher
-   *          要更新的商品兑换信息
-   */
-  public void update(GoodVoucherDTO updateVoucher) {
-    if (null == updateVoucher) {
-      return;
-    }
-    if (StringUtils.hasContent(updateVoucher.name)) {
-      this.name = updateVoucher.name;
-    }
-    if (StringUtils.hasContent(updateVoucher.description)) {
-      this.description = updateVoucher.description;
-    }
-    if (updateVoucher.score != 0) {
-      this.score = updateVoucher.score;
-    }
-    if (!CollectionUtils.isEmpty(updateVoucher.voucherItemIdList)) {
-      this.voucherItemIdList = updateVoucher.voucherItemIdList;
-    }
-  }
-
-  public void addVoucherItemId(String voucherItemId) {
-    if (StringUtils.hasContent(voucherItemId)) {
-      this.voucherItemIdList.add(voucherItemId);
-    }
-
-  }
 }

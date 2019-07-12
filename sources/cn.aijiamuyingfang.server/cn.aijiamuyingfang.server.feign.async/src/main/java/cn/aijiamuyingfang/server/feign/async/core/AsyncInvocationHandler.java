@@ -47,18 +47,7 @@ public class AsyncInvocationHandler implements InvocationHandler {
     } else {
       if (method.getDeclaringClass() == Object.class) {
         if (method.getName().equals("equals")) {
-          if (args[0] == null) {
-            return Boolean.valueOf(false);
-          }
-          try {
-            InvocationHandler e = Proxy.getInvocationHandler(args[0]);
-            if (e.getClass().equals(AsyncInvocationHandler.class)) {
-              AsyncInvocationHandler that = (AsyncInvocationHandler) e;
-              return Boolean.valueOf(this.target.equals(that.target));
-            }
-          } catch (IllegalArgumentException var6) {
-          }
-          return Boolean.valueOf(false);
+          return invokeEquals(args);
         }
         if (method.getName().equals("hashCode")) {
           return Integer.valueOf(this.hashCode());
@@ -69,6 +58,22 @@ public class AsyncInvocationHandler implements InvocationHandler {
       }
       return this.dispatch.get(method).invoke(args);
     }
+  }
+
+  private Object invokeEquals(Object[] args) {
+    if (args[0] == null) {
+      return Boolean.valueOf(false);
+    }
+    try {
+      InvocationHandler e = Proxy.getInvocationHandler(args[0]);
+      if (e.getClass().equals(AsyncInvocationHandler.class)) {
+        AsyncInvocationHandler that = (AsyncInvocationHandler) e;
+        return Boolean.valueOf(this.target.equals(that.target));
+      }
+    } catch (IllegalArgumentException var6) {
+      //异常不需要处理
+    }
+    return Boolean.valueOf(false);
   }
 
   @Override

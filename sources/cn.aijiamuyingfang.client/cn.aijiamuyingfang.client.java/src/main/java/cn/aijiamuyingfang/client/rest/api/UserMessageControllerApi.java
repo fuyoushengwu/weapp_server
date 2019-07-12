@@ -1,8 +1,8 @@
 package cn.aijiamuyingfang.client.rest.api;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpApi;
-import cn.aijiamuyingfang.vo.ResponseBean;
 import cn.aijiamuyingfang.vo.message.UserMessage;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;

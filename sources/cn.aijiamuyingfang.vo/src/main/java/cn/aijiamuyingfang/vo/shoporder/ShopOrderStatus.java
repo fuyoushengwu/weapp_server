@@ -60,9 +60,9 @@ public enum ShopOrderStatus implements BaseEnum, Parcelable {
   }
 
   public static ShopOrderStatus fromValue(int value) {
-    for (ShopOrderStatus type : ShopOrderStatus.values()) {
-      if (type.value == value) {
-        return type;
+    for (ShopOrderStatus status : ShopOrderStatus.values()) {
+      if (status.value == value) {
+        return status;
       }
     }
     return UNKNOW;

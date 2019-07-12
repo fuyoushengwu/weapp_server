@@ -2,8 +2,9 @@ package cn.aijiamuyingfang.server.user.dto;
 
 import javax.persistence.Entity;
 
-import cn.aijiamuyingfang.commons.utils.StringUtils;
-import cn.aijiamuyingfang.server.domain.address.Address;
+import cn.aijiamuyingfang.server.dto.address.AddressDTO;
+import cn.aijiamuyingfang.vo.user.RecieveAddress;
+import cn.aijiamuyingfang.vo.utils.StringUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,11 +20,11 @@ import lombok.Setter;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-06-25 20:38:53
  */
-@Entity
+@Entity(name = "recieve_address")
 @Getter
 @Setter
 @NoArgsConstructor
-public class RecieveAddressDTO extends Address {
+public class RecieveAddressDTO extends AddressDTO {
   /**
    * 收货地址-关联用户
    */
@@ -50,20 +51,29 @@ public class RecieveAddressDTO extends Address {
    * @param updateRecieveAddress
    *          要更新的收件地址
    */
-  public void update(RecieveAddressDTO updateRecieveAddress) {
+  public void update(RecieveAddress updateRecieveAddress) {
     if (null == updateRecieveAddress) {
       return;
     }
     super.update(updateRecieveAddress);
-    if (StringUtils.hasContent(updateRecieveAddress.username)) {
-      this.username = updateRecieveAddress.username;
+    if (StringUtils.hasContent(updateRecieveAddress.getUsername())) {
+      this.setUsername(updateRecieveAddress.getUsername());
     }
-    if (StringUtils.hasContent(updateRecieveAddress.phone)) {
-      this.phone = updateRecieveAddress.phone;
+    if (StringUtils.hasContent(updateRecieveAddress.getPhone())) {
+      this.setPhone(updateRecieveAddress.getPhone());
     }
-    if (StringUtils.hasContent(updateRecieveAddress.reciever)) {
-      this.reciever = updateRecieveAddress.reciever;
+    if (StringUtils.hasContent(updateRecieveAddress.getReciever())) {
+      this.setReciever(updateRecieveAddress.getReciever());
     }
   }
 
+  @Override
+  public int hashCode() {
+    return super.hashCode();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return super.equals(obj);
+  }
 }

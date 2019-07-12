@@ -1,8 +1,6 @@
 package cn.aijiamuyingfang.server.it.dto.address;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
 /**
  * [描述]:
@@ -15,9 +13,7 @@ import lombok.Setter;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-06-25 17:50:27
  */
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 public class CoordinateDTO {
   /**
    * 位置-纬度

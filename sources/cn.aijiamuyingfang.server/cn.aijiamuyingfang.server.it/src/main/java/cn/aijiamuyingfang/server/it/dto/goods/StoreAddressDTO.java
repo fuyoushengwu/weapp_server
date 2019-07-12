@@ -18,7 +18,7 @@ import lombok.Setter;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-06-25 20:37:56
  */
-@Entity
+@Entity(name = "store_address")
 @Getter
 @Setter
 @NoArgsConstructor

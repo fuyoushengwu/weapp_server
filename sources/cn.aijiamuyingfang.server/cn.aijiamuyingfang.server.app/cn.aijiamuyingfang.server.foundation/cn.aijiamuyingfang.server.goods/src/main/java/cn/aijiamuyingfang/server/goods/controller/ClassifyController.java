@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import cn.aijiamuyingfang.commons.utils.StringUtils;
-import cn.aijiamuyingfang.server.domain.response.ResponseCode;
-import cn.aijiamuyingfang.server.exception.GoodsException;
-import cn.aijiamuyingfang.server.goods.dto.ClassifyDTO;
-import cn.aijiamuyingfang.server.goods.dto.ImageSourceDTO;
 import cn.aijiamuyingfang.server.goods.service.ClassifyService;
 import cn.aijiamuyingfang.server.goods.service.ImageService;
+import cn.aijiamuyingfang.vo.ImageSource;
+import cn.aijiamuyingfang.vo.classify.Classify;
+import cn.aijiamuyingfang.vo.exception.GoodsException;
+import cn.aijiamuyingfang.vo.response.ResponseCode;
+import cn.aijiamuyingfang.vo.utils.StringUtils;
 
 /***
  * [描述]:
@@ -51,7 +51,7 @@ public class ClassifyController {
    */
   @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/classify")
-  public List<ClassifyDTO> getTopClassifyList() {
+  public List<Classify> getTopClassifyList() {
     return classifyService.getTopClassifyList();
   }
 
@@ -63,8 +63,8 @@ public class ClassifyController {
    */
   @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/classify/{classify_id}")
-  public ClassifyDTO getClassify(@PathVariable(value = "classify_id") String classifyId) {
-    ClassifyDTO classify = classifyService.getClassify(classifyId);
+  public Classify getClassify(@PathVariable(value = "classify_id") String classifyId) {
+    Classify classify = classifyService.getClassify(classifyId);
     if (null == classify) {
       throw new GoodsException(ResponseCode.CLASSIFY_NOT_EXIST, classifyId);
     }
@@ -90,7 +90,7 @@ public class ClassifyController {
    */
   @PreAuthorize("hasAuthority('permission:manager:*')")
   @PostMapping(value = "/classify")
-  public ClassifyDTO createTopClassify(@RequestBody ClassifyDTO request) {
+  public Classify createTopClassify(@RequestBody Classify request) {
     if (null == request) {
       throw new IllegalArgumentException("classify request body is null");
     }
@@ -108,7 +108,7 @@ public class ClassifyController {
    */
   @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/classify/{classify_id}/subclassify")
-  public List<ClassifyDTO> getSubClassifyList(@PathVariable(value = "classify_id") String classifyId) {
+  public List<Classify> getSubClassifyList(@PathVariable(value = "classify_id") String classifyId) {
     return classifyService.getSubClassifyList(classifyId);
   }
 
@@ -122,8 +122,8 @@ public class ClassifyController {
    */
   @PreAuthorize("hasAuthority('permission:manager:*')")
   @PostMapping(value = "/classify/{classify_id}/subclassify")
-  public ClassifyDTO createSubClassify(@PathVariable(value = "classify_id") String classifyId,
-      @RequestParam(value = "coverImage", required = false) MultipartFile coverImagePart, ClassifyDTO classifyRequest,
+  public Classify createSubClassify(@PathVariable(value = "classify_id") String classifyId,
+      @RequestParam(value = "coverImage", required = false) MultipartFile coverImagePart, Classify classifyRequest,
       HttpServletRequest request) {
     if (null == classifyRequest) {
       throw new IllegalArgumentException("classify request is null");
@@ -131,9 +131,9 @@ public class ClassifyController {
     if (StringUtils.isEmpty(classifyRequest.getName())) {
       throw new IllegalArgumentException("classify name is empty");
     }
-    ClassifyDTO subClassify = classifyService.createORUpdateSubClassify(classifyId, classifyRequest);
+    Classify subClassify = classifyService.createORUpdateSubClassify(classifyId, classifyRequest);
 
-    ImageSourceDTO coverImageSource = imageService.saveImage(coverImagePart);
+    ImageSource coverImageSource = imageService.saveImage(coverImagePart);
     if (coverImageSource != null) {
       subClassify.setCoverImg(coverImageSource);
     }

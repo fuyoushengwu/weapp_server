@@ -9,13 +9,14 @@ import org.springframework.stereotype.Service;
 
 import cn.aijiamuyingfang.client.rest.annotation.HttpService;
 import cn.aijiamuyingfang.client.rest.api.ShopCartControllerApi;
-import cn.aijiamuyingfang.client.rest.utils.JsonUtils;
-import cn.aijiamuyingfang.vo.ResponseBean;
-import cn.aijiamuyingfang.vo.ResponseCode;
+import cn.aijiamuyingfang.client.rest.utils.ResponseUtils;
 import cn.aijiamuyingfang.vo.exception.ShopCartException;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
+import cn.aijiamuyingfang.vo.response.ResponseCode;
 import cn.aijiamuyingfang.vo.shopcart.CreateShopCartRequest;
 import cn.aijiamuyingfang.vo.shopcart.PagableShopCartList;
 import cn.aijiamuyingfang.vo.shopcart.ShopCart;
+import cn.aijiamuyingfang.vo.utils.JsonUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,7 +41,7 @@ public class ShopCartControllerClient {
 
     @Override
     public void onResponse(Call<ResponseBean> call, Response<ResponseBean> response) {
-      LOGGER.info("onResponse:" + response.message());
+      LOGGER.info("onResponse:{}", response.message());
     }
 
     @Override
@@ -61,7 +62,8 @@ public class ShopCartControllerClient {
    * @return
    * @throws IOException
    */
-  public ShopCart addShopCart(String username, CreateShopCartRequest requestBean, String accessToken) throws IOException {
+  public ShopCart addShopCart(String username, CreateShopCartRequest requestBean, String accessToken)
+      throws IOException {
     Response<ResponseBean> response = shopCartControllerApi.addShopCart(username, requestBean, accessToken).execute();
     return getShopCartFromResponse(response, "add ShopCartItem  return code is '200',but return data is null");
   }
@@ -91,8 +93,8 @@ public class ShopCartControllerClient {
    */
   public PagableShopCartList getShopCartList(String username, int currentPage, int pageSize, String accessToken)
       throws IOException {
-    Response<ResponseBean> response = shopCartControllerApi.getShopCartList(username, currentPage, pageSize, accessToken)
-        .execute();
+    Response<ResponseBean> response = shopCartControllerApi
+        .getShopCartList(username, currentPage, pageSize, accessToken).execute();
     ResponseBean responseBean = response.body();
     if (null == responseBean) {
       if (response.errorBody() != null) {
@@ -128,20 +130,8 @@ public class ShopCartControllerClient {
       shopCartControllerApi.checkAllShopCart(username, checked, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = shopCartControllerApi.checkAllShopCart(username, checked, accessToken).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      if (response.errorBody() != null) {
-        LOGGER.error(new String(response.errorBody().bytes()));
-      }
-      throw new ShopCartException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    if ("200".equals(returnCode)) {
-      return;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new ShopCartException(returnCode, responseBean.getMsg());
+    ResponseUtils.handleShopCartVOIDResponse(
+        shopCartControllerApi.checkAllShopCart(username, checked, accessToken).execute(), LOGGER);
   }
 
   /**
@@ -160,21 +150,8 @@ public class ShopCartControllerClient {
       shopCartControllerApi.checkShopCart(username, shopCartId, checked, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = shopCartControllerApi.checkShopCart(username, shopCartId, checked, accessToken)
-        .execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      if (response.errorBody() != null) {
-        LOGGER.error(new String(response.errorBody().bytes()));
-      }
-      throw new ShopCartException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    if ("200".equals(returnCode)) {
-      return;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new ShopCartException(returnCode, responseBean.getMsg());
+    ResponseUtils.handleShopCartVOIDResponse(
+        shopCartControllerApi.checkShopCart(username, shopCartId, checked, accessToken).execute(), LOGGER);
   }
 
   /**
@@ -191,20 +168,8 @@ public class ShopCartControllerClient {
       shopCartControllerApi.deleteShopCart(username, shopCartId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = shopCartControllerApi.deleteShopCart(username, shopCartId, accessToken).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      if (response.errorBody() != null) {
-        LOGGER.error(new String(response.errorBody().bytes()));
-      }
-      throw new ShopCartException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    if ("200".equals(returnCode)) {
-      return;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new ShopCartException(returnCode, responseBean.getMsg());
+    ResponseUtils.handleShopCartVOIDResponse(
+        shopCartControllerApi.deleteShopCart(username, shopCartId, accessToken).execute(), LOGGER);
   }
 
   /**
@@ -219,8 +184,8 @@ public class ShopCartControllerClient {
    */
   public ShopCart updateShopCartCount(String username, String shopCartId, int count, String accessToken)
       throws IOException {
-    Response<ResponseBean> response = shopCartControllerApi.updateShopCartCount(username, shopCartId, count, accessToken)
-        .execute();
+    Response<ResponseBean> response = shopCartControllerApi
+        .updateShopCartCount(username, shopCartId, count, accessToken).execute();
     return getShopCartFromResponse(response, "update ShopCartItem count return code is '200',but return data is null");
   }
 
@@ -280,19 +245,6 @@ public class ShopCartControllerClient {
       shopCartControllerApi.deleteGood(goodId, accessToken).enqueue(Empty_Callback);
       return;
     }
-    Response<ResponseBean> response = shopCartControllerApi.deleteGood(goodId, accessToken).execute();
-    ResponseBean responseBean = response.body();
-    if (null == responseBean) {
-      if (response.errorBody() != null) {
-        LOGGER.error(new String(response.errorBody().bytes()));
-      }
-      throw new ShopCartException(ResponseCode.RESPONSE_BODY_IS_NULL);
-    }
-    String returnCode = responseBean.getCode();
-    if ("200".equals(returnCode)) {
-      return;
-    }
-    LOGGER.error(responseBean.getMsg());
-    throw new ShopCartException(returnCode, responseBean.getMsg());
+    ResponseUtils.handleShopCartVOIDResponse(shopCartControllerApi.deleteGood(goodId, accessToken).execute(), LOGGER);
   }
 }

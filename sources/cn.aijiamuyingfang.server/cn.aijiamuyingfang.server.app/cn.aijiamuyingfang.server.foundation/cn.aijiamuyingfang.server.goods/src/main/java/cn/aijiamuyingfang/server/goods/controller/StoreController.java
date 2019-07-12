@@ -19,15 +19,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import cn.aijiamuyingfang.commons.utils.CollectionUtils;
-import cn.aijiamuyingfang.commons.utils.StringUtils;
-import cn.aijiamuyingfang.server.domain.response.ResponseCode;
-import cn.aijiamuyingfang.server.exception.GoodsException;
-import cn.aijiamuyingfang.server.goods.domain.response.PagableStoreList;
-import cn.aijiamuyingfang.server.goods.dto.ImageSourceDTO;
-import cn.aijiamuyingfang.server.goods.dto.StoreDTO;
-import cn.aijiamuyingfang.server.goods.dto.StoreAddressDTO;
 import cn.aijiamuyingfang.server.goods.service.ImageService;
 import cn.aijiamuyingfang.server.goods.service.StoreService;
+import cn.aijiamuyingfang.vo.ImageSource;
+import cn.aijiamuyingfang.vo.exception.GoodsException;
+import cn.aijiamuyingfang.vo.response.ResponseCode;
+import cn.aijiamuyingfang.vo.store.PagableStoreList;
+import cn.aijiamuyingfang.vo.store.Store;
+import cn.aijiamuyingfang.vo.store.StoreAddress;
+import cn.aijiamuyingfang.vo.utils.StringUtils;
 
 /***
  * [描述]:
@@ -74,8 +74,8 @@ public class StoreController {
    */
   @PreAuthorize("hasAuthority('permission:manager:*')")
   @PostMapping(value = "/store")
-  public StoreDTO createStore(@RequestParam(value = "coverImage", required = false) MultipartFile coverImagePart,
-      @RequestParam(value = "detailImages", required = false) List<MultipartFile> detailImageParts, StoreDTO storeRequest,
+  public Store createStore(@RequestParam(value = "coverImage", required = false) MultipartFile coverImagePart,
+      @RequestParam(value = "detailImages", required = false) List<MultipartFile> detailImageParts, Store storeRequest,
       HttpServletRequest request) {
     if (null == storeRequest) {
       throw new IllegalArgumentException("store request body is null");
@@ -83,16 +83,16 @@ public class StoreController {
     if (StringUtils.isEmpty(storeRequest.getName())) {
       throw new IllegalArgumentException("store name is empty");
     }
-    StoreDTO store = storeService.createORUpdateStore(storeRequest);
-    ImageSourceDTO imageSource = imageService.saveImage(coverImagePart);
+    Store store = storeService.createORUpdateStore(storeRequest);
+    ImageSource imageSource = imageService.saveImage(coverImagePart);
     if (imageSource != null) {
       store.setCoverImg(imageSource);
     }
 
-    List<ImageSourceDTO> detailImageSourceList = new ArrayList<>();
+    List<ImageSource> detailImageSourceList = new ArrayList<>();
     if (CollectionUtils.hasContent(detailImageParts)) {
       for (MultipartFile detailImagePart : detailImageParts) {
-        ImageSourceDTO detailImageSource = imageService.saveImage(detailImagePart);
+        ImageSource detailImageSource = imageService.saveImage(detailImagePart);
         if (detailImageSource != null) {
           detailImageSourceList.add(detailImageSource);
         }
@@ -110,8 +110,8 @@ public class StoreController {
    */
   @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/store/{store_id}")
-  public StoreDTO getStore(@PathVariable("store_id") String storeId) {
-    StoreDTO store = storeService.getStore(storeId);
+  public Store getStore(@PathVariable("store_id") String storeId) {
+    Store store = storeService.getStore(storeId);
     if (null == store) {
       throw new GoodsException(ResponseCode.STORE_NOT_EXIST, storeId);
     }
@@ -126,7 +126,7 @@ public class StoreController {
    */
   @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/store/{store_id}/address")
-  public StoreAddressDTO getStoreAddressByStoreId(@PathVariable("store_id") String storeId) {
+  public StoreAddress getStoreAddressByStoreId(@PathVariable("store_id") String storeId) {
     return getStore(storeId).getStoreAddress();
   }
 
@@ -138,7 +138,7 @@ public class StoreController {
    */
   @PreAuthorize(value = "permitAll()")
   @GetMapping(value = "/storeaddress/{address_id}")
-  public StoreAddressDTO getStoreAddressByAddressId(@PathVariable("address_id") String addressId) {
+  public StoreAddress getStoreAddressByAddressId(@PathVariable("address_id") String addressId) {
     return storeService.getStoreAddress(addressId);
   }
 
@@ -151,7 +151,7 @@ public class StoreController {
    */
   @PreAuthorize("hasAuthority('permission:manager:*')")
   @PutMapping(value = "/store/{store_id}")
-  public StoreDTO updateStore(@PathVariable("store_id") String storeId, @RequestBody StoreDTO storeRequest) {
+  public Store updateStore(@PathVariable("store_id") String storeId, @RequestBody Store storeRequest) {
     if (null == storeRequest) {
       throw new IllegalArgumentException("update store request body is null");
     }
@@ -166,7 +166,7 @@ public class StoreController {
   @PreAuthorize("hasAuthority('permission:manager:*')")
   @DeleteMapping(value = "/store/{store_id}")
   public void deprecateStore(@PathVariable("store_id") String storeId) {
-    StoreDTO store = storeService.getStore(storeId);
+    Store store = storeService.getStore(storeId);
     if (store != null) {
       storeService.deprecateStore(storeId);
       imageService.deleteImage(store.getCoverImg());
@@ -183,7 +183,7 @@ public class StoreController {
   @GetMapping(value = "/store/defaultid")
   public String getDefaultStoreId() {
     PagableStoreList response = storeService.getInUseStoreList(1, 1);
-    List<StoreDTO> storeList = response.getDataList();
+    List<Store> storeList = response.getDataList();
     if (storeList != null && storeList.size() == 1) {
       return storeList.get(0).getId();
     }

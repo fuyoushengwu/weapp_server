@@ -9,14 +9,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import cn.aijiamuyingfang.commons.utils.CollectionUtils;
-import cn.aijiamuyingfang.commons.utils.StringUtils;
-import cn.aijiamuyingfang.server.domain.response.ResponseCode;
-import cn.aijiamuyingfang.server.exception.GoodsException;
 import cn.aijiamuyingfang.server.goods.db.ClassifyRepository;
 import cn.aijiamuyingfang.server.goods.db.GoodRepository;
-import cn.aijiamuyingfang.server.goods.domain.response.PagableGoodList;
 import cn.aijiamuyingfang.server.goods.dto.ClassifyDTO;
 import cn.aijiamuyingfang.server.goods.dto.GoodDTO;
+import cn.aijiamuyingfang.server.goods.utils.ConvertService;
+import cn.aijiamuyingfang.vo.exception.GoodsException;
+import cn.aijiamuyingfang.vo.goods.PagableGoodList;
+import cn.aijiamuyingfang.vo.response.ResponseCode;
+import cn.aijiamuyingfang.vo.utils.StringUtils;
 
 /**
  * [描述]:
@@ -37,6 +38,9 @@ public class ClassifyGoodService {
   @Autowired
   private GoodRepository goodRepository;
 
+  @Autowired
+  private ConvertService convertService;
+
   /**
    * 分页查询条目下的商品
    * 
@@ -56,10 +60,10 @@ public class ClassifyGoodService {
    *          每页商品数
    * @return
    */
-  public PagableGoodList getClassifyGoodList(String classifyId, List<String> packFilter,
-      List<String> levelFilter, String orderType, String orderValue, int currentPage, int pageSize) {
-    ClassifyDTO classify = classifyRepository.findOne(classifyId);
-    if (null == classify) {
+  public PagableGoodList getClassifyGoodList(String classifyId, List<String> packFilter, List<String> levelFilter,
+      String orderType, String orderValue, int currentPage, int pageSize) {
+    ClassifyDTO classifyDTO = classifyRepository.findOne(classifyId);
+    if (null == classifyDTO) {
       throw new GoodsException(ResponseCode.CLASSIFY_NOT_EXIST, classifyId);
     }
     // PageRequest的Page参数是基于0的,但是currentPage是基于1的,所有将currentPage作为参数传递给PgeRequest时需要'-1'
@@ -69,20 +73,20 @@ public class ClassifyGoodService {
     } else {
       pageRequest = new PageRequest(currentPage - 1, pageSize);
     }
-    Page<GoodDTO> goodPage;
+    Page<GoodDTO> goodDTOPage;
     if (CollectionUtils.isEmpty(packFilter) && CollectionUtils.isEmpty(levelFilter)) {
-      goodPage = goodRepository.findClassifyGood(classifyId, pageRequest);
+      goodDTOPage = goodRepository.findClassifyGood(classifyId, pageRequest);
     } else if (CollectionUtils.isEmpty(packFilter)) {
-      goodPage = goodRepository.findClassifyGoodByLevelIn(classifyId, levelFilter, pageRequest);
+      goodDTOPage = goodRepository.findClassifyGoodByLevelIn(classifyId, levelFilter, pageRequest);
     } else if (CollectionUtils.isEmpty(levelFilter)) {
-      goodPage = goodRepository.findClassifyGoodByPackIn(classifyId, packFilter, pageRequest);
+      goodDTOPage = goodRepository.findClassifyGoodByPackIn(classifyId, packFilter, pageRequest);
     } else {
-      goodPage = goodRepository.findClassifyGoodByPackInAndLevelIn(classifyId, packFilter, levelFilter, pageRequest);
+      goodDTOPage = goodRepository.findClassifyGoodByPackInAndLevelIn(classifyId, packFilter, levelFilter, pageRequest);
     }
     PagableGoodList response = new PagableGoodList();
-    response.setCurrentPage(goodPage.getNumber() + 1);
-    response.setDataList(goodPage.getContent());
-    response.setTotalpage(goodPage.getTotalPages());
+    response.setCurrentPage(goodDTOPage.getNumber() + 1);
+    response.setDataList(convertService.convertGoodDTOList(goodDTOPage.getContent()));
+    response.setTotalpage(goodDTOPage.getTotalPages());
     return response;
   }
 

@@ -5,10 +5,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import cn.aijiamuyingfang.server.auth.domain.WeChatSession;
-import cn.aijiamuyingfang.server.domain.Gender;
-import cn.aijiamuyingfang.server.exception.WeChatServiceException;
 import cn.aijiamuyingfang.server.feign.UserClient;
-import cn.aijiamuyingfang.server.feign.domain.user.User;
+import cn.aijiamuyingfang.vo.exception.WeChatServiceException;
+import cn.aijiamuyingfang.vo.user.Gender;
+import cn.aijiamuyingfang.vo.user.User;
 import cn.binarywang.wx.miniapp.api.WxMaUserService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import me.chanjar.weixin.common.bean.result.WxError;

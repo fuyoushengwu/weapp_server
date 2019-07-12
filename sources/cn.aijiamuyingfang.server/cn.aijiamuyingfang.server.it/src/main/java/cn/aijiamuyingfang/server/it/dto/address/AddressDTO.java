@@ -10,10 +10,7 @@ import javax.persistence.MappedSuperclass;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import cn.aijiamuyingfang.commons.utils.StringUtils;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
 /**
  * [描述]:
@@ -27,9 +24,7 @@ import lombok.Setter;
  * @date 2018-07-04 23:00:45
  */
 @MappedSuperclass
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 public abstract class AddressDTO {
   /**
    * 地址-Id
@@ -88,34 +83,4 @@ public abstract class AddressDTO {
   @AttributeOverrides({ @AttributeOverride(name = "latitude", column = @Column(name = "coordinate_latitude")),
       @AttributeOverride(name = "longitude", column = @Column(name = "coordinate_longitude")) })
   protected CoordinateDTO coordinate;
-
-  /**
-   * 使用updateAddress更新地址信息
-   * 
-   * @param updateAddress
-   *          要更新的定制信息
-   */
-  public void update(AddressDTO updateAddress) {
-    if (null == updateAddress) {
-      return;
-    }
-    if (updateAddress.province != null) {
-      this.province = updateAddress.province;
-    }
-    if (updateAddress.city != null) {
-      this.city = updateAddress.city;
-    }
-    if (updateAddress.county != null) {
-      this.county = updateAddress.county;
-    }
-    if (updateAddress.town != null) {
-      this.town = updateAddress.town;
-    }
-    if (StringUtils.hasContent(updateAddress.detail)) {
-      this.detail = updateAddress.detail;
-    }
-    if (updateAddress.coordinate != null) {
-      this.coordinate = updateAddress.coordinate;
-    }
-  }
 }

@@ -35,4 +35,22 @@ public class PreviewOrder {
    * 预览的商品项
    */
   private List<PreviewOrderItem> orderItemList = new ArrayList<>();
+
+  /**
+   * 添加预览项
+   * 
+   * @param item
+   *          预览项
+   */
+  public void addOrderItem(PreviewOrderItem item) {
+    if (null == item) {
+      return;
+    }
+    synchronized (this) {
+      if (null == this.orderItemList) {
+        this.orderItemList = new ArrayList<>();
+      }
+    }
+    this.orderItemList.add(item);
+  }
 }

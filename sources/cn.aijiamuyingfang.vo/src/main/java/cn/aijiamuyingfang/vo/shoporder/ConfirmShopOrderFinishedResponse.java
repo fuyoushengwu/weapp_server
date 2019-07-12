@@ -25,4 +25,11 @@ public class ConfirmShopOrderFinishedResponse {
    */
   private int voucherScore;
 
+  public void addGenericScore(int score) {
+    this.genericScore += score;
+  }
+
+  public void addVoucherScore(int score) {
+    this.voucherScore += score;
+  }
 }

@@ -1,11 +1,10 @@
 package cn.aijiamuyingfang.vo.coupon;
 
-import cn.aijiamuyingfang.vo.PageResponse;
+import cn.aijiamuyingfang.vo.response.PageResponse;
 
 /**
  * [描述]:
  * 
- * import cn.aijiamuyingfang.vo.PageResponse; *
  * <p>
  * 分页获取用户兑换券的返回类型
  * </p>

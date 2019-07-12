@@ -11,10 +11,10 @@ import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import cn.aijiamuyingfang.commons.utils.StringUtils;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import cn.aijiamuyingfang.server.goods.utils.ConvertUtils;
+import cn.aijiamuyingfang.vo.goods.Good;
+import cn.aijiamuyingfang.vo.utils.StringUtils;
+import lombok.Data;
 
 /**
  * [描述]:
@@ -27,10 +27,8 @@ import lombok.Setter;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-06-27 00:12:50
  */
-@Entity
-@Getter
-@Setter
-@NoArgsConstructor
+@Entity(name = "good")
+@Data
 public class GoodDTO {
   /**
    * 商品Id
@@ -115,12 +113,12 @@ public class GoodDTO {
    * @param updateGood
    *          要更新的商品信息
    */
-  public void update(GoodDTO updateGood) {
+  public void update(Good updateGood) {
     if (null == updateGood) {
       return;
     }
-    if (updateGood.coverImg != null) {
-      this.coverImg.update(updateGood.coverImg);
+    if (updateGood.getCoverImg() != null) {
+      this.setCoverImg(ConvertUtils.convertImageSource(updateGood.getCoverImg()));
     }
     updateNumber(updateGood);
     updateString(updateGood);
@@ -129,65 +127,42 @@ public class GoodDTO {
   /**
    * 更新数字信息(该方法是为了拆减update方法的复杂度抽取的)
    */
-  private void updateNumber(GoodDTO updateGood) {
-    if (updateGood.count != 0) {
-      this.count = updateGood.count;
+  private void updateNumber(Good updateGood) {
+    if (updateGood.getCount() != 0) {
+      this.setCount(updateGood.getCount());
     }
-    if (updateGood.salecount != 0) {
-      this.salecount = updateGood.salecount;
+    if (updateGood.getSalecount() != 0) {
+      this.setSalecount(updateGood.getSalecount());
     }
-    if (updateGood.price != 0) {
-      this.price = updateGood.price;
+    if (updateGood.getPrice() != 0) {
+      this.setPrice(updateGood.getPrice());
     }
-    if (updateGood.marketPrice != 0) {
-      this.marketPrice = updateGood.marketPrice;
+    if (updateGood.getMarketPrice() != 0) {
+      this.setMarketPrice(updateGood.getMarketPrice());
     }
-    if (updateGood.score != 0) {
-      this.score = updateGood.score;
+    if (updateGood.getScore() != 0) {
+      this.setScore(updateGood.getScore());
     }
   }
 
   /**
    * 更新字符串信息(该方法是为了拆减update方法的复杂度抽取的)
    */
-  private void updateString(GoodDTO updateGood) {
-    if (StringUtils.hasContent(updateGood.name)) {
-      this.name = updateGood.name;
+  private void updateString(Good updateGood) {
+    if (StringUtils.hasContent(updateGood.getName())) {
+      this.setName(updateGood.getName());
     }
-    if (StringUtils.hasContent(updateGood.pack)) {
-      this.pack = updateGood.pack;
+    if (StringUtils.hasContent(updateGood.getPack())) {
+      this.setPack(updateGood.getPack());
     }
-    if (StringUtils.hasContent(updateGood.level)) {
-      this.level = updateGood.level;
+    if (StringUtils.hasContent(updateGood.getLevel())) {
+      this.setLevel(updateGood.getLevel());
     }
-    if (StringUtils.hasContent(updateGood.barcode)) {
-      this.barcode = updateGood.barcode;
+    if (StringUtils.hasContent(updateGood.getBarcode())) {
+      this.setBarcode(updateGood.getBarcode());
     }
-    if (StringUtils.hasContent(updateGood.voucherId)) {
-      this.voucherId = updateGood.voucherId;
+    if (updateGood.getGoodVoucher() != null) {
+      this.setVoucherId(updateGood.getGoodVoucher().getId());
     }
-  }
-
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((id == null) ? 0 : id.hashCode());
-    return result;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    GoodDTO other = (GoodDTO) obj;
-    if (null == id) {
-      return null == other.id;
-    }
-    return id.equals(other.id);
   }
 }

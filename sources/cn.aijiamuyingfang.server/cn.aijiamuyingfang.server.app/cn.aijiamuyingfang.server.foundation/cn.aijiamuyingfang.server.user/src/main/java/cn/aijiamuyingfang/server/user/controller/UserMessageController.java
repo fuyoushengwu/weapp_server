@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import cn.aijiamuyingfang.commons.utils.StringUtils;
-import cn.aijiamuyingfang.server.user.domain.response.PagableUserMessageList;
-import cn.aijiamuyingfang.server.user.dto.UserMessageDTO;
 import cn.aijiamuyingfang.server.user.service.UserMessageService;
+import cn.aijiamuyingfang.vo.message.PagableUserMessageList;
+import cn.aijiamuyingfang.vo.message.UserMessage;
+import cn.aijiamuyingfang.vo.utils.StringUtils;
 
 /**
  * [描述]:
@@ -68,7 +68,7 @@ public class UserMessageController {
   @PreAuthorize(
       value = "isAuthenticated() and (#username.equals(getAuthentication().getName()) or hasAnyAuthority('permission:manager:*','permission:sender:*'))")
   @PostMapping(value = "/user/{username}/message")
-  public UserMessageDTO createMessage(@PathVariable("username") String username, @RequestBody UserMessageDTO userMessage) {
+  public UserMessage createMessage(@PathVariable("username") String username, @RequestBody UserMessage userMessage) {
     if (null == userMessage) {
       throw new IllegalArgumentException("usermessage request body is null");
     }

@@ -1,6 +1,6 @@
 package cn.aijiamuyingfang.vo.preorder;
 
-import cn.aijiamuyingfang.vo.PageResponse;
+import cn.aijiamuyingfang.vo.response.PageResponse;
 
 /**
  * [描述]:

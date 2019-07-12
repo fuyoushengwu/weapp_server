@@ -12,11 +12,4 @@ package cn.aijiamuyingfang.server.it.dto.address;
  * @date 2018-06-25 18:00:46
  */
 public class TownDTO extends DistrictDTO {
-
-  public TownDTO() {
-  }
-
-  public TownDTO(String name, String code) {
-    super(name, code);
-  }
 }

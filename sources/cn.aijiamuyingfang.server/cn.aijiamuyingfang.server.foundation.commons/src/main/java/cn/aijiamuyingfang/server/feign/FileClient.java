@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
-import cn.aijiamuyingfang.server.domain.response.ResponseBean;
-import cn.aijiamuyingfang.server.feign.domain.filecenter.FileInfo;
-import cn.aijiamuyingfang.server.feign.domain.filecenter.PagableFileInfoList;
+import cn.aijiamuyingfang.vo.filecenter.FileInfo;
+import cn.aijiamuyingfang.vo.filecenter.PagableFileInfoList;
+import cn.aijiamuyingfang.vo.response.ResponseBean;
 import feign.codec.Encoder;
 import feign.form.spring.SpringFormEncoder;
 

@@ -18,10 +18,9 @@ import cn.aijiamuyingfang.commons.utils.ReflectUtils;
 public class AsyncInvokeException extends RuntimeException {
   private static final long serialVersionUID = 7608324398059424193L;
 
-  private Method method;
+  private final transient Method method;
 
   public AsyncInvokeException(Method method) {
-    super();
     this.method = method;
   }
 

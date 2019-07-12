@@ -2,10 +2,10 @@ package cn.aijiamuyingfang.client.dnspod.domain;
 
 import java.util.Map;
 
+import cn.aijiamuyingfang.client.commons.constant.ClientRestConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 /**
@@ -20,7 +20,7 @@ import okhttp3.RequestBody;
  * @date 2019-06-10 06:47:57
  */
 @Data
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 public class UpdateRecordRequest extends DomainRequest {
   /**
@@ -45,12 +45,13 @@ public class UpdateRecordRequest extends DomainRequest {
     this.recordId = recordId;
     this.recordLine = recordLine;
   }
-  
-  public Map<String,RequestBody> toPartMap(){
-    Map<String,RequestBody> partMap=super.toPartMap();
-    partMap.put("record_id", RequestBody.create(MediaType.parse("multipart/form-data"), recordId));
-    partMap.put("sub_domain", RequestBody.create(MediaType.parse("multipart/form-data"), subDomain));
-    partMap.put("record_line", RequestBody.create(MediaType.parse("multipart/form-data"), recordLine));
+
+  @Override
+  public Map<String, RequestBody> toPartMap() {
+    Map<String, RequestBody> partMap = super.toPartMap();
+    partMap.put("record_id", RequestBody.create(ClientRestConstants.MEDIA_TYPE_MULTIPART, recordId));
+    partMap.put("sub_domain", RequestBody.create(ClientRestConstants.MEDIA_TYPE_MULTIPART, subDomain));
+    partMap.put("record_line", RequestBody.create(ClientRestConstants.MEDIA_TYPE_MULTIPART, recordLine));
     return partMap;
   }
 }

@@ -12,10 +12,4 @@ package cn.aijiamuyingfang.server.it.dto.address;
  * @date 2018-06-25 17:53:29
  */
 public class CountyDTO extends DistrictDTO {
-  public CountyDTO() {
-  }
-
-  public CountyDTO(String name, String code) {
-    super(name, code);
-  }
 }

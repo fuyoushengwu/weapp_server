@@ -7,7 +7,6 @@ import javax.persistence.Id;
 import org.hibernate.annotations.GenericGenerator;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * [描述]:
@@ -20,9 +19,8 @@ import lombok.NoArgsConstructor;
  * @email shiweideyouxiang@sina.cn
  * @date 2018-06-27 16:41:55
  */
-@Entity
+@Entity(name = "shop_order_voucher")
 @Data
-@NoArgsConstructor
 public class ShopOrderVoucherDTO {
   /**
    * ID

@@ -47,6 +47,11 @@ public enum SendType implements BaseEnum, Parcelable {
     this.value = value;
   }
 
+  @Override
+  public int getValue() {
+    return value;
+  }
+
   public static SendType fromValue(int value) {
     for (SendType type : SendType.values()) {
       if (type.value == value) {
@@ -54,11 +59,6 @@ public enum SendType implements BaseEnum, Parcelable {
       }
     }
     return UNKNOW;
-  }
-
-  @Override
-  public int getValue() {
-    return value;
   }
 
   @Override

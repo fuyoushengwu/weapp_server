@@ -7,9 +7,10 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import cn.aijiamuyingfang.server.domain.FileSource;
 import cn.aijiamuyingfang.server.filecenter.db.FileInfoRepository;
 import cn.aijiamuyingfang.server.filecenter.dto.FileInfoDTO;
+import cn.aijiamuyingfang.server.filecenter.utils.ConvertUtils;
+import cn.aijiamuyingfang.vo.filecenter.FileSource;
 
 /**
  * FileService工厂<br>
@@ -67,9 +68,9 @@ public class FileServiceFactory {
    * @return
    */
   public FileService getFileServiceById(String id) {
-    FileInfoDTO fileInfo = fileInfoRepository.findOne(id);
-    if (fileInfo != null) {
-      return getFileServiceBySource(fileInfo.getSource());
+    FileInfoDTO fileInfoDTO = fileInfoRepository.findOne(id);
+    if (fileInfoDTO != null) {
+      return getFileServiceBySource(ConvertUtils.convertFileSourceDTO(fileInfoDTO.getSource()));
     }
     return localFileServiceImpl;
   }

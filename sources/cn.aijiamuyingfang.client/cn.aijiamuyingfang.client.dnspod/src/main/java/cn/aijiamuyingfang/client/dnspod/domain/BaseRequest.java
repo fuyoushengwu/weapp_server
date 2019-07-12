@@ -3,9 +3,9 @@ package cn.aijiamuyingfang.client.dnspod.domain;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.aijiamuyingfang.client.commons.constant.ClientRestConstants;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 /**
@@ -45,13 +45,14 @@ public abstract class BaseRequest {
   protected BaseRequest(String tokenId, String tokenValue) {
     this.loginToken = String.format("%s,%s", tokenId, tokenValue);
   }
-  
-  public Map<String,RequestBody> toPartMap(){
-    Map<String,RequestBody> partMap=new HashMap<String, RequestBody>();
-    partMap.put("login_token", RequestBody.create(MediaType.parse("multipart/form-data"), loginToken));
-    partMap.put("format", RequestBody.create(MediaType.parse("multipart/form-data"), format));
-    partMap.put("lang", RequestBody.create(MediaType.parse("multipart/form-data"), lang));
-    partMap.put("error_on_empty", RequestBody.create(MediaType.parse("multipart/form-data"), errorOnEmpty));
+
+  public Map<String, RequestBody> toPartMap() {
+    Map<String, RequestBody> partMap = new HashMap<>();
+    
+    partMap.put("login_token", RequestBody.create(ClientRestConstants.MEDIA_TYPE_MULTIPART, loginToken));
+    partMap.put("format", RequestBody.create(ClientRestConstants.MEDIA_TYPE_MULTIPART, format));
+    partMap.put("lang", RequestBody.create(ClientRestConstants.MEDIA_TYPE_MULTIPART, lang));
+    partMap.put("error_on_empty", RequestBody.create(ClientRestConstants.MEDIA_TYPE_MULTIPART, errorOnEmpty));
     return partMap;
-  } 
+  }
 }

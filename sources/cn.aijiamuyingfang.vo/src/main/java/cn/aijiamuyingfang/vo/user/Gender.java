@@ -40,9 +40,9 @@ public enum Gender implements BaseEnum {
   }
 
   public static Gender fromValue(int value) {
-    for (Gender type : Gender.values()) {
-      if (type.value == value) {
-        return type;
+    for (Gender gender : Gender.values()) {
+      if (gender.value == value) {
+        return gender;
       }
     }
     return UNKNOW;
