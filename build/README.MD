@@ -140,7 +140,6 @@ EOF
 yum install -y kubelet kubeadm kubectl git
 git clone https://github.com/fuyoushengwu/weapp_server.git
 cd weapp_server
-git checkout -b spring-cloud origin/spring-cloud
 cd build && rm -rf base_image/kubectl
 cp -rf /usr/bin/kubectl base_image/ 
 

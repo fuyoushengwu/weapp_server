@@ -16,7 +16,7 @@ podTemplate(
 ){
     node(label){
         stage('get code') {
-            git branch: 'spring-cloud', url: 'https://github.com/fuyoushengwu/weapp_server.git'
+            git branch: 'master', url: 'https://github.com/fuyoushengwu/weapp_server.git'
         }
 
         stage('code analysis') {
