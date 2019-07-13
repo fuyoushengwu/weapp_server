@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import cn.aijiamuyingfang.commons.utils.CollectionUtils;
 import cn.aijiamuyingfang.server.coupon.service.CouponService;
 import cn.aijiamuyingfang.vo.coupon.GoodVoucher;
 import cn.aijiamuyingfang.vo.coupon.PagableGoodVoucherList;
@@ -21,6 +19,7 @@ import cn.aijiamuyingfang.vo.coupon.PagableUserVoucherList;
 import cn.aijiamuyingfang.vo.coupon.PagableVoucherItemList;
 import cn.aijiamuyingfang.vo.coupon.UserVoucher;
 import cn.aijiamuyingfang.vo.coupon.VoucherItem;
+import cn.aijiamuyingfang.vo.utils.CollectionUtils;
 import cn.aijiamuyingfang.vo.utils.StringUtils;
 
 /**

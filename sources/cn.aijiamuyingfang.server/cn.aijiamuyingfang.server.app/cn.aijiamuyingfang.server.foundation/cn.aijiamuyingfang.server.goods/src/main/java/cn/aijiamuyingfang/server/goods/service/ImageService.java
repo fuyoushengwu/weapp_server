@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
-
-import cn.aijiamuyingfang.commons.utils.CollectionUtils;
 import cn.aijiamuyingfang.server.feign.FileClient;
 import cn.aijiamuyingfang.server.goods.db.ImageSourceRepository;
 import cn.aijiamuyingfang.server.goods.dto.ImageSourceDTO;
@@ -19,6 +17,7 @@ import cn.aijiamuyingfang.server.goods.utils.ConvertUtils;
 import cn.aijiamuyingfang.vo.ImageSource;
 import cn.aijiamuyingfang.vo.filecenter.FileInfo;
 import cn.aijiamuyingfang.vo.response.ResponseBean;
+import cn.aijiamuyingfang.vo.utils.CollectionUtils;
 import cn.aijiamuyingfang.vo.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 

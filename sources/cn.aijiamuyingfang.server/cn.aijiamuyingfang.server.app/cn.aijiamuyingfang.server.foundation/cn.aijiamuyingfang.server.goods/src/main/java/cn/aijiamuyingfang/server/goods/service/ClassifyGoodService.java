@@ -7,8 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import cn.aijiamuyingfang.commons.utils.CollectionUtils;
 import cn.aijiamuyingfang.server.goods.db.ClassifyRepository;
 import cn.aijiamuyingfang.server.goods.db.GoodRepository;
 import cn.aijiamuyingfang.server.goods.dto.ClassifyDTO;
@@ -17,6 +15,7 @@ import cn.aijiamuyingfang.server.goods.utils.ConvertService;
 import cn.aijiamuyingfang.vo.exception.GoodsException;
 import cn.aijiamuyingfang.vo.goods.PagableGoodList;
 import cn.aijiamuyingfang.vo.response.ResponseCode;
+import cn.aijiamuyingfang.vo.utils.CollectionUtils;
 import cn.aijiamuyingfang.vo.utils.StringUtils;
 
 /**

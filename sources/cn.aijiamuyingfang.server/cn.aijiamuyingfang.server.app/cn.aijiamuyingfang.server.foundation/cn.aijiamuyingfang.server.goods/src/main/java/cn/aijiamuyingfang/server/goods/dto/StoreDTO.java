@@ -16,10 +16,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.GenericGenerator;
-
-import cn.aijiamuyingfang.commons.utils.CollectionUtils;
 import cn.aijiamuyingfang.server.goods.utils.ConvertUtils;
 import cn.aijiamuyingfang.vo.store.Store;
+import cn.aijiamuyingfang.vo.utils.CollectionUtils;
 import cn.aijiamuyingfang.vo.utils.StringUtils;
 import lombok.Data;
 

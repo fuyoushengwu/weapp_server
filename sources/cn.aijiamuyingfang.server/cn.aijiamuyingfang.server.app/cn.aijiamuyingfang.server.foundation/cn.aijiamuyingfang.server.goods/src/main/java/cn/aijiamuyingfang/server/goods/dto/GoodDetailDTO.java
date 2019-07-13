@@ -10,10 +10,9 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-
-import cn.aijiamuyingfang.commons.utils.CollectionUtils;
 import cn.aijiamuyingfang.server.goods.utils.ConvertUtils;
 import cn.aijiamuyingfang.vo.goods.GoodDetail;
+import cn.aijiamuyingfang.vo.utils.CollectionUtils;
 import lombok.Data;
 
 /**

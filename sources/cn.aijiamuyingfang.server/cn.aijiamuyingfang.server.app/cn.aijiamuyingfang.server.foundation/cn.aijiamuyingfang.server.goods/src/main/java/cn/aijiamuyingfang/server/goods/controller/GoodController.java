@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import cn.aijiamuyingfang.commons.utils.CollectionUtils;
 import cn.aijiamuyingfang.server.feign.ShopCartClient;
 import cn.aijiamuyingfang.server.feign.ShopOrderClient;
 import cn.aijiamuyingfang.server.goods.service.ClassifyGoodService;
@@ -31,6 +29,7 @@ import cn.aijiamuyingfang.vo.goods.GoodDetail;
 import cn.aijiamuyingfang.vo.goods.PagableGoodList;
 import cn.aijiamuyingfang.vo.goods.SaleGood;
 import cn.aijiamuyingfang.vo.response.ResponseCode;
+import cn.aijiamuyingfang.vo.utils.CollectionUtils;
 import cn.aijiamuyingfang.vo.utils.StringUtils;
 
 /***

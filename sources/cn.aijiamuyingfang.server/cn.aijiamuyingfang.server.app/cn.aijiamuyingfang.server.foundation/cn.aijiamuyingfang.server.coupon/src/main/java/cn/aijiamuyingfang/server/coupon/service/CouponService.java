@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
-import cn.aijiamuyingfang.commons.utils.CollectionUtils;
 import cn.aijiamuyingfang.server.coupon.db.GoodVoucherRepository;
 import cn.aijiamuyingfang.server.coupon.db.UserVoucherRepository;
 import cn.aijiamuyingfang.server.coupon.db.VoucherItemRepository;
@@ -23,6 +21,7 @@ import cn.aijiamuyingfang.vo.coupon.PagableVoucherItemList;
 import cn.aijiamuyingfang.vo.coupon.UserVoucher;
 import cn.aijiamuyingfang.vo.coupon.VoucherItem;
 import cn.aijiamuyingfang.vo.exception.CouponException;
+import cn.aijiamuyingfang.vo.utils.CollectionUtils;
 import cn.aijiamuyingfang.vo.utils.StringUtils;
 
 /**

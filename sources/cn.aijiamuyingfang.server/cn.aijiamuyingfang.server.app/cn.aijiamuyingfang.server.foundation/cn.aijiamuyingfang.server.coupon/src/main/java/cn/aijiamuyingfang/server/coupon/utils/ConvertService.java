@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import cn.aijiamuyingfang.commons.utils.CollectionUtils;
 import cn.aijiamuyingfang.server.coupon.dto.GoodVoucherDTO;
 import cn.aijiamuyingfang.server.coupon.dto.UserVoucherDTO;
 import cn.aijiamuyingfang.server.coupon.dto.VoucherItemDTO;
@@ -14,6 +12,7 @@ import cn.aijiamuyingfang.server.coupon.service.CouponService;
 import cn.aijiamuyingfang.vo.coupon.GoodVoucher;
 import cn.aijiamuyingfang.vo.coupon.UserVoucher;
 import cn.aijiamuyingfang.vo.coupon.VoucherItem;
+import cn.aijiamuyingfang.vo.utils.CollectionUtils;
 
 @Service
 public class ConvertService {

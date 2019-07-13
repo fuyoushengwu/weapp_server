@@ -1,4 +1,4 @@
-package cn.aijiamuyingfang.commons.utils;
+package cn.aijiamuyingfang.vo.utils;
 
 import java.util.Collection;
 

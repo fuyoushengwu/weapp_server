@@ -13,8 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
-
-import cn.aijiamuyingfang.commons.utils.CollectionUtils;
 import cn.aijiamuyingfang.server.feign.CouponClient;
 import cn.aijiamuyingfang.server.feign.GoodClient;
 import cn.aijiamuyingfang.server.feign.StoreClient;
@@ -50,6 +48,7 @@ import cn.aijiamuyingfang.vo.shoporder.ShopOrderStatus;
 import cn.aijiamuyingfang.vo.shoporder.ShopOrderVoucher;
 import cn.aijiamuyingfang.vo.shoporder.UpdateShopOrderStatusRequest;
 import cn.aijiamuyingfang.vo.user.User;
+import cn.aijiamuyingfang.vo.utils.CollectionUtils;
 import cn.aijiamuyingfang.vo.utils.StringUtils;
 
 /***

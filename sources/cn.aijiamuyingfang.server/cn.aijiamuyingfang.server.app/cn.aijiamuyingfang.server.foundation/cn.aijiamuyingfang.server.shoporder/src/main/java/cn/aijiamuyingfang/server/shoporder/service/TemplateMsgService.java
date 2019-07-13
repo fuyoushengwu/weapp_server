@@ -6,8 +6,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import cn.aijiamuyingfang.commons.utils.CollectionUtils;
 import cn.aijiamuyingfang.server.feign.TemplateMsgClient;
 import cn.aijiamuyingfang.vo.goods.Good;
 import cn.aijiamuyingfang.vo.message.TemplateMsg;
@@ -16,6 +14,7 @@ import cn.aijiamuyingfang.vo.shoporder.ShopOrder;
 import cn.aijiamuyingfang.vo.shoporder.ShopOrderItem;
 import cn.aijiamuyingfang.vo.store.StoreAddress;
 import cn.aijiamuyingfang.vo.user.RecieveAddress;
+import cn.aijiamuyingfang.vo.utils.CollectionUtils;
 import cn.aijiamuyingfang.vo.utils.StringUtils;
 
 /**
