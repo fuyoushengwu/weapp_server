@@ -73,16 +73,7 @@ public class ClassifyGoodService {
     } else {
       pageRequest = new PageRequest(currentPage - 1, pageSize);
     }
-    Page<GoodDTO> goodDTOPage;
-    if (CollectionUtils.isEmpty(packFilter) && CollectionUtils.isEmpty(levelFilter)) {
-      goodDTOPage = goodRepository.findClassifyGood(classifyId, pageRequest);
-    } else if (CollectionUtils.isEmpty(packFilter)) {
-      goodDTOPage = goodRepository.findClassifyGoodByLevelIn(classifyId, levelFilter, pageRequest);
-    } else if (CollectionUtils.isEmpty(levelFilter)) {
-      goodDTOPage = goodRepository.findClassifyGoodByPackIn(classifyId, packFilter, pageRequest);
-    } else {
-      goodDTOPage = goodRepository.findClassifyGoodByPackInAndLevelIn(classifyId, packFilter, levelFilter, pageRequest);
-    }
+    Page<GoodDTO> goodDTOPage= findClassifyGood(classifyId,pageRequest,packFilter,levelFilter);
     PagableGoodList response = new PagableGoodList();
     response.setCurrentPage(goodDTOPage.getNumber() + 1);
     response.setDataList(convertService.convertGoodDTOList(goodDTOPage.getContent()));
@@ -90,6 +81,50 @@ public class ClassifyGoodService {
     return response;
   }
 
+  
+  private Page<GoodDTO> findClassifyGood(String classifyId,PageRequest pageRequest,List<String> packFilter, List<String> levelFilter){
+    if (CollectionUtils.isEmpty(packFilter) && CollectionUtils.isEmpty(levelFilter)) {
+      return goodRepository.findClassifyGood(classifyId, pageRequest);
+    } else if (CollectionUtils.isEmpty(packFilter)) {
+      return findClassifyGoodByLevel(classifyId,pageRequest,levelFilter);
+    } else if (CollectionUtils.isEmpty(levelFilter)) {
+      return findClassifyGoodByPack(classifyId,pageRequest,packFilter);
+    } else {
+      return findClassifyGoodByPackAndLevel(classifyId,pageRequest,packFilter,levelFilter);
+    }
+  }
+  
+  private  Page<GoodDTO> findClassifyGoodByLevel(String classifyId,PageRequest pageRequest, List<String> levelFilter){
+    boolean containNull=levelFilter.contains("null");
+    if(containNull) {
+      return goodRepository.findClassifyGoodByLevelNULLORIn(classifyId, levelFilter, pageRequest);
+    }
+    return goodRepository.findClassifyGoodByLevelIn(classifyId, levelFilter, pageRequest);
+  }
+  
+  private  Page<GoodDTO> findClassifyGoodByPack(String classifyId,PageRequest pageRequest, List<String> packFilter){
+    boolean containNull=packFilter.contains("null");
+    if(containNull) {
+      return goodRepository.findClassifyGoodByPackNULLORIn(classifyId, packFilter, pageRequest);
+    }
+    return goodRepository.findClassifyGoodByPackIn(classifyId, packFilter, pageRequest);
+  }
+  
+  private  Page<GoodDTO> findClassifyGoodByPackAndLevel(String classifyId,PageRequest pageRequest, List<String> packFilter,List<String> levelFilter){
+    boolean packContainNull=packFilter.contains("null");
+    boolean levelContainNull=levelFilter.contains("null");
+    if(packContainNull&&levelContainNull) {
+      return goodRepository.findClassifyGoodByPackNULLORInAndLevelNULLORIn(classifyId, packFilter, levelFilter, pageRequest);
+    }
+    if(packContainNull) {
+    return goodRepository.findClassifyGoodByPackNULLORInAndLevelIn(classifyId, packFilter, levelFilter, pageRequest);
+    }
+    if(levelContainNull) {
+      return goodRepository.findClassifyGoodByPackInAndLevelNULLORIn(classifyId, packFilter, levelFilter, pageRequest);
+    }
+    return goodRepository.findClassifyGoodByPackInAndLevelIn(classifyId, packFilter, levelFilter, pageRequest);
+  }
+  
   /**
    * 移除条目下的商品
    * 
