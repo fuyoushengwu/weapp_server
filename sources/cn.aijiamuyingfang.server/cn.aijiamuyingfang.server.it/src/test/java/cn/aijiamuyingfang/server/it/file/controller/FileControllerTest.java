@@ -8,9 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -32,22 +29,12 @@ public class FileControllerTest {
 
   @Before
   public void before() {
-    // testActions.clearFileInfo();
+    testActions.clearFileInfo();
   }
 
   @After
   public void after() {
-    // testActions.clearFileInfo();
-  }
-
-  @Test
-  public void test() throws IOException {
-    String content = FileUtils
-        .readFileToString(new File("E:\\Code\\WeChat\\fuyoushengwu\\weapp_server\\build\\weapp\\Config.yaml"), "UTF-8");
-    System.out.println(content);
-    // Matcher matcher = Pattern.compile("<WEAPP_DATASOURCE_USERNAME>").matcher(content);
-    Matcher matcher = Pattern.compile("(<WEAPP_DATASOURCE_USERNAME>)").matcher(content);
-    System.out.println(matcher.groupCount());
+    testActions.clearFileInfo();
   }
 
   @Test
