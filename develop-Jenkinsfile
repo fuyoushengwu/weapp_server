@@ -50,7 +50,7 @@ podTemplate(
                                 )
                             ], 
                             fileEncoding: 'UTF-8', 
-                            filePath: 'build/weapp/Config.yaml'
+                            filePath: '${WORKSPACE}/build/weapp/Config.yaml'
                         ), 
                         fileContentReplaceConfig(
                             configs: [
@@ -74,7 +74,7 @@ podTemplate(
                                 )
                             ], 
                             fileEncoding: 'UTF-8', 
-                            filePath: 'build/weapp_test/Config.yaml'
+                            filePath: '${WORKSPACE}/build/weapp_test/Config.yaml'
                         ), 
                         fileContentReplaceConfig(
                             configs: [
@@ -86,7 +86,7 @@ podTemplate(
                                 )
                             ], 
                             fileEncoding: 'UTF-8', 
-                            filePath: 'sources/cn.aijiamuyingfang.server/cn.aijiamuyingfang.server.app/cn.aijiamuyingfang.server.foundation/cn.aijiamuyingfang.server.auth/src/main/resources/data.sql'
+                            filePath: '${WORKSPACE}/sources/cn.aijiamuyingfang.server/cn.aijiamuyingfang.server.app/cn.aijiamuyingfang.server.foundation/cn.aijiamuyingfang.server.auth/src/main/resources/data.sql'
                         ), 
                         fileContentReplaceConfig(
                             configs: [
@@ -95,7 +95,7 @@ podTemplate(
                                 )
                             ], 
                             fileEncoding: 'UTF-8', 
-                            filePath: 'sources/cn.aijiamuyingfang.server/cn.aijiamuyingfang.server.app/cn.aijiamuyingfang.server.foundation/cn.aijiamuyingfang.server.user/src/main/resources/data.sql'
+                            filePath: '${WORKSPACE}/sources/cn.aijiamuyingfang.server/cn.aijiamuyingfang.server.app/cn.aijiamuyingfang.server.foundation/cn.aijiamuyingfang.server.user/src/main/resources/data.sql'
                         ), 
                         fileContentReplaceConfig(
                             configs: [
@@ -107,7 +107,7 @@ podTemplate(
                                 )
                             ], 
                             fileEncoding: 'UTF-8', 
-                            filePath: 'sources/cn.aijiamuyingfang.server/cn.aijiamuyingfang.server.it/src/test/java/cn/aijiamuyingfang/server/it/AbstractTestAction.java'
+                            filePath: '${WORKSPACE}/sources/cn.aijiamuyingfang.server/cn.aijiamuyingfang.server.it/src/test/java/cn/aijiamuyingfang/server/it/AbstractTestAction.java'
                         )
                     ]
                 )
