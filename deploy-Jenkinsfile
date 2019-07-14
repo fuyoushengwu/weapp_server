@@ -27,22 +27,22 @@ podTemplate(
                                     fileContentReplaceConfig(
                                         configs: [
                                             fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: $WEAPP_APPID, search: '<WEAPP_APPID>'
+                                                matchCount: 1, replace: "$WEAPP_APPID", search: '<WEAPP_APPID>'
                                             ), 
                                             fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: $WEAPP_SECRET, search: '<WEAPP_SECRET>'
+                                                matchCount: 1, replace: "$WEAPP_SECRET", search: '<WEAPP_SECRET>'
                                             ), 
                                             fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: $DATABASE_USERNAME, search: '<WEAPP_DATASOURCE_USERNAME>'
+                                                matchCount: 1, replace: "$DATABASE_USERNAME", search: '<WEAPP_DATASOURCE_USERNAME>'
                                             ), 
                                             fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: $DATABASE_PASSWORD, search: '<WEAPP_DATASOURCE_PASSWORD>'
+                                                matchCount: 1, replace: "$DATABASE_PASSWORD", search: '<WEAPP_DATASOURCE_PASSWORD>'
                                             ), 
                                             fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: $GITHUB_USERNAME, search: '<WEAPP_CONFIG_REPO_USERNAME>'
+                                                matchCount: 1, replace: "$GITHUB_USERNAME", search: '<WEAPP_CONFIG_REPO_USERNAME>'
                                             ),
                                             fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: $GITHUB_PASSWORD, search: '<WEAPP_CONFIG_REPO_PASSWORD>'
+                                                matchCount: 1, replace: "$GITHUB_PASSWORD", search: '<WEAPP_CONFIG_REPO_PASSWORD>'
                                             )
                                         ], 
                                         fileEncoding: 'UTF-8', 
@@ -51,22 +51,22 @@ podTemplate(
                                     fileContentReplaceConfig(
                                         configs: [
                                             fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: $WEAPP_APPID, search: '<WEAPP_APPID>'
+                                                matchCount: 1, replace: "$WEAPP_APPID", search: '<WEAPP_APPID>'
                                             ), 
                                             fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: $WEAPP_SECRET, search: '<WEAPP_SECRET>'
+                                                matchCount: 1, replace: "$WEAPP_SECRET", search: '<WEAPP_SECRET>'
                                             ), 
                                             fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: $DATABASE_USERNAME, search: '<WEAPP_DATASOURCE_USERNAME>'
+                                                matchCount: 1, replace: "$DATABASE_USERNAME", search: '<WEAPP_DATASOURCE_USERNAME>'
                                             ), 
                                             fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: $DATABASE_PASSWORD, search: '<WEAPP_DATASOURCE_PASSWORD>'
+                                                matchCount: 1, replace: "$DATABASE_PASSWORD", search: '<WEAPP_DATASOURCE_PASSWORD>'
                                             ), 
                                             fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: $GITHUB_USERNAME, search: '<WEAPP_CONFIG_REPO_USERNAME>'
+                                                matchCount: 1, replace: "$GITHUB_USERNAME", search: '<WEAPP_CONFIG_REPO_USERNAME>'
                                             ),
                                             fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: $GITHUB_PASSWORD, search: '<WEAPP_CONFIG_REPO_PASSWORD>'
+                                                matchCount: 1, replace: "$GITHUB_PASSWORD", search: '<WEAPP_CONFIG_REPO_PASSWORD>'
                                             )
                                         ], 
                                         fileEncoding: 'UTF-8', 
@@ -75,10 +75,10 @@ podTemplate(
                                     fileContentReplaceConfig(
                                         configs: [
                                             fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: $WEAPP_APPID, search: '<WEAPP_APPID>'
+                                                matchCount: 1, replace: "$WEAPP_APPID", search: '<WEAPP_APPID>'
                                             ), 
                                             fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: $WEAPP_SECRET, search: '<WEAPP_SECRET>'
+                                                matchCount: 1, replace: "$WEAPP_SECRET", search: '<WEAPP_SECRET>'
                                             )
                                         ], 
                                         fileEncoding: 'UTF-8', 
@@ -87,7 +87,7 @@ podTemplate(
                                     fileContentReplaceConfig(
                                         configs: [
                                             fileContentReplaceItemConfig(
-                                                matchCount: 4, replace: $MANAGER_USERNAME, search: '<MANAGER_USERNAME>'
+                                                matchCount: 4, replace: "$MANAGER_USERNAME", search: '<MANAGER_USERNAME>'
                                             )
                                         ], 
                                         fileEncoding: 'UTF-8', 
@@ -96,10 +96,10 @@ podTemplate(
                                     fileContentReplaceConfig(
                                         configs: [
                                             fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: $MANAGER_USERNAME, search: '<MANAGER_USERNAME>'
+                                                matchCount: 1, replace: "$MANAGER_USERNAME", search: '<MANAGER_USERNAME>'
                                             ),
                                             fileContentReplaceItemConfig(
-                                                matchCount: 2, replace: $MANAGER_PASSWORD, search: '<MANAGER_PASSWORD>'
+                                                matchCount: 2, replace: "$MANAGER_PASSWORD", search: '<MANAGER_PASSWORD>'
                                             )
                                         ], 
                                         fileEncoding: 'UTF-8', 
