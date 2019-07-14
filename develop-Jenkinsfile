@@ -49,6 +49,7 @@ podTemplate(
                                     matchCount: 1, replace: "$GITHUB_PASSWORD", search: '(<WEAPP_CONFIG_REPO_PASSWORD>)'
                                 )
                             ], 
+                            fileEncoding: 'UTF-8', 
                             filePath: 'build/weapp/Config.yaml,build/weapp_test/Config.yaml'
                         ),
                         fileContentReplaceConfig(
@@ -60,6 +61,7 @@ podTemplate(
                                     matchCount: 1, replace: "$WEAPP_SECRET", search: '(<WEAPP_SECRET>)'
                                 )
                             ], 
+                            fileEncoding: 'UTF-8', 
                             filePath: 'sources/cn.aijiamuyingfang.server/cn.aijiamuyingfang.server.app/cn.aijiamuyingfang.server.foundation/cn.aijiamuyingfang.server.auth/src/main/resources/data.sql'
                         ), 
                         fileContentReplaceConfig(
@@ -80,6 +82,7 @@ podTemplate(
                                     matchCount: 2, replace: "$MANAGER_PASSWORD", search: '(<MANAGER_PASSWORD>)'
                                 )
                             ], 
+                            fileEncoding: 'UTF-8', 
                             filePath: 'sources/cn.aijiamuyingfang.server/cn.aijiamuyingfang.server.it/src/test/java/cn/aijiamuyingfang/server/it/AbstractTestAction.java'
                         )
                     ]
