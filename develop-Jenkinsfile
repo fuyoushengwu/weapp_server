@@ -20,264 +20,263 @@ podTemplate(
         }
 
         stage('replace content'){
-            withCredentials([usernamePassword(credentialsId: '3fdbf8de-1d06-46f8-80fe-a97a65500f55', usernameVariable: 'MANAGER_USERNAME', passwordVariable: 'MANAGER_PASSWORD')]) {
-                withCredentials([usernamePassword(credentialsId: 'b968024d-e10a-40ec-9731-daaf514a27ee', usernameVariable: 'WEAPP_APPID', passwordVariable: 'WEAPP_SECRET')]) {
-                    withCredentials([usernamePassword(credentialsId: '7fc61d02-aea8-43e8-a9af-edf9b4038f1b', usernameVariable: 'DATABASE_USERNAME', passwordVariable: 'DATABASE_PASSWORD')]) {
-                        withCredentials([usernamePassword(credentialsId: '3a17cc2c-396f-46f2-ab6c-69f648686fc8', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD')]) {
-                            contentReplace(
-                                configs: [
-                                    fileContentReplaceConfig(
-                                        configs: [
-                                            fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: "$WEAPP_APPID", search: '<WEAPP_APPID>'
-                                            ), 
-                                            fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: "$WEAPP_SECRET", search: '<WEAPP_SECRET>'
-                                            ), 
-                                            fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: "$DATABASE_USERNAME", search: '<WEAPP_DATASOURCE_USERNAME>'
-                                            ), 
-                                            fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: "$DATABASE_PASSWORD", search: '<WEAPP_DATASOURCE_PASSWORD>'
-                                            ), 
-                                            fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: "$GITHUB_USERNAME", search: '<WEAPP_CONFIG_REPO_USERNAME>'
-                                            ),
-                                            fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: "$GITHUB_PASSWORD", search: '<WEAPP_CONFIG_REPO_PASSWORD>'
-                                            )
-                                        ], 
-                                        fileEncoding: 'UTF-8', 
-                                        filePath: 'build/weapp/Config.yaml'
-                                    ), 
-                                    fileContentReplaceConfig(
-                                        configs: [
-                                            fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: "$WEAPP_APPID", search: '<WEAPP_APPID>'
-                                            ), 
-                                            fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: "$WEAPP_SECRET", search: '<WEAPP_SECRET>'
-                                            ), 
-                                            fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: "$DATABASE_USERNAME", search: '<WEAPP_DATASOURCE_USERNAME>'
-                                            ), 
-                                            fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: "$DATABASE_PASSWORD", search: '<WEAPP_DATASOURCE_PASSWORD>'
-                                            ), 
-                                            fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: "$GITHUB_USERNAME", search: '<WEAPP_CONFIG_REPO_USERNAME>'
-                                            ),
-                                            fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: "$GITHUB_PASSWORD", search: '<WEAPP_CONFIG_REPO_PASSWORD>'
-                                            )
-                                        ], 
-                                        fileEncoding: 'UTF-8', 
-                                        filePath: 'build/weapp_test/Config.yaml'
-                                    ), 
-                                    fileContentReplaceConfig(
-                                        configs: [
-                                            fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: "$WEAPP_APPID", search: '<WEAPP_APPID>'
-                                            ), 
-                                            fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: "$WEAPP_SECRET", search: '<WEAPP_SECRET>'
-                                            )
-                                        ], 
-                                        fileEncoding: 'UTF-8', 
-                                        filePath: 'sources/cn.aijiamuyingfang.server/cn.aijiamuyingfang.server.app/cn.aijiamuyingfang.server.foundation/cn.aijiamuyingfang.server.auth/src/main/resources/data.sql'
-                                    ), 
-                                    fileContentReplaceConfig(
-                                        configs: [
-                                            fileContentReplaceItemConfig(
-                                                matchCount: 4, replace: "$MANAGER_USERNAME", search: '<MANAGER_USERNAME>'
-                                            )
-                                        ], 
-                                        fileEncoding: 'UTF-8', 
-                                        filePath: 'sources/cn.aijiamuyingfang.server/cn.aijiamuyingfang.server.app/cn.aijiamuyingfang.server.foundation/cn.aijiamuyingfang.server.user/src/main/resources/data.sql'
-                                    ), 
-                                    fileContentReplaceConfig(
-                                        configs: [
-                                            fileContentReplaceItemConfig(
-                                                matchCount: 1, replace: "$MANAGER_USERNAME", search: '<MANAGER_USERNAME>'
-                                            ),
-                                            fileContentReplaceItemConfig(
-                                                matchCount: 2, replace: "$MANAGER_PASSWORD", search: '<MANAGER_PASSWORD>'
-                                            )
-                                        ], 
-                                        fileEncoding: 'UTF-8', 
-                                        filePath: 'sources/cn.aijiamuyingfang.server/cn.aijiamuyingfang.server.it/src/test/java/cn/aijiamuyingfang/server/it/AbstractTestAction.java'
-                                    )
-                                ]
-                            )
-                        }
-                    }
-                }
+            withCredentials([
+                usernamePassword(credentialsId: '3fdbf8de-1d06-46f8-80fe-a97a65500f55', passwordVariable: 'MANAGER_PASSWORD', usernameVariable: 'MANAGER_USERNAME'), 
+                usernamePassword(credentialsId: 'b968024d-e10a-40ec-9731-daaf514a27ee', passwordVariable: 'WEAPP_SECRET', usernameVariable: 'WEAPP_APPID'), 
+                usernamePassword(credentialsId: '7fc61d02-aea8-43e8-a9af-edf9b4038f1b', passwordVariable: 'DATABASE_PASSWORD', usernameVariable: 'DATABASE_USERNAME'), 
+                usernamePassword(credentialsId: '3a17cc2c-396f-46f2-ab6c-69f648686fc8', passwordVariable: 'GITHUB_PASSWORD', usernameVariable: 'GITHUB_USERNAME')]) {
+                    
+                contentReplace(
+                    configs: [
+                        fileContentReplaceConfig(
+                            configs: [
+                                fileContentReplaceItemConfig(
+                                    matchCount: 1, replace: "$WEAPP_APPID", search: '<WEAPP_APPID>'
+                                ), 
+                                fileContentReplaceItemConfig(
+                                    matchCount: 1, replace: "$WEAPP_SECRET", search: '<WEAPP_SECRET>'
+                                ), 
+                                fileContentReplaceItemConfig(
+                                    matchCount: 1, replace: "$DATABASE_USERNAME", search: '<WEAPP_DATASOURCE_USERNAME>'
+                                ), 
+                                fileContentReplaceItemConfig(
+                                    matchCount: 1, replace: "$DATABASE_PASSWORD", search: '<WEAPP_DATASOURCE_PASSWORD>'
+                                ), 
+                                fileContentReplaceItemConfig(
+                                    matchCount: 1, replace: "$GITHUB_USERNAME", search: '<WEAPP_CONFIG_REPO_USERNAME>'
+                                ),
+                                fileContentReplaceItemConfig(
+                                    matchCount: 1, replace: "$GITHUB_PASSWORD", search: '<WEAPP_CONFIG_REPO_PASSWORD>'
+                                )
+                            ], 
+                            fileEncoding: 'UTF-8', 
+                            filePath: 'build/weapp/Config.yaml'
+                        ), 
+                        fileContentReplaceConfig(
+                            configs: [
+                                fileContentReplaceItemConfig(
+                                    matchCount: 1, replace: "$WEAPP_APPID", search: '<WEAPP_APPID>'
+                                ), 
+                                fileContentReplaceItemConfig(
+                                    matchCount: 1, replace: "$WEAPP_SECRET", search: '<WEAPP_SECRET>'
+                                ), 
+                                fileContentReplaceItemConfig(
+                                    matchCount: 1, replace: "$DATABASE_USERNAME", search: '<WEAPP_DATASOURCE_USERNAME>'
+                                ), 
+                                fileContentReplaceItemConfig(
+                                    matchCount: 1, replace: "$DATABASE_PASSWORD", search: '<WEAPP_DATASOURCE_PASSWORD>'
+                                ), 
+                                fileContentReplaceItemConfig(
+                                    matchCount: 1, replace: "$GITHUB_USERNAME", search: '<WEAPP_CONFIG_REPO_USERNAME>'
+                                ),
+                                fileContentReplaceItemConfig(
+                                    matchCount: 1, replace: "$GITHUB_PASSWORD", search: '<WEAPP_CONFIG_REPO_PASSWORD>'
+                                )
+                            ], 
+                            fileEncoding: 'UTF-8', 
+                            filePath: 'build/weapp_test/Config.yaml'
+                        ), 
+                        fileContentReplaceConfig(
+                            configs: [
+                                fileContentReplaceItemConfig(
+                                    matchCount: 1, replace: "$WEAPP_APPID", search: '<WEAPP_APPID>'
+                                ), 
+                                fileContentReplaceItemConfig(
+                                    matchCount: 1, replace: "$WEAPP_SECRET", search: '<WEAPP_SECRET>'
+                                )
+                            ], 
+                            fileEncoding: 'UTF-8', 
+                            filePath: 'sources/cn.aijiamuyingfang.server/cn.aijiamuyingfang.server.app/cn.aijiamuyingfang.server.foundation/cn.aijiamuyingfang.server.auth/src/main/resources/data.sql'
+                        ), 
+                        fileContentReplaceConfig(
+                            configs: [
+                                fileContentReplaceItemConfig(
+                                    matchCount: 4, replace: "$MANAGER_USERNAME", search: '<MANAGER_USERNAME>'
+                                )
+                            ], 
+                            fileEncoding: 'UTF-8', 
+                            filePath: 'sources/cn.aijiamuyingfang.server/cn.aijiamuyingfang.server.app/cn.aijiamuyingfang.server.foundation/cn.aijiamuyingfang.server.user/src/main/resources/data.sql'
+                        ), 
+                        fileContentReplaceConfig(
+                            configs: [
+                                fileContentReplaceItemConfig(
+                                    matchCount: 1, replace: "$MANAGER_USERNAME", search: '<MANAGER_USERNAME>'
+                                ),
+                                fileContentReplaceItemConfig(
+                                    matchCount: 2, replace: "$MANAGER_PASSWORD", search: '<MANAGER_PASSWORD>'
+                                )
+                            ], 
+                            fileEncoding: 'UTF-8', 
+                            filePath: 'sources/cn.aijiamuyingfang.server/cn.aijiamuyingfang.server.it/src/test/java/cn/aijiamuyingfang/server/it/AbstractTestAction.java'
+                        )
+                    ]
+                )
             }
         }
 
-        stage('code analysis') {
-            container('tool'){
-                sh """
-                    mvn clean compile sonar:sonar -Dsonar.projectKey=cn.aijiamuyingfang:cn.aijiamuyingfang -Dsonar.organization=fuyoushengwu-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=033ad430ca4c06abfa5fe9f078d3a8de2ebe62dd -f sources/pom.xml
-                """
-            }
-        }        
+        // stage('code analysis') {
+        //     container('tool'){
+        //         sh """
+        //             mvn clean compile sonar:sonar -Dsonar.projectKey=cn.aijiamuyingfang:cn.aijiamuyingfang -Dsonar.organization=fuyoushengwu-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=033ad430ca4c06abfa5fe9f078d3a8de2ebe62dd -f sources/pom.xml
+        //         """
+        //     }
+        // }        
 
-        stage('package') {
-            container('tool') {
-                try {
-                    sh """
-                        kubectl delete -f build/weapp_test/
-                    """
-                } catch (exc) {
-                    println exc
-                }
+        // stage('package') {
+        //     container('tool') {
+        //         try {
+        //             sh """
+        //                 kubectl delete -f build/weapp_test/
+        //             """
+        //         } catch (exc) {
+        //             println exc
+        //         }
 
-                nodeIPAddr = sh (
-                    script: """
-                        kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}'
-                    """,
-                    returnStdout: true
-                ).trim().split()
-                for(int i=0;i<nodeIPAddr.size();i++){
-                    def ip=nodeIPAddr[i].trim()
-                    try {
-                        withCredentials([usernamePassword(credentialsId: ip, usernameVariable: 'NODE_USERNAME', passwordVariable: 'NODE_PASSWORD')]) {
-                            def imageArr = sh (
-                                script: """
-                                    sshpass -p $NODE_PASSWORD ssh -o StrictHostKeyChecking=no $NODE_USERNAME@$ip \"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}\"
-                                """,
-                                returnStdout: true
-                            ).trim().split()
-                            for(int j=0;j<imageArr.size();j++){
-                                def image = imageArr[j].trim()
-                                if("".equals(image)) {
-                                    continue
-                                }
-                                if(image.endsWith("<none>")) {
-                                    image = image.replace(":<none>","")
-                                    image = sh(
-                                        script: """
-                                            sshpass -p $NODE_PASSWORD ssh -o StrictHostKeyChecking=no $NODE_USERNAME@$ip \"docker images --filter=reference='$image' --format={{.ID}}\"
-                                        """,
-                                        returnStdout: true
-                                    ).trim()
-                                }
-                                try {
-                                    sh """
-                                        sshpass -p $NODE_PASSWORD ssh -o StrictHostKeyChecking=no $NODE_USERNAME@$ip \"docker rmi $image\"
-                                    """
-                                } catch (exc) {
-                                    println exc
-                                }
-                            }
-                        }
-                    } catch(exc) {
-                        println exc
-                    }
-                }
-                withCredentials([usernamePassword(credentialsId: '961154c4-c9ca-4c27-a97f-97e2172f3ef8', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    sh """
-                        mvn clean install -Dmaven.test.skip=true -f sources/pom.xml
-                        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD registry.cn-hangzhou.aliyuncs.com
-                    """
-                }
-                def newImageArr = sh (
-                    script: """
-                        docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}
-                    """,
-                    returnStdout: true
-                ).trim().split()
-                for(int i=0;i<newImageArr.size();i++){
-                    def image = newImageArr[i].trim()
-                    if("".equals(image)||image.endsWith("<none>")) {
-                        continue
-                    }
-                    try {
-                        sh """
-                            docker push $image
-                        """
-                    } catch (exc) {
-                        println exc
-                    }
-                }
-            }
-        }
+        //         nodeIPAddr = sh (
+        //             script: """
+        //                 kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}'
+        //             """,
+        //             returnStdout: true
+        //         ).trim().split()
+        //         for(int i=0;i<nodeIPAddr.size();i++){
+        //             def ip=nodeIPAddr[i].trim()
+        //             try {
+        //                 withCredentials([usernamePassword(credentialsId: ip, usernameVariable: 'NODE_USERNAME', passwordVariable: 'NODE_PASSWORD')]) {
+        //                     def imageArr = sh (
+        //                         script: """
+        //                             sshpass -p $NODE_PASSWORD ssh -o StrictHostKeyChecking=no $NODE_USERNAME@$ip \"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}\"
+        //                         """,
+        //                         returnStdout: true
+        //                     ).trim().split()
+        //                     for(int j=0;j<imageArr.size();j++){
+        //                         def image = imageArr[j].trim()
+        //                         if("".equals(image)) {
+        //                             continue
+        //                         }
+        //                         if(image.endsWith("<none>")) {
+        //                             image = image.replace(":<none>","")
+        //                             image = sh(
+        //                                 script: """
+        //                                     sshpass -p $NODE_PASSWORD ssh -o StrictHostKeyChecking=no $NODE_USERNAME@$ip \"docker images --filter=reference='$image' --format={{.ID}}\"
+        //                                 """,
+        //                                 returnStdout: true
+        //                             ).trim()
+        //                         }
+        //                         try {
+        //                             sh """
+        //                                 sshpass -p $NODE_PASSWORD ssh -o StrictHostKeyChecking=no $NODE_USERNAME@$ip \"docker rmi $image\"
+        //                             """
+        //                         } catch (exc) {
+        //                             println exc
+        //                         }
+        //                     }
+        //                 }
+        //             } catch(exc) {
+        //                 println exc
+        //             }
+        //         }
+        //         withCredentials([usernamePassword(credentialsId: '961154c4-c9ca-4c27-a97f-97e2172f3ef8', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+        //             sh """
+        //                 mvn clean install -Dmaven.test.skip=true -f sources/pom.xml
+        //                 docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD registry.cn-hangzhou.aliyuncs.com
+        //             """
+        //         }
+        //         def newImageArr = sh (
+        //             script: """
+        //                 docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}
+        //             """,
+        //             returnStdout: true
+        //         ).trim().split()
+        //         for(int i=0;i<newImageArr.size();i++){
+        //             def image = newImageArr[i].trim()
+        //             if("".equals(image)||image.endsWith("<none>")) {
+        //                 continue
+        //             }
+        //             try {
+        //                 sh """
+        //                     docker push $image
+        //                 """
+        //             } catch (exc) {
+        //                 println exc
+        //             }
+        //         }
+        //     }
+        // }
 
-        stage('test'){
-            container('tool') {
-                try {
-                    sh """
-                        kubectl delete -f build/weapp_test/
-                    """
-                } catch (exc) {
-                    println exc
-                }
+        // stage('test'){
+        //     container('tool') {
+        //         try {
+        //             sh """
+        //                 kubectl delete -f build/weapp_test/
+        //             """
+        //         } catch (exc) {
+        //             println exc
+        //         }
                 
-                sh """
-                    kubectl apply -f build/weapp_test/
-                """
+        //         sh """
+        //             kubectl apply -f build/weapp_test/
+        //         """
                 
-                sleep 300
+        //         sleep 300
                 
-                withCredentials([usernamePassword(credentialsId: 'c14e8739-7dc3-4e04-9c52-c218eeec15b8', usernameVariable: 'DATABASE_USERNAME', passwordVariable: 'DATABASE_PASSWORD')]) {
-                    try {
-                        sh """
-                            export WEAPP_DATASOURCE_USERNAME=$DATABASE_USERNAME
-                            export WEAPP_DATASOURCE_PASSWORD=$DATABASE_PASSWORD
-                            mvn clean test -f sources/pom.xml
-                        """
-                    }finally {
+        //         withCredentials([usernamePassword(credentialsId: 'c14e8739-7dc3-4e04-9c52-c218eeec15b8', usernameVariable: 'DATABASE_USERNAME', passwordVariable: 'DATABASE_PASSWORD')]) {
+        //             try {
+        //                 sh """
+        //                     export WEAPP_DATASOURCE_USERNAME=$DATABASE_USERNAME
+        //                     export WEAPP_DATASOURCE_PASSWORD=$DATABASE_PASSWORD
+        //                     mvn clean test -f sources/pom.xml
+        //                 """
+        //             }finally {
                         
-                        try {
-                            sh """
-                                kubectl delete -f build/weapp_test/
-                            """
-                        }catch(exc){
-                            println exc
-                        }
+        //                 try {
+        //                     sh """
+        //                         kubectl delete -f build/weapp_test/
+        //                     """
+        //                 }catch(exc){
+        //                     println exc
+        //                 }
 
-                        for(int i=0;i<nodeIPAddr.size();i++){
-                            def ip=nodeIPAddr[i].trim()
-                            try {
-                                withCredentials([usernamePassword(credentialsId: ip, usernameVariable: 'NODE_USERNAME', passwordVariable: 'NODE_PASSWORD')]) {
-                                    def imageArr = sh (
-                                        script: """
-                                            sshpass -p $NODE_PASSWORD ssh -o StrictHostKeyChecking=no $NODE_USERNAME@$ip \"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}\"
-                                        """,
-                                        returnStdout: true
-                                    ).trim().split()
+        //                 for(int i=0;i<nodeIPAddr.size();i++){
+        //                     def ip=nodeIPAddr[i].trim()
+        //                     try {
+        //                         withCredentials([usernamePassword(credentialsId: ip, usernameVariable: 'NODE_USERNAME', passwordVariable: 'NODE_PASSWORD')]) {
+        //                             def imageArr = sh (
+        //                                 script: """
+        //                                     sshpass -p $NODE_PASSWORD ssh -o StrictHostKeyChecking=no $NODE_USERNAME@$ip \"docker images --filter=reference='registry.cn-hangzhou.aliyuncs.com/fuyoushengwu/*:*' --format={{.Repository}}:{{.Tag}}\"
+        //                                 """,
+        //                                 returnStdout: true
+        //                             ).trim().split()
 
-                                    for(int j=0;j<imageArr.size();j++){
-                                        def image = imageArr[j].trim()
-                                        if("".equals(image)) {
-                                            continue
-                                        }
-                                        if(image.endsWith("<none>")) {
-                                            image = image.replace(":<none>","")
-                                            image = sh(
-                                                script: """
-                                                    sshpass -p $NODE_PASSWORD ssh -o StrictHostKeyChecking=no $NODE_USERNAME@$ip \"docker images --filter=reference='$image' --format={{.ID}}\"
-                                                """,
-                                                returnStdout: true
-                                            ).trim()
-                                        }
-                                        try {
-                                            sh """
-                                                sshpass -p $NODE_PASSWORD ssh -o StrictHostKeyChecking=no $NODE_USERNAME@$ip \"docker rmi $image\"
-                                            """
-                                        } catch (exc) {
-                                            println exc
-                                        }
-                                    }
-                                }
-                            }catch(exc) {
-                                println exc
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        //                             for(int j=0;j<imageArr.size();j++){
+        //                                 def image = imageArr[j].trim()
+        //                                 if("".equals(image)) {
+        //                                     continue
+        //                                 }
+        //                                 if(image.endsWith("<none>")) {
+        //                                     image = image.replace(":<none>","")
+        //                                     image = sh(
+        //                                         script: """
+        //                                             sshpass -p $NODE_PASSWORD ssh -o StrictHostKeyChecking=no $NODE_USERNAME@$ip \"docker images --filter=reference='$image' --format={{.ID}}\"
+        //                                         """,
+        //                                         returnStdout: true
+        //                                     ).trim()
+        //                                 }
+        //                                 try {
+        //                                     sh """
+        //                                         sshpass -p $NODE_PASSWORD ssh -o StrictHostKeyChecking=no $NODE_USERNAME@$ip \"docker rmi $image\"
+        //                                     """
+        //                                 } catch (exc) {
+        //                                     println exc
+        //                                 }
+        //                             }
+        //                         }
+        //                     }catch(exc) {
+        //                         println exc
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
     }
 }
