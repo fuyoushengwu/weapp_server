@@ -1,10 +1,16 @@
 package cn.aijiamuyingfang.server.it.file.controller;
 
+import cn.aijiamuyingfang.client.rest.api.impl.FileControllerClient;
+import cn.aijiamuyingfang.server.it.ITApplication;
+import cn.aijiamuyingfang.vo.filecenter.FileInfo;
+import cn.aijiamuyingfang.vo.filecenter.PagableFileInfoList;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,11 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import cn.aijiamuyingfang.client.rest.api.impl.FileControllerClient;
-import cn.aijiamuyingfang.server.it.ITApplication;
-import cn.aijiamuyingfang.vo.filecenter.FileInfo;
-import cn.aijiamuyingfang.vo.filecenter.PagableFileInfoList;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT, classes = ITApplication.class)
@@ -31,12 +32,22 @@ public class FileControllerTest {
 
   @Before
   public void before() {
-    testActions.clearFileInfo();
+    // testActions.clearFileInfo();
   }
 
   @After
   public void after() {
-    testActions.clearFileInfo();
+    // testActions.clearFileInfo();
+  }
+
+  @Test
+  public void test() throws IOException {
+    String content = FileUtils
+        .readFileToString(new File("E:\\Code\\WeChat\\fuyoushengwu\\weapp_server\\build\\weapp\\Config.yaml"), "UTF-8");
+    System.out.println(content);
+    // Matcher matcher = Pattern.compile("<WEAPP_DATASOURCE_USERNAME>").matcher(content);
+    Matcher matcher = Pattern.compile("(<WEAPP_DATASOURCE_USERNAME>)").matcher(content);
+    System.out.println(matcher.groupCount());
   }
 
   @Test

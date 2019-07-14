@@ -72,7 +72,7 @@ insert into oauth_client_details
 web_server_redirect_uri,authorities, access_token_validity,
 refresh_token_validity, additional_information, create_time, archived, trusted)
 values
-('JENKINS_WEAPP_APPID', 'JENKINS_WEAPP_SECRET', 'jscode,refresh_token',
+('<WEAPP_APPID>', '<WEAPP_SECRET>', 'jscode,refresh_token',
 null,'permission:buyer:*',null,null,null, now(), 0, 0),
 ('weapp-sender', 'weapp-sender', 'password,refresh_token',
 null,'permission:manager:*,permission:sender:*',null,null,null, now(), 0, 0),
