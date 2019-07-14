@@ -31,7 +31,7 @@ podTemplate(
                         fileContentReplaceConfig(
                             configs: [
                                 fileContentReplaceItemConfig(
-                                    matchCount: 1, replace: "weapp_appid", search: 'JENKINS_WEAPP_APPID'
+                                    matchCount: 1, replace: "weapp_appid", search: 'JENKINS\_WEAPP\_APPID$'
                                 ), 
                                 fileContentReplaceItemConfig(
                                     matchCount: 1, replace: "weapp_secret", search: 'JENKINS_WEAPP_SECRET'
