@@ -21,7 +21,7 @@ podTemplate(
 
         stage('replace content'){
             withCredentials([usernamePassword(credentialsId: '3fdbf8de-1d06-46f8-80fe-a97a65500f55', usernameVariable: 'MANAGER_USERNAME', passwordVariable: 'MANAGER_PASSWORD')]) {
-                withCredentials([usernamePassword(credentialsId: 'b968024d-e10a-40ec-9731-daaf514a27eec', usernameVariable: 'WEAPP_APPID', passwordVariable: 'WEAPP_SECRET')]) {
+                withCredentials([usernamePassword(credentialsId: 'b968024d-e10a-40ec-9731-daaf514a27ee', usernameVariable: 'WEAPP_APPID', passwordVariable: 'WEAPP_SECRET')]) {
                     withCredentials([usernamePassword(credentialsId: '7fc61d02-aea8-43e8-a9af-edf9b4038f1b', usernameVariable: 'DATABASE_USERNAME', passwordVariable: 'DATABASE_PASSWORD')]) {
                         withCredentials([usernamePassword(credentialsId: '3a17cc2c-396f-46f2-ab6c-69f648686fc8', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD')]) {
                             contentReplace(
