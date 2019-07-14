@@ -31,83 +31,83 @@ podTemplate(
                         fileContentReplaceConfig(
                             configs: [
                                 fileContentReplaceItemConfig(
-                                    matchCount: 1, replace: "weapp_appid", search: '<WEAPP_APPID>'
+                                    matchCount: 1, replace: "weapp_appid", search: 'JENKINS_WEAPP_APPID'
                                 ), 
                                 fileContentReplaceItemConfig(
-                                    matchCount: 1, replace: "weapp_secret", search: '<WEAPP_SECRET>'
+                                    matchCount: 1, replace: "weapp_secret", search: 'JENKINS_WEAPP_SECRET'
                                 ), 
                                 fileContentReplaceItemConfig(
-                                    matchCount: 1, replace: "database_username", search: '<WEAPP_DATASOURCE_USERNAME>'
+                                    matchCount: 1, replace: "database_username", search: 'JENKINS_WEAPP_DATASOURCE_USERNAME'
                                 ), 
                                 fileContentReplaceItemConfig(
-                                    matchCount: 1, replace: "database_password", search: '<WEAPP_DATASOURCE_PASSWORD>'
+                                    matchCount: 1, replace: "database_password", search: 'JENKINS_WEAPP_DATASOURCE_PASSWORD'
                                 ), 
                                 fileContentReplaceItemConfig(
-                                    matchCount: 1, replace: "github_username", search: '<WEAPP_CONFIG_REPO_USERNAME>'
+                                    matchCount: 1, replace: "github_username", search: 'JENKINS_WEAPP_CONFIG_REPO_USERNAME'
                                 ),
                                 fileContentReplaceItemConfig(
-                                    matchCount: 1, replace: "github_password", search: '<WEAPP_CONFIG_REPO_PASSWORD>'
+                                    matchCount: 1, replace: "github_password", search: 'JENKINS_WEAPP_CONFIG_REPO_PASSWORD'
                                 )
                             ], 
                             fileEncoding: 'UTF-8', 
-                            filePath: './build/weapp/Config.yaml'
+                            filePath: 'build/weapp/Config.yaml'
                         ), 
                         fileContentReplaceConfig(
                             configs: [
                                 fileContentReplaceItemConfig(
-                                    matchCount: 1, replace: "weapp_appid", search: '<WEAPP_APPID>'
+                                    matchCount: 1, replace: "weapp_appid", search: 'JENKINS_WEAPP_APPID'
                                 ), 
                                 fileContentReplaceItemConfig(
-                                    matchCount: 1, replace: "weapp_secret", search: '<WEAPP_SECRET>'
+                                    matchCount: 1, replace: "weapp_secret", search: 'JENKINS_WEAPP_SECRET'
                                 ), 
                                 fileContentReplaceItemConfig(
-                                    matchCount: 1, replace: "database_username", search: '<WEAPP_DATASOURCE_USERNAME>'
+                                    matchCount: 1, replace: "database_username", search: 'JENKINS_WEAPP_DATASOURCE_USERNAME'
                                 ), 
                                 fileContentReplaceItemConfig(
-                                    matchCount: 1, replace: "database_password", search: '<WEAPP_DATASOURCE_PASSWORD>'
+                                    matchCount: 1, replace: "database_password", search: 'JENKINS_WEAPP_DATASOURCE_PASSWORD'
                                 ), 
                                 fileContentReplaceItemConfig(
-                                    matchCount: 1, replace: "github_username", search: '<WEAPP_CONFIG_REPO_USERNAME>'
+                                    matchCount: 1, replace: "github_username", search: 'JENKINS_WEAPP_CONFIG_REPO_USERNAME'
                                 ),
                                 fileContentReplaceItemConfig(
-                                    matchCount: 1, replace: "github_password", search: '<WEAPP_CONFIG_REPO_PASSWORD>'
+                                    matchCount: 1, replace: "github_password", search: 'JENKINS_WEAPP_CONFIG_REPO_PASSWORD'
                                 )
                             ], 
                             fileEncoding: 'UTF-8', 
-                            filePath: './build/weapp_test/Config.yaml'
+                            filePath: 'build/weapp_test/Config.yaml'
                         ), 
                         fileContentReplaceConfig(
                             configs: [
                                 fileContentReplaceItemConfig(
-                                    matchCount: 1, replace: "weapp_appid", search: '<WEAPP_APPID>'
+                                    matchCount: 1, replace: "weapp_appid", search: 'JENKINS_WEAPP_APPID'
                                 ), 
                                 fileContentReplaceItemConfig(
-                                    matchCount: 1, replace: "weapp_secret", search: '<WEAPP_SECRET>'
+                                    matchCount: 1, replace: "weapp_secret", search: 'JENKINS_WEAPP_SECRET'
                                 )
                             ], 
                             fileEncoding: 'UTF-8', 
-                            filePath: './sources/cn.aijiamuyingfang.server/cn.aijiamuyingfang.server.app/cn.aijiamuyingfang.server.foundation/cn.aijiamuyingfang.server.auth/src/main/resources/data.sql'
+                            filePath: 'sources/cn.aijiamuyingfang.server/cn.aijiamuyingfang.server.app/cn.aijiamuyingfang.server.foundation/cn.aijiamuyingfang.server.auth/src/main/resources/data.sql'
                         ), 
                         fileContentReplaceConfig(
                             configs: [
                                 fileContentReplaceItemConfig(
-                                    matchCount: 4, replace: "manager_username", search: '<MANAGER_USERNAME>'
+                                    matchCount: 4, replace: "manager_username", search: 'JENKINS_MANAGER_USERNAME'
                                 )
                             ], 
                             fileEncoding: 'UTF-8', 
-                            filePath: './sources/cn.aijiamuyingfang.server/cn.aijiamuyingfang.server.app/cn.aijiamuyingfang.server.foundation/cn.aijiamuyingfang.server.user/src/main/resources/data.sql'
+                            filePath: 'sources/cn.aijiamuyingfang.server/cn.aijiamuyingfang.server.app/cn.aijiamuyingfang.server.foundation/cn.aijiamuyingfang.server.user/src/main/resources/data.sql'
                         ), 
                         fileContentReplaceConfig(
                             configs: [
                                 fileContentReplaceItemConfig(
-                                    matchCount: 1, replace: "manager_username", search: '<MANAGER_USERNAME>'
+                                    matchCount: 1, replace: "manager_username", search: 'JENKINS_MANAGER_USERNAME'
                                 ),
                                 fileContentReplaceItemConfig(
-                                    matchCount: 2, replace: "manager_password", search: '<MANAGER_PASSWORD>'
+                                    matchCount: 2, replace: "manager_password", search: 'JENKINS_MANAGER_PASSWORD'
                                 )
                             ], 
                             fileEncoding: 'UTF-8', 
-                            filePath: './sources/cn.aijiamuyingfang.server/cn.aijiamuyingfang.server.it/src/test/java/cn/aijiamuyingfang/server/it/AbstractTestAction.java'
+                            filePath: 'sources/cn.aijiamuyingfang.server/cn.aijiamuyingfang.server.it/src/test/java/cn/aijiamuyingfang/server/it/AbstractTestAction.java'
                         )
                     ]
                 )

@@ -70,7 +70,7 @@ public abstract class AbstractTestAction {
   /**
    * Admin用户的Id
    */
-  public static final String ADMIN_USER_NAME = "<MANAGER_USERNAME>";
+  public static final String ADMIN_USER_NAME = "JENKINS_MANAGER_USERNAME";
 
   /**
    * Admin用户的ACCESS_TOKEN
@@ -190,7 +190,7 @@ public abstract class AbstractTestAction {
   public String getAdminAccessToken() throws IOException {
     if (null == accessTokenResponse) {
       this.accessTokenResponse = TestUtils.getAccessToken(hostname, "weapp-manager", "weapp-manager", ADMIN_USER_NAME,
-          "<MANAGER_PASSWORD>");
+          "JENKINS_MANAGER_PASSWORD");
     }
     return accessTokenResponse.getAccessToken();
   }
@@ -198,7 +198,7 @@ public abstract class AbstractTestAction {
   public String getAdminRefreshToken() throws IOException {
     if (null == accessTokenResponse) {
       this.accessTokenResponse = TestUtils.getAccessToken(hostname, "weapp-manager", "weapp-manager", ADMIN_USER_NAME,
-          "<MANAGER_PASSWORD>");
+          "JENKINS_MANAGER_PASSWORD");
     }
     return accessTokenResponse.getRefreshToken();
   }
