@@ -19,13 +19,109 @@ podTemplate(
             git branch: 'master', url: 'https://github.com/fuyoushengwu/weapp_server.git'
         }
 
+        stage('replace content'){
+            withCredentials([usernamePassword(credentialsId: '3fdbf8de-1d06-46f8-80fe-a97a65500f55', usernameVariable: 'MANAGER_USERNAME', passwordVariable: 'MANAGER_PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'b968024d-e10a-40ec-9731-daaf514a27eec', usernameVariable: 'WEAPP_APPID', passwordVariable: 'WEAPP_SECRET')]) {
+                    withCredentials([usernamePassword(credentialsId: '7fc61d02-aea8-43e8-a9af-edf9b4038f1b', usernameVariable: 'DATABASE_USERNAME', passwordVariable: 'DATABASE_PASSWORD')]) {
+                        withCredentials([usernamePassword(credentialsId: '3a17cc2c-396f-46f2-ab6c-69f648686fc8', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD')]) {
+                            contentReplace(
+                                configs: [
+                                    fileContentReplaceConfig(
+                                        configs: [
+                                            fileContentReplaceItemConfig(
+                                                matchCount: 1, replace: $WEAPP_APPID, search: '<WEAPP_APPID>'
+                                            ), 
+                                            fileContentReplaceItemConfig(
+                                                matchCount: 1, replace: $WEAPP_SECRET, search: '<WEAPP_SECRET>'
+                                            ), 
+                                            fileContentReplaceItemConfig(
+                                                matchCount: 1, replace: $DATABASE_USERNAME, search: '<WEAPP_DATASOURCE_USERNAME>'
+                                            ), 
+                                            fileContentReplaceItemConfig(
+                                                matchCount: 1, replace: $DATABASE_PASSWORD, search: '<WEAPP_DATASOURCE_PASSWORD>'
+                                            ), 
+                                            fileContentReplaceItemConfig(
+                                                matchCount: 1, replace: $GITHUB_USERNAME, search: '<WEAPP_CONFIG_REPO_USERNAME>'
+                                            ),
+                                            fileContentReplaceItemConfig(
+                                                matchCount: 1, replace: $GITHUB_PASSWORD, search: '<WEAPP_CONFIG_REPO_PASSWORD>'
+                                            )
+                                        ], 
+                                        fileEncoding: 'UTF-8', 
+                                        filePath: 'build/weapp/Config.yaml'
+                                    ), 
+                                    fileContentReplaceConfig(
+                                        configs: [
+                                            fileContentReplaceItemConfig(
+                                                matchCount: 1, replace: $WEAPP_APPID, search: '<WEAPP_APPID>'
+                                            ), 
+                                            fileContentReplaceItemConfig(
+                                                matchCount: 1, replace: $WEAPP_SECRET, search: '<WEAPP_SECRET>'
+                                            ), 
+                                            fileContentReplaceItemConfig(
+                                                matchCount: 1, replace: $DATABASE_USERNAME, search: '<WEAPP_DATASOURCE_USERNAME>'
+                                            ), 
+                                            fileContentReplaceItemConfig(
+                                                matchCount: 1, replace: $DATABASE_PASSWORD, search: '<WEAPP_DATASOURCE_PASSWORD>'
+                                            ), 
+                                            fileContentReplaceItemConfig(
+                                                matchCount: 1, replace: $GITHUB_USERNAME, search: '<WEAPP_CONFIG_REPO_USERNAME>'
+                                            ),
+                                            fileContentReplaceItemConfig(
+                                                matchCount: 1, replace: $GITHUB_PASSWORD, search: '<WEAPP_CONFIG_REPO_PASSWORD>'
+                                            )
+                                        ], 
+                                        fileEncoding: 'UTF-8', 
+                                        filePath: 'build/weapp_test/Config.yaml'
+                                    ), 
+                                    fileContentReplaceConfig(
+                                        configs: [
+                                            fileContentReplaceItemConfig(
+                                                matchCount: 1, replace: $WEAPP_APPID, search: '<WEAPP_APPID>'
+                                            ), 
+                                            fileContentReplaceItemConfig(
+                                                matchCount: 1, replace: $WEAPP_SECRET, search: '<WEAPP_SECRET>'
+                                            )
+                                        ], 
+                                        fileEncoding: 'UTF-8', 
+                                        filePath: 'sources/cn.aijiamuyingfang.server/cn.aijiamuyingfang.server.app/cn.aijiamuyingfang.server.foundation/cn.aijiamuyingfang.server.auth/src/main/resources/data.sql'
+                                    ), 
+                                    fileContentReplaceConfig(
+                                        configs: [
+                                            fileContentReplaceItemConfig(
+                                                matchCount: 4, replace: $MANAGER_USERNAME, search: '<MANAGER_USERNAME>'
+                                            )
+                                        ], 
+                                        fileEncoding: 'UTF-8', 
+                                        filePath: 'sources/cn.aijiamuyingfang.server/cn.aijiamuyingfang.server.app/cn.aijiamuyingfang.server.foundation/cn.aijiamuyingfang.server.user/src/main/resources/data.sql'
+                                    ), 
+                                    fileContentReplaceConfig(
+                                        configs: [
+                                            fileContentReplaceItemConfig(
+                                                matchCount: 1, replace: $MANAGER_USERNAME, search: '<MANAGER_USERNAME>'
+                                            ),
+                                            fileContentReplaceItemConfig(
+                                                matchCount: 2, replace: $MANAGER_PASSWORD, search: '<MANAGER_PASSWORD>'
+                                            )
+                                        ], 
+                                        fileEncoding: 'UTF-8', 
+                                        filePath: 'sources/cn.aijiamuyingfang.server/cn.aijiamuyingfang.server.it/src/test/java/cn/aijiamuyingfang/server/it/AbstractTestAction.java'
+                                    )
+                                ]
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
         stage('code analysis') {
             container('tool'){
                 sh """
                     mvn clean compile sonar:sonar -Dsonar.projectKey=cn.aijiamuyingfang:cn.aijiamuyingfang -Dsonar.organization=fuyoushengwu-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=033ad430ca4c06abfa5fe9f078d3a8de2ebe62dd -f sources/pom.xml
                 """
             }
-        }
+        }        
 
         stage('package') {
             container('tool') {

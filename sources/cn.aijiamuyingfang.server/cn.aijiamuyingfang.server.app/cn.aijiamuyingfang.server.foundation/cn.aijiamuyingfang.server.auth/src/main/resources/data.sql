@@ -72,9 +72,7 @@ insert into oauth_client_details
 web_server_redirect_uri,authorities, access_token_validity,
 refresh_token_validity, additional_information, create_time, archived, trusted)
 values
-('wxf48bf82aa377dbc2', '715a5fa9cfcdbc7ed959118a80021a74', 'jscode,refresh_token',
-null,'permission:buyer:*',null,null,null, now(), 0, 0),
-('wxbe3725e2fe517faa', '02bc75f7860d5bd54e5302942a09b639', 'jscode,refresh_token',
+('<WEAPP_APPID>', '<WEAPP_SECRET>', 'jscode,refresh_token',
 null,'permission:buyer:*',null,null,null, now(), 0, 0),
 ('weapp-sender', 'weapp-sender', 'password,refresh_token',
 null,'permission:manager:*,permission:sender:*',null,null,null, now(), 0, 0),

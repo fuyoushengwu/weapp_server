@@ -49,7 +49,7 @@ cat << EOF >/etc/shadowsocks.json
   "server_port":8888,
   "local_address": "127.0.0.1",
   "local_port":1080,
-  "password":"g0Ekw&1BAJw&tHQy",
+  "password":"<password>",
   "timeout":300,
   "method":"aes-256-cfb",
   "workers": 1
@@ -271,7 +271,7 @@ yum install -y mysql-community-server
 + + 1.4 配置MySQL
 ```
 systemctl enable mysqld && systemctl start mysqld
-mysqladmin -u root password 'huawei123'
+mysqladmin -u root password '<yourpassword>'
 
 # 登录mysql
 mysql -u root -p
