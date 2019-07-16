@@ -1,18 +1,16 @@
 package cn.aijiamuyingfang.vo.shoporder;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 import cn.aijiamuyingfang.vo.store.StoreAddress;
 import cn.aijiamuyingfang.vo.user.RecieveAddress;
 import cn.aijiamuyingfang.vo.utils.StringUtils;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import lombok.Data;
 
 /**
@@ -153,9 +151,9 @@ public class ShopOrder implements Parcelable {
    * 
    * @return 距离最后修改日期(单位:天)
    */
-  public int getLastModifyTime() {
+  public double getLastModifyTime() {
     Date now = new Date();
-    return (int) ((now.getTime() - lastModify.getTime()) / 1000 / 60 / 60 / 24);
+    return (now.getTime() - lastModify.getTime()) / 1000 / 60 / 60 / 24;
   }
 
   /**
