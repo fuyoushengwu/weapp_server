@@ -153,7 +153,7 @@ public class ShopOrder implements Parcelable {
    */
   public double getLastModifyTime() {
     Date now = new Date();
-    return (now.getTime() - lastModify.getTime()) / 1000 / 60 / 60 / 24;
+    return (now.getTime() - lastModify.getTime()) / 1000.0 / 60 / 60 / 24;
   }
 
   /**
