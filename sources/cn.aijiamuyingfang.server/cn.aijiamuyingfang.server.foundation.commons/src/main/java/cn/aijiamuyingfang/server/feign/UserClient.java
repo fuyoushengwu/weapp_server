@@ -44,6 +44,16 @@ public interface UserClient {
    */
   @PutMapping(value = "/user/{username}")
   ResponseBean<User> updateUser(@PathVariable("username") String username, @RequestBody User user);
+  
+  /**
+   * 更新用户信息
+   * 
+   * @param username
+   * @param change 积分改变量
+   * @return
+   */
+  @PutMapping(value = "/user/{username}/generic_score/{change}")
+  ResponseBean<User> updateUserGenericScore(@PathVariable("username") String username, @PathVariable("change")int change);
 
   /**
    * 获取用户收件地址

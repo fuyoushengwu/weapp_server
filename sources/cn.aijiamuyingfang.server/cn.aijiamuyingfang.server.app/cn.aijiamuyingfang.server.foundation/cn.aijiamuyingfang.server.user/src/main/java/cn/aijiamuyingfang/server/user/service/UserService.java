@@ -114,6 +114,24 @@ public class UserService {
   }
 
   /**
+   * 更新用户积分信息
+   * 
+   * @param username
+   *          用户id
+   * @param change 积分改变量
+   * @return
+   */
+  public User updateUserGenericScore(String username,int change) {
+    UserDTO userDTO = userRepository.findOne(username);
+    if (null == userDTO) {
+      throw new UserException(ResponseCode.USER_NOT_EXIST, username);
+    }
+    userDTO.setGenericScore(userDTO.getGenericScore()+change);
+    userRepository.saveAndFlush(userDTO);
+    return ConvertUtils.convertUserDTO(userDTO);
+    
+  }
+  /**
    * 获取用户收件地址
    * 
    * @param username

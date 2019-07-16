@@ -286,9 +286,7 @@ public class ShopOrderService {
         updateUserVoucherList.add(userVoucher);
       }
       couponClient.updateUserVoucherList(username, updateUserVoucherList);
-
-      user.increaseGenericScore(shopOrderDTO.getScore());
-      userClient.updateUser(username, user);
+      userClient.updateUserGenericScore(username, shopOrderDTO.getScore());
     }
 
     if (shopOrderDTO.getStatus() != ShopOrderStatusDTO.DOING) {
@@ -326,10 +324,10 @@ public class ShopOrderService {
       return response;
     }
     List<UserVoucher> updateUserVoucherList = new ArrayList<>();
+    int genericScore = 0;
     for (ShopOrderItemDTO shoporderItemDTO : shoporderDTO.getOrderItemList()) {
       Good good = goodClient.getGood(shoporderItemDTO.getGoodId()).getData();
-      int genericScore = good.getScore() * shoporderItemDTO.getCount();
-      user.increaseGenericScore(genericScore);
+      genericScore += good.getScore() * shoporderItemDTO.getCount();
       response.addGenericScore(genericScore);
 
       GoodVoucher goodvoucher = good.getGoodVoucher();
@@ -347,7 +345,7 @@ public class ShopOrderService {
       }
     }
     couponClient.updateUserVoucherList(username, updateUserVoucherList);
-    userClient.updateUser(username, user);
+    userClient.updateUserGenericScore(username, genericScore);
     return response;
   }
 
@@ -505,15 +503,8 @@ public class ShopOrderService {
     }
 
     shoporder.setTotalPrice(totalPrice);
-
-    User user = userClient.getUserInternal(username).getData();
-    if (user != null) {
-      shoporder.setUsername(user.getUsername());
-
-      user.decreaseGenericScore(shoporder.getScore());
-      userClient.updateUser(username, user);
-    }
-
+    shoporder.setUsername(username);
+    userClient.updateUserGenericScore(username, -shoporder.getScore());
     ShopOrderDTO shopOrderDTO = shopOrderRepository.saveAndFlush(convertService.convertShopOrder(shoporder));
     previeworderRepository.delete(previeworder.getId());
     shoporder.setId(shopOrderDTO.getId());

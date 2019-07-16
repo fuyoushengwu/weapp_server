@@ -128,6 +128,19 @@ public class UserController {
   }
 
   /**
+   * 更新用户积分信息
+   * 
+   * @param username
+   * @param change 积分改变量
+   * @return
+   */
+  @PreAuthorize(value = "isAuthenticated() and #username.equals(getAuthentication().getName())")
+  @PutMapping(value = "/user/{username}/generic_score/{change}")
+  public User updateUserGenericScore(@PathVariable("username") String username, @PathVariable("change") int change) {
+    return userService.updateUserGenericScore(username, change);
+  }
+
+  /**
    * 获取用户收件地址
    * 
    * @param username
