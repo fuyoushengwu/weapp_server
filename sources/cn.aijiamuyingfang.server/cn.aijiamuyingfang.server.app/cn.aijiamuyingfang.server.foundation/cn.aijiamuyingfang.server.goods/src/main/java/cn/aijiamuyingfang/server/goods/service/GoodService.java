@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cn.aijiamuyingfang.server.feign.ShopOrderClient;
 import cn.aijiamuyingfang.server.goods.db.GoodDetailRepository;
 import cn.aijiamuyingfang.server.goods.db.GoodRepository;
 import cn.aijiamuyingfang.server.goods.dto.GoodDTO;
@@ -30,6 +31,9 @@ import cn.aijiamuyingfang.vo.utils.StringUtils;
 @Service
 public class GoodService {
   @Autowired
+  private ShopOrderClient shoporderClient;
+
+  @Autowired
   private GoodRepository goodRepository;
 
   @Autowired
@@ -50,8 +54,14 @@ public class GoodService {
     if (StringUtils.hasContent(good.getId())) {
       GoodDTO oriGoodDTO = goodRepository.findOne(good.getId());
       if (oriGoodDTO != null) {
+        int newGoodCount = good.getCount();
+        int oriGoodCount = oriGoodDTO.getCount();
         oriGoodDTO.update(good);
-        return convertService.convertGoodDTO(goodRepository.saveAndFlush(oriGoodDTO));
+        Good result = convertService.convertGoodDTO(goodRepository.saveAndFlush(oriGoodDTO));
+        if (newGoodCount != 0 && newGoodCount != oriGoodCount) {
+          shoporderClient.updatePreOrder(good.getId());
+        }
+        return result;
       }
     }
     return convertService.convertGoodDTO(goodRepository.saveAndFlush(convertService.convertGood(good)));
