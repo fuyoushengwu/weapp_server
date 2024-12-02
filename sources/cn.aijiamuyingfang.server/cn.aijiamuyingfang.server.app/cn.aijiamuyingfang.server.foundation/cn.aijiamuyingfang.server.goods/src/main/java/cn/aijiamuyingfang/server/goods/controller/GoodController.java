@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,7 +30,6 @@ import cn.aijiamuyingfang.vo.goods.GoodDetail;
 import cn.aijiamuyingfang.vo.goods.PagableGoodList;
 import cn.aijiamuyingfang.vo.goods.SaleGood;
 import cn.aijiamuyingfang.vo.response.ResponseCode;
-import cn.aijiamuyingfang.vo.utils.CollectionUtils;
 import cn.aijiamuyingfang.vo.utils.StringUtils;
 
 /***
@@ -127,7 +127,7 @@ public class GoodController {
     }
 
     List<ImageSource> detailImageSourceList = new ArrayList<>();
-    if (CollectionUtils.hasContent(detailImages)) {
+    if (CollectionUtils.isNotEmpty(detailImages)) {
       for (MultipartFile detailImagePart : detailImages) {
         ImageSource detailImageSource = imageService.saveImage(detailImagePart);
         detailImageSourceList.add(detailImageSource);

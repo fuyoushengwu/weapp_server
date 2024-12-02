@@ -11,7 +11,7 @@ public class RandomServerPort {
 
   private static final int RANDOM_SERVERPORT_END = 65535;
 
-  private int serverPort;
+  private volatile int serverPort;
 
   public int nextValue(int start) {
     return nextValue(start, RANDOM_SERVERPORT_END);
@@ -22,8 +22,8 @@ public class RandomServerPort {
     if (serverPort == 0) {
       synchronized (this) {
         if (serverPort == 0) {
-          start = start < RANDOM_SERVERPORT_START ? RANDOM_SERVERPORT_START : start;
-          end = end > RANDOM_SERVERPORT_END ? RANDOM_SERVERPORT_END : end;
+          start = Math.max(start, RANDOM_SERVERPORT_START);
+          end = Math.min(end, RANDOM_SERVERPORT_END);
           serverPort = RandomUtils.nextInt(start, end);
         }
       }

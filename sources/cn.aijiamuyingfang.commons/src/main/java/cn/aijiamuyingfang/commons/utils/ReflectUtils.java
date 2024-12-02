@@ -39,15 +39,6 @@ public class ReflectUtils {
     return method.getName() + "(" + parametersAsString(method, longTypeNames) + ")";
   }
 
-  /**
-   * 方法参数签名
-   * 
-   * @param method
-   * @return
-   */
-  public static String parametersAsString(Method method) {
-    return parametersAsString(method, false);
-  }
 
   /**
    * 方法参数签名

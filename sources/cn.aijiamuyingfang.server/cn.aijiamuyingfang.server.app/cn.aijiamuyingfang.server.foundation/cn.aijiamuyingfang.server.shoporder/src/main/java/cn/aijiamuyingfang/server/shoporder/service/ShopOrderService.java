@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -48,7 +49,6 @@ import cn.aijiamuyingfang.vo.shoporder.ShopOrderStatus;
 import cn.aijiamuyingfang.vo.shoporder.ShopOrderVoucher;
 import cn.aijiamuyingfang.vo.shoporder.UpdateShopOrderStatusRequest;
 import cn.aijiamuyingfang.vo.user.User;
-import cn.aijiamuyingfang.vo.utils.CollectionUtils;
 import cn.aijiamuyingfang.vo.utils.StringUtils;
 
 /***
@@ -488,7 +488,7 @@ public class ShopOrderService {
     List<ShopOrderVoucher> shoporderVoucherList = getUserShopOrderVoucherList(username, goodIdList);
     shoporder.setOrderVoucher(shoporderVoucherList);
     double totalPrice = totalGoodsPrice + sendPrice - request.getJfNum() / 100.0;
-    if (!CollectionUtils.isEmpty(shoporderVoucherList)) {
+    if (CollectionUtils.isNotEmpty(shoporderVoucherList)) {
       List<UserVoucher> updateUserVoucherList = new ArrayList<>();
       for (ShopOrderVoucher shoporderVoucher : shoporderVoucherList) {
         Good good = shoporderVoucher.getGood();

@@ -3,6 +3,7 @@ package cn.aijiamuyingfang.server.coupon.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import cn.aijiamuyingfang.server.coupon.dto.GoodVoucherDTO;
@@ -12,7 +13,6 @@ import cn.aijiamuyingfang.server.coupon.service.CouponService;
 import cn.aijiamuyingfang.vo.coupon.GoodVoucher;
 import cn.aijiamuyingfang.vo.coupon.UserVoucher;
 import cn.aijiamuyingfang.vo.coupon.VoucherItem;
-import cn.aijiamuyingfang.vo.utils.CollectionUtils;
 
 @Service
 public class ConvertService {
@@ -110,7 +110,7 @@ public class ConvertService {
     goodVoucherDTO.setId(goodVoucher.getId());
     goodVoucherDTO.setDeprecated(goodVoucher.isDeprecated());
     goodVoucherDTO.setName(goodVoucher.getName());
-    if (CollectionUtils.hasContent(goodVoucher.getVoucherItemList())) {
+    if (CollectionUtils.isNotEmpty(goodVoucher.getVoucherItemList())) {
       List<String> voucherItemIdList = new ArrayList<>();
       for (VoucherItem voucherItem : goodVoucher.getVoucherItemList()) {
         voucherItemIdList.add(voucherItem.getId());

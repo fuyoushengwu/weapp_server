@@ -2,6 +2,7 @@ package cn.aijiamuyingfang.server.goods.service;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,7 +16,6 @@ import cn.aijiamuyingfang.server.goods.utils.ConvertService;
 import cn.aijiamuyingfang.vo.exception.GoodsException;
 import cn.aijiamuyingfang.vo.goods.PagableGoodList;
 import cn.aijiamuyingfang.vo.response.ResponseCode;
-import cn.aijiamuyingfang.vo.utils.CollectionUtils;
 import cn.aijiamuyingfang.vo.utils.StringUtils;
 
 /**
@@ -86,7 +86,7 @@ public class ClassifyGoodService {
       return goodRepository.findClassifyGood(classifyId, pageRequest);
     } else if (CollectionUtils.isEmpty(packFilter)) {
       return findClassifyGoodByLevel(classifyId,pageRequest,levelFilter);
-    } else if (CollectionUtils.isEmpty(levelFilter)) {
+    } else if (CollectionUtils.isNotEmpty(levelFilter)) {
       return findClassifyGoodByPack(classifyId,pageRequest,packFilter);
     } else {
       return findClassifyGoodByPackAndLevel(classifyId,pageRequest,packFilter,levelFilter);

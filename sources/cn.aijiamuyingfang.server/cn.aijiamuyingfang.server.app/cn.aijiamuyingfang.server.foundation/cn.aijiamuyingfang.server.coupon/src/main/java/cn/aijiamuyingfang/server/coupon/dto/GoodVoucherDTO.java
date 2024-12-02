@@ -8,10 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.hibernate.annotations.GenericGenerator;
 import cn.aijiamuyingfang.vo.coupon.GoodVoucher;
 import cn.aijiamuyingfang.vo.coupon.VoucherItem;
-import cn.aijiamuyingfang.vo.utils.CollectionUtils;
 import cn.aijiamuyingfang.vo.utils.StringUtils;
 import lombok.Data;
 
@@ -80,7 +80,7 @@ public class GoodVoucherDTO {
       this.setScore(updateVoucher.getScore());
     }
 
-    if (CollectionUtils.hasContent(updateVoucher.getVoucherItemList())) {
+    if (CollectionUtils.isNotEmpty(updateVoucher.getVoucherItemList())) {
       this.voucherItemIdList = new ArrayList<>();
       for (VoucherItem voucherItem : updateVoucher.getVoucherItemList()) {
         if (voucherItem != null) {

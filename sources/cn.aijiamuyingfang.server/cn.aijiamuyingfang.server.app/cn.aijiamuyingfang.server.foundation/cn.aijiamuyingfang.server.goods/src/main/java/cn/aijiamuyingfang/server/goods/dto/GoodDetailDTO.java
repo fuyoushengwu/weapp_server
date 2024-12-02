@@ -12,8 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import cn.aijiamuyingfang.server.goods.utils.ConvertUtils;
 import cn.aijiamuyingfang.vo.goods.GoodDetail;
-import cn.aijiamuyingfang.vo.utils.CollectionUtils;
 import lombok.Data;
+import org.apache.commons.collections4.CollectionUtils;
 
 /**
  * [描述]:
@@ -56,7 +56,7 @@ public class GoodDetailDTO {
     if (updateGoodDetail.getLifetime() != null) {
       this.setLifetime(ConvertUtils.convertShelfLife(updateGoodDetail.getLifetime()));
     }
-    if (!CollectionUtils.isEmpty(updateGoodDetail.getDetailImgList())) {
+    if (CollectionUtils.isNotEmpty(updateGoodDetail.getDetailImgList())) {
       this.setDetailImgList(ConvertUtils.convertImageSourceList(updateGoodDetail.getDetailImgList()));
     }
   }

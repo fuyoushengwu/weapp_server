@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -17,7 +18,6 @@ import cn.aijiamuyingfang.server.goods.utils.ConvertUtils;
 import cn.aijiamuyingfang.vo.ImageSource;
 import cn.aijiamuyingfang.vo.filecenter.FileInfo;
 import cn.aijiamuyingfang.vo.response.ResponseBean;
-import cn.aijiamuyingfang.vo.utils.CollectionUtils;
 import cn.aijiamuyingfang.vo.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -95,7 +95,7 @@ public class ImageService {
    * @param imageSourceList
    */
   public void deleteImage(List<ImageSource> imageSourceList) {
-    if (CollectionUtils.hasContent(imageSourceList)) {
+    if (CollectionUtils.isNotEmpty(imageSourceList)) {
       for (ImageSource imageSource : imageSourceList) {
         deleteImage(imageSource);
       }

@@ -23,6 +23,6 @@ import cn.aijiamuyingfang.server.it.ITApplication;
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT, classes = ITApplication.class)
 public class ResponseControllerTest {
   @Test
-  public void empytTest() {
+  public void emptyTest() {
   }
 }

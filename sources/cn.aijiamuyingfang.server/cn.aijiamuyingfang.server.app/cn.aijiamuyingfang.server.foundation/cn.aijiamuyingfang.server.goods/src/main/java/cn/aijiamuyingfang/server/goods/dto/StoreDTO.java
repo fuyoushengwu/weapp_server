@@ -15,10 +15,10 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.hibernate.annotations.GenericGenerator;
 import cn.aijiamuyingfang.server.goods.utils.ConvertUtils;
 import cn.aijiamuyingfang.vo.store.Store;
-import cn.aijiamuyingfang.vo.utils.CollectionUtils;
 import cn.aijiamuyingfang.vo.utils.StringUtils;
 import lombok.Data;
 
@@ -100,7 +100,7 @@ public class StoreDTO {
     if (updateStore.getCoverImg() != null) {
       this.setCoverImg(ConvertUtils.convertImageSource(updateStore.getCoverImg()));
     }
-    if (CollectionUtils.hasContent(updateStore.getDetailImgList())) {
+    if (CollectionUtils.isNotEmpty(updateStore.getDetailImgList())) {
       this.setDetailImgList(ConvertUtils.convertImageSourceList(updateStore.getDetailImgList()));
     }
     if (updateStore.getStoreAddress() != null) {

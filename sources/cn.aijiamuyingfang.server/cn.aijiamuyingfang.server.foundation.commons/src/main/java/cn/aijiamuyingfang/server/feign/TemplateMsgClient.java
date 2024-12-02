@@ -13,8 +13,8 @@ public interface TemplateMsgClient {
   /**
    * 发送预定信息
    * 
-   * @param username
-   * @param msgData
+   * @param username 用户名
+   * @param msgData 消息
    */
   @PostMapping(value = "/users-anon/internal/user/{username}/wxservice/templatemsg/preorder")
   ResponseBean<Void> sendPreOrderMsg(@PathVariable(name = "username") String username,

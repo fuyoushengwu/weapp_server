@@ -1,6 +1,7 @@
 package cn.aijiamuyingfang.commons.utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import lombok.experimental.UtilityClass;
@@ -34,14 +35,10 @@ public class PermitAllUrl {
       return ENDPOINTS;
     }
     List<String> list = new ArrayList<>();
-    for (String url : ENDPOINTS) {
-      list.add(url);
-    }
+      Collections.addAll(list, ENDPOINTS);
 
-    for (String url : urls) {
-      list.add(url);
-    }
+      Collections.addAll(list, urls);
 
-    return list.toArray(new String[list.size()]);
+    return list.toArray(new String[0]);
   }
 }

@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import cn.aijiamuyingfang.server.feign.TemplateMsgClient;
@@ -14,7 +15,6 @@ import cn.aijiamuyingfang.vo.shoporder.ShopOrder;
 import cn.aijiamuyingfang.vo.shoporder.ShopOrderItem;
 import cn.aijiamuyingfang.vo.store.StoreAddress;
 import cn.aijiamuyingfang.vo.user.RecieveAddress;
-import cn.aijiamuyingfang.vo.utils.CollectionUtils;
 import cn.aijiamuyingfang.vo.utils.StringUtils;
 
 /**
@@ -81,7 +81,7 @@ public class TemplateMsgService {
 
     StringBuilder contentSB = new StringBuilder();
     List<ShopOrderItem> shoporderitemList = order.getOrderItemList();
-    if (CollectionUtils.hasContent(shoporderitemList)) {
+    if (CollectionUtils.isNotEmpty(shoporderitemList)) {
       for (ShopOrderItem shoporderItem : shoporderitemList) {
         contentSB.append(shoporderItem.getGood().getName()).append(" ");
         contentSB.append(shoporderItem.getCount()).append(shoporderItem.getGood().getPack()).append("\n");
@@ -122,7 +122,7 @@ public class TemplateMsgService {
 
     StringBuilder contentSB = new StringBuilder();
     List<ShopOrderItem> shoporderitemList = order.getOrderItemList();
-    if (CollectionUtils.hasContent(shoporderitemList)) {
+    if (CollectionUtils.isNotEmpty(shoporderitemList)) {
       for (ShopOrderItem item : shoporderitemList) {
         contentSB.append(item.getGood().getName()).append(" ");
         contentSB.append(item.getCount()).append(item.getGood().getPack()).append("\n");
@@ -169,7 +169,7 @@ public class TemplateMsgService {
 
     StringBuilder contentSB = new StringBuilder();
     List<ShopOrderItem> shoporderitemList = order.getOrderItemList();
-    if (CollectionUtils.hasContent(shoporderitemList)) {
+    if (CollectionUtils.isNotEmpty(shoporderitemList)) {
       for (ShopOrderItem item : shoporderitemList) {
         contentSB.append(item.getGood().getName()).append(" ");
         contentSB.append(item.getCount()).append(item.getGood().getPack()).append("\n");

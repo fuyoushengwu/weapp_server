@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,7 +26,6 @@ import cn.aijiamuyingfang.vo.response.ResponseCode;
 import cn.aijiamuyingfang.vo.store.PagableStoreList;
 import cn.aijiamuyingfang.vo.store.Store;
 import cn.aijiamuyingfang.vo.store.StoreAddress;
-import cn.aijiamuyingfang.vo.utils.CollectionUtils;
 import cn.aijiamuyingfang.vo.utils.StringUtils;
 
 /***
@@ -89,7 +89,7 @@ public class StoreController {
     }
 
     List<ImageSource> detailImageSourceList = new ArrayList<>();
-    if (CollectionUtils.hasContent(detailImageParts)) {
+    if (CollectionUtils.isNotEmpty(detailImageParts)) {
       for (MultipartFile detailImagePart : detailImageParts) {
         ImageSource detailImageSource = imageService.saveImage(detailImagePart);
         if (detailImageSource != null) {

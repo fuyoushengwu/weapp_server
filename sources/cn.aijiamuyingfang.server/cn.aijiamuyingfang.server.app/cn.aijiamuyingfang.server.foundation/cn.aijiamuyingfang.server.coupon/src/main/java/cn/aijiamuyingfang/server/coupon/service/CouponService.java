@@ -2,6 +2,7 @@ package cn.aijiamuyingfang.server.coupon.service;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,7 +22,6 @@ import cn.aijiamuyingfang.vo.coupon.PagableVoucherItemList;
 import cn.aijiamuyingfang.vo.coupon.UserVoucher;
 import cn.aijiamuyingfang.vo.coupon.VoucherItem;
 import cn.aijiamuyingfang.vo.exception.CouponException;
-import cn.aijiamuyingfang.vo.utils.CollectionUtils;
 import cn.aijiamuyingfang.vo.utils.StringUtils;
 
 /**
@@ -101,7 +101,7 @@ public class CouponService {
    * @param userVoucherList
    */
   public void updateUserVoucher(List<UserVoucher> userVoucherList) {
-    if (CollectionUtils.hasContent(userVoucherList)) {
+    if (CollectionUtils.isNotEmpty(userVoucherList)) {
       for (UserVoucher userVoucher : userVoucherList) {
         updateUserVoucher(userVoucher);
       }

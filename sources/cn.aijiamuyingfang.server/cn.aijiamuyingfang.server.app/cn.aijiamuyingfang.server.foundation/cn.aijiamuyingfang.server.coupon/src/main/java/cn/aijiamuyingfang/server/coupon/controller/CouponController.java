@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +20,6 @@ import cn.aijiamuyingfang.vo.coupon.PagableUserVoucherList;
 import cn.aijiamuyingfang.vo.coupon.PagableVoucherItemList;
 import cn.aijiamuyingfang.vo.coupon.UserVoucher;
 import cn.aijiamuyingfang.vo.coupon.VoucherItem;
-import cn.aijiamuyingfang.vo.utils.CollectionUtils;
 import cn.aijiamuyingfang.vo.utils.StringUtils;
 
 /**
@@ -140,13 +140,13 @@ public class CouponController {
       throw new IllegalArgumentException("goodvoucher request  body is null");
     }
     if (StringUtils.isEmpty(request.getName())) {
-      throw new IllegalArgumentException("good voucher name is empyt");
+      throw new IllegalArgumentException("good voucher name is empty");
     }
     if (request.getScore() == 0) {
       throw new IllegalArgumentException("good voucher score is 0");
     }
     if (CollectionUtils.isEmpty(request.getVoucherItemList())) {
-      throw new IllegalArgumentException("good voucher items is empyt");
+      throw new IllegalArgumentException("good voucher items is empty");
     }
     return couponService.createORUpdateGoodVoucher(request);
   }

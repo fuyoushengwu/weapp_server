@@ -38,7 +38,7 @@ public interface ClassifyControllerApi {
   /**
    * 获取某个条目
    * 
-   * @param classifyId
+   * @param classifyId 条目Id
    * @return
    */
   @GET(value = "/goods-service/classify/{classify_id}")
@@ -47,8 +47,8 @@ public interface ClassifyControllerApi {
   /**
    * 废弃条目
    * 
-   * @param classifyId
-   * @param accessToken
+   * @param classifyId 条目Id
+   * @param accessToken 访问码
    * @return
    */
   @DELETE(value = "/goods-service/classify/{classify_id}")

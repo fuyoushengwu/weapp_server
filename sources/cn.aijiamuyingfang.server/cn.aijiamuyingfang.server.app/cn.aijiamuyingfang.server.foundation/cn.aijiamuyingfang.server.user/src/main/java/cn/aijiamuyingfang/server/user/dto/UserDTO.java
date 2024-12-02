@@ -12,9 +12,9 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import cn.aijiamuyingfang.server.user.utils.ConvertUtils;
 import cn.aijiamuyingfang.vo.user.User;
-import cn.aijiamuyingfang.vo.utils.CollectionUtils;
 import cn.aijiamuyingfang.vo.utils.StringUtils;
 import lombok.Data;
+import org.apache.commons.collections4.CollectionUtils;
 
 /**
  * [描述]:
@@ -111,7 +111,8 @@ public class UserDTO {
     if (updateUser.getGenericScore() != 0) {
       this.setGenericScore(updateUser.getGenericScore());
     }
-    if (!CollectionUtils.isEmpty(updateUser.getAuthorityList())) {
+
+    if (CollectionUtils.isNotEmpty(updateUser.getAuthorityList())) {
       this.setAuthorityList(ConvertUtils.convertUserAuthorityList(updateUser.getAuthorityList()));
     }
   }
